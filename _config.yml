@@ -1,9 +1,9 @@
-title: DNHS Flocker
-description: "Social Media for Del Norte High School"
-owner_name: John Mortensen
-github_username: nighthawkcoders
-github_repo: "flocker_frontend" 
-baseurl: "/flocker_frontend"
+title: Genome Gamers
+description: "Pilot City Project: A platform for gamers to share their experiences and connect with others."
+owner_name: Pradyun Gowda
+github_username: Prad-coder
+github_repo: "GenomeGamersFrontend" 
+baseurl: "/genome_gamers"
 future: true
 remote_theme: jekyll/minima
 minima:
@@ -15,10 +15,5 @@ minima:
 # remote_theme: pages-themes/time-machine@v0.2.0
 plugins:
   - jekyll-remote-theme
-header_pages:
-  - navigation/ai.md
-  - navigation/shared_interests/home.md
-  - navigation/create_and_compete/home.md
-  - navigation/voteforthegoat/home.md
-  - navigation/share_and_care/home.md
-  - navigation/rate_and_relate/home.md
+nav_pages:
+  
