@@ -16,4 +16,4 @@ minima:
 plugins:
   - jekyll-remote-theme
 nav_pages:
-  - navigation/Pilot_City/titanic.md
+  - navigation/PilotCity/titanic.md
