@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Flocker Social Media Site 
+title: Genome Gamers - Pilot City 
 search_exclude: true
-description: Login and explore our social media hub for everything DNHS 
+description: Explore our Pilot City project for Scripps Biotech.
 hide: true
 menu: nav/home.html
 ---

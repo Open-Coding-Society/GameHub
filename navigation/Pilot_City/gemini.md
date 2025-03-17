@@ -1,6 +1,6 @@
 ---
 layout: base
-title: Striver Hobbies
+title: AI Chatbot
 search_exclude: true
 permalink: /gemini
 ---
