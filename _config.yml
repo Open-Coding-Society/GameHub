@@ -3,7 +3,7 @@ description: "Pilot City Project: A platform for gamers to share their experienc
 owner_name: Pradyun Gowda
 github_username: Prad-coder
 github_repo: "GenomeGamersFrontend" 
-baseurl: "/genome_gamers"
+baseurl: "/GenomeGamersFrontend"
 future: true
 remote_theme: jekyll/minima
 minima:
