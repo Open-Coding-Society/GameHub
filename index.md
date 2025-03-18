@@ -7,4 +7,4 @@ hide: true
 menu: nav/home.html
 ---
 
-<td><a href="{{site.baseurl}}/crowdsourcing">Home</a></td>
+<td><a href="{{site.baseurl}}/crowdsourcing">Crowdsourcing Blog</a></td>
