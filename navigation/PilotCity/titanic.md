@@ -5,10 +5,7 @@ search_exclude: true
 permalink: /titanic
 ---
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div>
     <title>Titanic Survival Predictor</title>
     <style>
        body {
@@ -59,8 +56,6 @@ permalink: /titanic
             font-size: 18px;
         }
     </style>
-</head>
-<body>
     <div class="container">
         <h2>Titanic Survival Predictor</h2>
         <p>Enter your details below to see if you would have survived the Titanic disaster!</p>        
@@ -94,11 +89,14 @@ permalink: /titanic
             <option value="true">Alone</option>
             <option value="false">Not Alone</option>
         </select>
-        <button onclick="predictSurvival()">Check Survival Probability</button>
+        <button id="predictButton">Check Survival Probability</button>
         <p id="result"></p>
     </div>
+<div>
 
-<script>
+<script type="module">
+import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
     async function predictSurvival() {
         // Gather user input
         let passengerData = {
@@ -116,13 +114,19 @@ permalink: /titanic
 
         try {
             // Send POST request to Titanic API
-            let response = await fetch("http://127.0.0.1:5000/api/predict", {
+            let response = await fetch(`${pythonURI}/api/predict`, {
+                ...fetchOptions,
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(passengerData)
             });
+
+            if (!response.ok) {
+                const errorDetails = await response.text();
+                throw new Error(`Server Error: ${response.status} - ${errorDetails}`);
+            }
 
             let data = await response.json();
             
@@ -133,9 +137,11 @@ permalink: /titanic
             `;
         } catch (error) {
             console.error("Error:", error);
-            document.getElementById("result").innerHTML = "<strong>Error:</strong> Could not get a prediction.";
+            document.getElementById("result").innerHTML = `
+                <strong>Error:</strong> Could not get a prediction. Please try again later.
+            `;
         }
     }
+    
+    document.getElementById("predictButton").addEventListener("click", predictSurvival);
 </script>
-</body>
-</html>
