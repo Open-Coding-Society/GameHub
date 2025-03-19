@@ -3,7 +3,7 @@ layout: post
 title: Safe Computing
 description: Team Teach on Safe Computing
 type: issues
-permalink: /safe_computing
+permalink: /safecomputing
 comments: true
 ---
 
