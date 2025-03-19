@@ -27,8 +27,35 @@ comments: true
 ## Password Security
 
 - As seen more and more on the web, passwords are required to be more and more sophisticated for the users safety. Modern expectations for a password include:
-    - Minimum 10 Characters
-    - At least 1 upper case letter
-    - At least 1 lower case letter
-    - use of a number
-    - use of speical character
+    - Minimum **10 characters** 
+    - Use of both **uppercase** and **lowercase** lettering
+    - Contains at least **one number**  
+    - Contains at least **one special character**  
+
+## Python Code
+
+```python
+import re
+
+def check_password_security(password):
+    if len(password) < 10:
+        return "Not secure enough: Password must be at least 10 characters long."
+    
+    if not re.search(r"[A-Z]", password):
+        return "Not secure enough: Password must include at least one uppercase letter."
+    
+    if not re.search(r"[a-z]", password):
+        return "Not secure enough: Password must include at least one lowercase letter."
+    
+    if not re.search(r"\\d", password):
+        return "Not secure enough: Password must include at least one number."
+    
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return "Not secure enough: Password must include at least one special character."
+    
+    return "Password is secure!"
+
+if __name__ == "__main__":
+    password = input("Enter your password: ")
+    print(check_password_security(password))
+```
