@@ -32,7 +32,6 @@ comments: true
     - Contains at least **one number**  
     - Contains at least **one special character**  
 
-## Python Code
 
 ```python
 import re
