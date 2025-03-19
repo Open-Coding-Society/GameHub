@@ -56,11 +56,10 @@ if __name__ == "__main__":
     password = input("Enter your password: ")
     print(check_password_security(password))
 ```
-<<<<<<< HEAD:_notebooks/safecomputing.md
+
 ## Encryption
 - Encryption is the process of converting data into a coded format to prevent unauthorized access. It ensures only authorized user can read the information. 
-### 
-=======
+
 ### Popcorn Hack #1
 
 - Using python, finish the standardized passsord security. Add an if statement to require users to use a **special character** when creating their password.
@@ -71,4 +70,3 @@ if __name__ == "__main__":
   if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
         return "Not secure enough: Password must include at least one special character."
 ```
->>>>>>> e597a7199f994a0fc46e1eae8aec3eac13585883:navigation/safecomputing.md
