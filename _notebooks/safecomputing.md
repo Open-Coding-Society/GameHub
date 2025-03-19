@@ -27,7 +27,7 @@ comments: true
 ## Password Security
 
 - As seen more and more on the web, passwords are required to be more and more sophisticated for the users safety. Modern expectations for a password include:
-    - 10 Characters
+    - Minimum 10 Characters
     - At least 1 upper case letter
     - At least 1 lower case letter
     - use of a number
