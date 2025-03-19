@@ -58,6 +58,7 @@ if __name__ == "__main__":
 ```
 
 ## Encryption
+
 - Encryption is the process of converting data into a coded format to prevent unauthorized access. It ensures only authorized user can read the information. 
 
 ### Popcorn Hack #1
