@@ -17,7 +17,7 @@ comments: true
 
 - Information identifying a user on the Internet
 - Safe computing revolves around this PII and how it is exploited or kept secure
-
+- For example:- Social Security Number, email, full name, driver's license etc.
 ## Cookies
 
 - A variety of different cookies are used in different sites
@@ -59,3 +59,6 @@ if __name__ == "__main__":
     password = input("Enter your password: ")
     print(check_password_security(password))
 ```
+## Encryption
+- Encryption is the process of converting data into a coded format to prevent unauthorized access. It ensures only authorized user can read the information. 
+### 
