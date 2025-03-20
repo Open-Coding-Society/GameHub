@@ -73,6 +73,43 @@ if __name__ == "__main__":
         return "Not secure enough: Password must include at least one special character."
 ```
 
+## Homework Hack 1
+- Create your own password strength checker based on what you feel is important (add at least one unique check from the popcorn hack)
+- Here is some code to give you a headstart
+
+```python
+import re
+
+def check_password_strength(password):
+    # Check length
+    if len(password) < 8:
+        return "Password too short. Must be at least 8 characters."
+    
+    # Check for at least one uppercase letter
+    # (Student to complete: Add code to check for an uppercase letter)
+    
+    # Check for at least one lowercase letter
+    # (Student to complete: Add code to check for a lowercase letter)
+    
+    # Check for at least one number
+    # (Student to complete: Add code to check for a number)
+    
+    # Check for at least one special character
+    # (Student to complete: Add code to check for a special character)
+    
+    # Unique check: Prevent simple sequences like '1234' or 'abcd'
+    # (Student to complete: Add code to check for simple sequences)
+    
+    return "Password is strong!"  # (Student to complete: Return custom messages for weaknesses)
+
+# Test the function
+password = input("Enter your password: ")
+print(check_password_strength(password))
+```
+- Once done, send a link of your personal blog with the completed homework assignments in utterances 
+
+
+
 
 ## Encryption
 <div style="display: inline-block; margin-right: 10px;">
@@ -134,7 +171,92 @@ For a more detailed explanation, here is a short video:-
 - **COPPA (U.S.):** Protects children's online privacy.  
 
 <img src="images/tick.png" alt="Encryption" width="170"/>
- 
+
+## Homework Hack 2
+Here is a simple code for encrypting characters or words (run in notebook to show output)
+```python
+def caesar_cipher(text, shift, mode):
+    result = ""
+    for char in text:
+        if char.isalpha():  # This part of the code only ecnrypts letters
+            shift_amount = shift if mode == "encrypt" else -shift
+            new_char = chr(((ord(char.lower()) - 97 + shift_amount) % 26) + 97)
+            result += new_char.upper() if char.isupper() else new_char
+        else:
+            result += char  # this keeps the spaces and position unchanged
+    return result
+
+# Here is the code for getting the user input
+mode = input("Do you want to encrypt or decrypt? ").strip().lower()
+message = input("Enter your message: ")
+shift = int(input("Enter shift value (number of places to shift): "))
+
+# And finally the code performs the encryption/decryption
+output = caesar_cipher(message, shift, mode)
+print(f"Result: {output}")
+```
+- Edit this code in such a way that the code is able to take "random" as a shift value. Which means that it picks a random integer between 1 and 25. 
+- Make full use of Jupyter notebooks and play around witht the outputs until you get your desired output. 
+### Answer
+
+<button onclick="toggleCode()" style="
+  background-color: #4CAF50; 
+  color: white; 
+  border: none; 
+  padding: 12px 24px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  font-size: 16px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  transition: background-color 0.3s, transform 0.2s;
+">
+  Click to Show/Hide Code
+</button>
+
+<div id="codeBlock" style="display:none; white-space: pre-wrap; font-family: 'Courier New', monospace; background-color:rgb(0, 0, 0); padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-top: 15px;">
+  <pre>
+<code>
+import random
+
+def caesar_cipher(text, shift, mode):
+    result = ""
+    for char in text:
+        if char.isalpha():  # Encrypts only letters
+            shift_amount = shift if mode == "encrypt" else -shift
+            new_char = chr(((ord(char.lower()) - 97 + shift_amount) % 26) + 97)
+            result += new_char.upper() if char.isupper() else new_char
+        else:
+            result += char  # Keeps spaces and punctuation unchanged
+    return result
+
+# Get user input
+mode = input("Do you want to encrypt or decrypt? ").strip().lower()
+message = input("Enter your message: ")
+shift_input = input("Enter shift value (or type 'random'): ").strip().lower()
+
+# Generate a random shift if "random" is entered
+shift = random.randint(1, 25) if shift_input == "random" else int(shift_input)
+
+print(f"Using shift value: {shift}")  # Display the shift used
+output = caesar_cipher(message, shift, mode)
+print(f"Result: {output}")
+</code>
+  </pre>
+</div>
+
+<script>
+  function toggleCode() {
+    var codeBlock = document.getElementById("codeBlock");
+    if (codeBlock.style.display === "none") {
+      codeBlock.style.display = "block";
+    } else {
+      codeBlock.style.display = "none";
+    }
+  }
+</script>
+
 
 
 ## Verification
