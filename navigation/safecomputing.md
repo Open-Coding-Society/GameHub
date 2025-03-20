@@ -172,6 +172,21 @@ For a more detailed explanation, here is a short video:-
 
 <img src="images/tick.png" alt="Encryption" width="170"/>
 
+## Verification
+
+- Verification is a crucial aspect of safe computing, ensuring that users, systems, and software are legitimate and secure.
+- Uses and types of verification
+1. Multi-Factor Authentification (MFA)
+    - Added security process that requires users to verify their identity using multiple independent authentication factors.
+    - Strengthens security by preventing unauthorized access even if passwords are stolen
+    
+2. Digital Structures
+    - A digital signature is a cryptographic technique used to verify the authenticity and integrity of digital documents, messages, and software
+    - Sender would generate a hash, the recipient would decrpt the hash and confirm it matches the original
+
+## Homework Hack 1
+- Create your own password strength checker based on what you feel is important in a password(add at least one unique check from the popcorn hack)
+
 ## Homework Hack 2
 Here is a simple code for encrypting characters or words (run in notebook to show output)
 ```python
@@ -256,17 +271,3 @@ print(f"Result: {output}")
     }
   }
 </script>
-
-
-
-## Verification
-
-- Verification is a crucial aspect of safe computing, ensuring that users, systems, and software are legitimate and secure.
-- Uses and types of verification
-1. Multi-Factor Authentification (MFA)
-    - Added security process that requires users to verify their identity using multiple independent authentication factors.
-    - Strengthens security by preventing unauthorized access even if passwords are stolen
-    
-2. Digital Structures
-    - A digital signature is a cryptographic technique used to verify the authenticity and integrity of digital documents, messages, and software
-    - Sender would generate a hash, the recipient would decrpt the hash and confirm it matches the original
