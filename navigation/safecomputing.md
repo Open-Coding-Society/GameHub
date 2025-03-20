@@ -75,30 +75,66 @@ if __name__ == "__main__":
 
 
 ## Encryption
+<div style="display: inline-block; margin-right: 10px;">
+    <img src="images/encryption.png" alt="Encryption" width="450"/>
+</div>
+<div style="display: inline-block;">
+    <img src="images/emoji.png" alt="yay" width="150"/>
+</div>
+
+
+
 
 - Encryption is the process of converting data into a coded format to prevent unauthorized access. It ensures only authorized user can read the information. 
 - Types of Encryption
-1. Symmetric Encryption (Private Key Encryption)
+1. **Symmetric Encryption (Private Key Encryption)**
     - The same key is used for both encryption and decryption
     - Faster but requires securely sharing the key between parties
     - Example: AES (Advance Encryption Standard) used for securing files
-2. Asymmetric Encryption (Public Key Encryption)
+2. **Asymmetric Encryption (Public Key Encryption)**
     - Uses a pair of keys:
-        - Public
-Key (for encryption)
+        - Public Key (for encryption)
         - Private key (for decryption)
     - More secure for internet communications since users don't need to share a single key. 
-3. Hashing (One-way encryption)
-    - Converts data into a fixed length 
-
-string hthat cann## Verification 
-tot be reversed.
+3. **Hashing (One-way encryption)**
+    - Converts data into a fixed length string that cannot be reversed
     - Used for storing passwordss securely. 
     - Example: SHA-256 (Secure Hash Algorithm) used in blockchain and password security. 
 
 ### Where Encryption is Used:
-- Web Security: HTTPS (SSL/TLS encryption) protects websitess from eavesdropping
-- MEssaging Apps: End-to-end encryption
+- **Web Security**: HTTPS (SSL/TLS encryption) protects websitess from eavesdropping
+- **Messaging Apps**: End-to-end encryption ensures that messages are private
+For a more detailed explanation, here is a short video:-
+
+<div style="display: inline-block; margin-right: 10px;">
+    <a href="https://www.youtube.com/watch?v=9chKCUQ8_VQ">
+        <img src="https://img.youtube.com/vi/9chKCUQ8_VQ/0.jpg" alt="Video Title" />
+    </a>
+</div>
+<div style="display: inline-block;">
+    <img src="images/question.png" alt="?" width="150"/>
+</div>
+
+
+## Legal & Ethical Considerations in Computing
+
+1. Intellectual Property & Copyright
+- **Copyright Laws:** Protect digital content (e.g., code, music, videos).  
+- **Creative Commons (CC):** Allows sharing under specific conditions.  
+- **Open Source:** Freely available code (e.g., Linux, Python).  
+
+2. Ethical Computing Practices
+- **Responsible Data Use:** Avoid misuse of personal data.  
+- **Bias in AI:** Ensure fair, non-discriminatory algorithms.  
+- **Digital Accessibility:** Make technology usable for all.  
+
+3. Cyber Laws & Regulations
+- **GDPR:** Protects user data and privacy in the EU.  
+- **CFAA (U.S.):** Criminalizes hacking & unauthorized access.  
+- **COPPA (U.S.):** Protects children's online privacy.  
+
+<img src="images/tick.png" alt="Encryption" width="170"/>
+ 
 
 
 ## Verification
