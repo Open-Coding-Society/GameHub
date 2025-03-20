@@ -68,6 +68,7 @@ if __name__ == "__main__":
 
 ### Popcorn Hack #2 Answer
 
+
 ```python
   if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
         return "Not secure enough: Password must include at least one special character."
@@ -184,8 +185,6 @@ For a more detailed explanation, here is a short video:-
     - A digital signature is a cryptographic technique used to verify the authenticity and integrity of digital documents, messages, and software
     - Sender would generate a hash, the recipient would decrpt the hash and confirm it matches the original
 
-## Homework Hack 1
-- Create your own password strength checker based on what you feel is important in a password(add at least one unique check from the popcorn hack)
 
 ## Homework Hack 2
 Here is a simple code for encrypting characters or words (run in notebook to show output)
