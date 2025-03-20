@@ -185,6 +185,24 @@ For a more detailed explanation, here is a short video:-
     - A digital signature is a cryptographic technique used to verify the authenticity and integrity of digital documents, messages, and software
     - Sender would generate a hash, the recipient would decrpt the hash and confirm it matches the original
 
+## Homework Hack 1
+
+<div style="margin-top: 20px;">
+    <a href="https://forms.gle/XyRK8JhrutuHfEQRA" target="_blank" style="
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    " onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
+        MCQ
+    </a>
+</div>
 
 ## Homework Hack 2
 Here is a simple code for encrypting characters or words (run in notebook to show output)
