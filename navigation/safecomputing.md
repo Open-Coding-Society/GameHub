@@ -185,6 +185,12 @@ For a more detailed explanation, here is a short video:-
     - A digital signature is a cryptographic technique used to verify the authenticity and integrity of digital documents, messages, and software
     - Sender would generate a hash, the recipient would decrpt the hash and confirm it matches the original
 
+3. CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart)
+    - A common popup that ensure the user is not a bot
+    - Most CAPTCHA are simple puzzles or questions that would be easy for humans but an AI should have a hard time figuring it out
+
+<img src="https://i.postimg.cc/3xR46D1Y/Screenshot-2025-03-20-at-10-52-59-AM.png" alt="Binary Overflow" width="600">
+
 ## Homework Hack 1
 
 <div style="margin-top: 20px;">
