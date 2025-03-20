@@ -62,7 +62,7 @@ if __name__ == "__main__":
     print(check_password_security(password))
 ```
 
-### Popcorn Hack #2: Cookies
+### Popcorn Hack #2: Password Security
 
 - Using python, finish the standardized passsord security. Add an if statement to require users to use a **special character** when creating their password.
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 ```
 
 ## Homework Hack 1
-- Create your own password strength checker based on what you feel is important (add at least one unique check from the popcorn hack)
+- Create your own custom password strength checker based on what you feel is important (add at least one unique check from the popcorn hack)
 - Here is some code to give you a headstart
 
 ```python
