@@ -24,8 +24,9 @@ comments: true
 ## Popcorn Hack 1: Cookies
 
 - Open Developer Tools(fn + F12 -> Application -> Cookies)
-- Find cookie from one site and list in a blog:
+- Find cookie from one site and find:
     - Name, Value, Expiration Date
+    - Where the cookie came from(See if you can figure out which category that is)
     
 ![Cookies Hack](cookieshack.png)
 
@@ -36,70 +37,6 @@ comments: true
     - Use of both **uppercase** and **lowercase** lettering
     - Contains at least **one number**  
     - Contains at least **one special character**  
-
-## Python Code: Password Checker
-
-```python
-import re
-
-def check_password_security(password):
-    if len(password) < 10:
-        return "Not secure enough: Password must be at least 10 characters long."
-    
-    if not re.search(r"[A-Z]", password):
-        return "Not secure enough: Password must include at least one uppercase letter."
-    
-    if not re.search(r"[a-z]", password):
-        return "Not secure enough: Password must include at least one lowercase letter."
-    
-    if not re.search(r"\\d", password):
-        return "Not secure enough: Password must include at least one number."
-    
-      if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-        return "Not secure enough: Password must include at least one special character."
-    
-    return "Password is secure!"
-
-if __name__ == "__main__":
-    password = input("Enter your password: ")
-    print(check_password_security(password))
-```
-## Homework Hack 1
-- Create your own custom password strength checker based on what you feel is important (add at least one unique check from the popcorn hack)
-- Here is some code to give you a headstart
-
-```python
-import re
-
-def check_password_strength(password):
-    # Check length
-    if len(password) < 8:
-        return "Password too short. Must be at least 8 characters."
-    
-    # Check for at least one uppercase letter
-    # (Student to complete: Add code to check for an uppercase letter)
-    
-    # Check for at least one lowercase letter
-    # (Student to complete: Add code to check for a lowercase letter)
-    
-    # Check for at least one number
-    # (Student to complete: Add code to check for a number)
-    
-    # Check for at least one special character
-    # (Student to complete: Add code to check for a special character)
-    
-    # Unique check: Prevent simple sequences like '1234' or 'abcd'
-    # (Student to complete: Add code to check for simple sequences)
-    
-    return "Password is strong!"  # (Student to complete: Return custom messages for weaknesses)
-
-# Test the function
-password = input("Enter your password: ")
-print(check_password_strength(password))
-```
-- Once done, send a link of your personal blog with the completed homework assignments in utterances 
-
-
 
 
 ## Encryption
@@ -179,7 +116,9 @@ For a more detailed explanation, here is a short video:-
     - A common popup that ensure the user is not a bot
     - Most CAPTCHA are simple puzzles or questions that would be easy for humans but an AI should have a hard time figuring it out
 
-<img src="https://i.postimg.cc/3xR46D1Y/Screenshot-2025-03-20-at-10-52-59-AM.png" alt="Binary Overflow" width="250">
+## Popcorn Hack 2
+
+<img src="{{site.baseurl}}/images/captcha.png" alt="CAPTCHA" width="350">
 
 ## Homework Hack 1
 
