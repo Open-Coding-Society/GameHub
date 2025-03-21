@@ -55,25 +55,15 @@ def check_password_security(password):
     if not re.search(r"\\d", password):
         return "Not secure enough: Password must include at least one number."
     
+      if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return "Not secure enough: Password must include at least one special character."
+    
     return "Password is secure!"
 
 if __name__ == "__main__":
     password = input("Enter your password: ")
     print(check_password_security(password))
 ```
-
-### Popcorn Hack #2: Password Security
-
-- Using python, finish the standardized passsord security. Add an if statement to require users to use a **special character** when creating their password.
-
-### Popcorn Hack #2 Answer
-
-
-```python
-  if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-        return "Not secure enough: Password must include at least one special character."
-```
-
 ## Homework Hack 1
 - Create your own custom password strength checker based on what you feel is important (add at least one unique check from the popcorn hack)
 - Here is some code to give you a headstart
