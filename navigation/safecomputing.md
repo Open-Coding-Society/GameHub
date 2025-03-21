@@ -116,7 +116,7 @@ For a more detailed explanation, here is a short video:-
     - A common popup that ensure the user is not a bot
     - Most CAPTCHA are simple puzzles or questions that would be easy for humans but an AI should have a hard time figuring it out
 
-## Popcorn Hack 2
+## Popcorn Hack 2: CAPTCHA
 
 <img src="{{site.baseurl}}/images/captcha.png" alt="CAPTCHA" width="350">
 
