@@ -18,6 +18,10 @@ comments: true
 ### Cookies
 
 - A variety of different cookies are used in different sites
+    - **Session Cookies**: Temporary cookies that are deleted when the browser is closed.  
+    - **Persistent Cookies**: Stored on a user's device for a specified duration, even after the browser is closed.  
+    - **First-Party Cookies**: Set by the website being visited, mainly for user experience and analytics.  
+    - **Third-Party Cookies**: Placed by external domains (e.g., advertisers) to track user behavior across sites.
 - These cookies track your PII, track your history on the site, and provide recommendations based on that history
 - Can breach security of the user because it takes personal info and preferences and displays that on the site
 
