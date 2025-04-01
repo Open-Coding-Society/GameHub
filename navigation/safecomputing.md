@@ -84,25 +84,51 @@ For a more detailed explanation, here is a short video:-
     <img src="images/question.png" alt="?" width="150"/>
 </div>
 
+## Phishing
+- Phishing is a cyber-attack where scammers trick you into giving personal information (such as bank details or passwords) by pretending to be a legal entity, usually through fake emails, messages, or websites. 
+<br>
+People can be tricked into giving information through many different kinds of phishing attacks and it is essential for us to understand how to prevent them. 
 
-## Legal & Ethical Considerations in Computing
+### Email Phishing 
+Attackers send fake emails pretending to be trusted companies (for example, Amazon, Banks etc.)
+To prevent this an individual must
+- Prevent clicking on links or downloading attachments from unexpected emails. 
+- check the sender's email carefully because scammers often use weird looking domains like the one shown below
+<p></p>
+<div style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="navigation/yesyes.png" alt="?" width="450"/>
+    </div>
+</div>
 
-1. Intellectual Property & Copyright
-- **Copyright Laws:** Protect digital content (e.g., code, music, videos).  
-- **Creative Commons (CC):** Allows sharing under specific conditions.  
-- **Open Source:** Freely available code (e.g., Linux, Python).  
+### Website Spoofing
+Attackers can also create fake versions of popular websites to steal login credentials. Some popularly "spoofed" websites include Google, Amazon and various banking sites
+- To Prevent this, we must ensure that
+    - We type out the webite URL manually instead if clicking links in emails or messages because we prevent a misdirection into a malicious link when we type it out. 
+    - Look for HTTPS in front of the URL and a padlock icon in the browser bar, most spoofed sites are insecure and lack security. (However some scamming sites may be secure)
+    - If unsure of the site, then contact customer services for said organization. 
 
-2. Ethical Computing Practices
-- **Responsible Data Use:** Avoid misuse of personal data.  
-- **Bias in AI:** Ensure fair, non-discriminatory algorithms.  
-- **Digital Accessibility:** Make technology usable for all.  
+Here is an example
+<div style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="navigation/safe.png" alt="?" width="700"/>
+    </div>
+</div>
 
-3. Cyber Laws & Regulations
-- **GDPR:** Protects user data and privacy in the EU.  
-- **CFAA (U.S.):** Criminalizes hacking & unauthorized access.  
-- **COPPA (U.S.):** Protects children's online privacy.  
+### Smishing (SMS Phishing)
+Hackers also send fake text images pretending to be from banks, delivery services, or government agencies, urging you to click a malicious link.
+- To prevent this, we must 
+    - never click on links in texts from unknown numbers
+    - never contact our bank or service provider directly if we recieve a suspicious text
+    - and enable spam filters on our phones to block spam messages
+<p></p>
+<div style="text-align: center;">
+    <div style="display: inline-block;">
+        <img src="navigation/phone.png" alt="?" width="300"/>
+    </div>
+</div>
 
-<img src="images/tick.png" alt="Encryption" width="170"/>
+
 
 ## Verification
 
