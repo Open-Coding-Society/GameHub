@@ -34,9 +34,9 @@ permalink: /home
 </head>
 <body>
 
-<h1>🎮 Welcome to the Mini Games Hub</h1>
+<h1>Welcome to the Mini Games Hub</h1>
 <div id="loading">Loading game assets...</div>
-<canvas id="gameCanvas" width="800" height="600"></canvas>
+<canvas id="gameCanvas" width="960" height="720"></canvas>
 
 <script>
   const canvas = document.getElementById('gameCanvas');
