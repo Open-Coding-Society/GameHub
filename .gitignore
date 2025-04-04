@@ -15,8 +15,4 @@ _posts/2024-06-25-RDS-and-Flask-Setup-
 venv/
 port_venv/
 verifyTools.md
-<<<<<<< HEAD
-_notebooks/CSP/big-ideas/big-idea-3-part-1-fundamentals/Period3/2024-9-27-fundamentals-3.6.4.ipynb
-=======
-.vscode/
->>>>>>> 88831ad3aa2f3fa9b6edb5e71b494c3cd7c97963
+.sass-cache/
