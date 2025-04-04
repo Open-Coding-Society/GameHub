@@ -45,13 +45,13 @@ permalink: /home
   const roomImage = new Image();
   roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png'; // ✅ Update this
   const spriteImage = new Image();
-  spriteImage.src = 'https://i.postimg.cc/g0DphJ09/image-2025-04-04-104141001.png'; // ✅ Update this
+  spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png'; // ✅ Update this
 
   const player = {
     x: 100,
     y: 100,
-    width: 64,
-    height: 64,
+    width: 100,
+    height: 100,
     speed: 4
   };
 
