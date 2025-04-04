@@ -79,6 +79,14 @@ permalink: /home
     // Add more wall blocks here
   ];
 
+  const borderThickness = 10;
+walls.push(
+  { x: 0, y: 0, width: canvas.width, height: borderThickness }, // top
+  { x: 0, y: canvas.height - borderThickness, width: canvas.width, height: borderThickness }, // bottom
+  { x: 0, y: 0, width: borderThickness, height: canvas.height }, // left
+  { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
+);
+
   function update() {
     let nextX = player.x;
     let nextY = player.y;
