@@ -43,30 +43,66 @@ permalink: /home
   const ctx = canvas.getContext('2d');
 
   const roomImage = new Image();
-  roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png'; // ✅ Update this
+  roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png';
+
   const spriteImage = new Image();
-  spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png'; // ✅ Update this
+  spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
   const player = {
     x: 100,
     y: 100,
-    width: 100,
-    height: 100,
+    width: 75,
+    height: 75,
     speed: 4
   };
 
   const keys = {};
+
   const objects = [
     { x: 300, y: 150, width: 40, height: 40, game: 'game1.html' },
-    { x: 500, y: 300, width: 40, height: 40, game: 'game2.html' }
+    { x: 500, y: 150, width: 40, height: 40, game: 'game2.html' },
+    { x: 765, y: 170, width: 40, height: 40, game: 'game3.html' },
+    { x: 800, y: 590, width: 40, height: 40, game: 'game4.html' },
+    { x: 410, y: 375, width: 40, height: 40, game: 'game5.html' },
+  ];
+
+  const walls = [
+    { x: 270, y: 250, width: 25, height: 55 },
+    { x: 420, y: 250, width: 25, height: 25 },
+    { x: 560, y: 250, width: 25, height: 55 },
+    { x: 270, y: 450, width: 25, height: 55 },
+    { x: 560, y: 450, width: 25, height: 55 },
+    { x: 680, y: 400, width: 25, height: 55 },
+    { x: 800, y: 400, width: 25, height: 55 },
+    { x: 680, y: 590, width: 25, height: 55 },
+    { x: 385, y: 360, width: 95, height: 30 },
+    // Add more wall blocks here
   ];
 
   function update() {
-    if (keys['w']) player.y -= player.speed;
-    if (keys['s']) player.y += player.speed;
-    if (keys['a']) player.x -= player.speed;
-    if (keys['d']) player.x += player.speed;
+    let nextX = player.x;
+    let nextY = player.y;
 
+    if (keys['w']) nextY -= player.speed;
+    if (keys['s']) nextY += player.speed;
+    if (keys['a']) nextX -= player.speed;
+    if (keys['d']) nextX += player.speed;
+
+    const futureBox = {
+      x: nextX,
+      y: nextY,
+      width: player.width,
+      height: player.height
+    };
+
+    const hittingWall = walls.some(wall => isColliding(futureBox, wall));
+
+    if (!hittingWall) {
+      player.x = nextX;
+      player.y = nextY;
+    }
+
+    // Check for object collision (trigger mini-games)
     objects.forEach(obj => {
       if (isColliding(player, obj)) {
         window.location.href = obj.game;
@@ -77,7 +113,6 @@ permalink: /home
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // fallback if room image not loaded
     if (roomImage.complete && roomImage.naturalWidth !== 0) {
       ctx.drawImage(roomImage, 0, 0, canvas.width, canvas.height);
     } else {
@@ -85,8 +120,16 @@ permalink: /home
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
+    // Draw invisible walls (debug)
+    ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
+    walls.forEach(wall => {
+      ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+    });
+
+    // Draw player sprite
     ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
+    // Draw interactive objects
     ctx.fillStyle = 'red';
     objects.forEach(obj => {
       ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
@@ -116,19 +159,20 @@ permalink: /home
     keys[e.key.toLowerCase()] = false;
   });
 
-  // Wait until both images load before starting game
+  // Start game once images are loaded
   let imagesLoaded = 0;
-  const tryStartGame = () => {
+  function tryStartGame() {
     imagesLoaded++;
     if (imagesLoaded === 2) {
-      document.getElementById('loading').style.display = 'none';
+      const loading = document.getElementById('loading');
+      if (loading) loading.style.display = 'none';
       gameLoop();
     }
-  };
+  }
+
   roomImage.onload = tryStartGame;
   spriteImage.onload = tryStartGame;
 
-  // Error fallback
   roomImage.onerror = () => alert('Failed to load room image');
   spriteImage.onerror = () => alert('Failed to load sprite image');
 </script>
