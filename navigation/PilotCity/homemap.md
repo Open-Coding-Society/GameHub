@@ -129,10 +129,10 @@ walls.push(
     }
 
     // Draw invisible walls (debug)
-    ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
-    walls.forEach(wall => {
-      ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-    });
+   // ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
+   // walls.forEach(wall => {
+   //   ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+    //});
 
     // Draw player sprite
     ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
