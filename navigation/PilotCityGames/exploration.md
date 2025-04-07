@@ -14,7 +14,7 @@ permalink: /exploration
         <td><a href="{{site.baseurl}}/editing">Editing</a></td>
         <td><a href="{{site.baseurl}}/exploration">Exploration</a></td>
         <td><a href="{{site.baseurl}}/outbreak">Outbreak</a></td>
-        <td><a href="{{site.baseurl}}/worldmap">WorldMap</a></td>
+        <td><a href="{{site.baseurl}}/aboutus">AboutUs</a></td>
     </tr>
 </table>
 
