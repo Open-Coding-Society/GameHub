@@ -6,18 +6,6 @@ permalink: /blackjack
 Author: Zach
 ---
 
-<table>
-    <tr>
-        <td><a href="{{site.baseurl}}/home">Home</a></td>
-        <td><a href="{{site.baseurl}}/blackjack">BlackJack</a></td>
-        <td><a href="{{site.baseurl}}/building">Building</a></td>
-        <td><a href="{{site.baseurl}}/editing">Editing</a></td>
-        <td><a href="{{site.baseurl}}/exploration">Exploration</a></td>
-        <td><a href="{{site.baseurl}}/outbreak">Outbreak</a></td>
-        <td><a href="{{site.baseurl}}/aboutus">AboutUs</a></td>
-    </tr>
-</table>
-
 <style>
 :root {
     --background: linear-gradient(145deg, #A6AEBF, #C5D3E8, #D0E8C5, #FFF8DE);

@@ -6,18 +6,6 @@ permalink: /building
 Author: Ian
 ---
 
-<table>
-    <tr>
-        <td><a href="{{site.baseurl}}/home">Home</a></td>
-        <td><a href="{{site.baseurl}}/blackjack">BlackJack</a></td>
-        <td><a href="{{site.baseurl}}/building">Building</a></td>
-        <td><a href="{{site.baseurl}}/editing">Editing</a></td>
-        <td><a href="{{site.baseurl}}/exploration">Exploration</a></td>
-        <td><a href="{{site.baseurl}}/outbreak">Outbreak</a></td>
-        <td><a href="{{site.baseurl}}/aboutus">AboutUs</a></td>
-    </tr>
-</table>
-
 <style>
 :root {
     --background: linear-gradient(145deg, #89A8B2, #B3C8CF, #E5E1DA, #F1F0E8, rgb(137, 168, 178), rgb(179, 200, 207), rgb(229, 225, 218), rgb(241, 240, 232));

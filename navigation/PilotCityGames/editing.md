@@ -6,18 +6,6 @@ permalink: /editing
 Author: Aarush
 ---
 
-<table>
-    <tr>
-        <td><a href="{{site.baseurl}}/home">Home</a></td>
-        <td><a href="{{site.baseurl}}/blackjack">BlackJack</a></td>
-        <td><a href="{{site.baseurl}}/building">Building</a></td>
-        <td><a href="{{site.baseurl}}/editing">Editing</a></td>
-        <td><a href="{{site.baseurl}}/exploration">Exploration</a></td>
-        <td><a href="{{site.baseurl}}/outbreak">Outbreak</a></td>
-        <td><a href="{{site.baseurl}}/aboutus">AboutUs</a></td>
-    </tr>
-</table>
-
 <style>
     body {
         background: linear-gradient(145deg, #F7CFD8, #F4F8D3, #A6F1E0, #73C7C7);

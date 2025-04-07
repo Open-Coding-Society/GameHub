@@ -1,69 +1,9 @@
 ---
-layout: post
-title: Home
-description: Home Page
-permalink: /home
-Author: Everyone
+layout: base
+title: GenomeGamers Homepage
+search_exclude: true
 ---
 
-<table>
-    <tr>
-        <td><a href="{{site.baseurl}}/home">Home</a></td>
-        <td><a href="{{site.baseurl}}/blackjack">BlackJack</a></td>
-        <td><a href="{{site.baseurl}}/building">Building</a></td>
-        <td><a href="{{site.baseurl}}/editing">Editing</a></td>
-        <td><a href="{{site.baseurl}}/exploration">Exploration</a></td>
-        <td><a href="{{site.baseurl}}/outbreak">Outbreak</a></td>
-        <td><a href="{{site.baseurl}}/aboutus">AboutUs</a></td>
-    </tr>
-</table>
-
-<style>
-    :root {
-        --primary-color: #1a237e;
-        --secondary-color: #283593;
-        --background: linear-gradient(145deg, #727D73, #AAB99A, #D0DDD0, #F0F0D7, rgb(114, 125, 115), rgb(170, 185, 154), rgb(208, 221, 208), rgb(240, 240, 215));
-        --text-color: black;
-        --card-bg: rgba(30, 41, 59, 0.8);
-        --error: #e74c3c;
-        --success: #2ecc71;
-    }
-
-    body {
-        background: var(--background);
-        color: var(--text-color);
-        min-height: 100vh;
-    }
-
-    table {
-        width: 100%;
-        margin-bottom: 2rem;
-        border-collapse: collapse;
-        background: rgba(30, 41, 59, 0.5);
-        border-radius: 8px;
-    }
-
-    table td {
-        padding: 0.5rem;
-        text-align: center;
-    }
-
-    table a {
-        color: #93c5fd;
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-
-    table a:hover {
-        color: #60a5fa;
-    }
-
-</style>
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Mini Games Hub</title>
   <style>
     body {
       margin: 0;
@@ -83,14 +23,31 @@ Author: Everyone
       margin: 20px auto;
       border: 2px solid white;
       background: #444; /* fallback background color */
+      position: relative;
+    }
+    #points-display {
+      position: absolute;
+      top: 22px; /* Moved two more pixels down */
+      left: 10px;
+      font-size: 1.5em;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 5px;
+      z-index: 1;
+    }
+    #canvas-container {
+      position: relative;
+      display: inline-block;
     }
   </style>
-</head>
-<body>
 
 <h1>Welcome to the Mini Games Hub</h1>
 <div id="loading">Loading game assets...</div>
-<canvas id="gameCanvas" width="960" height="720"></canvas>
+<div id="canvas-container">
+  <div id="points-display">Points: 0</div>
+  <canvas id="gameCanvas" width="960" height="720"></canvas>
+</div>
 
 <script>
   const canvas = document.getElementById('gameCanvas');
@@ -182,7 +139,7 @@ walls.push(
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw invisible walls (debug) uncomment to see walls
+    // Draw invisible walls (debug)
    // ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
    // walls.forEach(wall => {
    //   ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
@@ -238,6 +195,27 @@ walls.push(
   roomImage.onerror = () => alert('Failed to load room image');
   spriteImage.onerror = () => alert('Failed to load sprite image');
 </script>
+<script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+  async function fetchPoints() {
+    try {
+      const response = await fetch(`${pythonURI}/api/points`, {
+        ...fetchOptions,
+        method: 'GET',
+      });
 
-</body>
-</html>
+      if (response.ok) {
+        const data = await response.json();
+        document.getElementById('points-display').textContent = `Points: ${data.points.points}`;
+      } else {
+        const error = await response.json();
+        document.getElementById('points-display').textContent = `Points: ${error.message || 'Error fetching points'}`;
+      }
+    } catch (err) {
+      document.getElementById('points-display').textContent = 'Points: Failed to fetch points';
+    }
+  }
+
+  // Fetch points on page load
+  fetchPoints();
+</script>
