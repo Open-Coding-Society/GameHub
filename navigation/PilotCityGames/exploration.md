@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Exploration
 description: Exploration
 permalink: /exploration

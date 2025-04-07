@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Editing
 description: Editing
 permalink: /editing

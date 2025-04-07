@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Building
 description: Building
 permalink: /building

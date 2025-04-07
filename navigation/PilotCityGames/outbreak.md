@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Outbreak
 description: Outbreak
 permalink: /outbreak
