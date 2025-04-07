@@ -2,13 +2,13 @@
 layout: post
 title: Editing
 description: Editing
-Author: Aarush
 permalink: /editing
+Author: Aarush
 ---
 
 <table>
     <tr>
-        <td><a href="{{site.baseurl}}/index">Home</a></td>
+        <td><a href="{{site.baseurl}}/home">Home</a></td>
         <td><a href="{{site.baseurl}}/blackjack">BlackJack</a></td>
         <td><a href="{{site.baseurl}}/building">Building</a></td>
         <td><a href="{{site.baseurl}}/editing">Editing</a></td>
