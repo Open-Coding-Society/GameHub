@@ -1,7 +1,8 @@
 ---
-layout: base
-title: GenomeGamers Homepage
-search_exclude: true
+layout: post
+title: Mini Games Hub
+description: Minigame Selector Page
+Author: Everyone
 ---
 
   <style>
@@ -22,12 +23,12 @@ search_exclude: true
       display: block;
       margin: 20px auto;
       border: 2px solid white;
-      background: #444; /* fallback background color */
+      background: #444; 
       position: relative;
     }
     #points-display {
       position: absolute;
-      top: 22px; /* Moved two more pixels down */
+      top: 22px; 
       left: 10px;
       font-size: 1.5em;
       color: #fff;
@@ -42,7 +43,7 @@ search_exclude: true
     }
   </style>
 
-<h1>Welcome to the Mini Games Hub</h1>
+
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
   <div id="points-display">Points: 0</div>
@@ -87,7 +88,7 @@ search_exclude: true
     { x: 800, y: 400, width: 25, height: 55 },
     { x: 680, y: 590, width: 25, height: 55 },
     { x: 385, y: 360, width: 95, height: 30 },
-    // Add more wall blocks here
+
   ];
 
   const borderThickness = 10;
@@ -121,7 +122,7 @@ walls.push(
       player.y = nextY;
     }
 
-    // Check for object collision (trigger mini-games)
+  
     objects.forEach(obj => {
       if (isColliding(player, obj)) {
         window.location.href = obj.game;
@@ -139,16 +140,11 @@ walls.push(
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw invisible walls (debug)
-   // ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
-   // walls.forEach(wall => {
-   //   ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-    //});
 
-    // Draw player sprite
-    ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
-    // Draw interactive objects
+  ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
+
+  
     ctx.fillStyle = 'red';
     objects.forEach(obj => {
       ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
@@ -178,7 +174,7 @@ walls.push(
     keys[e.key.toLowerCase()] = false;
   });
 
-  // Start game once images are loaded
+ 
   let imagesLoaded = 0;
   function tryStartGame() {
     imagesLoaded++;
@@ -216,6 +212,6 @@ walls.push(
     }
   }
 
-  // Fetch points on page load
+ 
   fetchPoints();
 </script>
