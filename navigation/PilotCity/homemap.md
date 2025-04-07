@@ -128,7 +128,7 @@ walls.push(
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw invisible walls (debug)
+    // Draw invisible walls (debug) uncomment to see walls
    // ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
    // walls.forEach(wall => {
    //   ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
