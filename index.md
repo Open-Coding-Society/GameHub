@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Mini Games Hub
-description: Minigame Selector Page
+title: Scripps Biotech ML-Based Game
+description: Move your character around to enter different mini games on this map.
 Author: Everyone
 ---
 
