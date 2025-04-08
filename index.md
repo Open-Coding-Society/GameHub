@@ -61,8 +61,8 @@ Author: Everyone
   spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
   const player = {
-    x: 100,
-    y: 100,
+    x: 170,
+    y: 335,
     width: 75,
     height: 75,
     speed: 4
@@ -71,11 +71,12 @@ Author: Everyone
   const keys = {};
 
   const objects = [
-    { x: 300, y: 150, width: 40, height: 40, game: 'game1.html' },
-    { x: 500, y: 150, width: 40, height: 40, game: 'game2.html' },
-    { x: 765, y: 170, width: 40, height: 40, game: 'game3.html' },
-    { x: 800, y: 590, width: 40, height: 40, game: 'game4.html' },
-    { x: 410, y: 375, width: 40, height: 40, game: 'game5.html' },
+    { x: 100, y: 100, width: 40, height: 40, game: 'blackjack' }, // top left
+    { x: 450, y: 100, width: 40, height: 40, game: 'building' }, // top middle
+    { x: 755, y: 250, width: 40, height: 40, game: 'editing' }, // top right
+    { x: 100, y: 600, width: 40, height: 40, game: 'exploration' }, // bottom left
+    { x: 450, y: 620, width: 40, height: 40, game: 'outbreak' }, // bottom middle
+    { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }  // bottom right
   ];
 
   const walls = [
@@ -87,8 +88,6 @@ Author: Everyone
     { x: 680, y: 400, width: 25, height: 55 },
     { x: 800, y: 400, width: 25, height: 55 },
     { x: 680, y: 590, width: 25, height: 55 },
-    { x: 385, y: 360, width: 95, height: 30 },
-
   ];
 
   const borderThickness = 10;
