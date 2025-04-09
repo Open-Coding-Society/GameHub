@@ -148,6 +148,12 @@ function update() {
         case 'aboutus':
           window.location.href = '{{site.baseurl}}/aboutus';
           break;
+        case 'skin':
+          window.location.href = '{{site.baseurl}}/skin';
+          break;
+         case 'design':
+          window.location.href = '{{site.baseurl}}/design';
+          break;
       }
     }
   });

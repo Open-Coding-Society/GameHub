@@ -1,7 +1,7 @@
 ---
 layout: bootstrap
 title: Design
-description: Our designs/ideas
+description: Our ideas and designs for making this project!
 permalink: /design
-Author: Pradyun
+Author: Everyone
 ---
