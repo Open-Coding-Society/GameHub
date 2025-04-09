@@ -65,8 +65,8 @@ const iconImage = new Image();
 iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
 
 const player = {
-  x: 170,
-  y: 335,
+  x: 400,
+  y: 325,
   width: 75,
   height: 75,
   speed: 4
