@@ -61,8 +61,8 @@ const spriteImage = new Image();
 spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
 //doesnt work YET save for later
-// const iconImage = new Image();
-// iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
+const iconImage = new Image();
+iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
 
 const player = {
   x: 170,
