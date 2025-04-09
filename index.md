@@ -60,6 +60,10 @@ roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02
 const spriteImage = new Image();
 spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
+//doesnt work YET save for later
+// const iconImage = new Image();
+// iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
+
 const player = {
   x: 170,
   y: 335,
@@ -71,7 +75,7 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 100, y: 100, width: 40, height: 40, game: 'blackjack' }, // top left
+  { x: 100, y: 100, width: 40, height: 40, game: 'blackjack', icon: true }, // top left
   { x: 450, y: 100, width: 40, height: 40, game: 'building' }, // top middle
   { x: 755, y: 250, width: 40, height: 40, game: 'editing' }, // top right
   { x: 100, y: 600, width: 40, height: 40, game: 'exploration' }, // bottom left
@@ -123,10 +127,13 @@ function update() {
 
 
   objects.forEach(obj => {
-    if (isColliding(player, obj)) {
-      window.location.href = obj.game;
-    }
-  });
+  if (obj.icon && iconImage.complete) {
+    ctx.drawImage(iconImage, obj.x, obj.y, obj.width, obj.height);
+  } else {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+  }
+});
 }
 
 function draw() {
