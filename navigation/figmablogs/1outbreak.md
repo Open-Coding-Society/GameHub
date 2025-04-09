@@ -15,3 +15,16 @@ I can identify high-risk areas before an outbreak begins.
 When virus “bubbles” emerge on the map as indicators of potential hotspots,I must act fast to “pop” them and deploy appropriate interventions.
 My goal is to reduce infection spread, minimize economic disruption, and maintain national stability — all under pressure of real-time outbreaks
 modeled upon the recent devistating COVID-19 outbreak.</p>
+
+<body>
+
+    <br>
+    <div>
+         <table style="width: 25%; text-align: center; border-collapse: separate; border-spacing: 10px;">
+              <tr>
+                  <td><a href="{{site.baseurl}}/navigation/figmablogs/" class="button">Return</a></td>
+              </tr>
+         </table>
+    </div>
+    <br>
+</body>

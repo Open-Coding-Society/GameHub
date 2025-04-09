@@ -14,3 +14,16 @@ Drawing from real CRISPR/Cas9 data on gene sequences and mutation outcomes, I'm 
 For each bridge, I can choose different editing options, such as substitutions, insertions, or deletions.
 After making my changes, machine learning models like SVM and Random Forest forecast the biological impact — including whether the edit introduces a harmful mutation, enhances gene function, or results in a neutral change.
 My challenge is to optimize edits for beneficial outcomes while minimizing genetic instability. This experience helps me understand the power and complexity of gene editing, where every decision carries weight.</p>
+
+<body>
+
+    <br>
+    <div>
+         <table style="width: 25%; text-align: center; border-collapse: separate; border-spacing: 10px;">
+              <tr>
+                  <td><a href="{{site.baseurl}}/navigation/figmablogs/" class="button">Return</a></td>
+              </tr>
+         </table>
+    </div>
+    <br>
+</body>
