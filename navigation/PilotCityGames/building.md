@@ -6,59 +6,45 @@ permalink: /building
 Author: Ian
 ---
 
-<header>
-  🧬 DNA Building Game
-</header>
-<main>
-  <p>Drag the correct base to form the complementary strand!</p>
+<div class="container mt-5">
+  <h1 class="text-center text-success mb-4">🧬 DNA Building Game</h1>
+  <p class="text-center mb-4">Drag the correct base to form the complementary strand!</p>
 
-  <div class="game-wrapper">
-    <!-- Original DNA strand -->
-    <div class="strand" id="original-strand"></div>
-
-    <!-- Complementary strand (droppable) -->
-    <div class="strand" id="complementary-strand"></div>
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-5">
+      <div class="card bg-dark text-white mb-3">
+        <div class="card-header">Original Strand</div>
+        <div class="card-body d-flex flex-column align-items-center gap-2" id="original-strand"></div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="card bg-dark text-white mb-3">
+        <div class="card-header">Complementary Strand</div>
+        <div class="card-body d-flex flex-column align-items-center gap-2" id="complementary-strand"></div>
+      </div>
+    </div>
   </div>
 
-  <div class="base-pool-title">🧪 Base Pool</div>
-  <div class="base-pool" id="base-pool"></div>
+  <h4 class="text-center text-muted mb-3">🧪 Base Pool</h4>
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card bg-secondary p-3 mb-3">
+        <div class="d-flex flex-wrap justify-content-center gap-2" id="base-pool"></div>
+      </div>
+    </div>
+  </div>
 
-  <button onclick="calculateStability()">Check Stability</button>
-  <div id="score"></div>
-</main>
+  <div class="text-center">
+    <button class="btn btn-success btn-lg" onclick="calculateStability()">Check Stability</button>
+    <div id="score" class="mt-3 fs-5 text-white"></div>
+  </div>
+</div>
 
 <style>
   body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
     background-color: #121212;
     color: #ffffff;
-  }
-  header {
-    background-color: #1db954;
-    padding: 20px;
-    text-align: center;
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-  }
-  .game-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-  }
-  .strand {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    font-family: 'Inter', sans-serif;
   }
   .base-slot, .draggable {
     width: 60px;
@@ -84,37 +70,6 @@ Author: Ian
   .T { background-color: #fdd835; color: black; }
   .C { background-color: #43a047; color: white; }
   .G { background-color: #1e88e5; color: white; }
-
-  .base-pool-title {
-    font-size: 24px;
-    margin: 30px 0 10px;
-    color: #ccc;
-  }
-  .base-pool {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-  button {
-    margin-top: 20px;
-    background-color: #1db954;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 18px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  button:hover {
-    background-color: #17a74a;
-  }
-  #score {
-    margin-top: 20px;
-    font-size: 20px;
-    color: #ddd;
-  }
 </style>
 
 <script>
@@ -190,4 +145,3 @@ Author: Ian
       `✅ Correct Matches: ${percentCorrect}%<br>🧬 GC Stability: ${gcPercent}%`;
   }
 </script>
-
