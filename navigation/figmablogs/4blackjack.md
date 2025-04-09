@@ -14,3 +14,16 @@ Drawing from the Protein Data Bank (PDB), each “card” I draw represents a un
 My goal is to build the most stable antibody-antigen pair without “busting” — meaning exceeding the optimal stability threshold or selecting incompatible fragments.
 As I build my hand, machine learning models (K-Nearest Neighbors and Neural Networks) analyze my selected fragments in real-time,
 predicting binding efficacy and structural stability. If the final antibody configuration falls within the optimal range, I score high for immune precision.</p>
+
+<body>
+
+    <br>
+    <div>
+         <table style="width: 25%; text-align: center; border-collapse: separate; border-spacing: 10px;">
+              <tr>
+                  <td><a href="{{site.baseurl}}/navigation/figmablogs/" class="button">Return</a></td>
+              </tr>
+         </table>
+    </div>
+    <br>
+</body>

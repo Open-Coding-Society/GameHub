@@ -15,3 +15,16 @@ Some base pairs are highlighted or misaligned, and I must drag and place correct
 Once I finalize a sequence, machine learning models (Random Forest and XGBoost) evaluate the impact of my edits —
 revealing whether the mutation is silent, harmful, or beneficial based on known patterns.
 My goal is to build stable, functional DNA strands while learning how small changes in code can lead to big changes in biological outcomes.</p>
+
+<body>
+
+    <br>
+    <div>
+         <table style="width: 25%; text-align: center; border-collapse: separate; border-spacing: 10px;">
+              <tr>
+                  <td><a href="{{site.baseurl}}/navigation/figmablogs/" class="button">Return</a></td>
+              </tr>
+         </table>
+    </div>
+    <br>
+</body>

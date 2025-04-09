@@ -14,3 +14,16 @@ As I move through a colorful, immersive 3D-like cellular environment, I encounte
 Each time I reach an organelle, a short interactive module or animation explains its role — such as how the mitochondria produce energy, or how the Golgi apparatus packages proteins.
 The joystick movement gives me full control over my journey, letting me explore the cell at my own pace, revisit organelles, or take on optional mini-challenges at each location.
 This game helps me build a deeper understanding of cell biology through exploration and discovery, turning textbook concepts into an interactive adventure.<p>
+
+<body>
+
+    <br>
+    <div>
+            <table style="width: 25%; text-align: center; border-collapse: separate; border-spacing: 10px;">
+                <tr>
+                    <td><a href="{{site.baseurl}}/navigation/figmablogs/" class="button">Return</a></td>
+                </tr>
+            </table>
+    </div>
+    <br>
+</body>
