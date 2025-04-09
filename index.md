@@ -1,7 +1,9 @@
 ---
 layout: post
 title: Scripps Biotech ML-Based Game
-description: Move your character around to enter different mini games on this map.
+description: >
+  Move your character around to enter different minigames and experiences on this map.  
+  The Red squares are minigames and the Blue squares are varied experiences.
 Author: Everyone
 ---
 
@@ -180,8 +182,13 @@ function draw() {
 
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
-  ctx.fillStyle = 'red';
+
   objects.forEach(obj => {
+    if (obj.x > 700) { 
+      ctx.fillStyle = 'blue';
+    } else {
+      ctx.fillStyle = 'red';
+    }
     ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
   });
 }
