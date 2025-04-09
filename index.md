@@ -77,7 +77,9 @@ const keys = {};
 const objects = [
   { x: 100, y: 100, width: 40, height: 40, game: 'blackjack', icon: true }, // top left
   { x: 450, y: 100, width: 40, height: 40, game: 'building' }, // top middle
-  { x: 755, y: 250, width: 40, height: 40, game: 'editing' }, // top right
+  { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // top right
+  { x: 100, y: 360, width: 40, height: 40, game: 'editing' }, // middle left
+  { x: 735, y: 410, width: 40, height: 40, game: 'design' }, // middle right
   { x: 100, y: 600, width: 40, height: 40, game: 'exploration' }, // bottom left
   { x: 450, y: 620, width: 40, height: 40, game: 'outbreak' }, // bottom middle
   { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }  // bottom right
