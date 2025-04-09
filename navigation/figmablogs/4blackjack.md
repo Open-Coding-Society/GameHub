@@ -15,6 +15,8 @@ My goal is to build the most stable antibody-antigen pair without “busting” 
 As I build my hand, machine learning models (K-Nearest Neighbors and Neural Networks) analyze my selected fragments in real-time,
 predicting binding efficacy and structural stability. If the final antibody configuration falls within the optimal range, I score high for immune precision.</p>
 
+<img src="https://i.postimg.cc/0QgnHkNt/image-2025-04-09-003027069.png" alt="Figma Outbreak" style="width: 100%; height: auto;">
+
 <body>
 
     <br>

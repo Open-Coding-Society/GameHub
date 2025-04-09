@@ -15,6 +15,8 @@ Each time I reach an organelle, a short interactive module or animation explains
 The joystick movement gives me full control over my journey, letting me explore the cell at my own pace, revisit organelles, or take on optional mini-challenges at each location.
 This game helps me build a deeper understanding of cell biology through exploration and discovery, turning textbook concepts into an interactive adventure.<p>
 
+    <img src="https://i.postimg.cc/ZnPJy5WX/image-2025-04-09-003055885.png" alt="Figma Outbreak" style="width: 100%; height: auto;">
+
 <body>
 
     <br>

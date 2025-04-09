@@ -16,6 +16,8 @@ Once I finalize a sequence, machine learning models (Random Forest and XGBoost) 
 revealing whether the mutation is silent, harmful, or beneficial based on known patterns.
 My goal is to build stable, functional DNA strands while learning how small changes in code can lead to big changes in biological outcomes.</p>
 
+<img src="https://i.postimg.cc/289qSqmt/image-2025-04-09-002842783.png" alt="Figma Outbreak" style="width: 100%; height: auto;">
+
 <body>
 
     <br>

@@ -15,6 +15,8 @@ For each bridge, I can choose different editing options, such as substitutions, 
 After making my changes, machine learning models like SVM and Random Forest forecast the biological impact — including whether the edit introduces a harmful mutation, enhances gene function, or results in a neutral change.
 My challenge is to optimize edits for beneficial outcomes while minimizing genetic instability. This experience helps me understand the power and complexity of gene editing, where every decision carries weight.</p>
 
+<img src="https://i.postimg.cc/Sx3JWjZv/image-2025-04-09-003003661.png" alt="Figma Outbreak" style="width: 100%; height: auto;">
+
 <body>
 
     <br>

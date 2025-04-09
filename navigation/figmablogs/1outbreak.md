@@ -16,6 +16,7 @@ When virus “bubbles” emerge on the map as indicators of potential hotspots,I
 My goal is to reduce infection spread, minimize economic disruption, and maintain national stability — all under pressure of real-time outbreaks
 modeled upon the recent devistating COVID-19 outbreak.</p>
 
+<img src="https://i.postimg.cc/hPzxkbRj/image-2025-04-09-002803167.png" alt="Figma Outbreak" style="width: 100%; height: auto;">
 <body>
 
     <br>
