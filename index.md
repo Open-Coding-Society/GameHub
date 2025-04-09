@@ -125,15 +125,39 @@ function update() {
     player.y = nextY;
   }
 
+  objects.forEach(obj => {
+    if (isColliding(player, obj)) {
+      switch (obj.game) {
+        case 'blackjack':
+          window.location.href = '{{site.baseurl}}/blackjack';
+          break;
+        case 'building':
+          window.location.href = '{{site.baseurl}}/building';
+          break;
+        case 'editing':
+          window.location.href = '{{site.baseurl}}/editing';
+          break;
+        case 'exploration':
+          window.location.href = '{{site.baseurl}}/exploration';
+          break;
+        case 'outbreak':
+          window.location.href = '{{site.baseurl}}/outbreak';
+          break;
+        case 'aboutus':
+          window.location.href = '{{site.baseurl}}/aboutus';
+          break;
+      }
+    }
+  });
 
   objects.forEach(obj => {
-  if (obj.icon && iconImage.complete) {
-    ctx.drawImage(iconImage, obj.x, obj.y, obj.width, obj.height);
-  } else {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
-  }
-});
+    if (obj.icon && iconImage.complete) {
+      ctx.drawImage(iconImage, obj.x, obj.y, obj.width, obj.height);
+    } else {
+      ctx.fillStyle = 'red';
+      ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+    }
+  });
 }
 
 function draw() {
@@ -146,10 +170,7 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-
-
-ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
-
+  ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
   ctx.fillStyle = 'red';
   objects.forEach(obj => {
