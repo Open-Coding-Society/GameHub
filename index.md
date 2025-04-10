@@ -185,13 +185,8 @@ function draw() {
 
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
-
   objects.forEach(obj => {
-    if (obj.x > 700) { 
-      ctx.fillStyle = 'blue';
-    } else {
-      ctx.fillStyle = 'red';
-    }
+    ctx.fillStyle = 'red';
     ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
   });
 }
