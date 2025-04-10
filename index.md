@@ -95,7 +95,8 @@ const walls = [
   { x: 560, y: 450, width: 25, height: 55 },
   { x: 680, y: 400, width: 25, height: 55 },
   { x: 800, y: 400, width: 25, height: 55 },
-  { x: 680, y: 590, width: 25, height: 55 },
+  { x: 680, y: 570, width: 25, height: 55 },
+  { x: 800, y: 570, width: 25, height: 55 },
 ];
 
 const borderThickness = 10;
