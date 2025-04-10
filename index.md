@@ -1,9 +1,7 @@
 ---
 layout: post
 title: Scripps Biotech ML-Based Game
-description: >
-  Move your character around to enter different minigames and experiences on this map.  
-  The Red squares are minigames and the Blue squares are varied experiences.
+description: Move your character around to enter different minigames and experiences on this map.  
 Author: Everyone
 ---
 

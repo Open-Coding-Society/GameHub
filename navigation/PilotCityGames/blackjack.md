@@ -52,43 +52,56 @@ Author: Zach
 
   function createDeck() {
     const antibodies = [
-      { name: "IgG", value: 10 },
-      { name: "IgA", value: 8 },
-      { name: "IgM", value: 7 },
-      { name: "IgE", value: 6 },
+      { name: "IgG", value: 1 },
+      { name: "IgA", value: 2 },
+      { name: "IgM", value: 3 },
+      { name: "IgE", value: 4 },
       { name: "IgD", value: 5 },
-      { name: "IgG1", value: 10 },
-      { name: "IgG2", value: 9 },
-      { name: "IgG3", value: 10 },
-      { name: "IgG4", value: 4 },
-      { name: "IgA1", value: 8 },
-      { name: "IgA2", value: 7 },
-      { name: "Secretory IgM", value: 7 },
-      { name: "IgY", value: 6 }
+      { name: "IgG1", value: 6 },
+      { name: "IgG2", value: 7 },
+      { name: "IgG3", value: 8 },
+      { name: "IgG4", value: 9 },
+      { name: "IgA1", value: 10 },
+      { name: "IgA2", value: 10 },
+      { name: "Secretory IgM", value: 10 },
+      { name: "IgY", value: 10 }
     ];
     deck = antibodies.map(antibody => antibody.name).sort(() => Math.random() - 0.5); // Shuffle deck
   }
 
   function calculateScore(cards) {
     const antibodyValues = {
-      "IgG": 10,
-      "IgA": 8,
-      "IgM": 7,
-      "IgE": 6,
+      "IgG": 11, 
+      "IgA": 2,
+      "IgM": 3,
+      "IgE": 4,
       "IgD": 5,
-      "IgG1": 10,
-      "IgG2": 9,
-      "IgG3": 10,
-      "IgG4": 4,
-      "IgA1": 8,
-      "IgA2": 7,
-      "Secretory IgM": 7,
-      "IgY": 6
+      "IgG1": 6,
+      "IgG2": 7,
+      "IgG3": 8,
+      "IgG4": 9,
+      "IgA1": 10,
+      "IgA2": 10,
+      "Secretory IgM": 10,
+      "IgY": 10
     };
+
     let score = 0;
+    let iggCount = 0;
+
     for (const card of cards) {
       score += antibodyValues[card];
+      if (card === "IgG") {
+        iggCount++;
+      }
     }
+
+    // Adjust IgG value from 11 to 1 if score exceeds 21
+    while (score > 21 && iggCount > 0) {
+      score -= 10; // Reduce score by 10 (11 - 1)
+      iggCount--;
+    }
+
     return score;
   }
 
