@@ -97,7 +97,7 @@ const walls = [
   { x: 800, y: 400, width: 25, height: 55 },
   { x: 680, y: 570, width: 25, height: 55 },
   { x: 800, y: 570, width: 25, height: 55 },
-  { x: 755, y: 195, width: 25, height: 55 },
+  { x: 755, y: 180, width: 25, height: 55 },
   { x: 675, y: 80, width: 250, height: 55 },
 ];
 
