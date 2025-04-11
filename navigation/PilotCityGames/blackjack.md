@@ -52,46 +52,47 @@ Author: Zach
 
   function createDeck() {
     const antibodies = [
-      { name: "IgG", value: 1 },
-      { name: "IgA", value: 2 },
-      { name: "IgM", value: 3 },
-      { name: "IgE", value: 4 },
-      { name: "IgD", value: 5 },
-      { name: "IgG1", value: 6 },
-      { name: "IgG2", value: 7 },
-      { name: "IgG3", value: 8 },
-      { name: "IgG4", value: 9 },
-      { name: "IgA1", value: 10 },
-      { name: "IgA2", value: 10 },
-      { name: "Secretory IgM", value: 10 },
-      { name: "IgY", value: 10 }
+      { name: "IgG", value: 11, description: "Most abundant, long-term immunity." },
+      { name: "IgA", value: 2, description: "Protects mucosal surfaces." },
+      { name: "IgM", value: 3, description: "First responder, complement activator." },
+      { name: "IgE", value: 4, description: "Allergies and parasite defense." },
+      { name: "IgD", value: 5, description: "B cell activation role." },
+      { name: "IgG1", value: 6, description: "Effective against viruses/bacteria." },
+      { name: "IgG2", value: 7, description: "Carbohydrate antigen defense." },
+      { name: "IgG3", value: 8, description: "Strong complement activator." },
+      { name: "IgG4", value: 9, description: "Regulates immune responses." },
+      { name: "IgA1", value: 10, description: "Blood-based infection defense." },
+      { name: "IgA2", value: 10, description: "Mucosal secretion protection." },
+      { name: "Secretory IgM", value: 10, description: "Mucosal immunity role." },
+      { name: "IgY", value: 10, description: "Bird/reptile antibody, IgG-like." }
     ];
-    deck = antibodies.map(antibody => antibody.name).sort(() => Math.random() - 0.5); // Shuffle deck
+
+    const suits = ["♥", "♦", "♣", "♠"];
+    const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+    deck = [];
+    antibodies.forEach((antibody, index) => {
+      suits.forEach((suit) => {
+        deck.push({
+          name: antibody.name,
+          value: antibody.value,
+          rank: ranks[index],
+          suit: suit,
+          description: antibody.description
+        });
+      });
+    });
+
+    deck.sort(() => Math.random() - 0.5); // Shuffle the deck
   }
 
   function calculateScore(cards) {
-    const antibodyValues = {
-      "IgG": 11, 
-      "IgA": 2,
-      "IgM": 3,
-      "IgE": 4,
-      "IgD": 5,
-      "IgG1": 6,
-      "IgG2": 7,
-      "IgG3": 8,
-      "IgG4": 9,
-      "IgA1": 10,
-      "IgA2": 10,
-      "Secretory IgM": 10,
-      "IgY": 10
-    };
-
     let score = 0;
     let iggCount = 0;
 
     for (const card of cards) {
-      score += antibodyValues[card];
-      if (card === "IgG") {
+      score += card.value;
+      if (card.name === "IgG") {
         iggCount++;
       }
     }
@@ -105,81 +106,71 @@ Author: Zach
     return score;
   }
 
-  function createCardElement(cardName) {
-    const card = document.createElement("div");
-    card.className = "card m-2";
-    card.style.width = "100px";
-    card.style.height = "150px";
-    card.style.perspective = "1000px";
+  function createCardElement(card) {
+    const cardElement = document.createElement("div");
+    cardElement.style.width = "110px"; // Revert to standard card size
+    cardElement.style.height = "160px"; // Revert to standard card size
+    cardElement.className = "card m-2";
+    cardElement.style.border = "1px solid black";
+    cardElement.style.borderRadius = "8px";
+    cardElement.style.backgroundColor = "white";
+    cardElement.style.position = "relative";
+    cardElement.style.display = "flex";
+    cardElement.style.flexDirection = "column";
+    cardElement.style.justifyContent = "space-between";
+    cardElement.style.padding = "5px";
+    cardElement.style.color = "black"; // Ensure text is visible
 
-    const cardInner = document.createElement("div");
-    cardInner.className = "card-inner";
-    cardInner.style.position = "relative";
-    cardInner.style.width = "100%";
-    cardInner.style.height = "100%";
-    cardInner.style.transformStyle = "preserve-3d";
-    cardInner.style.transition = "transform 0.6s";
+    // Determine suit color
+    const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
 
-    const cardFront = document.createElement("div");
-    cardFront.className = "card-front";
-    cardFront.style.position = "absolute";
-    cardFront.style.width = "100%";
-    cardFront.style.height = "100%";
-    cardFront.style.backfaceVisibility = "hidden";
-    cardFront.style.backgroundColor = "#007bff";
-    cardFront.style.color = "white";
-    cardFront.style.display = "flex";
-    cardFront.style.alignItems = "center";
-    cardFront.style.justifyContent = "center";
-    cardFront.style.borderRadius = "5px";
-    cardFront.style.textAlign = "center"; // Ensure text is centered
-    cardFront.textContent = cardName;
+    // Top-left antibody name
+    const topLeft = document.createElement("div");
+    topLeft.style.position = "absolute";
+    topLeft.style.top = "5px";
+    topLeft.style.left = "5px";
+    topLeft.style.fontSize = card.name === "Secretory IgM" ? "10px" : "12px"; // Slightly smaller for "Secretory IgM"
+    topLeft.style.fontWeight = "bold";
+    topLeft.textContent = card.name;
+    cardElement.appendChild(topLeft);
 
-    const cardBack = document.createElement("div");
-    cardBack.className = "card-back";
-    cardBack.style.position = "absolute";
-    cardBack.style.width = "100%";
-    cardBack.style.height = "100%";
-    cardBack.style.backfaceVisibility = "hidden";
-    cardBack.style.backgroundColor = "#f8f9fa";
-    cardBack.style.color = "#333";
-    cardBack.style.display = "flex";
-    cardBack.style.alignItems = "center";
-    cardBack.style.justifyContent = "center";
-    cardBack.style.borderRadius = "5px";
-    cardBack.style.transform = "rotateY(180deg)";
-    cardBack.style.textAlign = "center"; // Ensure text is centered
-    cardBack.style.fontSize = "12px"; // Reduce font size for better fit
-    cardBack.textContent = getAntibodyDescription(cardName);
+    // Top-right rank and suit
+    const topRight = document.createElement("div");
+    topRight.style.position = "absolute";
+    topRight.style.top = "5px";
+    topRight.style.right = "5px";
+    topRight.style.fontSize = "12px";
+    topRight.style.fontWeight = "bold";
+    topRight.style.color = suitColor; // Apply suit color
+    topRight.textContent = `${card.rank} ${card.suit}`;
+    cardElement.appendChild(topRight);
 
-    cardInner.appendChild(cardFront);
-    cardInner.appendChild(cardBack);
-    card.appendChild(cardInner);
+    // Center antibody description
+    const centerText = document.createElement("div");
+    centerText.style.flexGrow = "1";
+    centerText.style.display = "flex";
+    centerText.style.alignItems = "center";
+    centerText.style.justifyContent = "center";
+    centerText.style.textAlign = "center";
+    centerText.style.fontSize = "10px";
+    centerText.style.overflow = "hidden";
+    centerText.style.textOverflow = "ellipsis";
+    centerText.style.whiteSpace = "normal";
+    centerText.textContent = card.description;
+    cardElement.appendChild(centerText);
 
-    card.addEventListener("click", () => {
-      cardInner.style.transform = cardInner.style.transform === "rotateY(180deg)" ? "rotateY(0deg)" : "rotateY(180deg)";
-    });
+    // Bottom-left rank and suit
+    const bottomLeft = document.createElement("div");
+    bottomLeft.style.position = "absolute";
+    bottomLeft.style.bottom = "5px";
+    bottomLeft.style.left = "5px";
+    bottomLeft.style.fontSize = "12px";
+    bottomLeft.style.fontWeight = "bold";
+    bottomLeft.style.color = suitColor; // Apply suit color
+    bottomLeft.textContent = `${card.rank} ${card.suit}`;
+    cardElement.appendChild(bottomLeft);
 
-    return card;
-  }
-
-  function getAntibodyDescription(cardName) {
-    const descriptions = {
-      "IgG": "Most abundant, long-term immunity.",
-      "IgA": "Protects mucosal surfaces.",
-      "IgM": "First responder, complement activator.",
-      "IgE": "Allergies and parasite defense.",
-      "IgD": "B cell activation role.",
-      "IgG1": "Effective against viruses/bacteria.",
-      "IgG2": "Carbohydrate antigen defense.",
-      "IgG3": "Strong complement activator.",
-      "IgG4": "Regulates immune responses.",
-      "IgA1": "Blood-based infection defense.",
-      "IgA2": "Mucosal secretion protection.",
-      "Secretory IgM": "Mucosal immunity role.",
-      "IgY": "Bird/reptile antibody, IgG-like."
-    };
-    return descriptions[cardName] || "Unknown antibody.";
+    return cardElement;
   }
 
   function updateHands() {
