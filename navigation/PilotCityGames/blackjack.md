@@ -6,11 +6,37 @@ permalink: /blackjack
 Author: Zach
 ---
 
+<style>
+  body {
+    background-color: #0b6623; 
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1; 
+    background-color: #0b6623; 
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  h1.text-center {
+    color: #000000; 
+  }
+
+  .card-title {
+    color: #cccccc; 
+  }
+</style>
+
 <div class="container mt-5">
   <h1 class="text-center">Antibody Blackjack</h1>
   <div class="row justify-content-center mt-4">
     <div class="col-md-6">
-      <div class="card">
+      <div class="card">  
         <div class="card-body">
           <h5 class="card-title">Game Status</h5>
           <p id="game-status" class="card-text">Press "Start Game" to begin!</p>
