@@ -119,31 +119,33 @@ Author: Zach
     cardElement.style.padding = "5px";
     cardElement.style.color = "black"; 
 
-   
-    cardElement.style.backgroundImage = `url('${card.name}.png')`; 
-    cardElement.style.backgroundSize = "cover";
-    cardElement.style.backgroundPosition = "center";
+    const imageElement = document.createElement("img");
+    imageElement.src = `{{site.baseurl}}/images/${card.name.replace(/\s+/g, '')}.png`;
+    imageElement.alt = card.name;
+    imageElement.style.width = "100%";
+    imageElement.style.height = "100%";
+    imageElement.style.borderRadius = "8px";
+    cardElement.appendChild(imageElement);
 
-   
     const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
 
- 
+
     const topLeft = document.createElement("div");
     topLeft.style.position = "absolute";
     topLeft.style.top = "5px";
     topLeft.style.left = "5px";
-    topLeft.style.fontSize = "14px";
+    topLeft.style.fontSize = "18px"; 
     topLeft.style.fontWeight = "bold";
     topLeft.style.color = suitColor; 
     topLeft.textContent = `${card.rank} ${card.suit}`;
     cardElement.appendChild(topLeft);
 
-  
+
     const topRight = document.createElement("div");
     topRight.style.position = "absolute";
     topRight.style.top = "5px";
     topRight.style.right = "5px";
-    topRight.style.fontSize = "12px";
+    topRight.style.fontSize = "16px"; 
     topRight.style.fontWeight = "bold";
     topRight.textContent = card.name;
     cardElement.appendChild(topRight);
@@ -153,7 +155,7 @@ Author: Zach
     bottomRight.style.position = "absolute";
     bottomRight.style.bottom = "5px";
     bottomRight.style.right = "5px";
-    bottomRight.style.fontSize = "14px";
+    bottomRight.style.fontSize = "18px"; 
     bottomRight.style.fontWeight = "bold";
     bottomRight.style.color = suitColor; 
     bottomRight.textContent = `${card.rank} ${card.suit}`;
