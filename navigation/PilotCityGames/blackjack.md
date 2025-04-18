@@ -96,7 +96,6 @@ Author: Zach
       }
     }
 
-    
     while (score > 21 && iggCount > 0) {
       score -= 10; 
       iggCount--;
@@ -120,64 +119,45 @@ Author: Zach
     cardElement.style.padding = "5px";
     cardElement.style.color = "black"; 
 
+   
+    cardElement.style.backgroundImage = `url('${card.name}.png')`; 
+    cardElement.style.backgroundSize = "cover";
+    cardElement.style.backgroundPosition = "center";
 
-  const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
+   
+    const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
 
-
+ 
     const topLeft = document.createElement("div");
     topLeft.style.position = "absolute";
     topLeft.style.top = "5px";
     topLeft.style.left = "5px";
-    topLeft.style.fontSize = "12px";
+    topLeft.style.fontSize = "14px";
     topLeft.style.fontWeight = "bold";
-    topLeft.textContent = card.name;
+    topLeft.style.color = suitColor; 
+    topLeft.textContent = `${card.rank} ${card.suit}`;
     cardElement.appendChild(topLeft);
 
-
+  
     const topRight = document.createElement("div");
     topRight.style.position = "absolute";
     topRight.style.top = "5px";
     topRight.style.right = "5px";
-    topRight.style.fontSize = "14px";
+    topRight.style.fontSize = "12px";
     topRight.style.fontWeight = "bold";
-    topRight.style.color = suitColor; 
-    topRight.textContent = `${card.rank} ${card.suit}`;
+    topRight.textContent = card.name;
     cardElement.appendChild(topRight);
 
-    
-    const image = document.createElement("img");
-    image.src = `/home/zachpeltz/nighthawk/GenomeGamersFrontend/assets/images/cards/${card.name}.png`;  
-    image.alt = card.name;
-    image.style.width = "100%";
-    image.style.height = "auto";
-    image.style.objectFit = "contain";
-    image.style.marginTop = "10px";
-    cardElement.appendChild(image);
 
-    
-    const centerText = document.createElement("div");
-    centerText.style.flexGrow = "1";
-    centerText.style.display = "flex";
-    centerText.style.alignItems = "center";
-    centerText.style.justifyContent = "center";
-    centerText.style.textAlign = "center";
-    centerText.style.fontSize = "10px"; 
-    centerText.style.overflow = "hidden";
-    centerText.style.textOverflow = "ellipsis";
-    centerText.style.whiteSpace = "normal";
-    centerText.textContent = card.description;
-    cardElement.appendChild(centerText);
-
-    
-    const bottomLeft = document.createElement("div");
-    bottomLeft.style.position = "absolute";
-    bottomLeft.style.bottom = "5px";
-    bottomLeft.style.left = "5px";
-    bottomLeft.style.fontSize = "14px";
-    bottomLeft.style.fontWeight = "bold";
-    bottomLeft.style.color = suitColor; 
-    bottomLeft.textContent = `${card.rank} ${card.suit}`;
-    cardElement.appendChild(bottomLeft);
+    const bottomRight = document.createElement("div");
+    bottomRight.style.position = "absolute";
+    bottomRight.style.bottom = "5px";
+    bottomRight.style.right = "5px";
+    bottomRight.style.fontSize = "14px";
+    bottomRight.style.fontWeight = "bold";
+    bottomRight.style.color = suitColor; 
+    bottomRight.textContent = `${card.rank} ${card.suit}`;
+    cardElement.appendChild(bottomRight);
 
     return cardElement;
   }
@@ -186,13 +166,11 @@ Author: Zach
     playerHand.innerHTML = "";
     dealerHand.innerHTML = "";
 
-    
     dealerHand.style.display = "flex";
     dealerHand.style.justifyContent = "center";
     dealerHand.style.marginBottom = "20px";
     dealerCards.forEach(card => dealerHand.appendChild(createCardElement(card)));
 
-    
     playerHand.style.display = "flex";
     playerHand.style.justifyContent = "center";
     playerCards.forEach(card => playerHand.appendChild(createCardElement(card)));
