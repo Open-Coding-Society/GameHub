@@ -27,10 +27,10 @@ Author: Zach
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Your Hand</h5>
-          <div id="player-hand" class="d-flex flex-wrap justify-content-center"></div>
-          <h5 class="card-title mt-4">Dealer's Hand</h5>
+          <h5 class="card-title">Dealer's Hand</h5>
           <div id="dealer-hand" class="d-flex flex-wrap justify-content-center"></div>
+          <h5 class="card-title mt-4">Your Hand</h5>
+          <div id="player-hand" class="d-flex flex-wrap justify-content-center"></div>
         </div>
       </div>
     </div>
@@ -38,7 +38,6 @@ Author: Zach
 </div>
 
 <script>
-  // Blackjack Game Logic
   const startGameButton = document.getElementById("start-game");
   const hitButton = document.getElementById("hit");
   const standButton = document.getElementById("stand");
@@ -52,19 +51,19 @@ Author: Zach
 
   function createDeck() {
     const antibodies = [
-      { name: "IgG", value: 11, description: "Most abundant, long-term immunity." },
-      { name: "IgA", value: 2, description: "Protects mucosal surfaces." },
-      { name: "IgM", value: 3, description: "First responder, complement activator." },
-      { name: "IgE", value: 4, description: "Allergies and parasite defense." },
-      { name: "IgD", value: 5, description: "B cell activation role." },
-      { name: "IgG1", value: 6, description: "Effective against viruses/bacteria." },
-      { name: "IgG2", value: 7, description: "Carbohydrate antigen defense." },
-      { name: "IgG3", value: 8, description: "Strong complement activator." },
-      { name: "IgG4", value: 9, description: "Regulates immune responses." },
-      { name: "IgA1", value: 10, description: "Blood-based infection defense." },
-      { name: "IgA2", value: 10, description: "Mucosal secretion protection." },
-      { name: "Secretory IgM", value: 10, description: "Mucosal immunity role." },
-      { name: "IgY", value: 10, description: "Bird/reptile antibody, IgG-like." }
+      { name: "IgG", value: 11, description: "IgG: Most abundant, long-term immunity." },
+      { name: "IgA", value: 2, description: "IgA: Protects mucosal surfaces." },
+      { name: "IgM", value: 3, description: "IgM: First responder, complement activator." },
+      { name: "IgE", value: 4, description: "IgE: Allergies and parasite defense." },
+      { name: "IgD", value: 5, description: "IgD: B cell activation role." },
+      { name: "IgG1", value: 6, description: "IgG1: Effective against viruses/bacteria." },
+      { name: "IgG2", value: 7, description: "IgG2: Carbohydrate antigen defense." },
+      { name: "IgG3", value: 8, description: "IgG3: Strong complement activator." },
+      { name: "IgG4", value: 9, description: "IgG4: Regulates immune responses." },
+      { name: "IgA1", value: 10, description: "IgA1: Blood-based infection defense." },
+      { name: "IgA2", value: 10, description: "IgA2: Mucosal secretion protection." },
+      { name: "Secretory IgM", value: 10, description: "Secretory IgM: Mucosal immunity role." },
+      { name: "IgY", value: 10, description: "IgY: Bird/reptile antibody, IgG-like." }
     ];
 
     const suits = ["♥", "♦", "♣", "♠"];
@@ -83,7 +82,7 @@ Author: Zach
       });
     });
 
-    deck.sort(() => Math.random() - 0.5); // Shuffle the deck
+    deck.sort(() => Math.random() - 0.5); 
   }
 
   function calculateScore(cards) {
@@ -97,9 +96,9 @@ Author: Zach
       }
     }
 
-    // Adjust IgG value from 11 to 1 if score exceeds 21
+    
     while (score > 21 && iggCount > 0) {
-      score -= 10; // Reduce score by 10 (11 - 1)
+      score -= 10; 
       iggCount--;
     }
 
@@ -108,8 +107,8 @@ Author: Zach
 
   function createCardElement(card) {
     const cardElement = document.createElement("div");
-    cardElement.style.width = "110px"; // Revert to standard card size
-    cardElement.style.height = "160px"; // Revert to standard card size
+    cardElement.style.width = "160px"; 
+    cardElement.style.height = "240px"; 
     cardElement.className = "card m-2";
     cardElement.style.border = "1px solid black";
     cardElement.style.borderRadius = "8px";
@@ -119,54 +118,64 @@ Author: Zach
     cardElement.style.flexDirection = "column";
     cardElement.style.justifyContent = "space-between";
     cardElement.style.padding = "5px";
-    cardElement.style.color = "black"; // Ensure text is visible
+    cardElement.style.color = "black"; 
 
-    // Determine suit color
-    const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
 
-    // Top-left antibody name
+  const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
+
+
     const topLeft = document.createElement("div");
     topLeft.style.position = "absolute";
     topLeft.style.top = "5px";
     topLeft.style.left = "5px";
-    topLeft.style.fontSize = card.name === "Secretory IgM" ? "10px" : "12px"; // Slightly smaller for "Secretory IgM"
+    topLeft.style.fontSize = "12px";
     topLeft.style.fontWeight = "bold";
     topLeft.textContent = card.name;
     cardElement.appendChild(topLeft);
 
-    // Top-right rank and suit
+
     const topRight = document.createElement("div");
     topRight.style.position = "absolute";
     topRight.style.top = "5px";
     topRight.style.right = "5px";
-    topRight.style.fontSize = "12px";
+    topRight.style.fontSize = "14px";
     topRight.style.fontWeight = "bold";
-    topRight.style.color = suitColor; // Apply suit color
+    topRight.style.color = suitColor; 
     topRight.textContent = `${card.rank} ${card.suit}`;
     cardElement.appendChild(topRight);
 
-    // Center antibody description
+    
+    const image = document.createElement("img");
+    image.src = `/home/zachpeltz/nighthawk/GenomeGamersFrontend/assets/images/cards/${card.name}.png`;  
+    image.alt = card.name;
+    image.style.width = "100%";
+    image.style.height = "auto";
+    image.style.objectFit = "contain";
+    image.style.marginTop = "10px";
+    cardElement.appendChild(image);
+
+    
     const centerText = document.createElement("div");
     centerText.style.flexGrow = "1";
     centerText.style.display = "flex";
     centerText.style.alignItems = "center";
     centerText.style.justifyContent = "center";
     centerText.style.textAlign = "center";
-    centerText.style.fontSize = "10px";
+    centerText.style.fontSize = "10px"; 
     centerText.style.overflow = "hidden";
     centerText.style.textOverflow = "ellipsis";
     centerText.style.whiteSpace = "normal";
     centerText.textContent = card.description;
     cardElement.appendChild(centerText);
 
-    // Bottom-left rank and suit
+    
     const bottomLeft = document.createElement("div");
     bottomLeft.style.position = "absolute";
     bottomLeft.style.bottom = "5px";
     bottomLeft.style.left = "5px";
-    bottomLeft.style.fontSize = "12px";
+    bottomLeft.style.fontSize = "14px";
     bottomLeft.style.fontWeight = "bold";
-    bottomLeft.style.color = suitColor; // Apply suit color
+    bottomLeft.style.color = suitColor; 
     bottomLeft.textContent = `${card.rank} ${card.suit}`;
     cardElement.appendChild(bottomLeft);
 
@@ -176,8 +185,18 @@ Author: Zach
   function updateHands() {
     playerHand.innerHTML = "";
     dealerHand.innerHTML = "";
-    playerCards.forEach(card => playerHand.appendChild(createCardElement(card)));
+
+    
+    dealerHand.style.display = "flex";
+    dealerHand.style.justifyContent = "center";
+    dealerHand.style.marginBottom = "20px";
     dealerCards.forEach(card => dealerHand.appendChild(createCardElement(card)));
+
+    
+    playerHand.style.display = "flex";
+    playerHand.style.justifyContent = "center";
+    playerCards.forEach(card => playerHand.appendChild(createCardElement(card)));
+
     gameStatus.textContent = `Your Score: ${calculateScore(playerCards)} | Dealer's Score: ${calculateScore(dealerCards)}`;
   }
 
