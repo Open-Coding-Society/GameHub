@@ -79,6 +79,7 @@ const objects = [
   { x: 450, y: 100, width: 40, height: 40, game: 'building' }, // top middle
   { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // top right
   { x: 100, y: 360, width: 40, height: 40, game: 'editing' }, // middle left
+  { x: 560, y: 360, width: 40, height: 40, game: 'adventure' }, // middle
   { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // middle right
   { x: 100, y: 600, width: 40, height: 40, game: 'exploration' }, // bottom left
   { x: 450, y: 620, width: 40, height: 40, game: 'outbreak' }, // bottom middle
@@ -154,9 +155,12 @@ function update() {
         case 'skin':
           window.location.href = '{{site.baseurl}}/skin';
           break;
-         case 'outline':
+        case 'outline':
           window.location.href = '{{site.baseurl}}/outline';
           break;
+        case 'adventure':
+          window.location.href = '{{site.baseurl}}/adventure';
+          break; 
       }
     }
   });
