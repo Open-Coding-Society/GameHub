@@ -8,7 +8,10 @@ Author: Zach
 
 <style>
   body {
-    background-color: #0b6623; 
+    background-image: url('{{site.baseurl}}/images/blackjacklayout.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
     margin: 0;
@@ -16,39 +19,57 @@ Author: Zach
   }
 
   .container {
-    position: relative;
-    z-index: 1; 
-    background-color: #0b6623; 
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: 8px;
     padding: 20px;
   }
 
-  h1.text-center {
-    color: #000000; 
+  .card-title {
+    color: #cccccc;
+    font-size: 1.5rem;
   }
 
-  .card-title {
-    color: #cccccc; 
+  .card {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  #dealer-hand, #player-hand {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .card.m-2 {
+    width: 160px;
+    height: 240px;
+    font-size: 1rem;
   }
 </style>
 
 <div class="container mt-5">
-  <h1 class="text-center">Antibody Blackjack</h1>
-  <div class="row justify-content-center mt-4">
-    <div class="col-md-6">
-      <div class="card">  
-        <div class="card-body">
-          <h5 class="card-title">Game Status</h5>
-          <p id="game-status" class="card-text">Press "Start Game" to begin!</p>
-          <div class="d-flex justify-content-between">
-            <button id="start-game" class="btn btn-primary">Start Game</button>
-            <button id="hit" class="btn btn-success" disabled>Hit</button>
-            <button id="stand" class="btn btn-warning" disabled>Stand</button>
-          </div>
-        </div>
+  <div class="card">  
+    <div class="card-body">
+      <h2 class="text-center" style="font-size: 2rem; margin-bottom: 10px;">Antibody Blackjack</h2>
+      <h5 class="card-title">Game Status</h5>
+      <p id="game-status" class="card-text">Press "Start Game" to begin!</p>
+      <div class="d-flex justify-content-between">
+        <button id="start-game" class="btn btn-primary">Start Game</button>
+        <button id="hit" class="btn btn-success" disabled>Hit</button>
+        <button id="stand" class="btn btn-warning" disabled>Stand</button>
       </div>
     </div>
   </div>
+
   <div class="row justify-content-center mt-4">
     <div class="col-md-6">
       <div class="card">
