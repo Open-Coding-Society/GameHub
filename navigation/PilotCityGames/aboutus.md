@@ -3,7 +3,7 @@ layout: bootstrap
 title: About Us
 description: About the Creators 
 permalink: /aboutus
-Author: Everyone
+Author: Zach
 ---
 
 ## Welcome to our Scripps Biotech About Page 

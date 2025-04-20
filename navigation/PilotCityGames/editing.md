@@ -3,5 +3,5 @@ layout: bootstrap
 title: Editing
 description: Editing
 permalink: /editing
-Author: Aarush
+Author: Pradyun
 ---

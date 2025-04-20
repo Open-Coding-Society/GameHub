@@ -130,18 +130,22 @@ Author: Ian
     const complements = complementaryStrandEl.children;
     let correct = 0;
     let gcCount = 0;
+    let atCount = 0;
     strand.forEach((base, i) => {
       const comp = complements[i].textContent;
       if (comp === basePairs[base]) {
         correct++;
         if ((base === 'C' && comp === 'G') || (base === 'G' && comp === 'C')) {
           gcCount++;
+        } else if ((base === 'A' && comp === 'T') || (base === 'T' && comp === 'A')) {
+          atCount++;
         }
       }
     });
     const percentCorrect = Math.round((correct / strand.length) * 100);
     const gcPercent = Math.round((gcCount / strand.length) * 100);
+    const atPercent = Math.round((atCount / strand.length) * 100);
     document.getElementById('score').innerHTML = 
-      `✅ Correct Matches: ${percentCorrect}%<br>🧬 GC Stability: ${gcPercent}%`;
+      `✅ Correct Matches: ${percentCorrect}%<br>🧬 GC Stability: ${gcPercent}%<br>🧬 AT Stability: ${atPercent}%`;
   }
 </script>
