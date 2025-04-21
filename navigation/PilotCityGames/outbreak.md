@@ -6,7 +6,7 @@ permalink: /outbreak
 Author: Lars
 ---
 
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -20,14 +20,15 @@ Author: Lars
       overflow: hidden;
     }
 
-    #gameCanvas {
-      display: block;
-      margin: auto;
-      background-image: url('https://i.postimg.cc/wMBckZJC/us-map-dark.png'); /* Example US map */
-      background-size: cover;
-      border: 2px solid #fff;
+        #gameContainer {
+    position: relative;
+    width: 1000px;
+    height: 600px;
+    margin: auto;
+    border: 2px solid #fff;
+    background-image: url('https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png');
+    background-size: cover;
     }
-
     #ui {
       position: absolute;
       top: 10px;
@@ -65,7 +66,9 @@ Author: Lars
   </style>
 </head>
 <body>
-  <canvas id="gameCanvas" width="1000" height="600"></canvas>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1000" height="600"></canvas>
+      </div>
   <div id="ui">
     <div class="scoreboard">
       Infection Risk: <span id="riskLevel">Low</span><br>
@@ -86,7 +89,31 @@ Author: Lars
     const uiRiskLevel = document.getElementById('riskLevel');
     const uiInterventions = document.getElementById('interventions');
 
+    // Define rectangular barriers (x, y, width, height)
+    const barriers = [
+      { x: 200, y: 150, width: 150, height: 100 },
+      { x: 600, y: 400, width: 180, height: 80 }
+    ];
+
     function spawnBubble(x, y) {
+      const bubbleSize = 30;
+
+      // Check if bubble would spawn inside a barrier
+      const collidesWithBarrier = barriers.some(barrier => {
+        return (
+          x < barrier.x + barrier.width &&
+          x + bubbleSize > barrier.x &&
+          y < barrier.y + barrier.height &&
+          y + bubbleSize > barrier.y
+        );
+      });
+
+      // Retry spawning if overlapping a barrier
+      if (collidesWithBarrier) {
+        spawnBubble(Math.random() * (canvas.width - 40), Math.random() * (canvas.height - 40));
+        return;
+      }
+
       const bubble = document.createElement('div');
       bubble.classList.add('bubble');
       bubble.style.left = `${x}px`;
@@ -97,7 +124,7 @@ Author: Lars
         uiInterventions.textContent = interventionsLeft;
         updateRisk();
       };
-      document.body.appendChild(bubble);
+      document.getElementById('gameContainer').appendChild(bubble);
       bubbles.push(bubble);
     }
 
@@ -111,11 +138,18 @@ Author: Lars
       }
     }
 
-    // Dummy spawner (ML can replace this)
+    // Dummy spawner (to be replaced with ML integration)
     setInterval(() => {
       const x = Math.random() * (canvas.width - 40);
       const y = Math.random() * (canvas.height - 40);
       spawnBubble(x, y);
+
+      // Optional: draw barriers for debug
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      barriers.forEach(barrier => {
+        ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+        ctx.fillRect(barrier.x, barrier.y, barrier.width, barrier.height);
+      });
     }, 3000);
 
     updateRisk();
