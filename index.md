@@ -41,13 +41,64 @@ Author: Everyone
     position: relative;
     display: inline-block;
   }
-</style>
 
+  /* Modal styles */
+  #skin-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    z-index: 1000;
+    text-align: center;
+    border-radius: 10px;
+  }
+  #skin-modal-content {
+    position: relative;
+    padding: 20px;
+    background: black;
+    border-radius: 10px;
+  }
+  #close-modal {
+    position: absolute;
+    top: 10px; /* Slightly down from the top */
+    right: 10px; /* Slightly left from the right */
+    background: darkgreen;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 0 10px 0 10px;
+  }
+  #confirm-button {
+    background: #d4af37; /* Less bright yellow */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1.2em;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-transform: uppercase; /* Make text uppercase */
+  }
+</style>
 
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
 <div id="points-display">Points: 0</div>
 <canvas id="gameCanvas" width="960" height="720"></canvas>
+</div>
+
+<div id="skin-modal">
+  <div id="skin-modal-content">
+    <button id="close-modal">X</button>
+    <p>Customize your skin and outfit here!</p>
+    <button id="confirm-button">Confirm</button>
+  </div>
 </div>
 
 <script>
@@ -108,14 +159,23 @@ walls.push(
 { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
 );
 
+const topRightBox = { x: 755, y: 250, width: 40, height: 40 }; 
+const skinModal = document.getElementById('skin-modal');
+const closeModal = document.getElementById('close-modal');
+const confirmButton = document.getElementById('confirm-button');
+let isModalOpen = false; 
+let hasLeftBox = true; 
+
 function update() {
   let nextX = player.x;
   let nextY = player.y;
 
-  if (keys['w']) nextY -= player.speed;
-  if (keys['s']) nextY += player.speed;
-  if (keys['a']) nextX -= player.speed;
-  if (keys['d']) nextX += player.speed;
+  if (!isModalOpen) { 
+    if (keys['w']) nextY -= player.speed;
+    if (keys['s']) nextY += player.speed;
+    if (keys['a']) nextX -= player.speed;
+    if (keys['d']) nextX += player.speed;
+  }
 
   const futureBox = {
     x: nextX,
@@ -129,6 +189,17 @@ function update() {
   if (!hittingWall) {
     player.x = nextX;
     player.y = nextY;
+  }
+
+  
+  if (isColliding(player, topRightBox)) {
+    if (hasLeftBox) { 
+      skinModal.style.display = 'block';
+      isModalOpen = true;
+      hasLeftBox = false; 
+    }
+  } else {
+    hasLeftBox = true; 
   }
 
   objects.forEach(obj => {
@@ -151,9 +222,6 @@ function update() {
           break;
         case 'aboutus':
           window.location.href = '{{site.baseurl}}/aboutus';
-          break;
-        case 'skin':
-          window.location.href = '{{site.baseurl}}/skin';
           break;
         case 'outline':
           window.location.href = '{{site.baseurl}}/outline';
@@ -232,6 +300,17 @@ spriteImage.onload = tryStartGame;
 
 roomImage.onerror = () => alert('Failed to load room image');
 spriteImage.onerror = () => alert('Failed to load sprite image');
+
+closeModal.addEventListener('click', () => {
+  skinModal.style.display = 'none';
+  isModalOpen = false; 
+});
+
+confirmButton.addEventListener('click', () => {
+  alert('Changes saved! (Functionality to be implemented)');
+  skinModal.style.display = 'none';
+  isModalOpen = false; 
+});
 </script>
 <script type="module">
 import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
