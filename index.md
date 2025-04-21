@@ -46,11 +46,10 @@ Author: Everyone
   #skin-modal {
     display: none;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 600px;
+    top: 23%; /* Slightly smaller */
+    left: 23%; /* Slightly smaller */
+    width: 54%; /* Slightly smaller */
+    height: 54%; /* Slightly smaller */
     background: rgba(0, 0, 0, 0.9);
     color: white;
     z-index: 1000;
@@ -85,6 +84,20 @@ Author: Everyone
     margin-top: 20px;
     text-transform: uppercase; /* Make text uppercase */
   }
+  #skin-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 15px; /* Spacing between squares */
+    justify-items: center;
+    margin: 20px 0;
+  }
+  .skin-option {
+    width: 120px; /* 75% of the previous size (160px) */
+    height: 120px; /* 75% of the previous size (160px) */
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 </style>
 
 <div id="loading">Loading game assets...</div>
@@ -97,6 +110,14 @@ Author: Everyone
   <div id="skin-modal-content">
     <button id="close-modal">X</button>
     <p>Customize your skin and outfit here!</p>
+    <div id="skin-options">
+      <div class="skin-option"></div>
+      <div class="skin-option"></div>
+      <div class="skin-option"></div>
+      <div class="skin-option"></div>
+      <div class="skin-option"></div>
+      <div class="skin-option"></div>
+    </div>
     <button id="confirm-button">Confirm</button>
   </div>
 </div>
