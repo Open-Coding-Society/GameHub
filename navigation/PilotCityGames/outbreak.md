@@ -113,8 +113,14 @@ Author: Lars
     background.src = 'https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png';
 
     const barriers = [
-      { x: 200, y: 150, width: 150, height: 100 },
-      { x: 600, y: 400, width: 180, height: 80 }
+      { x: 50, y: 5, width: 910, height: 50 }, // north border
+      { x: 150, y: 545, width: 850, height: 50 }, // south border
+      { x: 5, y: 5, width: 50, height: 610 }, // west border
+      { x: 895, y: 165, width: 120, height: 380 }, // east border (extended to prevent gaps)
+      { x: 175, y: 415, width: 180, height: 120 }, // hi
+      { x: 75, y: 355, width: 80, height: 60 }, // socal
+      { x: 600, y: 460, width: 180, height: 100 }, // tx - fl
+      { x: 630, y: 50, width: 220, height: 80 } // mi-ny
     ];
 
     function spawnBubble(x, y) {
@@ -131,8 +137,8 @@ Author: Lars
 
       if (collidesWithBarrier) {
         spawnBubble(
-          Math.random() * (canvas.clientWidth - bubbleSize),
-          Math.random() * (canvas.clientHeight - bubbleSize)
+          Math.random() * (canvas.clientWidth - bubbleSize - 10),
+          Math.random() * (canvas.clientHeight - bubbleSize - 10)
         );
         return;
       }
@@ -177,8 +183,8 @@ Author: Lars
           ctx.fillRect(barrier.x, barrier.y, barrier.width, barrier.height);
         });
 
-        const x = Math.random() * (canvas.clientWidth - 30);
-        const y = Math.random() * (canvas.clientHeight - 30);
+        const x = Math.random() * (canvas.clientWidth - 40);
+        const y = Math.random() * (canvas.clientHeight - 40);
         spawnBubble(x, y);
 
       }, 3000);
