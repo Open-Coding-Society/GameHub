@@ -42,15 +42,14 @@ Author: Everyone
     display: inline-block;
   }
 
-  /* Modal styles */
   #skin-modal {
     display: none;
     position: fixed;
-    top: 23%; /* Slightly smaller */
-    left: 23%; /* Slightly smaller */
-    width: 54%; /* Slightly smaller */
-    height: 54%; /* Slightly smaller */
-    background: rgba(0, 0, 0, 0.9);
+    top: 23%; 
+    left: 23%; 
+    width: 55%;
+    height: 65%; 
+    background: #001f3f; 
     color: white;
     z-index: 1000;
     text-align: center;
@@ -58,42 +57,54 @@ Author: Everyone
   }
   #skin-modal-content {
     position: relative;
-    padding: 20px;
-    background: black;
+    padding: 40px 20px; 
+    background: #001f3f; 
     border-radius: 10px;
+  }
+  #skin-modal-content p {
+    font-size: 2em; /* Double the size of the text */
+    margin-bottom: 20px;
   }
   #close-modal {
     position: absolute;
-    top: 10px; /* Slightly down from the top */
-    right: 10px; /* Slightly left from the right */
-    background: darkgreen;
+    top: 10px; 
+    right: 10px; 
+    background: black; 
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 15px 22.5px; /* Reduce size to 75% of current */
     cursor: pointer;
-    border-radius: 0 10px 0 10px;
+    border-radius: 5px; 
+    font-size: 1.5em; 
   }
   #confirm-button {
-    background: #d4af37; /* Less bright yellow */
+    background: #d4af37;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 15px 30px; 
     cursor: pointer;
-    font-size: 1.2em;
-    border-radius: 5px;
-    margin-top: 20px;
-    text-transform: uppercase; /* Make text uppercase */
+    font-size: 1.2em; 
+    border-radius: 10px;
+    position: absolute; 
+    bottom: calc(20px - (2.5 * 120px) - (0.25 * 120px)); /* Move 1/4th of a white square further down */
+    left: 50%; 
+    transform: translateX(-50%);
+    text-transform: uppercase; 
   }
   #skin-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
-    gap: 15px; /* Spacing between squares */
-    justify-items: center;
-    margin: 20px 0;
+    position: relative;
+    width: 100%;
+    height: 70%; 
+    margin-top: 20px; 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
   }
   .skin-option {
-    width: 120px; /* 75% of the previous size (160px) */
-    height: 120px; /* 75% of the previous size (160px) */
+    width: 120px; 
+    height: 120px; 
     background: white;
     border-radius: 5px;
     cursor: pointer;
@@ -132,7 +143,7 @@ roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02
 const spriteImage = new Image();
 spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
-//doesnt work YET save for later
+
 const iconImage = new Image();
 iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
 
