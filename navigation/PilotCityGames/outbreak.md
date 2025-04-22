@@ -20,12 +20,36 @@ Author: Lars
       display: flex;
     }
 
+    #wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    gap: 20px; /* <- this adds spacing between sidebar and canvas */
+    padding: 20px;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    }
+
     #sidebar {
-      width: 250px;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 20px;
-      box-sizing: border-box;
-      color: white;
+    width: 200px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-right: 2px solid #444;
+    justify-content: center;
+    }
+
+    .infographic-item {
+    padding: 10px;
+    border-left: 4px solid #0ff;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+    line-height: 1.4;
     }
 
     #gameContainer {
@@ -66,15 +90,24 @@ Author: Lars
   </style>
 </head>
 <body>
-  <div id="sidebar">
-    <div class="scoreboard">
-      Infection Risk: <span id="riskLevel">Low</span><br>
-      Active Outbreaks: <span id="activeCount">0</span>
+    <div id="wrapper">
+      <div id="sidebar">
+        <div class="infographic-item">
+          🧬 <strong>Infection Risk:</strong> <span id="riskLevel">Low</span>
+        </div>
+        <div class="infographic-item">
+          🦠 <strong>Active Outbreaks:</strong> <span id="activeCount">0</span>
+        </div>
+        <div class="infographic-item">
+          📍<strong> Goal:</strong><br>Prevent uncontrolled outbreaks by reacting quickly!
+        </div>
+      </div>
+  
+      <div id="gameContainer">
+        <canvas id="gameCanvas" width="1000" height="600"></canvas>
+      </div>
     </div>
-    <div class="instructions">
-      Click on outbreak bubbles before they spread!<br>
-    </div>
-  </div>
+  </body>
 
   <div id="gameContainer">
     <canvas id="gameCanvas" width="1000" height="600"></canvas>
