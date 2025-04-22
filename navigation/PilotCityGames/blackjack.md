@@ -135,8 +135,8 @@ Author: Zach
 
   function createCardElement(card) {
     const cardElement = document.createElement("div");
-    cardElement.style.width = "160px"; 
-    cardElement.style.height = "240px"; 
+    cardElement.style.width = "160px";
+    cardElement.style.height = "240px";
     cardElement.className = "card m-2";
     cardElement.style.border = "1px solid black";
     cardElement.style.borderRadius = "8px";
@@ -146,7 +146,18 @@ Author: Zach
     cardElement.style.flexDirection = "column";
     cardElement.style.justifyContent = "space-between";
     cardElement.style.padding = "5px";
-    cardElement.style.color = "black"; 
+    cardElement.style.color = "black";
+    cardElement.style.cursor = "pointer"; // Add pointer cursor for interactivity
+
+    const frontFace = document.createElement("div");
+    frontFace.style.width = "100%";
+    frontFace.style.height = "100%";
+    frontFace.style.position = "absolute";
+    frontFace.style.backfaceVisibility = "hidden";
+    frontFace.style.transform = "rotateY(0deg)";
+    frontFace.style.display = "flex";
+    frontFace.style.flexDirection = "column";
+    frontFace.style.justifyContent = "space-between";
 
     const imageElement = document.createElement("img");
     imageElement.src = `{{site.baseurl}}/images/${card.name.replace(/\s+/g, '')}.png`;
@@ -154,41 +165,58 @@ Author: Zach
     imageElement.style.width = "100%";
     imageElement.style.height = "100%";
     imageElement.style.borderRadius = "8px";
-    cardElement.appendChild(imageElement);
+    frontFace.appendChild(imageElement);
 
     const suitColor = (card.suit === "♥" || card.suit === "♦") ? "red" : "black";
-
 
     const topLeft = document.createElement("div");
     topLeft.style.position = "absolute";
     topLeft.style.top = "5px";
     topLeft.style.left = "5px";
-    topLeft.style.fontSize = "18px"; 
+    topLeft.style.fontSize = "18px";
     topLeft.style.fontWeight = "bold";
-    topLeft.style.color = suitColor; 
+    topLeft.style.color = suitColor;
     topLeft.textContent = `${card.rank} ${card.suit}`;
-    cardElement.appendChild(topLeft);
-
+    frontFace.appendChild(topLeft);
 
     const topRight = document.createElement("div");
     topRight.style.position = "absolute";
     topRight.style.top = "5px";
     topRight.style.right = "5px";
-    topRight.style.fontSize = "16px"; 
+    topRight.style.fontSize = "16px";
     topRight.style.fontWeight = "bold";
     topRight.textContent = card.name;
-    cardElement.appendChild(topRight);
+    frontFace.appendChild(topRight);
 
+    const backFace = document.createElement("div");
+    backFace.style.width = "100%";
+    backFace.style.height = "100%";
+    backFace.style.position = "absolute";
+    backFace.style.backfaceVisibility = "hidden";
+    backFace.style.transform = "rotateY(180deg)";
+    backFace.style.display = "flex";
+    backFace.style.alignItems = "center";
+    backFace.style.justifyContent = "center";
+    backFace.style.backgroundColor = "white";
+    backFace.style.borderRadius = "8px";
+    backFace.style.padding = "10px";
+    backFace.style.textAlign = "center";
+    backFace.style.color = "black";
+    backFace.textContent = card.description;
 
-    const bottomRight = document.createElement("div");
-    bottomRight.style.position = "absolute";
-    bottomRight.style.bottom = "5px";
-    bottomRight.style.right = "5px";
-    bottomRight.style.fontSize = "18px"; 
-    bottomRight.style.fontWeight = "bold";
-    bottomRight.style.color = suitColor; 
-    bottomRight.textContent = `${card.rank} ${card.suit}`;
-    cardElement.appendChild(bottomRight);
+    cardElement.appendChild(frontFace);
+    cardElement.appendChild(backFace);
+
+    cardElement.style.transformStyle = "preserve-3d";
+    cardElement.style.transition = "transform 0.6s";
+
+    cardElement.addEventListener("click", () => {
+      if (cardElement.style.transform === "rotateY(180deg)") {
+        cardElement.style.transform = "rotateY(0deg)";
+      } else {
+        cardElement.style.transform = "rotateY(180deg)";
+      }
+    });
 
     return cardElement;
   }
@@ -236,6 +264,7 @@ Author: Zach
     updateHands();
     const playerScore = calculateScore(playerCards);
     const dealerScore = calculateScore(dealerCards);
+
     if (dealerScore > 21 || playerScore > dealerScore) {
       gameStatus.textContent = "You win!";
     } else if (playerScore < dealerScore) {
@@ -243,6 +272,7 @@ Author: Zach
     } else {
       gameStatus.textContent = "It's a tie!";
     }
+
     hitButton.disabled = true;
     standButton.disabled = true;
   }
