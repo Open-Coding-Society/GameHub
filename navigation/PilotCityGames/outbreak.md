@@ -6,7 +6,6 @@ permalink: /outbreak
 Author: Lars
 ---
 
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -18,24 +17,25 @@ Author: Lars
       background-color: #1e1e2f;
       color: white;
       overflow: hidden;
+      display: flex;
     }
 
-        #gameContainer {
-    position: relative;
-    width: 1000px;
-    height: 600px;
-    margin: auto;
-    border: 2px solid #fff;
-    background-image: url('https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png');
-    background-size: cover;
+    #sidebar {
+      width: 250px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      box-sizing: border-box;
+      color: white;
     }
-    #ui {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 15px;
-      border-radius: 8px;
+
+    #gameContainer {
+      position: relative;
+      width: 1000px;
+      height: 600px;
+      margin: auto;
+      border: 2px solid #fff;
+      background-image: url('https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png');
+      background-size: cover;
     }
 
     .scoreboard {
@@ -66,18 +66,18 @@ Author: Lars
   </style>
 </head>
 <body>
-    <div id="gameContainer">
-        <canvas id="gameCanvas" width="1000" height="600"></canvas>
-      </div>
-  <div id="ui">
+  <div id="sidebar">
     <div class="scoreboard">
       Infection Risk: <span id="riskLevel">Low</span><br>
-      Interventions Left: <span id="interventions">5</span>
+      Active Outbreaks: <span id="activeCount">0</span>
     </div>
     <div class="instructions">
       Click on outbreak bubbles before they spread!<br>
-      (Machine learning predictions coming soon)
     </div>
+  </div>
+
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="1000" height="600"></canvas>
   </div>
 
   <script>
@@ -85,9 +85,8 @@ Author: Lars
     const ctx = canvas.getContext('2d');
 
     let bubbles = [];
-    let interventionsLeft = 5;
     const uiRiskLevel = document.getElementById('riskLevel');
-    const uiInterventions = document.getElementById('interventions');
+    const uiActiveCount = document.getElementById('activeCount');
 
     // Define rectangular barriers (x, y, width, height)
     const barriers = [
@@ -120,21 +119,27 @@ Author: Lars
       bubble.style.top = `${y}px`;
       bubble.onclick = () => {
         bubble.remove();
-        interventionsLeft--;
-        uiInterventions.textContent = interventionsLeft;
+        bubbles = bubbles.filter(b => b !== bubble);
         updateRisk();
       };
+
       document.getElementById('gameContainer').appendChild(bubble);
       bubbles.push(bubble);
+      updateRisk();
     }
 
     function updateRisk() {
-      if (interventionsLeft >= 4) {
+      const activeCount = bubbles.length;
+      uiActiveCount.textContent = activeCount;
+
+      if (activeCount <= 10) {
         uiRiskLevel.textContent = 'Low';
-      } else if (interventionsLeft >= 2) {
+      } else if (activeCount <= 20) {
         uiRiskLevel.textContent = 'Moderate';
-      } else {
+      } else if (activeCount <= 45) {
         uiRiskLevel.textContent = 'High';
+      } else {
+        uiRiskLevel.textContent = 'Extremely High';
       }
     }
 
