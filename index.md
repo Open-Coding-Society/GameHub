@@ -152,7 +152,7 @@ const player = {
   y: 325,
   width: 75,
   height: 75,
-  speed: 8
+  speed: 4
 };
 
 const keys = {};
