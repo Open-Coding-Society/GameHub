@@ -9,7 +9,7 @@ Author: Lars
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Outbreak Response Game</title>
+  <title>Outbreak Response Game - Resource Challenge</title>
   <style>
     body {
       margin: 0;
@@ -73,6 +73,24 @@ Author: Lars
       margin-top: 20px;
     }
 
+    .crate {
+      width: 40px;
+      height: 40px;
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 6px;
+      cursor: grab;
+      margin: 5px;
+    }
+
+    .region {
+      position: absolute;
+      border: 2px dashed rgba(255,255,255,0.2);
+      pointer-events: all;
+    }
+
     .bubble {
       position: absolute;
       width: 30px;
@@ -92,116 +110,143 @@ Author: Lars
 </head>
 <body>
   <div id="wrapper">
-    <div id="title">Predict Outbreak Scenarios</div>
+    <div id="title">Resource Optimization Challenge</div>
     <div id="sidebar">
       <div class="infographic-item">
-        🧬 <strong>Infection Risk:</strong> <span id="riskLevel">Low</span>
+        💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk
       </div>
       <div class="infographic-item">
-        🦠 <strong>Active Outbreaks:</strong> <span id="activeCount">0</span>
-      </div>
-      <div class="infographic-item">
-        📍<strong> Goal:</strong><br>Prevent uncontrolled outbreaks by reacting quickly!
+        📊 <strong>Regions Allocated:</strong>
+        <ul id="regionStats" style="list-style: none; padding-left: 0; font-size: 11px;"></ul>
       </div>
     </div>
 
     <div id="gameContainer">
       <canvas id="gameCanvas" width="1000" height="600"></canvas>
+      <div id="crateBox">
+        <div class="crate" draggable="true" ondragstart="handleDrag(event)">💉</div>
+        <div class="crate" draggable="true" ondragstart="handleDrag(event)">💉</div>
+        <div class="crate" draggable="true" ondragstart="handleDrag(event)">💉</div>
+      </div>
     </div>
   </div>
 
   <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let bubbles = [];
-    const uiRiskLevel = document.getElementById('riskLevel');
-    const uiActiveCount = document.getElementById('activeCount');
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
     const background = new Image();
-    background.src = 'https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png';
+    background.src = "https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png";
 
-    const barriers = [
-      { x: 50, y: 5, width: 910, height: 50 }, // north border
-      { x: 150, y: 545, width: 850, height: 50 }, // south border
-      { x: 5, y: 5, width: 50, height: 610 }, // west border
-      { x: 895, y: 165, width: 120, height: 380 }, // east border (extended to prevent gaps)
-      { x: 175, y: 415, width: 180, height: 120 }, // hi
-      { x: 75, y: 355, width: 80, height: 60 }, // socal
-      { x: 600, y: 460, width: 180, height: 100 }, // tx - fl
-      { x: 630, y: 50, width: 220, height: 80 } // mi-ny
+    const regions = [
+      { name: "West", x: 55, y: 210, width: 200, height: 200 },
+      { name: "Midwest", x: 380, y: 240, width: 160, height: 100 },
+      { name: "South", x: 540, y: 420, width: 180, height: 100 },
+      { name: "Northeast", x: 720, y: 180, width: 150, height: 80 }
     ];
 
-    function spawnBubble(x, y) {
-      const bubbleSize = 30;
+    const regionStats = {
+      "West": { allocated: 0 },
+      "Midwest": { allocated: 0 },
+      "South": { allocated: 0 },
+      "Northeast": { allocated: 0 }
+    };
 
-      const collidesWithBarrier = barriers.some(barrier => {
-        return (
-          x < barrier.x + barrier.width &&
-          x + bubbleSize > barrier.x &&
-          y < barrier.y + barrier.height &&
-          y + bubbleSize > barrier.y
-        );
+    let bubbles = [];
+
+    function updateRegionStats() {
+      const ul = document.getElementById("regionStats");
+      ul.innerHTML = "";
+      Object.keys(regionStats).forEach(region => {
+        const li = document.createElement("li");
+        li.textContent = `${region}: ${regionStats[region].allocated} doses`;
+        ul.appendChild(li);
       });
+    }
 
-      if (collidesWithBarrier) {
-        spawnBubble(
-          Math.random() * (canvas.clientWidth - bubbleSize - 10),
-          Math.random() * (canvas.clientHeight - bubbleSize - 10)
-        );
-        return;
+    function handleDrag(e) {
+      e.dataTransfer.setData("text/plain", "vaccine");
+    }
+
+    function handleDrop(e, regionName) {
+      e.preventDefault();
+      const type = e.dataTransfer.getData("text/plain");
+      if (type === "vaccine") {
+        regionStats[regionName].allocated += 5000;
+        updateRegionStats();
+        e.target.style.backgroundColor = "rgba(0,255,0,0.1)";
+        setTimeout(() => {
+          e.target.style.backgroundColor = "";
+        }, 1000);
       }
+    }
 
-      if (bubbles.length >= 50) return; 
+    function allowDrop(e) {
+      e.preventDefault();
+    }
 
-      const bubble = document.createElement('div');
-      bubble.classList.add('bubble');
-      bubble.style.left = `${x}px`;
-      bubble.style.top = `${y}px`;
+    function spawnBubble(region) {
+      const bubble = document.createElement("div");
+      bubble.classList.add("bubble");
+      bubble.style.left = `${region.x + Math.random() * (region.width - 30)}px`;
+      bubble.style.top = `${region.y + Math.random() * (region.height - 30)}px`;
+      bubble.dataset.region = region.name;
       bubble.onclick = () => {
         bubble.remove();
         bubbles = bubbles.filter(b => b !== bubble);
-        updateRisk();
+        updateRegionStats();
       };
-
-      document.getElementById('gameContainer').appendChild(bubble);
+      document.getElementById("gameContainer").appendChild(bubble);
       bubbles.push(bubble);
-      updateRisk();
     }
 
-    function updateRisk() {
-      const activeCount = bubbles.length;
-      uiActiveCount.textContent = activeCount;
+    // Region decay every 5 seconds
+    setInterval(() => {
+      Object.keys(regionStats).forEach(region => {
+        if (regionStats[region].allocated > 0) {
+          regionStats[region].allocated -= 1000;
+          if (regionStats[region].allocated < 0) regionStats[region].allocated = 0;
+        }
+      });
+      updateRegionStats();
+    }, 5000);
 
-      if (activeCount <= 4) {
-        uiRiskLevel.textContent = 'Low';
-      } else if (activeCount <= 9) {
-        uiRiskLevel.textContent = 'Moderate';
-      } else if (activeCount <= 14) {
-        uiRiskLevel.textContent = 'High';
-      } else {
-        uiRiskLevel.textContent = 'Extremely High';
-      }
-    }
+    // Bubble spawning based on dose levels
+    setInterval(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+      regions.forEach(region => {
+        const doses = regionStats[region.name].allocated;
+        const chance = Math.random();
+
+        if (doses < 5000 && chance < 0.4) {
+          spawnBubble(region);
+        } else if (doses < 10000 && chance < 0.2) {
+          spawnBubble(region);
+        } else if (doses < 20000 && chance < 0.1) {
+          spawnBubble(region);
+        }
+      });
+    }, 4000);
 
     background.onload = () => {
-      setInterval(() => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-      //  barriers.forEach(barrier => {
-      //    ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
-      //    ctx.fillRect(barrier.x, barrier.y, barrier.width, barrier.height);
-      //  });
-
-        const x = Math.random() * (canvas.clientWidth - 40);
-        const y = Math.random() * (canvas.clientHeight - 40);
-        spawnBubble(x, y);
-
-      }, 3000);
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      regions.forEach(region => {
+        const div = document.createElement("div");
+        div.classList.add("region");
+        div.style.left = `${region.x}px`;
+        div.style.top = `${region.y}px`;
+        div.style.width = `${region.width}px`;
+        div.style.height = `${region.height}px`;
+        div.ondragover = allowDrop;
+        div.ondrop = (e) => handleDrop(e, region.name);
+        div.title = region.name;
+        document.getElementById("gameContainer").appendChild(div);
+      });
     };
 
-    updateRisk();
+    updateRegionStats();
   </script>
 </body>
 </html>
