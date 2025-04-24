@@ -32,24 +32,37 @@ Author: Lars
     }
 
     #sidebar {
-      width: 240px;
+      width: auto;
       background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
+      padding: 10px;
       box-sizing: border-box;
       color: white;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 20px;
-      border-right: 2px solid #444;
-      justify-content: center;
+      border-bottom: 2px solid #444;
+      justify-content: space-around;
+      align-items: center;
+      position: relative;
+      top: 70px; 
+    }
+
+    #title {
+      position: relative;
+      top: 80px; 
+      text-align: center;
+      font-size: 36px; 
+      font-weight: bold;
+      color: white;
     }
 
     .infographic-item {
-      padding: 10px;
+      padding: 5px;
       border-left: 4px solid #0ff;
       background: rgba(255, 255, 255, 0.05);
-      font-size: 14px;
+      font-size: 12px;
       line-height: 1.4;
+      text-align: center;
     }
 
     #gameContainer {
@@ -57,12 +70,7 @@ Author: Lars
       width: 1000px;
       height: 600px;
       border: 2px solid #fff;
-    }
-
-    #gameCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
+      margin-top: 20px;
     }
 
     .bubble {
@@ -84,6 +92,7 @@ Author: Lars
 </head>
 <body>
   <div id="wrapper">
+    <div id="title">Predict Outbreak Scenarios</div>
     <div id="sidebar">
       <div class="infographic-item">
         🧬 <strong>Infection Risk:</strong> <span id="riskLevel">Low</span>
@@ -143,6 +152,8 @@ Author: Lars
         return;
       }
 
+      if (bubbles.length >= 50) return; 
+
       const bubble = document.createElement('div');
       bubble.classList.add('bubble');
       bubble.style.left = `${x}px`;
@@ -162,11 +173,11 @@ Author: Lars
       const activeCount = bubbles.length;
       uiActiveCount.textContent = activeCount;
 
-      if (activeCount <= 10) {
+      if (activeCount <= 4) {
         uiRiskLevel.textContent = 'Low';
-      } else if (activeCount <= 20) {
+      } else if (activeCount <= 9) {
         uiRiskLevel.textContent = 'Moderate';
-      } else if (activeCount <= 45) {
+      } else if (activeCount <= 14) {
         uiRiskLevel.textContent = 'High';
       } else {
         uiRiskLevel.textContent = 'Extremely High';
