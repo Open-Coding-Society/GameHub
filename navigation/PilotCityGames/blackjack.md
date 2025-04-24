@@ -69,6 +69,28 @@ Author: Zach
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
+  function showPopup(message) {
+    const popup = document.createElement("div");
+    popup.textContent = message;
+    popup.style.position = "fixed";
+    popup.style.top = "50%";
+    popup.style.left = "50%";
+    popup.style.transform = "translate(-50%, -50%)";
+    popup.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    popup.style.color = "white";
+    popup.style.padding = "20px";
+    popup.style.borderRadius = "8px";
+    popup.style.zIndex = "1000";
+    popup.style.textAlign = "center";
+    popup.style.fontSize = "18px";
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+      document.body.removeChild(popup);
+    }, 3000); // Remove popup after 3 seconds
+  }
+
   async function updatePoints(points) {
     try {
       const response = await fetch(`${pythonURI}/api/points`, {
@@ -83,6 +105,7 @@ Author: Zach
 
       if (response.ok) {
         console.log('Points updated successfully:', data.total_points);
+        showPopup("You gained 50 points!"); // Show popup on successful point update
       } else {
         console.error('Failed to update points:', data.message);
       }
