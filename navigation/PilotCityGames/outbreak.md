@@ -189,10 +189,10 @@ Author: Lars
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-        barriers.forEach(barrier => {
-          ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
-          ctx.fillRect(barrier.x, barrier.y, barrier.width, barrier.height);
-        });
+      //  barriers.forEach(barrier => {
+      //    ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+      //    ctx.fillRect(barrier.x, barrier.y, barrier.width, barrier.height);
+      //  });
 
         const x = Math.random() * (canvas.clientWidth - 40);
         const y = Math.random() * (canvas.clientHeight - 40);
