@@ -355,7 +355,11 @@ async function fetchPoints() {
 
     if (response.ok) {
       const data = await response.json();
-      document.getElementById('points-display').textContent = `Points: ${data.points.points}`;
+      if (data.total_points !== undefined) {
+        document.getElementById('points-display').textContent = `Points: ${data.total_points}`;
+      } else {
+        document.getElementById('points-display').textContent = 'Points: Unexpected response format';
+      }
     } else {
       const error = await response.json();
       document.getElementById('points-display').textContent = `Points: ${error.message || 'Error fetching points'}`;
@@ -364,7 +368,6 @@ async function fetchPoints() {
     document.getElementById('points-display').textContent = 'Points: Failed to fetch points';
   }
 }
-
 
 fetchPoints();
 </script>

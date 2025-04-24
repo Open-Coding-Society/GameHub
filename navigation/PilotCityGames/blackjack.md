@@ -66,7 +66,31 @@ Author: Zach
   </div>
 </div>
 
-<script>
+<script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+  async function updatePoints(points) {
+    try {
+      const response = await fetch(`${pythonURI}/api/points`, {
+        ...fetchOptions,
+        method: 'POST',
+        body: JSON.stringify({ points })
+      });
+
+      const data = await response.json();
+      console.log('Response:', response); // Log the response for debugging
+      console.log('Response Data:', data); // Log the response data for debugging
+
+      if (response.ok) {
+        console.log('Points updated successfully:', data.total_points);
+      } else {
+        console.error('Failed to update points:', data.message);
+      }
+    } catch (error) {
+      console.error('Error updating points:', error);
+    }
+  }
+
   const startGameButton = document.getElementById("start-game");
   const hitButton = document.getElementById("hit");
   const standButton = document.getElementById("stand");
@@ -267,6 +291,7 @@ Author: Zach
 
     if (dealerScore > 21 || playerScore > dealerScore) {
       gameStatus.textContent = "You win!";
+      updatePoints(50); // Award 50 points for a win
     } else if (playerScore < dealerScore) {
       gameStatus.textContent = "Dealer wins!";
     } else {
