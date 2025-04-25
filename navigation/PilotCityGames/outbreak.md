@@ -139,17 +139,17 @@ Author: Lars
     background.src = "https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png";
 
     const regions = [
-      { name: "West", x: 55, y: 210, width: 200, height: 200 },
-      { name: "Midwest", x: 380, y: 240, width: 160, height: 100 },
-      { name: "South", x: 540, y: 420, width: 180, height: 100 },
-      { name: "Northeast", x: 720, y: 180, width: 150, height: 80 }
+      { name: "West", x: 55, y: 180, width: 200, height: 200 },
+      { name: "Midwest", x: 275, y: 125, width: 200, height: 200 },
+      { name: "South", x: 510, y: 260, width: 200, height: 200 },
+      { name: "Northeast", x: 720, y: 180, width: 200, height: 200 }
     ];
 
     const regionStats = {
-      "West": { allocated: 0 },
-      "Midwest": { allocated: 0 },
-      "South": { allocated: 0 },
-      "Northeast": { allocated: 0 }
+      "West": { allocated: 1000 },
+      "Midwest": { allocated: 1000 },
+      "South": { allocated: 1000 },
+      "Northeast": { allocated: 1000 }
     };
 
     let bubbles = [];
