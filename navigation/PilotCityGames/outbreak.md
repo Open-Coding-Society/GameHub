@@ -119,7 +119,7 @@ Author: Lars
     <div id="title">Resource Optimization Challenge</div>
     <div id="sidebar">
       <div class="infographic-item">
-        💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk
+        💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk, Pop virus bubbles to stop spread
       </div>
       <div class="infographic-item">
         📊 <strong>Regions Allocated:</strong>
@@ -249,7 +249,7 @@ Author: Lars
           spawnBubble(region);
         }
       });
-    }, 4000);
+    }, 1500);
 
     background.onload = () => {
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
