@@ -62,7 +62,7 @@ Author: Everyone
     border-radius: 10px;
   }
   #skin-modal-content p {
-    font-size: 2em; /* Double the size of the text */
+    font-size: 2em; 
     margin-bottom: 20px;
   }
   #close-modal {
@@ -72,7 +72,7 @@ Author: Everyone
     background: black; 
     color: white;
     border: none;
-    padding: 15px 22.5px; /* Reduce size to 75% of current */
+    padding: 15px 22.5px; 
     cursor: pointer;
     border-radius: 5px; 
     font-size: 1.5em; 
@@ -86,7 +86,7 @@ Author: Everyone
     font-size: 1.2em; 
     border-radius: 10px;
     position: absolute; 
-    bottom: calc(20px - (2.5 * 120px) - (0.25 * 120px)); /* Move 1/4th of a white square further down */
+    bottom: calc(20px - (2.5 * 120px) - (0.25 * 120px)); 
     left: 50%; 
     transform: translateX(-50%);
     text-transform: uppercase; 
@@ -144,21 +144,20 @@ const spriteImage = new Image();
 spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
 
-// Example image used for objects. 
-// You can set a unique URL for each object based on its game type.
+
 const objectImages = {
   blackjack: '{{site.baseurl}}/images/playingcard.png',
-  building: '{{site.baseurl}}/navigation/cytoplasm.png',
-  skin: '{{site.baseurl}}/navigation/cell.png',
-  editing: '{{site.baseurl}}/navigation/lysosome.png',
-  adventure: '{{site.baseurl}}/navigation/ribosome.png',
-  outline: '{{site.baseurl}}/navigation/sprite.png',
-  exploration: '{{site.baseurl}}/navigation/nucleus.png',
-  outbreak: '{{site.baseurl}}/navigation/plasma.png',
-  aboutus: '{{site.baseurl}}/navigation/sprite.png'
+  building: '{{site.baseurl}}/images/dnabuilding.png',
+  skin: '{{site.baseurl}}/images/cosmeticicon.png',
+  editing: '{{site.baseurl}}/images/geneedit.png',
+  adventure: '{{site.baseurl}}/images/marioplatformer.png',
+  outline: '{{site.baseurl}}/images/chaticon.png',
+  exploration: '{{site.baseurl}}/images/joystick.png',
+  outbreak: '{{site.baseurl}}/images/outbreakpotion.png',
+  aboutus: '{{site.baseurl}}/images/aboutusicon.png'
 };
 
-// Preload object images into a dictionary of Image objects.
+
 const loadedObjectImages = {};
 for (const game in objectImages) {
   const img = new Image();
@@ -287,12 +286,12 @@ function update() {
 }
 
 
-// The draw function for rendering the scene
+
 function draw() {
-  // Clear the canvas
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw the room background or a placeholder if not loaded
+  
   if (roomImage.complete && roomImage.naturalWidth !== 0) {
     ctx.drawImage(roomImage, 0, 0, canvas.width, canvas.height);
   } else {
@@ -300,17 +299,17 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  // Draw the player sprite
+
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
-  // Draw each object
+
   objects.forEach(obj => {
-    // Check whether an image exists for this object type and is loaded
+
     let img = loadedObjectImages[obj.game];
     if (img && img.complete && img.naturalWidth !== 0) {
       ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
     } else {
-      // If the image isn’t loaded, fall back to a red square
+
       ctx.fillStyle = 'blue';
       ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
     }
