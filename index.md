@@ -151,9 +151,9 @@ const objectImages = {
   building: '{{site.baseurl}}/navigation/cytoplasm.png',
   skin: '{{site.baseurl}}/navigation/cell.png',
   editing: '{{site.baseurl}}/navigation/lysosome.png',
-  adventure: '{{site.baseurl}}/navigation/nucleus.png',
-  outline: '{{site.baseurl}}/navigation/ribosome.png',
-  exploration: '{{site.baseurl}}/navigation/sprite.png',
+  adventure: '{{site.baseurl}}/navigation/ribosome.png',
+  outline: '{{site.baseurl}}/navigation/sprite.png',
+  exploration: '{{site.baseurl}}/navigation/nucleus.png',
   outbreak: '{{site.baseurl}}/navigation/plasma.png',
   aboutus: '{{site.baseurl}}/navigation/sprite.png'
 };
