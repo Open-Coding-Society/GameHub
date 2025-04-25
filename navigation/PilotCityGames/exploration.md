@@ -7,13 +7,15 @@ Author: Darsh
 ---
 
 
+
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f2f4f8;
-    background-image: url('navigation/background.jpg');
+    background-color:rgb(255, 255, 255);
+    background-image: url('navigation/white2.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -35,7 +37,7 @@ Author: Darsh
   width: 800px;
   height: 600px;
   border: 2px solid #333;
-  background: url('navigation/white.png') no-repeat center center;
+  background: url('navigation/white2.png') no-repeat center center;
   background-size: contain;
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -98,9 +100,9 @@ Author: Darsh
   }
 
   const organelles = [
-    { name: 'Nucleus', x: 200, y: 150, discovered: false, description: 'Contains the cell\'s DNA.', image: loadImage('navigation/nucleus.png'), size: 60 },
-    { name: 'Mitochondria', x: 400, y: 300, discovered: false, description: 'Produces energy.', image: loadImage('navigation/mitochondria.png'), size: 60 },
-    { name: 'Ribosome', x: 600, y: 450, discovered: false, description: 'Site of protein synthesis.', image: loadImage('navigation/ribosome.png'), size: 60 },
+    { name: 'Nucleus', x: 200, y: 150, discovered: false, description: ' The nucleus is a membrane-bound organelle within a cell that houses the cells DNA, which is responsible for carrying genetic information. ', image: loadImage('navigation/nucleus.png'), size: 60 },
+    { name: 'Mitochondria', x: 400, y: 300, discovered: false, description: 'Mitochondria are the "powerhouses" of the cell, specialized structures found in nearly all eukaryotic cells, including those of animals, plants, and fungi. They are responsible for generating the majority of the cells chemical energy, which is stored in the form of ATP (adenosine triphosphate). ', image: loadImage('navigation/mitochondria.png'), size: 60 },
+    { name: 'Ribosome', x: 600, y: 450, discovered: false, description: 'A ribosome is a molecular machine found in all cells that is responsible for translating the genetic code (mRNA) into proteins. It acts as a site where amino acids are linked together in a specific order to form polypeptide chains, which are the building blocks of proteins. ', image: loadImage('navigation/ribosome.png'), size: 60 },
     { name: 'Golgi Apparatus', x: 300, y: 500, discovered: false, description: 'Packages proteins.', image: loadImage('navigation/golgi.png'), size: 60 },
     { name: 'Endoplasmic Reticulum', x: 100, y: 400, discovered: false, description: 'Transports materials.', image: loadImage('navigation/er.png'), size: 60 },
     { name: 'Lysosome', x: 700, y: 100, discovered: false, description: 'Breaks down waste.', image: loadImage('navigation/lysosome.png'), size: 60 },
@@ -114,7 +116,7 @@ Author: Darsh
     x: 50,
     y: 50,
     speed: 2,
-    image: loadImage('navigation/cell.png'),
+    image: loadImage('navigation/sprite.png'),
     width: 24,
     height: 24
   };
@@ -122,8 +124,15 @@ Author: Darsh
   let discoveredCount = 0;
   let keysPressed = {};
 
-  document.addEventListener('keydown', e => keysPressed[e.key] = true);
-  document.addEventListener('keyup', e => keysPressed[e.key] = false);
+document.addEventListener('keydown', e => {
+  const keysToPrevent = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+  if (keysToPrevent.includes(e.key)) e.preventDefault(); // Stop scroll on arrow keys
+  keysPressed[e.key.toLowerCase()] = true; // support lowercase for WASD
+});
+
+document.addEventListener('keyup', e => {
+  keysPressed[e.key.toLowerCase()] = false;
+});
 
   function drawEnvironment() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -154,10 +163,11 @@ Author: Darsh
   }
 
   function movePlayer() {
-    if (keysPressed['ArrowUp']) player.y -= player.speed;
-    if (keysPressed['ArrowDown']) player.y += player.speed;
-    if (keysPressed['ArrowLeft']) player.x -= player.speed;
-    if (keysPressed['ArrowRight']) player.x += player.speed;
+    if (keysPressed['w']) player.y -= player.speed;
+    if (keysPressed['s']) player.y += player.speed;
+    if (keysPressed['a']) player.x -= player.speed;
+    if (keysPressed['d']) player.x += player.speed;
+
 
     player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
     player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
