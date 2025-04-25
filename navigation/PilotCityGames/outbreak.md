@@ -80,9 +80,15 @@ Author: Lars
       color: white;
       text-align: center;
       line-height: 40px;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: grab;
       margin: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .crate.cooldown {
+      background-color: #b71c1c !important;
+      cursor: not-allowed;
     }
 
     .region {
@@ -124,9 +130,7 @@ Author: Lars
     <div id="gameContainer">
       <canvas id="gameCanvas" width="1000" height="600"></canvas>
       <div id="crateBox">
-        <div class="crate" draggable="true" ondragstart="handleDrag(event)">💉</div>
-        <div class="crate" draggable="true" ondragstart="handleDrag(event)">💉</div>
-        <div class="crate" draggable="true" ondragstart="handleDrag(event)">💉</div>
+        <div class="crate" draggable="true" ondragstart="handleDrag(event)" id="vaccineCrate">💉</div>
       </div>
     </div>
   </div>
@@ -153,6 +157,7 @@ Author: Lars
     };
 
     let bubbles = [];
+    let crateCooldown = false;
 
     function updateRegionStats() {
       const ul = document.getElementById("regionStats");
@@ -165,19 +170,35 @@ Author: Lars
     }
 
     function handleDrag(e) {
+      if (crateCooldown) {
+        e.preventDefault();
+        return false;
+      }
       e.dataTransfer.setData("text/plain", "vaccine");
     }
 
     function handleDrop(e, regionName) {
       e.preventDefault();
       const type = e.dataTransfer.getData("text/plain");
-      if (type === "vaccine") {
+      if (type === "vaccine" && !crateCooldown) {
         regionStats[regionName].allocated += 5000;
         updateRegionStats();
         e.target.style.backgroundColor = "rgba(0,255,0,0.1)";
         setTimeout(() => {
           e.target.style.backgroundColor = "";
         }, 1000);
+
+        // Start cooldown
+        crateCooldown = true;
+        const crate = document.getElementById("vaccineCrate");
+        crate.classList.add("cooldown");
+        crate.setAttribute("draggable", false);
+
+        setTimeout(() => {
+          crateCooldown = false;
+          crate.classList.remove("cooldown");
+          crate.setAttribute("draggable", true);
+        }, 5000);
       }
     }
 
