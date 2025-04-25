@@ -7,6 +7,8 @@ Author: Darsh
 ---
 
 
+
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -114,7 +116,7 @@ Author: Darsh
     x: 50,
     y: 50,
     speed: 2,
-    image: loadImage('navigation/cell.png'),
+    image: loadImage('navigation/sprite.png'),
     width: 24,
     height: 24
   };
