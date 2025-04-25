@@ -51,7 +51,7 @@ Author: Aarush, Zach, Ian
       },
       platforms: {
         grass: { src: "/images/platformer/platforms/stone.jpg" },
-        alien: { src: "/images/platformer/platforms/stone.jpg" }
+        alien: { src: "/images/platformer/platforms/narwhalfloor.png" }
       },
       backgrounds: {
         start: { src: "/images/platformer/backgrounds/Lab.png" },
@@ -75,7 +75,7 @@ Author: Aarush, Zach, Ian
         mort: {
           src: "/images/platformer/sprites/mort.png",
           width: 614,
-          height: 392,
+          height: 372,
           w: { row: 1, frames: 0 },
           wa: { row: 1, frames: 0 },
           wd: { row: 1, frames: 0 },
