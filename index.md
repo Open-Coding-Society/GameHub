@@ -147,7 +147,7 @@ spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png'
 // Example image used for objects. 
 // You can set a unique URL for each object based on its game type.
 const objectImages = {
-  blackjack: '{{site.baseurl}}/navigation/mitochondria.png',
+  blackjack: '{{site.baseurl}}/images/playingcard.png',
   building: '{{site.baseurl}}/navigation/cytoplasm.png',
   skin: '{{site.baseurl}}/navigation/cell.png',
   editing: '{{site.baseurl}}/navigation/lysosome.png',
