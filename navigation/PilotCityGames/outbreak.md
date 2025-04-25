@@ -38,20 +38,20 @@ Author: Lars
       box-sizing: border-box;
       color: white;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       gap: 20px;
       border-bottom: 2px solid #444;
-      justify-content: space-around;
-      align-items: center;
+      justify-content: flex-start;
+      align-items: flex-start;
       position: relative;
-      top: 70px; 
+      top: 70px;
     }
 
     #title {
       position: relative;
-      top: 80px; 
+      top: 80px;
       text-align: center;
-      font-size: 36px; 
+      font-size: 36px;
       font-weight: bold;
       color: white;
     }
@@ -62,7 +62,8 @@ Author: Lars
       background: rgba(255, 255, 255, 0.05);
       font-size: 12px;
       line-height: 1.4;
-      text-align: center;
+      text-align: left;
+      width: 100%;
     }
 
     #gameContainer {
@@ -71,6 +72,17 @@ Author: Lars
       height: 600px;
       border: 2px solid #fff;
       margin-top: 20px;
+    }
+
+    #pauseBtn {
+      margin-top: 10px;
+      padding: 5px 10px;
+      font-size: 14px;
+      background-color: #555;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
     }
 
     .crate {
@@ -122,8 +134,9 @@ Author: Lars
         💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk, Pop virus bubbles to stop spread
       </div>
       <div class="infographic-item">
-        📊 <strong>Regions Allocated:</strong>
+        📊 <strong>Regions Allocated & Health:</strong>
         <ul id="regionStats" style="list-style: none; padding-left: 0; font-size: 11px;"></ul>
+        <button id="pauseBtn">⏸️ Pause</button>
       </div>
     </div>
 
@@ -138,6 +151,13 @@ Author: Lars
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    const pauseBtn = document.getElementById("pauseBtn");
+    let isPaused = false;
+
+    pauseBtn.onclick = () => {
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? "▶️ Resume" : "⏸️ Pause";
+    };
 
     const background = new Image();
     background.src = "https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png";
@@ -150,10 +170,10 @@ Author: Lars
     ];
 
     const regionStats = {
-      "West": { allocated: 1000 },
-      "Midwest": { allocated: 1000 },
-      "South": { allocated: 1000 },
-      "Northeast": { allocated: 1000 }
+      "West": { allocated: 1000, health: 100 },
+      "Midwest": { allocated: 1000, health: 100 },
+      "South": { allocated: 1000, health: 100 },
+      "Northeast": { allocated: 1000, health: 100 }
     };
 
     let bubbles = [];
@@ -164,13 +184,13 @@ Author: Lars
       ul.innerHTML = "";
       Object.keys(regionStats).forEach(region => {
         const li = document.createElement("li");
-        li.textContent = `${region}: ${regionStats[region].allocated} doses`;
+        li.textContent = `${region}: ${regionStats[region].allocated} doses | Health: ${regionStats[region].health}`;
         ul.appendChild(li);
       });
     }
 
     function handleDrag(e) {
-      if (crateCooldown) {
+      if (crateCooldown || isPaused) {
         e.preventDefault();
         return false;
       }
@@ -179,21 +199,22 @@ Author: Lars
 
     function handleDrop(e, regionName) {
       e.preventDefault();
+      if (isPaused) return;
       const type = e.dataTransfer.getData("text/plain");
       if (type === "vaccine" && !crateCooldown) {
         regionStats[regionName].allocated += 5000;
+        regionStats[regionName].health += 5;
+        if (regionStats[regionName].health > 100) regionStats[regionName].health = 100;
         updateRegionStats();
         e.target.style.backgroundColor = "rgba(0,255,0,0.1)";
         setTimeout(() => {
           e.target.style.backgroundColor = "";
         }, 1000);
 
-        // Start cooldown
         crateCooldown = true;
         const crate = document.getElementById("vaccineCrate");
         crate.classList.add("cooldown");
         crate.setAttribute("draggable", false);
-
         setTimeout(() => {
           crateCooldown = false;
           crate.classList.remove("cooldown");
@@ -221,8 +242,8 @@ Author: Lars
       bubbles.push(bubble);
     }
 
-    // Region decay every 5 seconds
     setInterval(() => {
+      if (isPaused) return;
       Object.keys(regionStats).forEach(region => {
         if (regionStats[region].allocated > 0) {
           regionStats[region].allocated -= 1000;
@@ -232,24 +253,39 @@ Author: Lars
       updateRegionStats();
     }, 5000);
 
-    // Bubble spawning based on dose levels
     setInterval(() => {
+      if (isPaused) return;
+      regions.forEach(region => {
+        const count = bubbles.filter(b => b.dataset.region === region.name).length;
+        if (count > 5) {
+          regionStats[region.name].health -= 10;
+          if (regionStats[region.name].health < 0) regionStats[region.name].health = 0;
+        }
+      });
+      const failed = Object.values(regionStats).filter(r => r.health <= 0).length;
+      if (failed >= 2) {
+        alert("Multiple regions have collapsed. Game Over.");
+        location.reload();
+      }
+      updateRegionStats();
+    }, 4000);
+
+    setInterval(() => {
+      if (isPaused) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
       regions.forEach(region => {
         const doses = regionStats[region.name].allocated;
         const chance = Math.random();
-
-        if (doses < 5000 && chance < 0.4) {
+        if (doses < 5000 && chance < 0.6) {
           spawnBubble(region);
-        } else if (doses < 10000 && chance < 0.2) {
+        } else if (doses < 10000 && chance < 0.3) {
           spawnBubble(region);
         } else if (doses < 20000 && chance < 0.1) {
           spawnBubble(region);
         }
       });
-    }, 1500);
+    }, 2000);
 
     background.onload = () => {
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
