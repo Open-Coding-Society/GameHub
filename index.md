@@ -144,8 +144,27 @@ const spriteImage = new Image();
 spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
 
 
-const iconImage = new Image();
-iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
+// Example image used for objects. 
+// You can set a unique URL for each object based on its game type.
+const objectImages = {
+  blackjack: '{{site.baseurl}}/navigation/mitochondria.png',
+  building: '{{site.baseurl}}/navigation/cytoplasm.png',
+  skin: '{{site.baseurl}}/navigation/cell.png',
+  editing: '{{site.baseurl}}/navigation/lysosome.png',
+  adventure: '{{site.baseurl}}/navigation/nucleus.png',
+  outline: '{{site.baseurl}}/navigation/ribosome.png',
+  exploration: '{{site.baseurl}}/navigation/sprite.png',
+  outbreak: '{{site.baseurl}}/navigation/plasma.png',
+  aboutus: '{{site.baseurl}}/navigation/sprite.png'
+};
+
+// Preload object images into a dictionary of Image objects.
+const loadedObjectImages = {};
+for (const game in objectImages) {
+  const img = new Image();
+  img.src = objectImages[game];
+  loadedObjectImages[game] = img;
+}
 
 const player = {
   x: 400,
@@ -265,19 +284,15 @@ function update() {
     }
   });
 
-  objects.forEach(obj => {
-    if (obj.icon && iconImage.complete) {
-      ctx.drawImage(iconImage, obj.x, obj.y, obj.width, obj.height);
-    } else {
-      ctx.fillStyle = 'red';
-      ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
-    }
-  });
 }
 
+
+// The draw function for rendering the scene
 function draw() {
+  // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Draw the room background or a placeholder if not loaded
   if (roomImage.complete && roomImage.naturalWidth !== 0) {
     ctx.drawImage(roomImage, 0, 0, canvas.width, canvas.height);
   } else {
@@ -285,11 +300,20 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
+  // Draw the player sprite
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
+  // Draw each object
   objects.forEach(obj => {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+    // Check whether an image exists for this object type and is loaded
+    let img = loadedObjectImages[obj.game];
+    if (img && img.complete && img.naturalWidth !== 0) {
+      ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
+    } else {
+      // If the image isn’t loaded, fall back to a red square
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+    }
   });
 }
 
