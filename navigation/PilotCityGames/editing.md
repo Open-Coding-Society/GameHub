@@ -50,6 +50,7 @@ const predictBtn = document.getElementById('predict-btn');
 const restartBtn = document.getElementById('restart-btn');
 const predictionResult = document.getElementById('prediction-result');
 let sequence = Array(dnaSlots.length).fill(null);
+let predictionMade = false; // Add a flag to track if prediction has been made
 
 draggables.forEach(draggable => {
   draggable.addEventListener('dragstart', () => {
@@ -116,6 +117,8 @@ async function updatePoints(points) {
 }
 
 predictBtn.addEventListener('click', async () => {
+  if (predictionMade) return; // Prevent multiple clicks if prediction is already made
+
   const colorMap = { red: 1, green: 2, purple: 3, yellow: 4, blue: 5, black: 6, gray: 7, white: 0 };
   const encodedSequence = sequence.map(color => colorMap[color] ?? 0);
 
@@ -164,7 +167,10 @@ predictBtn.addEventListener('click', async () => {
     predictionResult.textContent = resultText;
     console.log('Displayed result:', resultText); // Log the displayed result for verification
 
-    if (resultText === "Functional") updatePoints(100);
+    if (resultText === "Functional") {
+      updatePoints(100);
+      predictionMade = true; // Set the flag to true after gaining points
+    }
   } catch (error) {
     predictionResult.textContent = 'Error predicting functionality';
     console.error('Prediction error:', error);
@@ -177,6 +183,7 @@ restartBtn.addEventListener('click', () => {
   sequence = Array(dnaSlots.length).fill(null);
   predictBtn.disabled = true;
   predictionResult.textContent = '(__)';
+  predictionMade = false; // Reset the flag on restart
 });
 </script>
 
