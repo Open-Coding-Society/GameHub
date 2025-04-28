@@ -381,7 +381,7 @@ async function fetchPoints() {
       if (data.total_points !== undefined) {
         document.getElementById('points-display').textContent = `Points: ${data.total_points}`;
       } else {
-        document.getElementById('points-display').textContent = 'Points: Unexpected response format';
+        document.getElementById('points-display').textContent = 'Points: 0'; // Default to 0 points
       }
     } else {
       const error = await response.json();

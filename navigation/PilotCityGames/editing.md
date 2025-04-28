@@ -119,6 +119,15 @@ predictBtn.addEventListener('click', async () => {
   const colorMap = { red: 1, green: 2, purple: 3, yellow: 4, blue: 5, black: 6, gray: 7, white: 0 };
   const encodedSequence = sequence.map(color => colorMap[color] ?? 0);
 
+  // Check for successive slots with the same color
+  for (let i = 0; i < sequence.length - 1; i++) {
+    if (sequence[i] !== null && sequence[i] === sequence[i + 1]) {
+      predictionResult.textContent = "Not Functional";
+      console.log('Displayed result: Not Functional (due to successive same colors)'); // Log the result
+      return;
+    }
+  }
+
   console.log('Encoded sequence:', encodedSequence); // Log the encoded sequence for debugging
 
   const inputData = {
