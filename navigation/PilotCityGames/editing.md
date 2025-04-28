@@ -13,7 +13,6 @@ Author: Pradyun
   <div class="row justify-content-center">
     <div class="col-md-10">
       <div class="dna-helix position-relative">
-        <!-- DNA slots -->
         <div class="dna-slot position-absolute" style="top: 12%; left: 50%; transform: translateX(-50%); width: 60px; height: 6px;"></div>
         <div class="dna-slot position-absolute" style="top: 38.5%; left: 49%; transform: translateX(-50%); width: 50px; height: 6px;"></div>
         <div class="dna-slot position-absolute" style="top: 48%; left: 53%; transform: translateX(-50%); width: 55px; height: 6px;"></div>
@@ -24,11 +23,11 @@ Author: Pradyun
         <div class="dna-segment bg-danger draggable" draggable="true" data-color="red"></div>
         <div class="dna-segment bg-success draggable" draggable="true" data-color="green"></div>
         <div class="dna-segment bg-purple draggable" draggable="true" data-color="purple"></div>
-        <div class="dna-segment bg-warning draggable" draggable="true" data-color="yellow"></div> <!-- New block -->
-        <div class="dna-segment bg-info draggable" draggable="true" data-color="blue"></div> <!-- New block -->
-        <div class="dna-segment bg-dark draggable" draggable="true" data-color="black"></div> <!-- New block -->
-        <div class="dna-segment bg-secondary draggable" draggable="true" data-color="gray"></div> <!-- New block -->
-        <div class="dna-segment bg-light draggable" draggable="true" data-color="white" style="border: 2px solid black;"></div> <!-- Updated white block -->
+        <div class="dna-segment bg-warning draggable" draggable="true" data-color="yellow"></div>
+        <div class="dna-segment bg-info draggable" draggable="true" data-color="blue"></div>
+        <div class="dna-segment bg-dark draggable" draggable="true" data-color="black"></div>
+        <div class="dna-segment bg-secondary draggable" draggable="true" data-color="gray"></div>
+        <div class="dna-segment bg-light draggable" draggable="true" data-color="white" style="border: 2px solid black;"></div>
       </div>
     </div>
   </div>
@@ -36,7 +35,7 @@ Author: Pradyun
   <div class="row justify-content-center mt-4">
     <div class="col-md-4 text-center">
       <button id="predict-btn" class="btn btn-primary" disabled>Predict Functionality</button>
-      <button id="restart-btn" class="btn btn-secondary mt-2">Restart</button> <!-- Restart button -->
+      <button id="restart-btn" class="btn btn-secondary mt-2">Restart</button>
       <p class="mt-3">Your gene is: <span id="prediction-result">(__)</span></p>
     </div>
   </div>
@@ -78,141 +77,96 @@ dnaSlots.forEach((slot, index) => {
     const dragging = document.querySelector('.dragging');
     if (dragging) {
       const color = dragging.dataset.color;
-      if (color === 'gray') {
-        slot.innerHTML = `<div class="dna-segment" style="background-color: #6c757d;"></div>`; // Explicit gray color
-      } else {
-        slot.innerHTML = `<div class="dna-segment bg-${color}"></div>`;
-      }
+      slot.innerHTML = color === 'gray'
+        ? `<div class="dna-segment" style="background-color: #6c757d;"></div>`
+        : `<div class="dna-segment bg-${color}"></div>`;
       sequence[index] = color;
       predictBtn.disabled = !sequence.every(color => color !== null);
     }
   });
 });
 
-// Function to update points
+function showPopup(message) {
+  const popup = document.createElement("div");
+  popup.textContent = message;
+  Object.assign(popup.style, {
+    position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+    backgroundColor: "rgba(0, 0, 0, 0.8)", color: "white", padding: "20px",
+    borderRadius: "8px", zIndex: "1000", textAlign: "center", fontSize: "18px"
+  });
+  document.body.appendChild(popup);
+  setTimeout(() => document.body.removeChild(popup), 3000);
+}
+
 async function updatePoints(points) {
   try {
     const response = await fetch(`${pythonURI}/api/points`, {
       ...fetchOptions,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json' // Ensure JSON content type
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ points })
     });
-
     const data = await response.json();
     if (response.ok) {
-      console.log('Points updated successfully:', data.total_points);
-      showPopup("You gained 100 points!"); // Show popup on successful point update
-    } else {
-      console.error('Failed to update points:', data.message);
+      showPopup("You gained 100 points!");
     }
   } catch (error) {
     console.error('Error updating points:', error);
   }
 }
 
-// Function to show a popup message
-function showPopup(message) {
-  const popup = document.createElement("div");
-  popup.textContent = message;
-  popup.style.position = "fixed";
-  popup.style.top = "50%";
-  popup.style.left = "50%";
-  popup.style.transform = "translate(-50%, -50%)";
-  popup.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-  popup.style.color = "white";
-  popup.style.padding = "20px";
-  popup.style.borderRadius = "8px";
-  popup.style.zIndex = "1000";
-  popup.style.textAlign = "center";
-  popup.style.fontSize = "18px";
-
-  document.body.appendChild(popup);
-
-  setTimeout(() => {
-    document.body.removeChild(popup);
-  }, 3000); // Remove popup after 3 seconds
-}
-
-// Predict functionality
 predictBtn.addEventListener('click', async () => {
-  const colorMap = {
-    red: 1,
-    green: 2,
-    purple: 3,
-    yellow: 4, // New block
-    blue: 5,   // New block
-    black: 6,  // New block
-    gray: 7,   // New block
-    white: 0   // Block with 0
-  };
+  const colorMap = { red: 1, green: 2, purple: 3, yellow: 4, blue: 5, black: 6, gray: 7, white: 0 };
+  const encodedSequence = sequence.map(color => colorMap[color] ?? 0);
 
-  // Ensure the sequence is properly encoded as numeric values
-  const encodedSequence = sequence.map(color => colorMap[color] || 0);
-
-  // Validate that encodedSequence is strictly numeric
-  if (!encodedSequence.every(num => typeof num === 'number')) {
-    console.error('Error: encodedSequence contains non-numeric values:', encodedSequence);
-    predictionResult.textContent = 'Error: Invalid sequence data';
-    return;
-  }
+  console.log('Encoded sequence:', encodedSequence); // Log the encoded sequence for debugging
 
   const inputData = {
     input_data: {
-      Days: encodedSequence[0] || 5,
-      pDNABatch: encodedSequence[1] || 3,
-      ModelID: encodedSequence[2] || 1,
-      ExcludeFromCRISPRCombined: encodedSequence[3] || 0,
-      ScreenType: "Arrayed",
+      Days: encodedSequence[0],
+      pDNABatch: encodedSequence[1],
+      ModelID: encodedSequence[2],
+      ExcludeFromCRISPRCombined: encodedSequence[3],
+      ScreenType: "2DS",
       DrugTreated: "No"
     }
   };
-
-  // Log the inputData for debugging
-  console.log('Sending inputData to backend:', JSON.stringify(inputData));
 
   try {
     const response = await fetch(`${pythonURI}/api/editing`, {
       ...fetchOptions,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json' // Ensure JSON content type
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(inputData)
     });
     const data = await response.json();
-    if (data.prediction) {
-      predictionResult.textContent = data.prediction[0] === 1 ? "Functional" : "Not Functional";
+    console.log('Full backend response:', data); // Log the full backend response for debugging
+    console.log('Prediction value:', data.prediction); // Log the prediction value specifically
 
-      // Award 100 points if the gene is functional
-      if (data.prediction[0] === 1) {
-        updatePoints(100);
-      }
+    let resultText;
+    if (typeof data.prediction === 'boolean') {
+      resultText = data.prediction ? "Functional" : "Not Functional";
+    } else if (typeof data.prediction === 'string') {
+      resultText = data.prediction === "Functional" ? "Functional" : "Not Functional";
     } else {
-      predictionResult.textContent = 'Error: Invalid response from server';
+      resultText = 'Error: Invalid server response';
     }
+
+    predictionResult.textContent = resultText;
+    console.log('Displayed result:', resultText); // Log the displayed result for verification
+
+    if (resultText === "Functional") updatePoints(100);
   } catch (error) {
     predictionResult.textContent = 'Error predicting functionality';
     console.error('Prediction error:', error);
+    console.log('Displayed result: Error predicting functionality'); // Log error case
   }
 });
 
-// Restart functionality
 restartBtn.addEventListener('click', () => {
-  // Clear all DNA slots
-  dnaSlots.forEach(slot => {
-    slot.innerHTML = '';
-  });
-
-  // Reset the sequence array
+  dnaSlots.forEach(slot => slot.innerHTML = '');
   sequence = Array(dnaSlots.length).fill(null);
-
-  // Disable the predict button
   predictBtn.disabled = true;
-
-  // Reset the prediction result
   predictionResult.textContent = '(__)';
 });
 </script>
