@@ -2,7 +2,7 @@
 layout: post
 title: Scripps Biotech ML-Based Game
 description: Move your character around to enter different minigames and experiences on this map.  
-Author: Everyone
+Author: Everyone (Aarush made the cosmetic box)
 ---
 
 <style>
