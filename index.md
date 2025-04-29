@@ -78,35 +78,36 @@ Author: Everyone
     font-size: 1.5em; 
   }
   #confirm-button {
-    background: #d4af37;
-    color: white;
-    border: none;
-    padding: 15px 30px; 
-    cursor: pointer;
-    font-size: 1.2em; 
-    border-radius: 10px;
-    position: absolute; 
-    bottom: calc(20px - (2.5 * 120px) - (0.25 * 120px)); 
-    left: 50%; 
-    transform: translateX(-50%);
-    text-transform: uppercase; 
-  }
+  background: #d4af37;
+  color: white;
+  border: none;
+  padding: 15px 30px; 
+  cursor: pointer;
+  font-size: 1.2em; 
+  border-radius: 10px;
+  position: relative; /* Change to relative positioning */
+  margin: 20px auto 0; /* Add margin to position below the boxes */
+  display: block; /* Center the button */
+  text-transform: uppercase; 
+}
   #skin-options {
     position: relative;
-    width: 100%;
+    width: 70%; /* Further reduce width to shift right */
     height: 70%; 
+    margin: 0 auto; /* Center horizontally */
     margin-top: 20px; 
-    display: flex;
-    flex-wrap: wrap;
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2, 1fr); 
+    gap: 40px; /* Increase space between boxes */
     justify-content: center;
     align-items: center;
-    gap: 20px;
   }
   .skin-option {
-    width: 120px; 
-    height: 120px; 
+    width: 180px; /* Further increase box size */
+    height: 180px; /* Further increase box size */
     background: white;
-    border-radius: 5px;
+    border-radius: 15px; /* Slightly rounder corners */
     cursor: pointer;
   }
 </style>
