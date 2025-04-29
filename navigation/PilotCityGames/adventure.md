@@ -7,33 +7,22 @@ Author: Zach & Ian
 image: /images/platformer/backgrounds/home.png
 ---
 
-<!-- Syle is now located, as of Jan 2024 v2.0, in _sass/minima/dracula/platformer-styles.scss -->
 
-<!-- DOM Settings Panel (sidebar id and div), managed by SettingsContro.js -->
 <div id="sidebar" class="sidebar" style="z-index: 9999">
   </div>
   <div id="leaderboardDropDown" class="leaderboardDropDown" style="z-index: 9999">
-    <!-- <a href="javascript:void(0)" id="leaderboard-header">&times; Leaderboard</a> -->
   </div>
   
-  <!--Audio for Mushroom -->
   <audio id="Mushroom" src="{{site.baseurl}}/assets/audio/Mushroom.mp3" preload="auto"></audio>
   
-  <!--Audio for Death of Goomba -->
   <audio id="goombaDeath" src="{{site.baseurl}}/assets/audio/goomba-death.mp3" preload="auto"></audio>
   
-  <!--Audio for Jump oF player -->
   <audio id ="PlayerJump" src="{{site.baseurl}}/assets/audio/mario-jump.mp3" preload="auto"></audio>
   
-  <!--Audio for death of player -->
   <audio id ="PlayerDeath" src="{{site.baseurl}}/assets/audio/MarioDeath.mp3" preload="auto"></audio>
   
-  <!--Audio for coin collection -->
   <audio id ="coin" src="{{site.baseurl}}/assets/audio/coin.mp3" preload="auto"></audio>
 
-<!--Audio for music -->
-
-  <!--Audio for Everlong by Foo Fighters (Winter) -->
   <audio id="everlong" src="{{site.baseurl}}/assets/audio/everlong.mp3" preload="auto"></audio>
   
   <!--Audio for EARFQUAKE by Tyler the Creator-->
