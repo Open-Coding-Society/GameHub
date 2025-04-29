@@ -3,7 +3,6 @@ comments: false
 layout: post
 title: Game levels and objects
 description: A description of concepts behind creating game levels.  This describes Game Level setup and defining the assets used to create Game Objects.
-categories: [An Introduction] 
 ---
 
 ## Game Level Setup
