@@ -1,7 +1,9 @@
 ---
 layout: base
-title: Platformer Game v3.0
-description: Incorporate student lessons. Gameplay includes enemies, platforms, parallax backgrounds, settings with local storage, etc.  This revision introduces Settings, Leaderboard and Multiplayer.
+title: Platformer Game 
+description: A Platformer Game
+permalink: /adventure
+Author: Zach & Ian
 image: /images/platformer/backgrounds/home.png
 ---
 
