@@ -22,12 +22,11 @@ Author: Lars
 
     #wrapper {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
       gap: 20px;
       padding: 20px;
       box-sizing: border-box;
-      justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
     }
 
@@ -41,15 +40,11 @@ Author: Lars
       flex-direction: column;
       gap: 20px;
       border-bottom: 2px solid #444;
-      justify-content: flex-start;
       align-items: flex-start;
-      position: relative;
-      top: 70px;
+      margin-bottom: 20px;
     }
 
     #title {
-      position: relative;
-      top: 80px;
       text-align: center;
       font-size: 36px;
       font-weight: bold;
@@ -83,6 +78,11 @@ Author: Lars
       border: none;
       cursor: pointer;
       border-radius: 4px;
+    }
+
+    #timer {
+      font-size: 14px;
+      margin-top: 10px;
     }
 
     .crate {
@@ -124,6 +124,37 @@ Author: Lars
       50% { transform: scale(1.4); opacity: 0.5; }
       100% { transform: scale(1); opacity: 0.8; }
     }
+
+    #endScreen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    #endScreen h1 {
+      margin-bottom: 20px;
+    }
+
+    #playAgainBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -137,6 +168,7 @@ Author: Lars
         📊 <strong>Regions Allocated & Health:</strong>
         <ul id="regionStats" style="list-style: none; padding-left: 0; font-size: 11px;"></ul>
         <button id="pauseBtn">⏸️ Pause</button>
+        <div id="timer">⏱️ Time Remaining: <span id="timeLeft">180</span>s</div>
       </div>
     </div>
 
@@ -148,15 +180,32 @@ Author: Lars
     </div>
   </div>
 
+  <div id="endScreen">
+    <h1 id="endMessage"></h1>
+    <button id="playAgainBtn">🔁 Play Again</button>
+  </div>
+
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     const pauseBtn = document.getElementById("pauseBtn");
+    const timeDisplay = document.getElementById("timeLeft");
+    const endScreen = document.getElementById("endScreen");
+    const endMessage = document.getElementById("endMessage");
+    const playAgainBtn = document.getElementById("playAgainBtn");
     let isPaused = false;
+    let timeLeft = 180;
 
     pauseBtn.onclick = () => {
       isPaused = !isPaused;
       pauseBtn.textContent = isPaused ? "▶️ Resume" : "⏸️ Pause";
+    };
+
+    playAgainBtn.onclick = () => {
+      endScreen.style.opacity = 0;
+      setTimeout(() => {
+        location.reload();
+      }, 300);
     };
 
     const background = new Image();
@@ -263,20 +312,38 @@ Author: Lars
         }
       });
       const failed = Object.values(regionStats).filter(r => r.health <= 0).length;
-      if (failed >= 2) {
-        alert("Multiple regions have collapsed. Game Over.");
-        location.reload();
+      if (failed >= 3) {
+        endMessage.textContent = "💀 Game Over! Too many regions collapsed.";
+        endScreen.style.display = "flex";
       }
       updateRegionStats();
     }, 4000);
 
     setInterval(() => {
       if (isPaused) return;
+      if (timeLeft <= 0) {
+        const alive = Object.values(regionStats).filter(r => r.health > 0).length;
+        if (alive >= 2) {
+          endMessage.textContent = "🎉 You Win! You kept 2 or more regions alive!";
+        } else {
+          endMessage.textContent = "💀 Game Over! Too many regions collapsed.";
+        }
+        endScreen.style.display = "flex";
+      } else {
+        timeLeft--;
+        timeDisplay.textContent = timeLeft;
+      }
+    }, 1000);
+
+    setInterval(() => {
+      if (isPaused) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
       regions.forEach(region => {
         const doses = regionStats[region.name].allocated;
         const chance = Math.random();
+
         if (doses < 5000 && chance < 0.6) {
           spawnBubble(region);
         } else if (doses < 10000 && chance < 0.3) {
