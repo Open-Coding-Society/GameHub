@@ -61,7 +61,7 @@ const predictBtn = document.getElementById('predict-btn');
 const restartBtn = document.getElementById('restart-btn');
 const predictionResult = document.getElementById('prediction-result');
 let sequence = Array(dnaSlots.length).fill(null);
-let predictionMade = false; // Add a flag to track if prediction has been made
+let predictionMade = false; 
 
 draggables.forEach(draggable => {
   draggable.addEventListener('dragstart', () => {
@@ -128,21 +128,21 @@ async function updatePoints(points) {
 }
 
 predictBtn.addEventListener('click', async () => {
-  if (predictionMade) return; // Prevent multiple clicks if prediction is already made
+  if (predictionMade) return; 
 
   const colorMap = { red: 1, green: 2, purple: 3, yellow: 4, blue: 5, black: 6, gray: 7, white: 0 };
   const encodedSequence = sequence.map(color => colorMap[color] ?? 0);
 
-  // Check for successive slots with the same color
+
   for (let i = 0; i < sequence.length - 1; i++) {
     if (sequence[i] !== null && sequence[i] === sequence[i + 1]) {
       predictionResult.textContent = "Not Functional";
-      console.log('Displayed result: Not Functional (due to successive same colors)'); // Log the result
+      console.log('Displayed result: Not Functional (due to successive same colors)'); 
       return;
     }
   }
 
-  console.log('Encoded sequence:', encodedSequence); // Log the encoded sequence for debugging
+  console.log('Encoded sequence:', encodedSequence); 
 
   const inputData = {
     input_data: {
@@ -163,8 +163,8 @@ predictBtn.addEventListener('click', async () => {
       body: JSON.stringify(inputData)
     });
     const data = await response.json();
-    console.log('Full backend response:', data); // Log the full backend response for debugging
-    console.log('Prediction value:', data.prediction); // Log the prediction value specifically
+    console.log('Full backend response:', data); 
+    console.log('Prediction value:', data.prediction); 
 
     let resultText;
     if (typeof data.prediction === 'boolean') {
@@ -176,16 +176,16 @@ predictBtn.addEventListener('click', async () => {
     }
 
     predictionResult.textContent = resultText;
-    console.log('Displayed result:', resultText); // Log the displayed result for verification
+    console.log('Displayed result:', resultText); 
 
     if (resultText === "Functional") {
       updatePoints(100);
-      predictionMade = true; // Set the flag to true after gaining points
+      predictionMade = true; 
     }
   } catch (error) {
     predictionResult.textContent = 'Error predicting functionality';
     console.error('Prediction error:', error);
-    console.log('Displayed result: Error predicting functionality'); // Log error case
+    console.log('Displayed result: Error predicting functionality'); 
   }
 });
 
@@ -194,7 +194,7 @@ restartBtn.addEventListener('click', () => {
   sequence = Array(dnaSlots.length).fill(null);
   predictBtn.disabled = true;
   predictionResult.textContent = '(__)';
-  predictionMade = false; // Reset the flag on restart
+  predictionMade = false; 
 });
 </script>
 

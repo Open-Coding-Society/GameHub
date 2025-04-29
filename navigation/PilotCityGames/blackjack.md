@@ -88,7 +88,7 @@ Author: Zach
 
     setTimeout(() => {
       document.body.removeChild(popup);
-    }, 3000); // Remove popup after 3 seconds
+    }, 3000); 
   }
 
   async function updatePoints(points) {
@@ -100,12 +100,12 @@ Author: Zach
       });
 
       const data = await response.json();
-      console.log('Response:', response); // Log the response for debugging
-      console.log('Response Data:', data); // Log the response data for debugging
+      console.log('Response:', response); 
+      console.log('Response Data:', data); 
 
       if (response.ok) {
         console.log('Points updated successfully:', data.total_points);
-        showPopup("You gained 50 points!"); // Show popup on successful point update
+        showPopup("You gained 50 points!"); 
       } else {
         console.error('Failed to update points:', data.message);
       }
@@ -194,7 +194,7 @@ Author: Zach
     cardElement.style.justifyContent = "space-between";
     cardElement.style.padding = "5px";
     cardElement.style.color = "black";
-    cardElement.style.cursor = "pointer"; // Add pointer cursor for interactivity
+    cardElement.style.cursor = "pointer"; 
 
     const frontFace = document.createElement("div");
     frontFace.style.width = "100%";
@@ -314,7 +314,7 @@ Author: Zach
 
     if (dealerScore > 21 || playerScore > dealerScore) {
       gameStatus.textContent = "You win!";
-      updatePoints(50); // Award 50 points for a win
+      updatePoints(50); 
     } else if (playerScore < dealerScore) {
       gameStatus.textContent = "Dealer wins!";
     } else {
