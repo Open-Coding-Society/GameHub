@@ -81,8 +81,8 @@ Author: Zach & Ian
          
           <button id="settings-button">Settings</button>
       </div>
-      <div id="leaderboard"> 
-          <button id="leaderboard-button">Leaderboard</button>
+      <div id="leaderboard"> <!-- Controls -->
+          <button id="leaderboard-button">Placeholder</button>
       </div>
     </div>
   
@@ -91,7 +91,7 @@ Author: Zach & Ian
   <div id="container">
       <header class="fun_facts">
       <p id="num">Fun Fact #0</p>
-      <h3 id="fun_fact">Mario is named after the frustrated landlord, Mario Segale, of the Nintendo of America building.</h3> 
+      <h3 id="fun_fact">Scripps Research is a real research facility that involved the research of scripps!</h3> <!-- want to access later so have id-->
       </header>
     </div>
   
