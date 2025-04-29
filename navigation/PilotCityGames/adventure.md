@@ -3,8 +3,6 @@ layout: base
 title: Platformer Game 
 description: Platformer Game
 image: /images/platformer/backgrounds/home.png
-permalink : /adventure
-Author: Zach & Ian
 ---
 
 <!-- Syle is now located, as of Jan 2024 v2.0, in _sass/minima/dracula/platformer-styles.scss -->
