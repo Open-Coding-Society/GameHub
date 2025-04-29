@@ -33,6 +33,9 @@ export function putUpdate(options) {
            
         });
 }
+
+
+
 // Update User Data with "POST" 
 export function postUpdate(options) {
     // Modify the options to use the POST method and include the request body.
@@ -45,7 +48,6 @@ export function postUpdate(options) {
 
     // Clear the message area
     document.getElementById(options.message).textContent = "";
-
     // Send POST request
     fetch(options.URL, requestOptions)
         .then(response => {
@@ -125,12 +127,3 @@ export async function logoutUser() {
             }
          }
 
-// session
-// asynchronous session response
-//session call api----?
-// then--> javascript promise
-// data loaded
-// screen establishes 5 different sessions
-// talk about play
-// iteration style ----> little pieces
-// Your teacher likes to iterate -->

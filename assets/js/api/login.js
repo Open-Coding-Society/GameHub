@@ -2,14 +2,6 @@ import { pythonURI, fetchOptions } from './config.js';
 
 console.log("login.js loaded");
 
-/**
- * This function is called when the DOM is loaded.
- * It fetches the credentials from the API and updates the login area, based on the data.
- * If the user is authenticated, the name of the user is shown as a link.
- * If the user is not authenticated, a "Login" link is shown.
- * The authenticated status is stored in the local storage.
- * @param {string} baseurl - The base URL of the website.
- */
 document.addEventListener('DOMContentLoaded', function() {
     const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
     console.log("Base URL:", baseurl); // Debugging line
@@ -18,28 +10,28 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Credentials data:", data); // Debugging line
             const loginArea = document.getElementById('loginArea');
             if (data) { // Update the login area based on the data
-                loginArea.innerHTML = `<a href="${baseurl}/login">${data.name}</a>`;
-                localStorage.setItem('authenticated', 'true'); // Set authenticated status in local storage
+                // User is authenticated, replace "Login" with User's name
+                loginArea.innerHTML = `
+                    <div class="dropdown">
+                        <button class="dropbtn">${data.name}</button>
+                        <div class="dropdown-content">
+                            <a href="${baseurl}/logout">Logout</a>
+                            <a href="${baseurl}/profile">Profile</a>
+                            <a href="${baseurl}/analytics">Analytics</a>
+                        </div>
+                    </div>
+                `;
             } else {
                 // User is not authenticated, then "Login" link is shown
                 loginArea.innerHTML = `<a href="${baseurl}/login">Login</a>`;
-                localStorage.setItem('authenticated', 'false'); // Set authenticated status in local storage
             }
         })
         .catch(err => { // General error handler
             console.error("Error fetching credentials: ", err);
             // Handle any errors that occurred during getCredentials
-            localStorage.setItem('authenticated', 'false'); // Set authenticated status in local storage
         });
 });
 
-/**
- * This function fetches the credentials of the User from the API.
- * @param {string} baseurl - The base URL of the website.
- * @returns {Promise} - The Promise object representing the completion of the function.
- * @async - This function performs asynchronous operations using .then() and .catch() for handling responses.
- * @function getCredentials
- */
 function getCredentials(baseurl) {
     const URL = pythonURI + '/api/id';
     return fetch(URL, fetchOptions)
