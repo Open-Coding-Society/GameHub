@@ -10,7 +10,6 @@ import Mushroom from './Mushroom.js';
 import FinishLine from './FinishLine.js';
 import BlockPlatform from './BlockPlatform.js';
 import Trash from './Trash.js'
-import Snowman from './EnemySnowman.js';
 
 // Define the GameSetup object literal
 const assets = {  
@@ -133,13 +132,10 @@ const assets = {
   { name: 'flyingGoomba', id: '', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["hard", "impossible"] },
   { name: 'flyingGoomba', id: '', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["impossible"] },
   { name: 'mushroom', id: '', class: Mushroom, data: assets.enemies.mushroom, xPercentage: 0.4, yPercentage: 0.65 },
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.09, yPercentage: 0.88 },  
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.057, yPercentage: 0.4},
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.69, yPercentage: 0.88 },
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.55, yPercentage: 0.69}, 
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.34, yPercentage: 0.69},
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.31, yPercentage: 0.27},   
-  { name: 'trash', id: '', class: Trash, data: assets.obstacles.trash, xPercentage: 0.5, yPercentage: 0.27},   
+  { name: 'trash', id: 'trash', class: Trash, data: assets.obstacles.trash, xPercentage: 0.09, yPercentage: 0.88 },  
+  { name: 'trash', id: 'trash', class: Trash, data: assets.obstacles.trash, xPercentage: 0.057, yPercentage: 0.4},
+  { name: 'trash', id: 'trash', class: Trash, data: assets.obstacles.trash, xPercentage: 0.69, yPercentage: 0.88 },
+  { name: 'trash', id: 'trash', class: Trash, data: assets.obstacles.trash, xPercentage: 0.55, yPercentage: 0.69}, 
   { name: 'mario', id: 'player', class: PlayerWinter, data: assets.players.mario },
   { name: 'cabin', id: 'finishline', class: FinishLine, data: assets.obstacles.cabin, xPercentage: 0.85, yPercentage: 0.79 },
   { name: 'loading', id: 'background', class: BackgroundTransitions, data: assets.transitions.loading },
