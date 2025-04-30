@@ -2,7 +2,7 @@
 layout: post
 title: Scripps Biotech ML-Based Game
 description: Move your character around to enter different minigames and experiences on this map.  
-Author: Everyone (Aarush made the cosmetic box)
+Author: Zach & Aarush
 ---
 
 <style>
@@ -85,30 +85,76 @@ Author: Everyone (Aarush made the cosmetic box)
   cursor: pointer;
   font-size: 1.2em; 
   border-radius: 10px;
-  position: relative; /* Change to relative positioning */
-  margin: 20px auto 0; /* Add margin to position below the boxes */
-  display: block; /* Center the button */
+  position: relative; 
+  margin: 20px auto 0; 
+  display: block; 
   text-transform: uppercase; 
 }
   #skin-options {
     position: relative;
-    width: 70%; /* Further reduce width to shift right */
+    width: 70%; 
     height: 70%; 
-    margin: 0 auto; /* Center horizontally */
+    margin: 0 auto; 
     margin-top: 20px; 
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     grid-template-rows: repeat(2, 1fr); 
-    gap: 40px; /* Increase space between boxes */
+    gap: 40px; 
     justify-content: center;
     align-items: center;
   }
   .skin-option {
-    width: 180px; /* Further increase box size */
-    height: 180px; /* Further increase box size */
+    position: relative; 
+    width: 180px; 
+    height: 180px; 
     background: white;
-    border-radius: 15px; /* Slightly rounder corners */
+    border-radius: 15px; 
     cursor: pointer;
+    background-size: cover;
+    background-position: center;
+  }
+  .skin-option .points {
+    position: absolute;
+    top: 5px;
+    left: 5px; 
+    font-size: 1.2em;
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+  .skin-option:nth-child(1) {
+    background-image: url('https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png'); 
+  }
+  .skin-option:nth-child(2) {
+    background-image: url('https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png'); 
+  }
+  .skin-option:nth-child(3) {
+    background-image: url('https://i.postimg.cc/K8wLmvh6/Dialga.png'); 
+  }
+  .skin-option:nth-child(4) {
+    background-image: url('https://i.postimg.cc/VsKW3w58/Jett.png'); 
+  }
+  .skin-option:nth-child(5) {
+    background-image: url('https://i.postimg.cc/VsF0hWG0/Goku.png'); 
+  }
+  .skin-option:nth-child(6) {
+    background-image: url('https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'); 
+  }
+  .skin-option .checkmark {
+    display: none; 
+    position: absolute;
+    top: -20px; 
+    left: -18px; 
+    width: 50px;
+    height: 50px;
+    background: url('https://i.postimg.cc/WDxvjnPY/checkmark.png') no-repeat center center; 
+    background-size: contain;
+    z-index: 10;
+  }
+  .skin-option.selected .checkmark {
+    display: block; 
   }
 </style>
 
@@ -121,14 +167,32 @@ Author: Everyone (Aarush made the cosmetic box)
 <div id="skin-modal">
   <div id="skin-modal-content">
     <button id="close-modal">X</button>
-    <p>Customize your skin and outfit here!</p>
+    <p>Customize your outfit here!</p>
     <div id="skin-options">
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
+      <div class="skin-option selected">
+        <div class="points">Free</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">200</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">500</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">1000</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">1500</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">2000</div>
+        <div class="checkmark"></div>
+      </div>
     </div>
     <button id="confirm-button">Confirm</button>
   </div>
@@ -141,10 +205,18 @@ const ctx = canvas.getContext('2d');
 const roomImage = new Image();
 roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png';
 
+const spriteImages = [
+  'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png', // Default Character
+  'https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png', // Melodie
+  'https://i.postimg.cc/K8wLmvh6/Dialga.png', // Dialga
+  'https://i.postimg.cc/VsKW3w58/Jett.png', // Jett
+  'https://i.postimg.cc/VsF0hWG0/Goku.png', // Goku
+  'https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'  // Boss Bandit
+];
+
+let currentSpriteIndex = 0;
 const spriteImage = new Image();
-spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
-
-
+spriteImage.src = spriteImages[currentSpriteIndex];
 
 const objectImages = {
   blackjack: '{{site.baseurl}}/images/playingcard.png',
@@ -358,14 +430,36 @@ roomImage.onerror = () => alert('Failed to load room image');
 spriteImage.onerror = () => alert('Failed to load sprite image');
 
 closeModal.addEventListener('click', () => {
+  skinOptions.forEach(opt => opt.classList.remove('selected'));
+  skinOptions[confirmedSelection].classList.add('selected');
   skinModal.style.display = 'none';
   isModalOpen = false; 
 });
 
 confirmButton.addEventListener('click', () => {
-  alert('Changes saved! (Functionality to be implemented)');
+  skinOptions.forEach((option, index) => {
+    if (option.classList.contains('selected')) {
+      confirmedSelection = index;
+      currentSpriteIndex = index;
+      spriteImage.src = spriteImages[currentSpriteIndex];
+    }
+  });
   skinModal.style.display = 'none';
   isModalOpen = false; 
+});
+
+const skinOptions = document.querySelectorAll('.skin-option');
+let confirmedSelection = 0; 
+
+skinOptions.forEach((option, index) => {
+  option.addEventListener('click', () => {
+    skinOptions.forEach(opt => opt.classList.remove('selected'));
+    option.classList.add('selected');
+  });
+
+  if (index === 0) {
+    option.classList.add('selected');
+  }
 });
 </script>
 <script type="module">
