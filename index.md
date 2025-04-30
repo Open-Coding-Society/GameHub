@@ -125,7 +125,7 @@ Author: Zach & Aarush
     border-radius: 5px;
   }
   .skin-option:nth-child(1) {
-    background-image: url('https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png'); 
+    background-image: url('https://i.postimg.cc/PxDYNLjG/Default.png'); 
   }
   .skin-option:nth-child(2) {
     background-image: url('https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png'); 
@@ -206,7 +206,7 @@ const roomImage = new Image();
 roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png';
 
 const spriteImages = [
-  'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png', // Default Character
+  'https://i.postimg.cc/PxDYNLjG/Default.png', // Default Character
   'https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png', // Melodie
   'https://i.postimg.cc/K8wLmvh6/Dialga.png', // Dialga
   'https://i.postimg.cc/VsKW3w58/Jett.png', // Jett
