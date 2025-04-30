@@ -20,12 +20,12 @@ const assets = {
       height: 81, //125
       scaleSize: 100,
       },
-      coin: { src: "/images/platformer/obstacles/coin.png" },
+      coin: { src: "/images/platformer/obstacles/pills.jpeg" },
     },
     platforms: {
-      grass: { src: "/images/platformer/platforms/grass.png" },
+      grass: { src: "/images/platformer/platforms/snowyfloor.png" },
       bricks: { src: "/images/platformer/platforms/brick_wall.png" },
-      block: { src: "/images/platformer/platforms/brick_block.png" }, 
+      block: { src: "/images/platformer/platforms/cobblestone.png" }, 
       itemBlock: {
         src: "/images/platformer/sprites/key.png",
         sizeRatio: 83.2,
@@ -39,8 +39,8 @@ const assets = {
       },
     },
     backgrounds: {
-      hills: { src: "/images/platformer/backgrounds/hills.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
-      mountains: { src: "/images/platformer/backgrounds/mountains.jpg", parallaxSpeed: 0.1, moveOnKeyAction: true },
+      hills: { src: "/images/platformer/backgrounds/beefall.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
+      mountains: { src: "/images/platformer/backgrounds/scripps.jpg", parallaxSpeed: 0.1, moveOnKeyAction: true },
       clouds: { src: "/images/platformer/backgrounds/clouds.png", parallaxSpeed: 0.5 },
     },
     transitions: {
@@ -48,7 +48,7 @@ const assets = {
     },
     players: {
       mario: {
-        src: "/images/platformer/sprites/mario.png",
+        src: "/images/platformer/sprites/white_mario.png",
         width: 256,
         height: 256,
         scaleSize: 80,
@@ -74,7 +74,7 @@ const assets = {
     },
     enemies: {
       goomba: {
-        src: "/images/platformer/sprites/goomba.png",
+        src: "/images/platformer/sprites/virus.jpeg",
         width: 448,
         height: 452,
         scaleSize: 60,
@@ -83,14 +83,14 @@ const assets = {
         hitbox: { widthPercentage: 0.0, heightPercentage: 0.2 }
       },
       flyingGoomba: {
-        src: "/images/platformer/sprites/flying-goomba.png",
+        src: "/images/platformer/sprites/virus.jpeg",
         width: 448,
         height: 452,
         scaleSize: 60,
         speedRatio: 0.7,
       },
       mushroom: {
-        src: "/images/platformer/platforms/mushroom.png",
+        src: "/images/platformer/platforms/medicine.jpeg",
         width: 200,
         height: 180,
         hitbox: { widthPercentage: 0.0, heightPercentage: 0.2 }
@@ -123,25 +123,25 @@ const assets = {
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5548, yPercentage: 0.4},
     { name: 'blocks', id: 'wall', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.7, yPercentage: 1 },
     { name: 'itemBlock', id: 'jumpPlatform', class: JumpPlatform, data: assets.platforms.itemBlock, xPercentage: 0.5999, yPercentage: 0.6}, //item block is a platform
-    { name: 'goomba', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.5, yPercentage: 1, minPosition: 0.05 },
-    { name: 'goomba', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.45, yPercentage: 0.35, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
-    { name: 'goomba', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.4, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
-    { name: 'goomba', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.3, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
-    { name: 'goomba', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.2, yPercentage: 1, minPosition: 0.05, difficulties: ["hard", "impossible"] },
-    { name: 'goomba', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.1, yPercentage: 1, minPosition: 0.05, difficulties: ["impossible"] },
-    { name: 'goombaSpecial', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.75, yPercentage: 1, minPosition: 0.5 }, // special name is used for random event 2 to make sure that only one of the Goombas ends the random event
-    { name: 'goombaSpecial', id: 'goomba', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.95, yPercentage: 1, minPosition: 0.5, difficulties: ["hard", "impossible"] }, //this special name is used for random event 2 to make sure that only one of the Goombas ends the random event
-    { name: 'flyingGoomba', id: 'flyingGoomba', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["normal", "hard", "impossible"] },
-    { name: 'flyingGoomba', id: 'flyingGoomba', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["hard", "impossible"] },
-    { name: 'flyingGoomba', id: 'flyingGoomba', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["impossible"] },
-    { name: 'mushroom', id: 'mushroom', class: Mushroom, data: assets.enemies.mushroom, xPercentage: 0.4, yPercentage: 0.65 },
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.09, yPercentage: 0.88 },  
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.057, yPercentage: 0.4},
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.69, yPercentage: 0.88 },
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.55, yPercentage: 0.69}, 
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.34, yPercentage: 0.69},
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.31, yPercentage: 0.27},   
-    { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.5, yPercentage: 0.27},   
+    { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.5, yPercentage: 1, minPosition: 0.05 },
+    { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.45, yPercentage: 0.35, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
+    { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.4, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
+    { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.3, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
+    { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.2, yPercentage: 1, minPosition: 0.05, difficulties: ["hard", "impossible"] },
+    { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.1, yPercentage: 1, minPosition: 0.05, difficulties: ["impossible"] },
+    { name: 'goombaSpecial', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.75, yPercentage: 1, minPosition: 0.5 }, // special name is used for random event 2 to make sure that only one of the Goombas ends the random event
+    { name: 'goombaSpecial', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.95, yPercentage: 1, minPosition: 0.5, difficulties: ["hard", "impossible"] }, //this special name is used for random event 2 to make sure that only one of the Goombas ends the random event
+    { name: 'flyingGoomba', id: '', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["normal", "hard", "impossible"] },
+    { name: 'flyingGoomba', id: '', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["hard", "impossible"] },
+    { name: 'flyingGoomba', id: '', class: FlyingGoomba, data: assets.enemies.flyingGoomba, xPercentage: 0.9, minPosition: 0.5, difficulties: ["impossible"] },
+    { name: 'mushroom', id: '', class: Mushroom, data: assets.enemies.mushroom, xPercentage: 0.4, yPercentage: 0.65 },
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.09, yPercentage: 0.88 },  
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.057, yPercentage: 0.4},
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.69, yPercentage: 0.88 },
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.55, yPercentage: 0.69}, 
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.34, yPercentage: 0.69},
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.31, yPercentage: 0.27},   
+    { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.5, yPercentage: 0.27},   
     { name: 'mario', id: 'player', class: PlayerHills, data: assets.players.mario },
     { name: 'tube', id: 'finishline', class: FinishLine, data: assets.obstacles.tube, xPercentage: 0.85, yPercentage: 0.85 },
     { name: 'loading', id: 'background', class: BackgroundTransitions, data: assets.transitions.loading },
