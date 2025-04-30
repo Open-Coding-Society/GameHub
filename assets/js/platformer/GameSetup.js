@@ -143,15 +143,33 @@ const GameSetup = {
    * If it's not, returns false.
    * @returns {boolean} Returns true if the player's x position is greater than the innerWidth, false otherwise.
    */
+  /**
+   * Level completion callback, based on Player off screen.
+   * Checks if the player's x position is greater than the innerWidth of the game environment.
+   * If it is, checks if the player has collected enough trash to proceed.
+   * If the requirements are met, resets the player for the next level and returns true.
+   * If not, displays an alert and prevents the level transition.
+   * @returns {boolean} Returns true if the player's x position is greater than the innerWidth and requirements are met, false otherwise.
+   */
   playerOffScreenCallBack: function () {
-    // console.log(GameEnv.player?.x)
+    // Check if the player is off the screen
     if (GameEnv.player?.x > GameEnv.innerWidth) {
-      GameEnv.player = null; // reset for next level
-      //Leaderboard.openLeaderboardPanel();
-      alert("Level Complete! Click OK to continue to the next level.");
-      return true;
+        // Check if the player has collected enough trash
+        const requiredTrash = 4; // Set the required amount of trash to proceed
+        if (GameEnv.trashCount.length < requiredTrash) {
+            alert(`You need to collect at least ${requiredTrash} pieces of trash to proceed to the next level!`);
+            // Teleport the player back to the start of the level
+            GameEnv.player.setX(0); // Set the player's X position to the start
+            GameEnv.player.setY(GameEnv.bottom - GameEnv.player.canvas.height); // Set the player's Y position to the ground
+            return false; // Prevent level transition
+        }
+
+        // If requirements are met, reset the player for the next level
+        GameEnv.player = null; // Reset for the next level
+        alert("Level Complete! Click OK to continue to the next level.");
+        return true; // Allow level transition
     } else {
-      return false;
+        return false; // Player is still within the level
     }
   },
 

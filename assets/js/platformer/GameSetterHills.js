@@ -137,7 +137,6 @@ const assets = {
   { name: 'trash', id: 'trash', class: Trash, data: assets.obstacles.trash, xPercentage: 0.69, yPercentage: 0.88 },
   { name: 'trash', id: 'trash', class: Trash, data: assets.obstacles.trash, xPercentage: 0.55, yPercentage: 0.69}, 
   { name: 'mario', id: 'player', class: PlayerWinter, data: assets.players.mario },
-  { name: 'cabin', id: 'finishline', class: FinishLine, data: assets.obstacles.cabin, xPercentage: 0.85, yPercentage: 0.79 },
   { name: 'loading', id: 'background', class: BackgroundTransitions, data: assets.transitions.loading },
   ];
 
