@@ -28,11 +28,11 @@ Author: Zach
 
   h1.text-center {
     color: #ffffff; 
-    font-size: 2.5875rem; /* Increased to 115% of the current size */
+    font-size: 2.5875rem; 
   }
 
   .description {
-    font-size: 1.2rem; /* Keep the same size */
+    font-size: 1.2rem; 
     color: #ffffff;
   }
 
