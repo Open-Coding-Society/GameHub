@@ -1,5 +1,6 @@
 // GameSetHills.js Key objective is to define objects for a GameLevel
 import BackgroundParallax from './BackgroundParallax.js';
+import BackgroundScripps from './BackgroundScripps.js';
 import BackgroundTransitions from './BackgroundTransitions.js';
 import Platform from './Platform.js';
 import JumpPlatform from './PlatformJump.js';
@@ -20,7 +21,12 @@ const assets = {
       height: 81, //125
       scaleSize: 100,
       },
-      coin: { src: "/images/platformer/obstacles/pills.jpeg" },
+      coin: { 
+        src: "/images/platformer/obstacles/pill.png", 
+        width: 100, // Adjust based on the desired base width
+        height: 75, // Adjust based on the aspect ratio of the image
+        scaleSize: 80, // Adjust to control the scaling factor
+      },      
     },
     platforms: {
       grass: { src: "/images/platformer/platforms/snowyfloor.png" },
@@ -74,7 +80,7 @@ const assets = {
     },
     enemies: {
       goomba: {
-        src: "/images/platformer/sprites/virus.jpeg",
+        src: "/images/platformer/sprites/viruses.png",
         width: 448,
         height: 452,
         scaleSize: 60,
@@ -83,7 +89,7 @@ const assets = {
         hitbox: { widthPercentage: 0.0, heightPercentage: 0.2 }
       },
       flyingGoomba: {
-        src: "/images/platformer/sprites/virus.jpeg",
+        src: "/images/platformer/sprites/viruses.png",
         width: 448,
         height: 452,
         scaleSize: 60,
@@ -100,7 +106,7 @@ const assets = {
 
   // Hills Game Level defintion...
   const objects = [
-    { name: 'mountains', id: 'background', class: BackgroundParallax, data: assets.backgrounds.mountains },
+    { name: 'mountains', id: 'background', class: BackgroundScripps, data: assets.backgrounds.mountains },
     { name: 'clouds', id: 'background', class: BackgroundParallax, data: assets.backgrounds.clouds },
     { name: 'hills', id: 'background', class: BackgroundParallax, data: assets.backgrounds.hills },
     { name: 'grass', id: 'floor', class: Platform, data: assets.platforms.grass },
