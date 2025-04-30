@@ -204,16 +204,16 @@ const GameSetup = {
 
     var fun_facts = {
       //data structure
-      "Fun Fact #1": "Mario's full name is Mario Mario.", //key and value
-      "Fun Fact #2": "Mario's least favorite food is shiitake mushrooms.", //single quotes to include the double quotes
-      "Fun Fact #3": "Mario, in human years, is 24-25 years old.",
-      "Fun Fact #4": "Mario's girlfriend's name is Pauline.",
-      "Fun Fact #5": "Call or text 929-55-MARIO (929-556-2746) to get a fun surprise!",
-      "Fun Fact #6": "Mario's original name was Jumpman.",
-      "Fun Fact #7": "March 10th is known as Mario Day because the abbreviation for March 10th (Mar10) looks like Mario.",
-      "Fun Fact #8": "Mario was originally a carpenter, not a plumber.",
-      "Fun Fact #9": "There are actually lyrics to the Mario theme song."
-    }
+      "Fun Fact #1": "Scripps Research is ranked as one of the most influential scientific institutions in the world.",
+      "Fun Fact #2": "Scripps Research has pioneered advancements in drug discovery and biomedical science.",
+      "Fun Fact #3": "The institute was founded in 1924 and is headquartered in La Jolla, California.",
+      "Fun Fact #4": "Scripps Research scientists have contributed to over 1,000 patents.",
+      "Fun Fact #5": "The institute is home to one of the largest graduate programs in biomedical sciences.",
+      "Fun Fact #6": "Scripps Research played a key role in the development of antiviral drugs like Tamiflu.",
+      "Fun Fact #7": "The institute's work spans chemistry, biology, and computational science.",
+      "Fun Fact #8": "Scripps Research collaborates with organizations worldwide to advance human health.",
+      "Fun Fact #9": "The institute has received numerous awards, including Nobel Prizes, for its groundbreaking research."
+    };
     function generate() {
       var nums = Object.keys(fun_facts);
       //console.log(nums);
@@ -244,10 +244,6 @@ const GameSetup = {
     GameLevelSetup(GameSetterStart, this.path, this.homeScreenCallback, true);
     // Game Levels added to the Game ...
     GameLevelSetup(GameSetterHills, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterGreece, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterQuidditch, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterWinter, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterSkibidi, this.path, this.playerOffScreenCallBack);
     GameLevelSetup(GameSetterBossFight, this.path, this.playerOffScreenCallBack);
     // End Game
     GameLevelSetup(GameSetterEnd, this.path, this.gameOverCallBack, true);
