@@ -346,7 +346,6 @@ Author: Zach
       });
     }
 
-    const splitButton = document.getElementById("split");
     if (playerCards.length === 2 && playerCards[0].rank === playerCards[1].rank) {
       splitButton.disabled = false;
     } else {
@@ -373,6 +372,8 @@ Author: Zach
     gameStatus.textContent = `Your Score: ${currentHandScore} | Dealer's Score: ${dealerScore}`;
 
     updateHands();
+
+    splitButton.disabled = true;
 
     if (currentHandScore > 21) {
       if (playerHand1.length > 0 && playerHand2.length > 0) {
@@ -407,6 +408,8 @@ Author: Zach
   }
 
   function stand() {
+    splitButton.disabled = true;
+
     if (playerHand1.length > 0 && playerHand2.length > 0) {
       if (isPlayingFirstHand) {
         isPlayingFirstHand = false;
@@ -449,7 +452,6 @@ Author: Zach
     const firstHandScore = calculateScore(playerHand1);
     const secondHandScore = calculateScore(playerHand2);
 
-    
     if (firstHandScore > 21 && secondHandScore > 21) {
       gameStatus.textContent = "Dealer wins!";
       hitButton.disabled = true;
@@ -457,7 +459,6 @@ Author: Zach
       return;
     }
 
-    
     while (calculateScore(dealerCards) < 17) {
       dealerCards.push(deck.pop());
     }
@@ -468,27 +469,33 @@ Author: Zach
     const firstHandResult = firstHandScore > 21 ? "bust" : dealerScore > 21 || firstHandScore > dealerScore ? "win" : firstHandScore < dealerScore ? "lose" : "tie";
     const secondHandResult = secondHandScore > 21 ? "bust" : dealerScore > 21 || secondHandScore > dealerScore ? "win" : secondHandScore < dealerScore ? "lose" : "tie";
 
-    
+    let resultMessage = "";
+
     if (firstHandResult === "win" && secondHandResult === "win") {
-      gameStatus.textContent = "You win!";
+      resultMessage = "You win!";
       updatePoints(50);
     } else if (firstHandResult === "lose" && secondHandResult === "lose") {
-      gameStatus.textContent = "Dealer wins!";
+      resultMessage = "Dealer wins!";
     } else if (firstHandResult === "tie" && secondHandResult === "tie") {
-      gameStatus.textContent = "It's a tie!";
+      resultMessage = "It's a tie!";
     } else if ((firstHandResult === "win" && secondHandResult === "lose") || (firstHandResult === "lose" && secondHandResult === "win")) {
-      gameStatus.textContent = "It's a tie!";
+      resultMessage = "It's a tie!";
     } else if (firstHandResult === "tie" && secondHandResult === "lose") {
-      gameStatus.textContent = "Dealer wins!";
+      resultMessage = "Dealer wins!";
     } else if (firstHandResult === "tie" && secondHandResult === "win") {
-      gameStatus.textContent = "You win!";
+      resultMessage = "You win!";
       updatePoints(50);
     } else if ((firstHandResult === "bust" && secondHandResult === "tie") || (firstHandResult === "tie" && secondHandResult === "bust")) {
-      gameStatus.textContent = "Dealer wins!";
+      resultMessage = "Dealer wins!";
     } else if (secondHandResult === "bust") {
-      gameStatus.textContent = firstHandResult === "win" ? "You win!" : "Dealer wins!";
+      resultMessage = firstHandResult === "win" ? "You win!" : "Dealer wins!";
+      if (firstHandResult === "win") updatePoints(50);
+    } else if (firstHandResult === "bust") {
+      resultMessage = secondHandResult === "win" ? "You win!" : "Dealer wins!";
+      if (secondHandResult === "win") updatePoints(50);
     }
 
+    gameStatus.textContent = resultMessage;
     hitButton.disabled = true;
     standButton.disabled = true;
   }
