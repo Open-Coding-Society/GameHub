@@ -9,7 +9,11 @@ Author: Ian
 <div class="container mt-5">
   <h1 class="text-center text-success mb-4">🧬 DNA Building Game</h1>
   <p class="text-center mb-4">Drag the correct base to form the complementary strand!</p>
-  <p class="text-center mb-4">Hint: Adenine pairs w/ Thymine & Cytosine pairs w/ Guanine.</p>
+  
+  <div class="text-center mb-4">
+    <button class="btn btn-info" onclick="toggleHint()">Hint Button</button>
+    <p id="hint-text" class="mt-3" style="display: none;">Adenine pairs w/ Thymine & Cytosine pairs w/ Guanine.</p>
+  </div>
 
   <div class="row justify-content-center mb-4">
     <div class="col-md-5">
@@ -148,5 +152,10 @@ Author: Ian
     const atPercent = Math.round((atCount / strand.length) * 100);
     document.getElementById('score').innerHTML = 
       `✅ Correct Matches: ${percentCorrect}%<br>🧬 GC Stability: ${gcPercent}%<br>🧬 AT Stability: ${atPercent}%`;
+  }
+
+  function toggleHint() {
+    const hintText = document.getElementById('hint-text');
+    hintText.style.display = hintText.style.display === 'none' ? 'block' : 'none';
   }
 </script>
