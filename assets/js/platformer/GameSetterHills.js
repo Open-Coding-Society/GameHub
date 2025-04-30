@@ -15,16 +15,10 @@ import BlockPlatform from './BlockPlatform.js';
 // Define the GameSetup object literal
 const assets = {  
     obstacles: {
-      tube: { src: "/images/platformer/obstacles/doorclosed.png",
-      hitbox: { widthPercentage: 0.5, heightPercentage: 0.5},
-      width: 52, //87
-      height: 81, //125
-      scaleSize: 100,
-      },
       coin: { 
-        src: "/images/platformer/obstacles/pill.png", 
-        width: 100, // Adjust based on the desired base width
-        height: 75, // Adjust based on the aspect ratio of the image
+        src: "/images/platformer/sprites/pill.png", 
+        width: 225, // Adjust based on the desired base width
+        height: 225, // Adjust based on the aspect ratio of the image
         scaleSize: 80, // Adjust to control the scaling factor
       },      
     },
@@ -32,17 +26,6 @@ const assets = {
       grass: { src: "/images/platformer/platforms/snowyfloor.png" },
       bricks: { src: "/images/platformer/platforms/brick_wall.png" },
       block: { src: "/images/platformer/platforms/cobblestone.png" }, 
-      itemBlock: {
-        src: "/images/platformer/sprites/key.png",
-        sizeRatio: 83.2,
-        widthRatio: 1.0,
-        heightRatio: 1.0,
-        width: 5952, // 204
-        height: 6000, // 204
-        scaleSize: 10, // 80
-        speedRatio: 0.7,
-        hitbox: { widthPercentage: 0.4, heightPercentage: -0.2 }
-      },
     },
     backgrounds: {
       hills: { src: "/images/platformer/backgrounds/beefall.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
@@ -114,21 +97,23 @@ const assets = {
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.067, yPercentage: 0.55},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.1, yPercentage: 0.55},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.03, yPercentage: 0.55},
-    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.2, yPercentage: 0.76 },
-    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.31, yPercentage: 0.75},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.1, yPercentage: 0.76 },
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.31, yPercentage: 0.8},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3475, yPercentage: 0.8},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3775, yPercentage: 0.8},
-    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.525, yPercentage: 0.8},
-    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5625, yPercentage: 0.8},
-    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5999, yPercentage: 0.75},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.525, yPercentage: 0.85},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5625, yPercentage: 0.85},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5999, yPercentage: 0.85},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.2752, yPercentage: 0.4},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3126, yPercentage: 0.4},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.35, yPercentage: 0.4},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3825, yPercentage: 0.4},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.4125, yPercentage: 0.4},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.4425, yPercentage: 0.4},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.48, yPercentage: 0.4},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5174, yPercentage: 0.4},
     { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5548, yPercentage: 0.4},
     { name: 'blocks', id: 'wall', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.7, yPercentage: 1 },
-    { name: 'itemBlock', id: 'jumpPlatform', class: JumpPlatform, data: assets.platforms.itemBlock, xPercentage: 0.5999, yPercentage: 0.6}, //item block is a platform
     { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.5, yPercentage: 1, minPosition: 0.05 },
     { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.45, yPercentage: 0.35, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
     { name: 'goomba', id: '', class: Goomba, data: assets.enemies.goomba, xPercentage: 0.4, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
@@ -149,7 +134,6 @@ const assets = {
     { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.31, yPercentage: 0.27},   
     { name: 'coin', id: '', class: Coin, data: assets.obstacles.coin, xPercentage: 0.5, yPercentage: 0.27},   
     { name: 'mario', id: 'player', class: PlayerHills, data: assets.players.mario },
-    { name: 'tube', id: 'finishline', class: FinishLine, data: assets.obstacles.tube, xPercentage: 0.85, yPercentage: 0.85 },
     { name: 'loading', id: 'background', class: BackgroundTransitions, data: assets.transitions.loading },
   ];
 
