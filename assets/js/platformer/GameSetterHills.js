@@ -79,8 +79,8 @@ const assets = {
         speedRatio: 0.7,
       },
       mushroom: {
-        src: "/images/platformer/platforms/medicine.jpeg",
-        width: 200,
+        src: "/images/platformer/platforms/medicine.png",
+        width: 280,
         height: 180,
         hitbox: { widthPercentage: 0.0, heightPercentage: 0.2 }
       },
