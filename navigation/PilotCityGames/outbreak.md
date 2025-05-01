@@ -8,7 +8,7 @@ Author: Lars
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Outbreak Response Game - Resource Challenge</title>
   <style>
     body {
@@ -25,7 +25,6 @@ Author: Lars
       align-items: center;
       gap: 20px;
       padding: 20px;
-      box-sizing: border-box;
       min-height: 100vh;
     }
     #sidebar {
@@ -52,22 +51,9 @@ Author: Lars
       line-height: 1.4;
       width: 100%;
     }
-    #gameContainer {
+    #crateBox {
+      z-index: 10;
       position: relative;
-      width: 1000px;
-      height: 600px;
-      border: 2px solid #fff;
-      margin-top: 20px;
-    }
-    #pauseBtn {
-      margin-top: 10px;
-      padding: 5px 10px;
-      font-size: 14px;
-      background-color: #555;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
     }
     .crate {
       width: 40px;
@@ -83,6 +69,12 @@ Author: Lars
     .crate.cooldown {
       background-color: #b71c1c !important;
       cursor: not-allowed;
+    }
+    #gameContainer {
+      position: relative;
+      width: 1000px;
+      height: 600px;
+      border: 2px solid #fff;
     }
     .bubble {
       position: absolute;
@@ -108,7 +100,7 @@ Author: Lars
     }
     .region-hitbox {
       position: absolute;
-      z-index: 2;
+      z-index: 3;
       pointer-events: all;
     }
     #endScreen {
@@ -124,7 +116,6 @@ Author: Lars
       align-items: center;
       flex-direction: column;
       z-index: 9999;
-      opacity: 1;
     }
     #playAgainBtn {
       padding: 10px 20px;
@@ -149,16 +140,17 @@ Author: Lars
         📊 <strong>Regions Allocated & Health:</strong>
         <ul id="regionStats" style="list-style: none; padding-left: 0; font-size: 11px;"></ul>
         <button id="pauseBtn">⏸️ Pause</button>
-        <div id="timer">⏱️ Time Remaining: <span id="timeLeft">180</span>s</div>
-        <div id="riskDisplay">📉 Infection Risk: <span id="riskLevel">Loading...</span></div>
+        <div>⏱️ Time Remaining: <span id="timeLeft">180</span>s</div>
+        <div>📉 Infection Risk: <span id="riskLevel">Loading...</span></div>
       </div>
+    </div>
+
+    <div id="crateBox">
+      <div class="crate" draggable="true" ondragstart="handleDrag(event)" id="vaccineCrate">💉</div>
     </div>
 
     <div id="gameContainer">
       <canvas id="gameCanvas" width="1000" height="600"></canvas>
-      <div id="crateBox">
-        <div class="crate" draggable="true" ondragstart="handleDrag(event)" id="vaccineCrate">💉</div>
-      </div>
     </div>
   </div>
 
@@ -169,14 +161,23 @@ Author: Lars
 
   <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const timeDisplay = document.getElementById("timeLeft");
+    const endScreen = document.getElementById("endScreen");
+    const endMessage = document.getElementById("endMessage");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const riskElement = document.getElementById("riskLevel");
+
+    let isPaused = false;
+    let timeLeft = 180;
+    let bubbles = [];
+    let crateCooldown = false;
 
     const background = new Image();
     background.src = "https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png";
-    background.onload = () => {
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    };
 
     const regions = [
       { name: "West", x: 55, y: 180, width: 200, height: 200 },
@@ -191,18 +192,6 @@ Author: Lars
       "South": { allocated: 1000, health: 100 },
       "Northeast": { allocated: 1000, health: 100 }
     };
-
-    const pauseBtn = document.getElementById("pauseBtn");
-    const timeDisplay = document.getElementById("timeLeft");
-    const endScreen = document.getElementById("endScreen");
-    const endMessage = document.getElementById("endMessage");
-    const playAgainBtn = document.getElementById("playAgainBtn");
-    const riskElement = document.getElementById("riskLevel");
-
-    let isPaused = false;
-    let timeLeft = 180;
-    let bubbles = [];
-    let crateCooldown = false;
 
     function updateRegionStats() {
       const ul = document.getElementById("regionStats");
@@ -234,7 +223,6 @@ Author: Lars
         regionStats[regionName].allocated += 5000;
         regionStats[regionName].health = Math.min(100, regionStats[regionName].health + 5);
         updateRegionStats();
-
         const crate = document.getElementById("vaccineCrate");
         crate.classList.add("cooldown");
         crate.setAttribute("draggable", false);
@@ -262,6 +250,10 @@ Author: Lars
       bubbles.push(bubble);
     }
 
+    background.onload = () => {
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    };
+
     window.onload = () => {
       const container = document.getElementById("gameContainer");
       regions.forEach(region => {
@@ -283,8 +275,8 @@ Author: Lars
           width: `${region.width}px`,
           height: `${region.height}px`
         });
-        hitbox.setAttribute("ondragover", "allowDrop(event)");
-        hitbox.setAttribute("ondrop", `handleDrop(event, '${region.name}')`);
+        hitbox.ondragover = allowDrop;
+        hitbox.ondrop = (e) => handleDrop(e, region.name);
         container.appendChild(hitbox);
       });
 
@@ -295,7 +287,6 @@ Author: Lars
       if (isPaused) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
       regions.forEach(region => {
         const chance = Math.random();
         if (regionStats[region.name].allocated < 10000 && chance < 0.5) {
