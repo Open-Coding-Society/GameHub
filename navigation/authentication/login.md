@@ -90,6 +90,12 @@ show_reading_time: false
                 </label>
             </p>
             <p>
+                <label>
+                    <input type="checkbox" name="kasmNeeded" id="kasmNeeded">
+                    Kasm Server Needed
+                </label>
+            </p>
+            <p>
                 <button type="submit">Sign Up</button>
             </p>
             <p id="signupMessage" style="color: green;"></p>
@@ -132,6 +138,7 @@ show_reading_time: false
             name: document.getElementById("name").value,
             uid: document.getElementById("signupUid").value,
             password: document.getElementById("signupPassword").value,
+            kasm_server_needed: document.getElementById("kasmNeeded").checked,
         }
     };
 

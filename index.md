@@ -2,7 +2,7 @@
 layout: post
 title: Scripps Biotech ML-Based Game
 description: Move your character around to enter different minigames and experiences on this map.  
-Author: Everyone
+Author: Lars, Zach & Aarush
 ---
 
 <style>
@@ -62,7 +62,7 @@ Author: Everyone
     border-radius: 10px;
   }
   #skin-modal-content p {
-    font-size: 2em; /* Double the size of the text */
+    font-size: 2em; 
     margin-bottom: 20px;
   }
   #close-modal {
@@ -72,42 +72,89 @@ Author: Everyone
     background: black; 
     color: white;
     border: none;
-    padding: 15px 22.5px; /* Reduce size to 75% of current */
+    padding: 15px 22.5px; 
     cursor: pointer;
     border-radius: 5px; 
     font-size: 1.5em; 
   }
   #confirm-button {
-    background: #d4af37;
-    color: white;
-    border: none;
-    padding: 15px 30px; 
-    cursor: pointer;
-    font-size: 1.2em; 
-    border-radius: 10px;
-    position: absolute; 
-    bottom: calc(20px - (2.5 * 120px) - (0.25 * 120px)); /* Move 1/4th of a white square further down */
-    left: 50%; 
-    transform: translateX(-50%);
-    text-transform: uppercase; 
-  }
+  background: #d4af37;
+  color: white;
+  border: none;
+  padding: 15px 30px; 
+  cursor: pointer;
+  font-size: 1.2em; 
+  border-radius: 10px;
+  position: relative; 
+  margin: 20px auto 0; 
+  display: block; 
+  text-transform: uppercase; 
+}
   #skin-options {
     position: relative;
-    width: 100%;
+    width: 70%; 
     height: 70%; 
+    margin: 0 auto; 
     margin-top: 20px; 
-    display: flex;
-    flex-wrap: wrap;
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2, 1fr); 
+    gap: 40px; 
     justify-content: center;
     align-items: center;
-    gap: 20px;
   }
   .skin-option {
-    width: 120px; 
-    height: 120px; 
+    position: relative; 
+    width: 180px; 
+    height: 180px; 
     background: white;
-    border-radius: 5px;
+    border-radius: 15px; 
     cursor: pointer;
+    background-size: cover;
+    background-position: center;
+  }
+  .skin-option .points {
+    position: absolute;
+    top: 5px;
+    left: 5px; 
+    font-size: 1.2em;
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+  .skin-option:nth-child(1) {
+    background-image: url('https://i.postimg.cc/PxDYNLjG/Default.png'); 
+  }
+  .skin-option:nth-child(2) {
+    background-image: url('https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png'); 
+  }
+  .skin-option:nth-child(3) {
+    background-image: url('https://i.postimg.cc/K8wLmvh6/Dialga.png'); 
+  }
+  .skin-option:nth-child(4) {
+    background-image: url('https://i.postimg.cc/VsKW3w58/Jett.png'); 
+  }
+  .skin-option:nth-child(5) {
+    background-image: url('https://i.postimg.cc/VsF0hWG0/Goku.png'); 
+  }
+  .skin-option:nth-child(6) {
+    background-image: url('https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'); 
+  }
+  .skin-option .checkmark {
+    display: none; 
+    position: absolute;
+    top: -20px; 
+    left: -18px; 
+    width: 50px;
+    height: 50px;
+    background: url('https://i.postimg.cc/WDxvjnPY/checkmark.png') no-repeat center center; 
+    background-size: contain;
+    z-index: 10;
+  }
+  .skin-option.selected .checkmark {
+    display: block; 
   }
 </style>
 
@@ -120,14 +167,32 @@ Author: Everyone
 <div id="skin-modal">
   <div id="skin-modal-content">
     <button id="close-modal">X</button>
-    <p>Customize your skin and outfit here!</p>
+    <p>Customize your outfit here!</p>
     <div id="skin-options">
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
-      <div class="skin-option"></div>
+      <div class="skin-option selected">
+        <div class="points">Free</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">200</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">500</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">1000</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">1500</div>
+        <div class="checkmark"></div>
+      </div>
+      <div class="skin-option">
+        <div class="points">2000</div>
+        <div class="checkmark"></div>
+      </div>
     </div>
     <button id="confirm-button">Confirm</button>
   </div>
@@ -140,12 +205,38 @@ const ctx = canvas.getContext('2d');
 const roomImage = new Image();
 roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png';
 
+const spriteImages = [
+  'https://i.postimg.cc/PxDYNLjG/Default.png', // Default Character
+  'https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png', // Melodie
+  'https://i.postimg.cc/K8wLmvh6/Dialga.png', // Dialga
+  'https://i.postimg.cc/VsKW3w58/Jett.png', // Jett
+  'https://i.postimg.cc/VsF0hWG0/Goku.png', // Goku
+  'https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'  // Boss Bandit
+];
+
+let currentSpriteIndex = 0;
 const spriteImage = new Image();
-spriteImage.src = 'https://i.postimg.cc/LsFpbWXV/image-2025-04-04-104816749.png';
+spriteImage.src = spriteImages[currentSpriteIndex];
+
+const objectImages = {
+  blackjack: '{{site.baseurl}}/images/icon1.png',
+  building: '{{site.baseurl}}/images/icon4.png',
+  skin: '{{site.baseurl}}/images/icon7.png',
+  editing: '{{site.baseurl}}/images/icon2.png',
+  adventure: '{{site.baseurl}}/images/icon5.png',
+  outline: '{{site.baseurl}}/images/icon8.png',
+  exploration: '{{site.baseurl}}/images/icon3.png',
+  outbreak: '{{site.baseurl}}/images/icon6.png',
+  aboutus: '{{site.baseurl}}/images/icon9.png'
+};
 
 
-const iconImage = new Image();
-iconImage.src = 'https://i.postimg.cc/8PG3nSh7/image-2025-04-08-105328050.png'; 
+const loadedObjectImages = {};
+for (const game in objectImages) {
+  const img = new Image();
+  img.src = objectImages[game];
+  loadedObjectImages[game] = img;
+}
 
 const player = {
   x: 400,
@@ -265,19 +356,15 @@ function update() {
     }
   });
 
-  objects.forEach(obj => {
-    if (obj.icon && iconImage.complete) {
-      ctx.drawImage(iconImage, obj.x, obj.y, obj.width, obj.height);
-    } else {
-      ctx.fillStyle = 'red';
-      ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
-    }
-  });
 }
 
+
+
 function draw() {
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  
   if (roomImage.complete && roomImage.naturalWidth !== 0) {
     ctx.drawImage(roomImage, 0, 0, canvas.width, canvas.height);
   } else {
@@ -285,11 +372,49 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
+
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
+  const baseWidth = 40 * 0.9; 
+  const baseHeight = 40 * 0.9; 
+  const scaledWidth = baseWidth * 3; 
+  const scaledHeight = baseHeight * 3; 
+
   objects.forEach(obj => {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+    let img = loadedObjectImages[obj.game];
+    if (img && img.complete && img.naturalWidth !== 0) {
+      let scaledWidth = 40 * 0.9 * 3; 
+      let scaledHeight = 40 * 0.9 * 3;
+
+      if (obj.game === 'blackjack') { 
+        scaledWidth *= 1.3;
+        scaledHeight *= 1.3;
+      } else if (obj.game === 'editing') { 
+        scaledWidth *= 1.1;
+        scaledHeight *= 1.1;
+      } else if (obj.game === 'adventure') { 
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;
+      } else if (obj.game === 'outline') { 
+        scaledWidth *= 1.7;
+        scaledHeight *= 1.7;
+      } else if (obj.game === 'building') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
+      }
+
+      const offsetX = (scaledWidth - obj.width) / 2; 
+      const offsetY = (scaledHeight - obj.height) / 2; 
+      ctx.drawImage(img, obj.x - offsetX, obj.y - offsetY, scaledWidth, scaledHeight);
+    } else {
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(
+        obj.x - (scaledWidth - obj.width) / 2,
+        obj.y - (scaledHeight - obj.height) / 2,
+        scaledWidth,
+        scaledHeight
+      ); 
+    }
   });
 }
 
@@ -334,14 +459,36 @@ roomImage.onerror = () => alert('Failed to load room image');
 spriteImage.onerror = () => alert('Failed to load sprite image');
 
 closeModal.addEventListener('click', () => {
+  skinOptions.forEach(opt => opt.classList.remove('selected'));
+  skinOptions[confirmedSelection].classList.add('selected');
   skinModal.style.display = 'none';
   isModalOpen = false; 
 });
 
 confirmButton.addEventListener('click', () => {
-  alert('Changes saved! (Functionality to be implemented)');
+  skinOptions.forEach((option, index) => {
+    if (option.classList.contains('selected')) {
+      confirmedSelection = index;
+      currentSpriteIndex = index;
+      spriteImage.src = spriteImages[currentSpriteIndex];
+    }
+  });
   skinModal.style.display = 'none';
   isModalOpen = false; 
+});
+
+const skinOptions = document.querySelectorAll('.skin-option');
+let confirmedSelection = 0; 
+
+skinOptions.forEach((option, index) => {
+  option.addEventListener('click', () => {
+    skinOptions.forEach(opt => opt.classList.remove('selected'));
+    option.classList.add('selected');
+  });
+
+  if (index === 0) {
+    option.classList.add('selected');
+  }
 });
 </script>
 <script type="module">
@@ -358,7 +505,7 @@ async function fetchPoints() {
       if (data.total_points !== undefined) {
         document.getElementById('points-display').textContent = `Points: ${data.total_points}`;
       } else {
-        document.getElementById('points-display').textContent = 'Points: Unexpected response format';
+        document.getElementById('points-display').textContent = 'Points: 0'; 
       }
     } else {
       const error = await response.json();

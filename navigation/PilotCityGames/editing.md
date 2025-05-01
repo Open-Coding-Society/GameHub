@@ -12,18 +12,33 @@ Author: Pradyun
   
   <div class="row justify-content-center">
     <div class="col-md-10">
-      <div class="dna-helix position-relative">
-        <!-- DNA slots -->
-        <div class="dna-slot position-absolute" style="top: 12%; left: 50%; transform: translateX(-50%); width: 60px; height: 6px;"></div>
-        <div class="dna-slot position-absolute" style="top: 38.5%; left: 49%; transform: translateX(-50%); width: 50px; height: 6px;"></div>
-        <div class="dna-slot position-absolute" style="top: 48%; left: 53%; transform: translateX(-50%); width: 55px; height: 6px;"></div>
-        <div class="dna-slot position-absolute" style="top: 76.2%; left: 49%; transform: translateX(-50%); width: 40px; height: 6px;"></div>
-        <div class="dna-slot position-absolute" style="top: 86%; left: 50%; transform: translateX(-50%); width: 60px; height: 6px;"></div>
-      </div>
-      <div class="dna-pieces mt-3 d-flex justify-content-center">
-        <div class="dna-segment bg-danger draggable" draggable="true" data-color="red"></div>
-        <div class="dna-segment bg-success draggable" draggable="true" data-color="green"></div>
-        <div class="dna-segment bg-purple draggable" draggable="true" data-color="purple"></div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="dna-helix position-relative">
+            <div class="dna-slot position-absolute" style="top: 12%; left: 50%; transform: translateX(-50%); width: 60px; height: 6px;"></div>
+            <div class="dna-slot position-absolute" style="top: 38.5%; left: 49%; transform: translateX(-50%); width: 50px; height: 6px;"></div>
+            <div class="dna-slot position-absolute" style="top: 48%; left: 53%; transform: translateX(-50%); width: 55px; height: 6px;"></div>
+            <div class="dna-slot position-absolute" style="top: 76.2%; left: 49%; transform: translateX(-50%); width: 40px; height: 6px;"></div>
+            <div class="dna-slot position-absolute" style="top: 86%; left: 50%; transform: translateX(-50%); width: 60px; height: 6px;"></div>
+          </div>
+          <div class="dna-pieces mt-3 d-flex justify-content-center">
+            <div class="dna-segment bg-danger draggable" draggable="true" data-color="red"></div>
+            <div class="dna-segment bg-success draggable" draggable="true" data-color="green"></div>
+            <div class="dna-segment bg-purple draggable" draggable="true" data-color="purple"></div>
+            <div class="dna-segment bg-warning draggable" draggable="true" data-color="yellow"></div>
+            <div class="dna-segment bg-info draggable" draggable="true" data-color="blue"></div>
+            <div class="dna-segment bg-dark draggable" draggable="true" data-color="black"></div>
+            <div class="dna-segment bg-secondary draggable" draggable="true" data-color="gray"></div>
+            <div class="dna-segment bg-light draggable" draggable="true" data-color="white" style="border: 2px solid black;"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="game-description">
+            <h4>Game Description</h4>
+            <p>Each colored block represents a number, and each slot represents a step in testing a gene. Your goal is to arrange the blocks in the slots to form a valid sequence and predict the gene's functionality.</p>
+            <p>Drag and drop the blocks into the slots. Once all slots are filled, click "Predict Functionality" to see the result.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -31,6 +46,7 @@ Author: Pradyun
   <div class="row justify-content-center mt-4">
     <div class="col-md-4 text-center">
       <button id="predict-btn" class="btn btn-primary" disabled>Predict Functionality</button>
+      <button id="restart-btn" class="btn btn-secondary mt-2">Restart</button>
       <p class="mt-3">Your gene is: <span id="prediction-result">(__)</span></p>
     </div>
   </div>
@@ -38,65 +54,148 @@ Author: Pradyun
 
 <script type="module">
 import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-  // Drag and drop functionality
-  const draggables = document.querySelectorAll('.draggable');
-  const dnaSlots = document.querySelectorAll('.dna-slot');
-  const predictBtn = document.getElementById('predict-btn');
-  const predictionResult = document.getElementById('prediction-result');
-  let sequence = Array(dnaSlots.length).fill(null);
 
-  draggables.forEach(draggable => {
-    draggable.addEventListener('dragstart', () => {
-      draggable.classList.add('dragging');
-    });
+const draggables = document.querySelectorAll('.draggable');
+const dnaSlots = document.querySelectorAll('.dna-slot');
+const predictBtn = document.getElementById('predict-btn');
+const restartBtn = document.getElementById('restart-btn');
+const predictionResult = document.getElementById('prediction-result');
+let sequence = Array(dnaSlots.length).fill(null);
+let predictionMade = false; 
 
-    draggable.addEventListener('dragend', () => {
-      draggable.classList.remove('dragging');
-    });
+draggables.forEach(draggable => {
+  draggable.addEventListener('dragstart', () => {
+    draggable.classList.add('dragging');
   });
 
-  dnaSlots.forEach((slot, index) => {
-    slot.addEventListener('dragover', e => {
-      e.preventDefault();
-      slot.classList.add('drag-over');
-    });
+  draggable.addEventListener('dragend', () => {
+    draggable.classList.remove('dragging');
+  });
+});
 
-    slot.addEventListener('dragleave', () => {
-      slot.classList.remove('drag-over');
-    });
-
-    slot.addEventListener('drop', e => {
-      e.preventDefault();
-      slot.classList.remove('drag-over');
-      const dragging = document.querySelector('.dragging');
-      if (dragging) {
-        slot.innerHTML = `<div class="dna-segment bg-${dragging.dataset.color}"></div>`;
-        sequence[index] = dragging.dataset.color;
-        predictBtn.disabled = !sequence.every(color => color !== null);
-      }
-    });
+dnaSlots.forEach((slot, index) => {
+  slot.addEventListener('dragover', e => {
+    e.preventDefault();
+    slot.classList.add('drag-over');
   });
 
-  // Predict functionality
-  predictBtn.addEventListener('click', async () => {
-    const inputData = { input_data: { sequence: sequence } }; // Ensure the sequence is passed as expected by the API
-    try {
-      const response = await fetch(`${pythonURI}/api/editing`, {
-        ...fetchOptions,
-        method: 'POST',
-        body: JSON.stringify(inputData)
-      });
-      const data = await response.json();
-      if (data.prediction) {
-        predictionResult.textContent = data.prediction;
-      } else {
-        predictionResult.textContent = 'Error: Invalid response from server';
-      }
-    } catch (error) {
-      predictionResult.textContent = 'Error predicting functionality';
-      console.error('Prediction error:', error);
+  slot.addEventListener('dragleave', () => {
+    slot.classList.remove('drag-over');
+  });
+
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    const dragging = document.querySelector('.dragging');
+    if (dragging) {
+      const color = dragging.dataset.color;
+      slot.innerHTML = color === 'gray'
+        ? `<div class="dna-segment" style="background-color: #6c757d;"></div>`
+        : `<div class="dna-segment bg-${color}"></div>`;
+      sequence[index] = color;
+      predictBtn.disabled = !sequence.every(color => color !== null);
     }
   });
+});
+
+function showPopup(message) {
+  const popup = document.createElement("div");
+  popup.textContent = message;
+  Object.assign(popup.style, {
+    position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+    backgroundColor: "rgba(0, 0, 0, 0.8)", color: "white", padding: "20px",
+    borderRadius: "8px", zIndex: "1000", textAlign: "center", fontSize: "18px"
+  });
+  document.body.appendChild(popup);
+  setTimeout(() => document.body.removeChild(popup), 3000);
+}
+
+async function updatePoints(points) {
+  try {
+    const response = await fetch(`${pythonURI}/api/points`, {
+      ...fetchOptions,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ points })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      showPopup("You gained 100 points!");
+    }
+  } catch (error) {
+    console.error('Error updating points:', error);
+  }
+}
+
+predictBtn.addEventListener('click', async () => {
+  if (predictionMade) return; 
+
+  const colorMap = { red: 1, green: 2, purple: 3, yellow: 4, blue: 5, black: 6, gray: 7, white: 0 };
+  const encodedSequence = sequence.map(color => colorMap[color] ?? 0);
+
+
+  for (let i = 0; i < sequence.length - 1; i++) {
+    if (sequence[i] !== null && sequence[i] === sequence[i + 1]) {
+      predictionResult.textContent = "Not Functional";
+      console.log('Displayed result: Not Functional (due to successive same colors)'); 
+      return;
+    }
+  }
+
+  console.log('Encoded sequence:', encodedSequence); 
+
+  const inputData = {
+    input_data: {
+      Days: encodedSequence[0],
+      pDNABatch: encodedSequence[1],
+      ModelID: encodedSequence[2],
+      ExcludeFromCRISPRCombined: encodedSequence[3],
+      ScreenType: "2DS",
+      DrugTreated: "No"
+    }
+  };
+
+  try {
+    const response = await fetch(`${pythonURI}/api/editing`, {
+      ...fetchOptions,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(inputData)
+    });
+    const data = await response.json();
+    console.log('Full backend response:', data); 
+    console.log('Prediction value:', data.prediction); 
+
+    let resultText;
+    if (typeof data.prediction === 'boolean') {
+      resultText = data.prediction ? "Functional" : "Not Functional";
+    } else if (typeof data.prediction === 'string') {
+      resultText = data.prediction === "Functional" ? "Functional" : "Not Functional";
+    } else {
+      resultText = 'Error: Invalid server response';
+    }
+
+    predictionResult.textContent = resultText;
+    console.log('Displayed result:', resultText); 
+
+    if (resultText === "Functional") {
+      updatePoints(100);
+      predictionMade = true; 
+    }
+  } catch (error) {
+    predictionResult.textContent = 'Error predicting functionality';
+    console.error('Prediction error:', error);
+    console.log('Displayed result: Error predicting functionality'); 
+  }
+});
+
+restartBtn.addEventListener('click', () => {
+  dnaSlots.forEach(slot => slot.innerHTML = '');
+  sequence = Array(dnaSlots.length).fill(null);
+  predictBtn.disabled = true;
+  predictionResult.textContent = '(__)';
+  predictionMade = false; 
+});
 </script>
 
 <style>

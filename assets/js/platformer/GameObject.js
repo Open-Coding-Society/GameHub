@@ -1,8 +1,9 @@
 import GameEnv from './GameEnv.js';
+import Socket from './Multiplayer.js';
 
 class GameObject {
     // container for all game objects in game
-    constructor(canvas, image, speedRatio) {
+    constructor(canvas, image, data) {
         this.x = 0;
         this.y = 0;
         this.frame = 0;
@@ -14,11 +15,13 @@ class GameObject {
         this.collisionWidth = 0;
         this.collisionHeight = 0;
         this.aspect_ratio = this.width / this.height;
-        this.speedRatio = speedRatio;
+        this.speedRatio = data?.speedRatio || 0;
         this.speed = GameEnv.gameSpeed * this.speedRatio;
         this.invert = true;
         this.collisionData = {};
         this.jsonifiedElement = '';
+        this.shouldBeSynced = false; //if the object should be synced with the server
+        this.hitbox = data?.hitbox || {};
         // Add this object to the game object array so collision can be detected
         // among other things
         GameEnv.gameObjects.push(this); 
@@ -33,8 +36,11 @@ class GameObject {
     logElement() {
         var jsonifiedElement = this.stringifyElement();
         if (jsonifiedElement !== this.jsonifiedElement) {
-            console.log(jsonifiedElement);
+            //console.log(jsonifiedElement);
             this.jsonifiedElement = jsonifiedElement;
+            if (this.shouldBeSynced && !GameEnv.inTransition) {
+                Socket.sendData("update",this.jsonifiedElement);
+            }
         }
     }
 
@@ -43,7 +49,7 @@ class GameObject {
         var element = this.canvas;
         if (element && element.id) {
             // Convert the relevant properties of the element to a string for comparison
-            return JSON.stringify({
+            return {
                 id: element.id,
                 width: element.width,
                 height: element.height,
@@ -52,8 +58,12 @@ class GameObject {
                     left: element.style.left,
                     top: element.style.top
                 },
-                filter: element.style.filter
-            });
+                filter: element.style.filter,
+                tag: GameEnv.currentLevel.tag,
+                x: this.x / GameEnv.innerWidth,
+                y: (this.y - GameEnv.top) / (GameEnv.bottom - GameEnv.top),
+                frameY: this.frameY
+            };
         }
     }
 
@@ -63,6 +73,9 @@ class GameObject {
     }
 
     setX(x) {
+        if (x < 0) {
+            x = 0;
+        }
         this.x = x;
     }
 
@@ -72,7 +85,28 @@ class GameObject {
     }
 
     setY(y) {
+        if (y < GameEnv.top) {
+            y = GameEnv.top;
+        }
+        if (y > GameEnv.bottom) {
+            y = GameEnv.bottom;
+        }
         this.y = y;
+    }
+
+    updateInfo(json) {
+        var element = this.canvas;
+        if (json.id === element.id) {
+            //console.log("runs", json.width, json.height)
+            this.canvas.width = json.width;
+            this.canvas.height = json.height;
+            this.canvas.style.filter = json.filter;
+            var element = this.canvas;
+            //this.x = json.x * GameEnv.innerWidth;
+            //this.y = (json.y * (GameEnv.bottom - GameEnv.top)) + GameEnv.top;
+            this.frameY = json.frameY
+        }
+        return json.id === element.id
     }
 
     /* Destroy Game Object
@@ -81,6 +115,8 @@ class GameObject {
     */
     destroy() {
         const index = GameEnv.gameObjects.indexOf(this);
+     // GameEnv.gameObjects.removeChild(this)
+      // GameEnv.gameObjects.splice(index, 1)
         if (index !== -1) {
             // Remove the canvas from the DOM
             this.canvas.parentNode.removeChild(this.canvas);
@@ -120,6 +156,18 @@ class GameObject {
             }
         }
     }
+    playerTubeCollision(player, tube) {
+        // Check if there is a collision between the player and the tube
+        const playerRect = player.canvas.getBoundingClientRect();
+        const tubeRect = tube.canvas.getBoundingClientRect();
+    
+        const collisionDetected = (
+            playerRect.right > tubeRect.left &&
+            playerRect.left < tubeRect.right &&
+            playerRect.bottom > tubeRect.top &&
+            playerRect.top < tubeRect.bottom
+        );
+    }
 
     /* Collision detection method
      * usage: if (player.isCollision(platform)) { // action }
@@ -131,45 +179,54 @@ class GameObject {
     
         // Calculate center points of rectangles
         const thisCenterX = (thisRect.left + thisRect.right) / 2;
-        const thisCenterY = (thisRect.top + thisRect.bottom) / 2;
         const otherCenterX = (otherRect.left + otherRect.right) / 2;
-        const otherCenterY = (otherRect.top + otherRect.bottom) / 2;
+
+        // Calculate new center points of rectangles
+        const thisRectWidth = thisRect.right - thisRect.left;
+        const thisRectLeftNew = otherCenterX - thisRectWidth / 2;
     
         // Calculate hitbox constants
-        const percentage = 0.5; 
-        const widthReduction = thisRect.width * percentage;
-        const heightReduction = thisRect.height * percentage;
+        var widthPercentage = this.hitbox?.widthPercentage || 0.0;
+        var heightPercentage = this.hitbox?.heightPercentage || 0.0;
+    
+        // Calculate hitbox reductions from the width and height
+        const widthReduction = thisRect.width * widthPercentage;
+        const heightReduction = thisRect.height * heightPercentage;
     
         // Build hitbox by subtracting reductions from the left, right, top, and bottom
         const thisLeft = thisRect.left + widthReduction;
         const thisTop = thisRect.top + heightReduction;
         const thisRight = thisRect.right - widthReduction;
-        const thisBottom = thisRect.bottom - heightReduction;
-    
+        const thisBottom = thisRect.bottom;
+        const tolerance = 10; // Adjust as needed
+
+        // Determine if this object's bottom exactly aligns with the other object's top
+        const onTopofOther = Math.abs(thisBottom - otherRect.top) <= tolerance;
         // Determine hit and touch points of hit
         this.collisionData = {
+            newX: thisRectLeftNew, // proportionally adjust left to center over other object
             hit: (
                 thisLeft < otherRect.right &&
                 thisRight > otherRect.left &&
                 thisTop < otherRect.bottom &&
                 thisBottom > otherRect.top
             ),
-            atFloor: (GameEnv.bottom <= this.y), // Check if the object's bottom edge is at or below the floor level
+            atFloor: (GameEnv.bottom <= this.y),
             touchPoints: {
                 this: {
-                    top: thisCenterY < otherCenterY,
-                    bottom: thisCenterY > otherCenterY,
+                    id: this.canvas.id,
+                    top: thisRect.bottom > otherRect.top,
+                    bottom: (thisRect.bottom <= otherRect.top) && !(Math.abs(thisRect.bottom - otherRect.bottom) <= GameEnv.gravity),
                     left: thisCenterX > otherCenterX,
                     right: thisCenterX < otherCenterX,
+                    onTopofOther: onTopofOther
                 },
                 other: {
                     id: other.canvas.id,
-                    top: thisCenterY > otherCenterY,
-                    bottom: thisCenterY < otherCenterY,
-                    left: thisCenterX < otherCenterX,
-                    right: thisCenterX > otherCenterX,
-                    ontop: Math.abs(thisBottom - otherRect.top) <= GameEnv.gravity,
-                    x: otherRect.left
+                    top: thisRect.bottom < otherRect.top,
+                    bottom: (thisRect.bottom >= otherRect.top) && !(Math.abs(thisRect.bottom - otherRect.bottom) <= GameEnv.gravity),
+                    left: thisCenterX < otherCenterX, 
+                     right: thisCenterX > otherCenterX,
                 },
             },
         };

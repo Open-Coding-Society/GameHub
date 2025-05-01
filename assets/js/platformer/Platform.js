@@ -2,8 +2,8 @@ import GameEnv from './GameEnv.js';
 import GameObject from './GameObject.js';
 
 export class Platform extends GameObject {
-    constructor(canvas, image, speedRatio) {
-        super(canvas, image, speedRatio);
+    constructor(canvas, image, data) {
+        super(canvas, image, data);
     }
 
     /* Update uses modulo math to cycle to start at width extent
@@ -34,7 +34,6 @@ export class Platform extends GameObject {
         const scaledHeight = GameEnv.backgroundHeight / 6;
 
         const canvasWidth = GameEnv.innerWidth;
-        const canvasHeight = canvasWidth / this.aspect_ratio;
         const canvasLeft = 0;
         GameEnv.platformHeight = scaledHeight;
     

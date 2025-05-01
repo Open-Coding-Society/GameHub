@@ -8,7 +8,7 @@ Author: Lars
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Outbreak Response Game - Resource Challenge</title>
   <style>
     body {
@@ -19,72 +19,42 @@ Author: Lars
       overflow-x: hidden;
       overflow-y: auto;
     }
-
     #wrapper {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
       gap: 20px;
       padding: 20px;
-      box-sizing: border-box;
-      justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
     }
-
     #sidebar {
-      width: auto;
       background: rgba(0, 0, 0, 0.6);
       padding: 10px;
-      box-sizing: border-box;
       color: white;
       display: flex;
       flex-direction: column;
       gap: 20px;
       border-bottom: 2px solid #444;
-      justify-content: flex-start;
       align-items: flex-start;
-      position: relative;
-      top: 70px;
+      margin-bottom: 20px;
     }
-
     #title {
-      position: relative;
-      top: 80px;
       text-align: center;
       font-size: 36px;
       font-weight: bold;
-      color: white;
     }
-
     .infographic-item {
       padding: 5px;
       border-left: 4px solid #0ff;
       background: rgba(255, 255, 255, 0.05);
       font-size: 12px;
       line-height: 1.4;
-      text-align: left;
       width: 100%;
     }
-
-    #gameContainer {
+    #crateBox {
+      z-index: 10;
       position: relative;
-      width: 1000px;
-      height: 600px;
-      border: 2px solid #fff;
-      margin-top: 20px;
     }
-
-    #pauseBtn {
-      margin-top: 10px;
-      padding: 5px 10px;
-      font-size: 14px;
-      background-color: #555;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
     .crate {
       width: 40px;
       height: 40px;
@@ -95,20 +65,17 @@ Author: Lars
       border-radius: 4px;
       cursor: grab;
       margin: 5px;
-      transition: background-color 0.3s;
     }
-
     .crate.cooldown {
       background-color: #b71c1c !important;
       cursor: not-allowed;
     }
-
-    .region {
-      position: absolute;
-      border: 2px dashed rgba(255,255,255,0.2);
-      pointer-events: all;
+    #gameContainer {
+      position: relative;
+      width: 1000px;
+      height: 600px;
+      border: 2px solid #fff;
     }
-
     .bubble {
       position: absolute;
       width: 30px;
@@ -117,18 +84,54 @@ Author: Lars
       border-radius: 50%;
       cursor: pointer;
       animation: pulse 2s infinite;
+      z-index: 4;
     }
-
     @keyframes pulse {
       0% { transform: scale(1); opacity: 0.8; }
       50% { transform: scale(1.4); opacity: 0.5; }
       100% { transform: scale(1); opacity: 0.8; }
+    }
+    .region-visual {
+      position: absolute;
+      border: 1px dashed rgba(0, 255, 255, 0.3);
+      background-color: rgba(0, 255, 255, 0.05);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .region-hitbox {
+      position: absolute;
+      z-index: 3;
+      pointer-events: all;
+    }
+    #endScreen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    #playAgainBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div id="wrapper">
     <div id="title">Resource Optimization Challenge</div>
+
     <div id="sidebar">
       <div class="infographic-item">
         💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk, Pop virus bubbles to stop spread
@@ -137,27 +140,41 @@ Author: Lars
         📊 <strong>Regions Allocated & Health:</strong>
         <ul id="regionStats" style="list-style: none; padding-left: 0; font-size: 11px;"></ul>
         <button id="pauseBtn">⏸️ Pause</button>
+        <div>⏱️ Time Remaining: <span id="timeLeft">180</span>s</div>
+        <div>📉 Infection Risk: <span id="riskLevel">Loading...</span></div>
       </div>
+    </div>
+
+    <div id="crateBox">
+      <div class="crate" draggable="true" ondragstart="handleDrag(event)" id="vaccineCrate">💉</div>
     </div>
 
     <div id="gameContainer">
       <canvas id="gameCanvas" width="1000" height="600"></canvas>
-      <div id="crateBox">
-        <div class="crate" draggable="true" ondragstart="handleDrag(event)" id="vaccineCrate">💉</div>
-      </div>
     </div>
   </div>
 
-  <script>
+  <div id="endScreen">
+    <h1 id="endMessage"></h1>
+    <button id="playAgainBtn">🔁 Play Again</button>
+  </div>
+
+  <script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     const pauseBtn = document.getElementById("pauseBtn");
-    let isPaused = false;
+    const timeDisplay = document.getElementById("timeLeft");
+    const endScreen = document.getElementById("endScreen");
+    const endMessage = document.getElementById("endMessage");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const riskElement = document.getElementById("riskLevel");
 
-    pauseBtn.onclick = () => {
-      isPaused = !isPaused;
-      pauseBtn.textContent = isPaused ? "▶️ Resume" : "⏸️ Pause";
-    };
+    let isPaused = false;
+    let timeLeft = 180;
+    let bubbles = [];
+    let crateCooldown = false;
 
     const background = new Image();
     background.src = "https://i.postimg.cc/jjwbHWnp/image-2025-04-21-104242750.png";
@@ -175,9 +192,6 @@ Author: Lars
       "South": { allocated: 1000, health: 100 },
       "Northeast": { allocated: 1000, health: 100 }
     };
-
-    let bubbles = [];
-    let crateCooldown = false;
 
     function updateRegionStats() {
       const ul = document.getElementById("regionStats");
@@ -197,34 +211,28 @@ Author: Lars
       e.dataTransfer.setData("text/plain", "vaccine");
     }
 
+    function allowDrop(e) {
+      e.preventDefault();
+    }
+
     function handleDrop(e, regionName) {
       e.preventDefault();
       if (isPaused) return;
       const type = e.dataTransfer.getData("text/plain");
       if (type === "vaccine" && !crateCooldown) {
         regionStats[regionName].allocated += 5000;
-        regionStats[regionName].health += 5;
-        if (regionStats[regionName].health > 100) regionStats[regionName].health = 100;
+        regionStats[regionName].health = Math.min(100, regionStats[regionName].health + 5);
         updateRegionStats();
-        e.target.style.backgroundColor = "rgba(0,255,0,0.1)";
-        setTimeout(() => {
-          e.target.style.backgroundColor = "";
-        }, 1000);
-
-        crateCooldown = true;
         const crate = document.getElementById("vaccineCrate");
         crate.classList.add("cooldown");
         crate.setAttribute("draggable", false);
+        crateCooldown = true;
         setTimeout(() => {
           crateCooldown = false;
           crate.classList.remove("cooldown");
           crate.setAttribute("draggable", true);
         }, 5000);
       }
-    }
-
-    function allowDrop(e) {
-      e.preventDefault();
     }
 
     function spawnBubble(region) {
@@ -242,13 +250,55 @@ Author: Lars
       bubbles.push(bubble);
     }
 
+    background.onload = () => {
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    };
+
+    window.onload = () => {
+      const container = document.getElementById("gameContainer");
+      regions.forEach(region => {
+        const visual = document.createElement("div");
+        visual.className = "region-visual";
+        Object.assign(visual.style, {
+          left: `${region.x}px`,
+          top: `${region.y}px`,
+          width: `${region.width}px`,
+          height: `${region.height}px`
+        });
+        container.appendChild(visual);
+
+        const hitbox = document.createElement("div");
+        hitbox.className = "region-hitbox";
+        Object.assign(hitbox.style, {
+          left: `${region.x}px`,
+          top: `${region.y}px`,
+          width: `${region.width}px`,
+          height: `${region.height}px`
+        });
+        hitbox.ondragover = allowDrop;
+        hitbox.ondrop = (e) => handleDrop(e, region.name);
+        container.appendChild(hitbox);
+      });
+
+      updateRegionStats();
+    };
+
+    setInterval(() => {
+      if (isPaused) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      regions.forEach(region => {
+        const chance = Math.random();
+        if (regionStats[region.name].allocated < 10000 && chance < 0.5) {
+          spawnBubble(region);
+        }
+      });
+    }, 3000);
+
     setInterval(() => {
       if (isPaused) return;
       Object.keys(regionStats).forEach(region => {
-        if (regionStats[region].allocated > 0) {
-          regionStats[region].allocated -= 1000;
-          if (regionStats[region].allocated < 0) regionStats[region].allocated = 0;
-        }
+        regionStats[region].allocated = Math.max(0, regionStats[region].allocated - 1000);
       });
       updateRegionStats();
     }, 5000);
@@ -258,52 +308,62 @@ Author: Lars
       regions.forEach(region => {
         const count = bubbles.filter(b => b.dataset.region === region.name).length;
         if (count > 5) {
-          regionStats[region.name].health -= 10;
-          if (regionStats[region.name].health < 0) regionStats[region.name].health = 0;
+          regionStats[region.name].health = Math.max(0, regionStats[region.name].health - 10);
         }
       });
       const failed = Object.values(regionStats).filter(r => r.health <= 0).length;
-      if (failed >= 2) {
-        alert("Multiple regions have collapsed. Game Over.");
-        location.reload();
+      if (failed >= 3) {
+        endMessage.textContent = "💀 Game Over! Too many regions collapsed.";
+        endScreen.style.display = "flex";
       }
       updateRegionStats();
     }, 4000);
 
     setInterval(() => {
       if (isPaused) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-      regions.forEach(region => {
-        const doses = regionStats[region.name].allocated;
-        const chance = Math.random();
-        if (doses < 5000 && chance < 0.6) {
-          spawnBubble(region);
-        } else if (doses < 10000 && chance < 0.3) {
-          spawnBubble(region);
-        } else if (doses < 20000 && chance < 0.1) {
-          spawnBubble(region);
-        }
-      });
-    }, 2000);
+      timeLeft--;
+      timeDisplay.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        endMessage.textContent = "✅ Success! You held off the outbreak!";
+        endScreen.style.display = "flex";
+      }
+    }, 1000);
 
-    background.onload = () => {
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-      regions.forEach(region => {
-        const div = document.createElement("div");
-        div.classList.add("region");
-        div.style.left = `${region.x}px`;
-        div.style.top = `${region.y}px`;
-        div.style.width = `${region.width}px`;
-        div.style.height = `${region.height}px`;
-        div.ondragover = allowDrop;
-        div.ondrop = (e) => handleDrop(e, region.name);
-        div.title = region.name;
-        document.getElementById("gameContainer").appendChild(div);
-      });
+    pauseBtn.onclick = () => {
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? "▶️ Resume" : "⏸️ Pause";
     };
 
-    updateRegionStats();
+    playAgainBtn.onclick = () => {
+      endScreen.style.opacity = 0;
+      setTimeout(() => {
+        location.reload();
+      }, 300);
+    };
+
+    async function fetchRiskLevel() {
+      try {
+        const response = await fetch(`${pythonURI}/api/predict`, {
+          ...fetchOptions,
+          method: 'POST',
+          body: JSON.stringify({
+            vaccines: 15000,
+            fully_vaccinated: 10000,
+            daily_vaccinations: 400,
+            distributed: 16000
+          })
+        });
+
+        const data = await response.json();
+        if (data.risk) {
+          riskElement.textContent = data.risk.charAt(0).toUpperCase() + data.risk.slice(1);
+        }
+      } catch (err) {
+        console.error('Risk fetch failed:', err);
+      }
+    }
+
+    setInterval(fetchRiskLevel, 5000);
   </script>
 </body>
 </html>

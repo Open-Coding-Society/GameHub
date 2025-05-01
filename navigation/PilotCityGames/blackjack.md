@@ -28,6 +28,12 @@ Author: Zach
 
   h1.text-center {
     color: #ffffff; 
+    font-size: 2.5875rem; 
+  }
+
+  .description {
+    font-size: 1.2rem; 
+    color: #ffffff;
   }
 
   .card-title {
@@ -37,6 +43,7 @@ Author: Zach
 
 <div class="container mt-5">
   <h1 class="text-center">Antibody Blackjack</h1>
+  <p class="text-center description">Get as close as you can to 21 without going over!</p>
   <div class="row justify-content-center mt-4">
     <div class="col-md-6">
       <div class="card">  
@@ -47,6 +54,7 @@ Author: Zach
             <button id="start-game" class="btn btn-primary">Start Game</button>
             <button id="hit" class="btn btn-success" disabled>Hit</button>
             <button id="stand" class="btn btn-warning" disabled>Stand</button>
+            <button id="split" class="btn btn-secondary" disabled>Split</button>
           </div>
         </div>
       </div>
@@ -88,7 +96,7 @@ Author: Zach
 
     setTimeout(() => {
       document.body.removeChild(popup);
-    }, 3000); // Remove popup after 3 seconds
+    }, 3000); 
   }
 
   async function updatePoints(points) {
@@ -100,12 +108,12 @@ Author: Zach
       });
 
       const data = await response.json();
-      console.log('Response:', response); // Log the response for debugging
-      console.log('Response Data:', data); // Log the response data for debugging
+      console.log('Response:', response); 
+      console.log('Response Data:', data); 
 
       if (response.ok) {
         console.log('Points updated successfully:', data.total_points);
-        showPopup("You gained 50 points!"); // Show popup on successful point update
+        showPopup("You gained 50 points!"); 
       } else {
         console.error('Failed to update points:', data.message);
       }
@@ -117,6 +125,7 @@ Author: Zach
   const startGameButton = document.getElementById("start-game");
   const hitButton = document.getElementById("hit");
   const standButton = document.getElementById("stand");
+  const splitButton = document.getElementById("split");
   const gameStatus = document.getElementById("game-status");
   const playerHand = document.getElementById("player-hand");
   const dealerHand = document.getElementById("dealer-hand");
@@ -124,6 +133,9 @@ Author: Zach
   let deck = [];
   let playerCards = [];
   let dealerCards = [];
+  let playerHand1 = [];
+  let playerHand2 = [];
+  let isPlayingFirstHand = true;
 
   function createDeck() {
     const antibodies = [
@@ -194,7 +206,7 @@ Author: Zach
     cardElement.style.justifyContent = "space-between";
     cardElement.style.padding = "5px";
     cardElement.style.color = "black";
-    cardElement.style.cursor = "pointer"; // Add pointer cursor for interactivity
+    cardElement.style.cursor = "pointer"; 
 
     const frontFace = document.createElement("div");
     frontFace.style.width = "100%";
@@ -268,6 +280,21 @@ Author: Zach
     return cardElement;
   }
 
+  function resetGame() {
+    deck = [];
+    playerCards = [];
+    dealerCards = [];
+    playerHand1 = [];
+    playerHand2 = [];
+    isPlayingFirstHand = true;
+    playerHand.innerHTML = "";
+    dealerHand.innerHTML = "";
+    gameStatus.textContent = "Press 'Start Game' to begin!";
+    hitButton.disabled = true;
+    standButton.disabled = true;
+    splitButton.disabled = true;
+  }
+
   function updateHands() {
     playerHand.innerHTML = "";
     dealerHand.innerHTML = "";
@@ -277,14 +304,57 @@ Author: Zach
     dealerHand.style.marginBottom = "20px";
     dealerCards.forEach(card => dealerHand.appendChild(createCardElement(card)));
 
-    playerHand.style.display = "flex";
-    playerHand.style.justifyContent = "center";
-    playerCards.forEach(card => playerHand.appendChild(createCardElement(card)));
+    if (playerHand1.length > 0 && playerHand2.length > 0) {
+      const handsContainer = document.createElement("div");
+      handsContainer.style.display = "flex";
+      handsContainer.style.justifyContent = "center";
+      handsContainer.style.gap = "40px";
 
-    gameStatus.textContent = `Your Score: ${calculateScore(playerCards)} | Dealer's Score: ${calculateScore(dealerCards)}`;
+      const hand1Container = document.createElement("div");
+      hand1Container.style.display = "flex";
+      hand1Container.style.flexDirection = "column";
+      hand1Container.style.alignItems = "center";
+
+      const hand2Container = document.createElement("div");
+      hand2Container.style.display = "flex";
+      hand2Container.style.flexDirection = "column";
+      hand2Container.style.alignItems = "center";
+
+      playerHand1.forEach((card, index) => {
+        const cardElement = createCardElement(card);
+        cardElement.style.position = "relative";
+        cardElement.style.marginTop = `${index * 30}px`;
+        hand1Container.appendChild(cardElement);
+      });
+
+      playerHand2.forEach((card, index) => {
+        const cardElement = createCardElement(card);
+        cardElement.style.position = "relative";
+        cardElement.style.marginTop = `${index * 30}px`;
+        hand2Container.appendChild(cardElement);
+      });
+
+      handsContainer.appendChild(hand1Container);
+      handsContainer.appendChild(hand2Container);
+      playerHand.appendChild(handsContainer);
+    } else {
+      playerCards.forEach((card, index) => {
+        const cardElement = createCardElement(card);
+        cardElement.style.position = "relative";
+        cardElement.style.marginTop = `${index * 30}px`;
+        playerHand.appendChild(cardElement);
+      });
+    }
+
+    if (playerCards.length === 2 && playerCards[0].rank === playerCards[1].rank) {
+      splitButton.disabled = false;
+    } else {
+      splitButton.disabled = true;
+    }
   }
 
   function startGame() {
+    resetGame();
     createDeck();
     playerCards = [deck.pop(), deck.pop()];
     dealerCards = [deck.pop()];
@@ -296,25 +366,78 @@ Author: Zach
 
   function hit() {
     playerCards.push(deck.pop());
+    const currentHandScore = calculateScore(playerCards);
+    const dealerScore = calculateScore(dealerCards);
+
+    gameStatus.textContent = `Your Score: ${currentHandScore} | Dealer's Score: ${dealerScore}`;
+
     updateHands();
-    if (calculateScore(playerCards) > 21) {
-      gameStatus.textContent = "You busted! Dealer wins.";
-      hitButton.disabled = true;
-      standButton.disabled = true;
+
+    splitButton.disabled = true;
+
+    if (currentHandScore > 21) {
+      if (playerHand1.length > 0 && playerHand2.length > 0) {
+        if (isPlayingFirstHand) {
+          isPlayingFirstHand = false;
+          playerCards = playerHand2;
+          gameStatus.textContent = "Second Card! Your Turn.";
+          updateHands();
+        } else {
+          finalizeSplitGame();
+        }
+      } else {
+        gameStatus.textContent = "You busted! Dealer wins.";
+        hitButton.disabled = true;
+        standButton.disabled = true;
+      }
+    }
+  }
+
+  function split() {
+    if (playerCards.length === 2 && playerCards[0].rank === playerCards[1].rank) {
+      playerHand1 = [playerCards[0]];
+      playerHand2 = [playerCards[1]];
+      playerCards = playerHand1;
+      isPlayingFirstHand = true;
+      gameStatus.textContent = "First Card! Your Turn.";
+      updateHands();
+      hitButton.disabled = false;
+      standButton.disabled = false;
+      splitButton.disabled = true;
     }
   }
 
   function stand() {
+    splitButton.disabled = true;
+
+    if (playerHand1.length > 0 && playerHand2.length > 0) {
+      if (isPlayingFirstHand) {
+        isPlayingFirstHand = false;
+        playerCards = playerHand2;
+        gameStatus.textContent = "Second Card! Your Turn.";
+        updateHands();
+      } else {
+        finalizeSplitGame();
+      }
+    } else {
+      finalizeNormalGame();
+    }
+  }
+
+  function finalizeNormalGame() {
     while (calculateScore(dealerCards) < 17) {
       dealerCards.push(deck.pop());
     }
     updateHands();
+
     const playerScore = calculateScore(playerCards);
     const dealerScore = calculateScore(dealerCards);
 
-    if (dealerScore > 21 || playerScore > dealerScore) {
+    if (playerScore > 21) {
+      gameStatus.textContent = "You busted! Dealer wins.";
+    } else if (dealerScore > 21 || playerScore > dealerScore) {
       gameStatus.textContent = "You win!";
-      updatePoints(50); // Award 50 points for a win
+      updatePoints(50);
     } else if (playerScore < dealerScore) {
       gameStatus.textContent = "Dealer wins!";
     } else {
@@ -325,7 +448,60 @@ Author: Zach
     standButton.disabled = true;
   }
 
+  function finalizeSplitGame() {
+    const firstHandScore = calculateScore(playerHand1);
+    const secondHandScore = calculateScore(playerHand2);
+
+    if (firstHandScore > 21 && secondHandScore > 21) {
+      gameStatus.textContent = "Dealer wins!";
+      hitButton.disabled = true;
+      standButton.disabled = true;
+      return;
+    }
+
+    while (calculateScore(dealerCards) < 17) {
+      dealerCards.push(deck.pop());
+    }
+    updateHands();
+
+    const dealerScore = calculateScore(dealerCards);
+
+    const firstHandResult = firstHandScore > 21 ? "bust" : dealerScore > 21 || firstHandScore > dealerScore ? "win" : firstHandScore < dealerScore ? "lose" : "tie";
+    const secondHandResult = secondHandScore > 21 ? "bust" : dealerScore > 21 || secondHandScore > dealerScore ? "win" : secondHandScore < dealerScore ? "lose" : "tie";
+
+    let resultMessage = "";
+
+    if (firstHandResult === "win" && secondHandResult === "win") {
+      resultMessage = "You win!";
+      updatePoints(50);
+    } else if (firstHandResult === "lose" && secondHandResult === "lose") {
+      resultMessage = "Dealer wins!";
+    } else if (firstHandResult === "tie" && secondHandResult === "tie") {
+      resultMessage = "It's a tie!";
+    } else if ((firstHandResult === "win" && secondHandResult === "lose") || (firstHandResult === "lose" && secondHandResult === "win")) {
+      resultMessage = "It's a tie!";
+    } else if (firstHandResult === "tie" && secondHandResult === "lose") {
+      resultMessage = "Dealer wins!";
+    } else if (firstHandResult === "tie" && secondHandResult === "win") {
+      resultMessage = "You win!";
+      updatePoints(50);
+    } else if ((firstHandResult === "bust" && secondHandResult === "tie") || (firstHandResult === "tie" && secondHandResult === "bust")) {
+      resultMessage = "Dealer wins!";
+    } else if (secondHandResult === "bust") {
+      resultMessage = firstHandResult === "win" ? "You win!" : "Dealer wins!";
+      if (firstHandResult === "win") updatePoints(50);
+    } else if (firstHandResult === "bust") {
+      resultMessage = secondHandResult === "win" ? "You win!" : "Dealer wins!";
+      if (secondHandResult === "win") updatePoints(50);
+    }
+
+    gameStatus.textContent = resultMessage;
+    hitButton.disabled = true;
+    standButton.disabled = true;
+  }
+
   startGameButton.addEventListener("click", startGame);
   hitButton.addEventListener("click", hit);
   standButton.addEventListener("click", stand);
+  splitButton.addEventListener("click", split);
 </script>
