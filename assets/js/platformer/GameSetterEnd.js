@@ -4,7 +4,7 @@ import Background from './Background.js'
 // Define the assets
 const assets = {  
   backgrounds: {
-    end: { src: "/images/platformer/backgrounds/game_over.png" },
+    end: { src: "/images/platformer/backgrounds/scripps_starting.png" },
   },
 };
 

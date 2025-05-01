@@ -107,6 +107,18 @@ const GameControl = {
         GameEnv.coinScore += value;
         this.updateCoinDisplay()
     },
+    updatePillDisplay() {
+        const pills = GameEnv.coinScore; // Reuse coinScore for pill tracking
+        const pillDisplay = document.getElementById('coinScore'); // ID remains the same
+        if (!pillDisplay) {
+            console.error("PILL DISPLAY DOES NOT EXIST");
+        }
+        pillDisplay.textContent = pills;
+    },     
+    gainPill(value) {
+        GameEnv.coinScore += value; // Increment pill score
+        this.updatePillDisplay();
+    },
     /**
      * Starts the game timer.
      * @function startTimer

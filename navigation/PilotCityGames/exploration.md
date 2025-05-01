@@ -123,8 +123,8 @@ Author: Darsh
 
 document.addEventListener('keydown', e => {
   const keysToPrevent = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-  if (keysToPrevent.includes(e.key)) e.preventDefault(); // Stop scroll on arrow keys
-  keysPressed[e.key.toLowerCase()] = true; // support lowercase for WASD
+  if (keysToPrevent.includes(e.key)) e.preventDefault(); 
+  keysPressed[e.key.toLowerCase()] = true; 
 });
 
 document.addEventListener('keyup', e => {
