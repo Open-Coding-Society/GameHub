@@ -219,15 +219,15 @@ const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
 
 const objectImages = {
-  blackjack: '{{site.baseurl}}/images/playingcard.png',
-  building: '{{site.baseurl}}/images/dnabuilding.png',
-  skin: '{{site.baseurl}}/images/cosmeticicon.png',
-  editing: '{{site.baseurl}}/images/geneedit.png',
-  adventure: '{{site.baseurl}}/images/marioplatformer.png',
-  outline: '{{site.baseurl}}/images/chaticon.png',
-  exploration: '{{site.baseurl}}/images/joystick.png',
-  outbreak: '{{site.baseurl}}/images/outbreakpotion.png',
-  aboutus: '{{site.baseurl}}/images/aboutusicon.png'
+  blackjack: '{{site.baseurl}}/images/icon1.png',
+  building: '{{site.baseurl}}/images/icon4.png',
+  skin: '{{site.baseurl}}/images/icon7.png',
+  editing: '{{site.baseurl}}/images/icon2.png',
+  adventure: '{{site.baseurl}}/images/icon5.png',
+  outline: '{{site.baseurl}}/images/icon8.png',
+  exploration: '{{site.baseurl}}/images/icon3.png',
+  outbreak: '{{site.baseurl}}/images/icon6.png',
+  aboutus: '{{site.baseurl}}/images/icon9.png'
 };
 
 
@@ -375,16 +375,45 @@ function draw() {
 
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
+  const baseWidth = 40 * 0.9; 
+  const baseHeight = 40 * 0.9; 
+  const scaledWidth = baseWidth * 3; 
+  const scaledHeight = baseHeight * 3; 
 
   objects.forEach(obj => {
-
     let img = loadedObjectImages[obj.game];
     if (img && img.complete && img.naturalWidth !== 0) {
-      ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
-    } else {
+      let scaledWidth = 40 * 0.9 * 3; 
+      let scaledHeight = 40 * 0.9 * 3;
 
+      if (obj.game === 'blackjack') { 
+        scaledWidth *= 1.3;
+        scaledHeight *= 1.3;
+      } else if (obj.game === 'editing') { 
+        scaledWidth *= 1.1;
+        scaledHeight *= 1.1;
+      } else if (obj.game === 'adventure') { 
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;
+      } else if (obj.game === 'outline') { 
+        scaledWidth *= 1.7;
+        scaledHeight *= 1.7;
+      } else if (obj.game === 'building') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
+      }
+
+      const offsetX = (scaledWidth - obj.width) / 2; 
+      const offsetY = (scaledHeight - obj.height) / 2; 
+      ctx.drawImage(img, obj.x - offsetX, obj.y - offsetY, scaledWidth, scaledHeight);
+    } else {
       ctx.fillStyle = 'blue';
-      ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+      ctx.fillRect(
+        obj.x - (scaledWidth - obj.width) / 2,
+        obj.y - (scaledHeight - obj.height) / 2,
+        scaledWidth,
+        scaledHeight
+      ); 
     }
   });
 }
