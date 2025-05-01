@@ -422,14 +422,14 @@ const assets = {
         right: { row: 0, frames: 0, idleFrame: { column: 0, frames: 0 } }, // Right Movement 
       },
       skibidiToilet: {
-        src: "/images/platformer/sprites/skibidiEnemy.png",
+        src: "/images/platformer/sprites/boss.png",
         width: 529,
         height: 884,
         scaleSize: 60,
         speedRatio: 0.85,
       },
       skibidiTitan: {
-        src: "/images/platformer/sprites/mortensen.png",
+        src: "/images/platformer/sprites/boss.png",
         width: 529,
         height: 884,
         scaleSize: 1500,
