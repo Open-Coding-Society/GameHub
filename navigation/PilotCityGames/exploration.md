@@ -44,19 +44,24 @@ async function updatePoints(points) {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Ensure the game-container and joystick-container exist
-  const gameContainer = document.getElementById('game-container');
   const infoContainer = document.getElementById('info-container');
   const joystickContainer = document.getElementById('joystick-container');
 
-  if (!gameContainer || !infoContainer || !joystickContainer) {
+  if (!infoContainer || !joystickContainer) {
     console.error('Required containers are missing in the DOM.');
     return;
   }
 
+  // Remove the game container entirely
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) {
+    gameContainer.remove();
+  }
+
   // Create the canvas for the game
   const canvas = document.createElement('canvas');
-  gameContainer.appendChild(canvas);
-  canvas.width = 1500;
+  infoContainer.appendChild(canvas);
+  canvas.width = 2000;
   canvas.height = 600;
   const ctx = canvas.getContext('2d');
 
@@ -157,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const joystick = nipplejs.create({
     zone: joystickDiv,
     mode: 'static',
-    position: { right: '10%', top: '50%' }, // Positioning joystick on the right side
+    position: { right: '10%', top: '30%' }, // Move joystick further up
     color: 'green'
   });
 
@@ -187,10 +192,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- Container for game and UI -->
 <div class="container">
   <div class="row">
-    <!-- Add an enclosed barrier for the game area -->
-    <div class="col-md-8" id="game-container" style="border: 2px solid #000; padding: 10px;">
-      <!-- Game canvas will be appended here -->
-    </div>
     <div class="col-md-4" id="info-container" style="margin-left: 20px;">
       <!-- Progress and organelle info will be shown here -->
     </div>
