@@ -151,7 +151,7 @@ playerOffScreenCallBack: function () {
         if (GameEnv.currentLevel?.tag === 'Hills') {
             const requiredTrash = 4; // Set the required amount of trash to proceed
             if (GameEnv.trashCount.length < requiredTrash) {
-                alert(`You need to collect at least ${requiredTrash} pieces of trash to proceed to the next level!`);
+                alert(`You need to collect at least ${requiredTrash} pieces of pills to proceed to the next level!`);
                 // Teleport the player back to the start of the level
                 GameEnv.player.setX(0); // Set the player's X position to the start
                 GameEnv.player.setY(GameEnv.bottom - GameEnv.player.canvas.height); // Set the player's Y position to the ground
@@ -181,7 +181,7 @@ playerOffScreenCallBack: function () {
         if (GameEnv.currentLevel?.tag === 'Hills') {
             const requiredTrash = 4; // Set the required amount of trash to proceed
             if (GameEnv.trashCount.length < requiredTrash) {
-                alert(`You need to collect at least ${requiredTrash} pieces of trash to proceed to the next level!`);
+                alert(`You need to collect at least ${requiredTrash} pills to proceed to the next level!`);
                 // Teleport the player back to the start of the level
                 GameEnv.player.setX(0); // Set the player's X position to the start
                 GameEnv.player.setY(GameEnv.bottom - GameEnv.player.canvas.height); // Set the player's Y position to the ground

@@ -12,7 +12,7 @@ import BlockPlatform from './BlockPlatform.js';
 import Trash from './Trash.js'
 import BackgroundScrippsVersion2 from './BackgroundScrippsVersion2.js';
 
-alert("Level 1: Hills - Use the arrow keys or use WASD to move the character. Press the space bar to jump. Collect at least 4 pills to continue!!!");
+alert("Level 1: Hills - Use WASD to move the character. Collect at least 4 pills to continue!!!");
 
 // Define the GameSetup object literal
 const assets = {  
