@@ -58,7 +58,7 @@ Author: Zach & Ian
         Timer: <span id="timeScore">0</span>
     </div>
     <div id="score">
-        Coins: <span id="coinScore">0</span>
+        Pills: <span id="coinScore">0</span>
     </div>
     <div id="gameBegin" hidden>
         <button id="startGame">Start Game</button>

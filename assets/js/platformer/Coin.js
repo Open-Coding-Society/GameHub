@@ -66,15 +66,12 @@ export class Coin extends GameObject {
         // check player collision
         if (this.collisionData.touchPoints.other.id === "player") {
             if (this.id) {
-                GameEnv.claimedCoinIds.push(this.id)
+                GameEnv.claimedCoinIds.push(this.id);
             }
-           // this is how you find the index of the coin - GameEnv.gameObjects.findIndex(coin => coin.id === this.id)
             this.destroy();
 
-            GameControl.gainCoin(5)
-            GameEnv.playSound("coin");
-
-            
+            GameControl.gainPill(1); // Changed from gainCoin to gainPill
+            GameEnv.playSound("coin"); // Retain the sound effect for now
         }
     }
     
