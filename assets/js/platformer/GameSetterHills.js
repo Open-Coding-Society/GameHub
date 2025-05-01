@@ -10,6 +10,9 @@ import Mushroom from './Mushroom.js';
 import FinishLine from './FinishLine.js';
 import BlockPlatform from './BlockPlatform.js';
 import Trash from './Trash.js'
+import BackgroundScrippsVersion2 from './BackgroundScrippsVersion2.js';
+
+alert("Level 1: Hills - Use the arrow keys or use WASD to move the character. Press the space bar to jump. Collect at least 4 pills to continue!!!");
 
 // Define the GameSetup object literal
 const assets = {  
@@ -95,7 +98,7 @@ const assets = {
 
   // Hills Game Level defintion...
   const objects = [
-  { name: 'mountains', id: 'background', class: BackgroundScripps, data: assets.backgrounds.mountains },
+  { name: 'mountains', id: 'background', class: BackgroundScrippsVersion2, data: assets.backgrounds.mountains },
   { name: 'clouds', id: 'background', class: BackgroundParallax, data: assets.backgrounds.clouds },
   { name: 'hills', id: 'background', class: BackgroundParallax, data: assets.backgrounds.hills },
   { name: 'grass', id: 'floor', class: Platform, data: assets.platforms.grass },

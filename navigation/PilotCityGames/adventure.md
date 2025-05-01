@@ -30,9 +30,14 @@ Author: Zach & Ian
 
 <audio id="everlong" src="{{site.baseurl}}/assets/audio/everlong.mp3" preload="auto"></audio>
 
-<audio id="Scripps" src="{{site.baseurl}}/assets/audio/El_Gigante_De_Hierro.mp3" preload="auto"></audio>
+  <audio id="Scripps" src="{{site.baseurl}}/assets/audio/El_Gigante_De_Hierro.mp3" preload="auto"></audio>
 
-<audio id="EARFQUAKE" src="{{site.baseurl}}/assets/audio/EARFQUAKE.mp3" preload="auto"></audio>
+
+  <audio id="ScrippsVersion2" src="{{site.baseurl}}/assets/audio/brawl_stars.mp3" preload="auto"></audio>
+  
+ 
+  <audio id="EARFQUAKE" src="{{site.baseurl}}/assets/audio/EARFQUAKE.mp3" preload="auto"></audio>
+
 
 <audio id="Noid" src="{{site.baseurl}}/assets/audio/Noid.mp3" preload="auto"></audio>
 

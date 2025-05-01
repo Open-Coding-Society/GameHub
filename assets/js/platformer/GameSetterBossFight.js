@@ -12,6 +12,7 @@ import FinishLine from './FinishLine.js';
 import BossFight from './BossFight.js'
 import Shard from './Shard.js';
 import { PlayerBossFight } from './PlayerBossFight.js';
+import BackgroundScripps from './BackgroundScripps.js';
 
 const assets = {
     obstacles: {
@@ -44,11 +45,12 @@ const assets = {
         scaleSize: 150,
       },
       laser: {
-        src: "/images/platformer/obstacles/laser.png",
+        src: "/images/platformer/sprites/viruses.png",
         hitbox: { widthPercentage: 0.06, heightPercentage: 0.5},
-        width: 60,
-        height: 500,
-        scaleSize: 90
+        width: 448,
+        height: 452,
+        scaleSize: 60,
+        speedRatio: 0.7,
       },
       cabin: {
         src: "/images/platformer/obstacles/cabin.png",
@@ -79,7 +81,7 @@ const assets = {
         scaleSize: 120,
       },
       vbucks: { src: "/images/platformer/obstacles/vbucks.png"},
-      coin: { src: "/images/platformer/obstacles/coin.png" },
+      coin: { src: "/images/platformer/sprites/pill.png" },
       snowflake: { src: "/images/platformer/obstacles/snowflake.png" },
       star: { src: "/images/platformer/obstacles/star.png" },
       snitch: { src: "/images/platformer/obstacles/snitch.png" },
@@ -91,7 +93,7 @@ const assets = {
     platforms: {
       grass: { src: "/images/platformer/platforms/grass.png" },
       narwhalfloor: { src: "/images/platformer/platforms/narwhalfloor.png" },
-      sand: { src: "/images/platformer/platforms/sand.png" },
+      sand: { src: "/images/platformer/platforms/snowyfloor.png" },
       snowyfloor: { src: "/images/platformer/platforms/snowyfloor.png" },
       snowywood: { src: "/images/platformer/platforms/snowywood.png" },
       alien: { src: "/images/platformer/platforms/alien.png" },
@@ -106,7 +108,7 @@ const assets = {
       turf: { src: "/images/platformer/platforms/turf.png" },
       island: { src: "/images/platformer/platforms/island.png" },
       island: { src: "/images/platformer/platforms/island.png" },
-      block: { src: "/images/platformer/platforms/brick_block.png" }, //MAY need 3 new variables: sizeRatio, widthRatio, and heightRatio
+      block: { src: "/images/platformer/platforms/cobblestone.png" }, //MAY need 3 new variables: sizeRatio, widthRatio, and heightRatio
       itemBlock2: { //power-up
         src: "/images/platformer/sprites/jumppowerup.png", //spritesheet
         sizeRatio: 2.0, 
@@ -120,7 +122,7 @@ const assets = {
       },
     },
     backgrounds: {
-      boss: { src: "/images/platformer/backgrounds/BossBackground.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
+      boss: { src: "/images/platformer/backgrounds/scripps.jpg", parallaxSpeed: 0.4, moveOnKeyAction: true },
       start: { src: "/images/platformer/backgrounds/home.png" },
       hills: { src: "/images/platformer/backgrounds/hills.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
       greece: { src: "/images/platformer/backgrounds/greek.png" },
@@ -128,7 +130,7 @@ const assets = {
       clouds: { src: "/images/platformer/backgrounds/clouds.png", parallaxSpeed: 0.5 },
       water: { src: "/images/platformer/backgrounds/water.png" },
       fish: { src: "/images/platformer/backgrounds/school-fish.png", parallaxSpeed: -0.5 },
-      complete3: { src: "/images/platformer/backgrounds/skibidiCompletion.png" },
+      complete3: { src: "/images/platformer/transitions/greenscreen.png" },
       desert: {src: "/images/platformer/backgrounds/desertbg.png"},
       reef: { src: "/images/platformer/backgrounds/reef.png" },
       quidditch: { src: "/images/platformer/backgrounds/quidditch2.jpg" },
@@ -251,7 +253,8 @@ const assets = {
           right: { row: 2, frames: 23 },
         },
         hitbox: { widthPercentage: 0.3, heightPercentage: 0.8 }
-      }, harry: {
+      }, 
+      harry: {
         src: "/images/platformer/sprites/harryanimation3.png",
         width: 32,
         height: 32,
@@ -426,7 +429,7 @@ const assets = {
         speedRatio: 0.85,
       },
       skibidiTitan: {
-        src: "/images/platformer/oryx.png",
+        src: "/images/platformer/sprites/mortensen.png",
         width: 529,
         height: 884,
         scaleSize: 1500,
@@ -496,6 +499,17 @@ const assets = {
     { name: 'sand', id: 'platform', class: Platform, data: assets.platforms.sand },
     //{ name: 'clouds', id: 'background', class: BackgroundClouds, data: assets.backgrounds.clouds },
     // Level breaks when not loading laser even though it's not even used???
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.1, yPercentage: 0.76 },
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.31, yPercentage: 0.8},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3475, yPercentage: 0.8},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3775, yPercentage: 0.8},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.525, yPercentage: 0.85},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5625, yPercentage: 0.85},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.5999, yPercentage: 0.85},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.2752, yPercentage: 0.4},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3126, yPercentage: 0.4},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.35, yPercentage: 0.4},
+    { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.3825, yPercentage: 0.4},
     { name: 'shard', id: 'coin', class: Shard, data: assets.obstacles.coin, xPercentage: 0.5, yPercentage: 0.5 },
     { name: 'shard', id: 'coin', class: Shard, data: assets.obstacles.coin, xPercentage: 0.5, yPercentage: 0.5 },
     { name: 'shard', id: 'coin', class: Shard, data: assets.obstacles.coin, xPercentage: 0.5, yPercentage: 0.5 },
@@ -504,7 +518,6 @@ const assets = {
     { name: 'laser', id: 'Laser', class: Laser, data: assets.obstacles.laser, xPercentage:  0.75, yPercentage: 0.5 },
     { name: 'titan', id: 'skibidiTitan', class: BossFight, data: assets.enemies.skibidiTitan, xPercentage:  0.35, yPercentage: 0.5, minPosition: 0.5 }, 
     { name: 'escaper', id: 'player', class: PlayerBossFight, data: assets.players.escaper  },
-    { name: 'tolietfinish', id: 'finishline', class: FinishLine, data: assets.obstacles.toiletfinish, xPercentage: 0.85, yPercentage: 0.77 },
     { name: 'complete3', id: 'background', class: BackgroundTransitions,  data: assets.backgrounds.complete3 },
   ];
 
