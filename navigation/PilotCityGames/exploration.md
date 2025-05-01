@@ -6,86 +6,10 @@ permalink: /exploration
 Author: Darsh
 ---
 
-<<<<<<< HEAD
+
+
 <!-- Bootstrap CSS for styling -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-=======
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color:rgb(255, 255, 255);
-    background-image: url('navigation/white2.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    padding: 40px 20px;
-  }
-
-  .game-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: nowrap;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-#gameCanvas {
-  width: 800px;
-  height: 600px;
-  border: 2px solid #333;
-  background: url('navigation/white2.png') no-repeat center center;
-  background-size: contain;
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-#sidePanel {
-  width: 400px;
-  background-color: #ffffffee;
-  padding: 28px;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  border: 1px solid #ccc;
-  backdrop-filter: blur(2px);
-  flex-shrink: 0;
-}
-
-
-  #sidePanel h4 {
-    font-size: 22px;
-    color: #222;
-  }
-
-  #sidePanel p {
-    font-size: 15px;
-    color: #444;
-    line-height: 1.5;
-  }
-
-  #resetButton {
-    margin-top: 25px;
-  }
-</style>
-
-<div class="game-wrapper">
-  <canvas id="gameCanvas" width="800" height="600"></canvas>
-  <div id="sidePanel">
-    <h4>Organelle Info</h4>
-    <p><strong>Name:</strong> <span id="infoName">None</span></p>
-    <p><strong>Description:</strong></p>
-    <p id="infoDesc">Move your character to discover and learn about cell organelles.</p>
-    <hr>
-    <h4>Progress Tracker</h4>
-    <p id="progress">Organelles Discovered: 0/10</p>
-    <button id="resetButton" class="btn btn-primary w-100">Return to Start</button>
-  </div>
-</div>
->>>>>>> 7534e0c638bd9df21be8c2409de648fe00d355b8
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -128,16 +52,8 @@ Author: Darsh
     const infoBox = document.createElement('div');
     document.getElementById('info-container').appendChild(infoBox);
 
-<<<<<<< HEAD
     const joystickDiv = document.createElement('div');
     document.getElementById('joystick-container').appendChild(joystickDiv);
-=======
-document.addEventListener('keydown', e => {
-  const keysToPrevent = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-  if (keysToPrevent.includes(e.key)) e.preventDefault(); 
-  keysPressed[e.key.toLowerCase()] = true; 
-});
->>>>>>> 7534e0c638bd9df21be8c2409de648fe00d355b8
 
     // Functions for the game
     function drawPlayer() {
