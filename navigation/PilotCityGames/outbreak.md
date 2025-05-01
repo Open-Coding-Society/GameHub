@@ -293,7 +293,7 @@ Author: Lars
           spawnBubble(region);
         }
       });
-    }, 1000);
+    }, 750);
 
     setInterval(() => {
       if (isPaused) return;
