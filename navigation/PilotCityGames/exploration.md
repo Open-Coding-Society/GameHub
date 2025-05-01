@@ -6,8 +6,6 @@ permalink: /exploration
 Author: Darsh
 ---
 
-
-
 <!-- Bootstrap CSS for styling -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -44,7 +42,6 @@ async function updatePoints(points) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Ensure the game-container and joystick-container exist
   const gameContainer = document.getElementById('game-container');
   const infoContainer = document.getElementById('info-container');
   const joystickContainer = document.getElementById('joystick-container');
@@ -54,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
-  // Create the canvas for the game
   const canvas = document.createElement('canvas');
   gameContainer.appendChild(canvas);
   canvas.width = 800;
@@ -63,7 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const player = { x: 100, y: 100, size: 15, speed: 2, dx: 0, dy: 0 };
   let discovered = new Set();
-  let points = 0; // Initialize points
+  let points = 0;
+
   const organelles = [
     { name: "Nucleus", x: 400, y: 300, r: 30, desc: "Controls cell activities and contains DNA." },
     { name: "Chloroplast", x: 600, y: 150, r: 25, desc: "Performs photosynthesis." },
@@ -77,7 +74,33 @@ document.addEventListener('DOMContentLoaded', function () {
     { name: "Endoplasmic Reticulum", x: 150, y: 100, r: 20, desc: "Transports materials within the cell." }
   ];
 
-  // UI Elements
+  // Load organelle images
+  const organelleImages = {
+    "Nucleus": new Image(),
+    "Chloroplast": new Image(),
+    "Vacuole": new Image(),
+    "Cell Wall": new Image(),
+    "Cell Membrane": new Image(),
+    "Cytoplasm": new Image(),
+    "Mitochondrion": new Image(),
+    "Ribosome": new Image(),
+    "Golgi Apparatus": new Image(),
+    "Endoplasmic Reticulum": new Image()
+  };
+
+  // Set image sources from the 'images' folder
+  organelleImages["Nucleus"].src = "images/nucleus.png";
+  organelleImages["Chloroplast"].src = "images/chloroplast.png";
+  organelleImages["Vacuole"].src = "images/cytoplasm.png";
+  organelleImages["Cell Wall"].src = "images/cellwall.png";
+  organelleImages["Cell Membrane"].src = "images/cellmembrane.png";
+  organelleImages["Cytoplasm"].src = "images/cytoplasm.png";
+  organelleImages["Mitochondrion"].src = "images/mitochondria.png";
+  organelleImages["Ribosome"].src = "images/ribosome.png";
+  organelleImages["Golgi Apparatus"].src = "images/golgi.png";
+  organelleImages["Endoplasmic Reticulum"].src = "images/er.png";
+
+  // UI elements
   const progressSpan = document.createElement('span');
   const progressDiv = document.createElement('div');
   progressDiv.classList.add('mb-3');
@@ -85,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
   progressDiv.appendChild(progressSpan);
   infoContainer.appendChild(progressDiv);
 
-  const pointsDiv = document.createElement('div'); // Points display
+  const pointsDiv = document.createElement('div');
   pointsDiv.classList.add('mb-3');
   pointsDiv.innerHTML = `<strong>Points:</strong> <span id="points-counter">0</span>`;
   infoContainer.appendChild(pointsDiv);
@@ -96,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const joystickDiv = document.createElement('div');
   joystickContainer.appendChild(joystickDiv);
 
-  // Functions for the game
+  // Drawing functions
   function drawPlayer() {
     ctx.fillStyle = "#3e8e41";
     ctx.beginPath();
@@ -106,13 +129,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function drawOrganelles() {
     organelles.forEach(o => {
-      ctx.beginPath();
-      ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
-      ctx.fillStyle = discovered.has(o.name) ? '#ffe600' : '#7ec850';
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = '#000';
-      ctx.fillText(o.name, o.x - o.r, o.y - o.r - 5);
+      const img = organelleImages[o.name];
+      if (img.complete) {
+        const size = o.r * 2;
+        ctx.drawImage(img, o.x - o.r, o.y - o.r, size, size);
+      } else {
+        img.onload = () => {
+          const size = o.r * 2;
+          ctx.drawImage(img, o.x - o.r, o.y - o.r, size, size);
+        };
+      }
     });
   }
 
@@ -121,12 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
       const dist = Math.hypot(player.x - o.x, player.y - o.y);
       if (dist < player.size + o.r && !discovered.has(o.name)) {
         discovered.add(o.name);
-        points += 10; // Add 10 points for each interaction
-        document.getElementById('points-counter').textContent = points; // Update points display
+        points += 10;
+        document.getElementById('points-counter').textContent = points;
         progressSpan.textContent = discovered.size;
         infoBox.style.display = 'block';
         infoBox.innerHTML = `<strong>${o.name}</strong><br>${o.desc}`;
-        updatePoints(10); // Call the API to update points
       }
     });
   }
@@ -147,26 +172,18 @@ document.addEventListener('DOMContentLoaded', function () {
     requestAnimationFrame(gameLoop);
   }
 
-  function resetPlayer() {
-    player.x = 100;
-    player.y = 100;
-    player.dx = 0;
-    player.dy = 0;
-  }
-
-  // Joystick Setup (Position joystick on the right side)
+  // Joystick setup
   const joystick = nipplejs.create({
     zone: joystickDiv,
     mode: 'static',
-    position: { right: '10%', top: '50%' }, // Positioning joystick on the right side
+    position: { right: '10%', top: '50%' },
     color: 'green'
   });
 
   joystick.on('move', (evt, data) => {
     const rad = data.angle.radian;
-    // Inverting Y-axis: Multiply the Y-axis speed by -1
     player.dx = Math.cos(rad) * player.speed;
-    player.dy = -Math.sin(rad) * player.speed;  // Invert the vertical movement
+    player.dy = -Math.sin(rad) * player.speed;
   });
 
   joystick.on('end', () => {
@@ -174,10 +191,9 @@ document.addEventListener('DOMContentLoaded', function () {
     player.dy = 0;
   });
 
-  // Start the game loop
   gameLoop();
 });
-</script>
+
 
 <!-- Bootstrap JS and NippleJS for the joystick -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"></script>
