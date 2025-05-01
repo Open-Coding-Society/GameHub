@@ -70,8 +70,8 @@ export class Coin extends GameObject {
             }
             this.destroy();
 
-            GameControl.gainPill(1); // Changed from gainCoin to gainPill
-            GameEnv.playSound("coin"); // Retain the sound effect for now
+            GameControl.gainPill(5); // Award 5 pills (handled in gainPill)
+            GameEnv.playSound("coin"); // Retain the sound effect
         }
     }
     
