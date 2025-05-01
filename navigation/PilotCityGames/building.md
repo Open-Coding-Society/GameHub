@@ -11,7 +11,7 @@ Author: Ian
   <p class="text-center mb-4">Drag the correct base to form the complementary strand!</p>
   
   <div class="text-center mb-4">
-    <button class="btn btn-info" onclick="toggleHint()">Hint Button</button>
+    <button class="btn btn-info" id="hint-button">Hint Button</button>
     <p id="hint-text" class="mt-3" style="display: none;">Adenine pairs w/ Thymine & Cytosine pairs w/ Guanine.</p>
   </div>
 
@@ -197,8 +197,8 @@ function showPopup(message) {
 // Attach the function to the global window object
 window.calculateStability = calculateStability;
 
-  function toggleHint() {
-    const hintText = document.getElementById('hint-text');
-    hintText.style.display = hintText.style.display === 'none' ? 'block' : 'none';
-  }
+document.getElementById('hint-button').addEventListener('click', () => {
+  const hintText = document.getElementById('hint-text');
+  hintText.style.display = hintText.style.display === 'none' ? 'block' : 'none';
+});
 </script>
