@@ -1,7 +1,7 @@
 ---
 layout: base
-title: Platformer Game v3.0
-description: Incorporate student lessons. Gameplay includes enemies, platforms, parallax backgrounds, settings with local storage, etc.  This revision introduces Settings, Leaderboard and Multiplayer.
+title: Platformer Biotech Game
+description: A cool platformer biotech game!
 image: /images/platformer/backgrounds/home.png
 permalink: /adventure
 Author: Zach & Ian
@@ -81,14 +81,9 @@ Author: Zach & Ian
           <button id="restartGame">Restart</button>
       </div>
       <div id="settings"> 
-         
-          <button id="settings-button">Settings</button>
-      </div>
-      <div id="leaderboard"> <!-- Controls -->
-          <button id="leaderboard-button">Placeholder</button>
+         <button id="settings-button">Settings</button>
       </div>
     </div>
-  
   </div>
   
   <div id="container">
@@ -106,7 +101,6 @@ Author: Zach & Ian
       import GameControl from '{{site.baseurl}}/assets/js/platformer/GameControl.js';
       import SettingsControl from '{{site.baseurl}}/assets/js/platformer/SettingsControl.js';
       import GameEnv from '{{site.baseurl}}/assets/js/platformer/GameEnv.js';
-      import Leaderboard from '{{site.baseurl}}/assets/js/platformer/Leaderboard.js';
       import startCutstory from '{{site.baseurl}}/assets/js/platformer/Cutstory.js';;
   
 
@@ -122,7 +116,6 @@ Author: Zach & Ian
       SettingsControl.initialize();
 
       
-      Leaderboard.initializeLeaderboard();
       startCutstory();
       RandomEvent();
 
