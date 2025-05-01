@@ -116,7 +116,7 @@ const GameControl = {
         pillDisplay.textContent = pills;
     },     
     gainPill(value) {
-        GameEnv.coinScore += value; // Increment pill score
+        GameEnv.coinScore += value * 5; // Increment pill score by 5 per pill/trash
         this.updatePillDisplay();
     },
     /**
