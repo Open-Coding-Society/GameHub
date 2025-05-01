@@ -44,33 +44,23 @@ async function updatePoints(points) {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Ensure the game-container and joystick-container exist
-  const gameContainer = document.getElementById('game-container');
   const infoContainer = document.getElementById('info-container');
   const joystickContainer = document.getElementById('joystick-container');
 
-  if (!gameContainer || !infoContainer || !joystickContainer) {
+  if (!infoContainer || !joystickContainer) {
     console.error('Required containers are missing in the DOM.');
     return;
   }
 
-  // Removed border styling from the game container
+  // Remove the game container entirely
+  const gameContainer = document.getElementById('game-container');
   if (gameContainer) {
-    gameContainer.style.border = 'none';
-    gameContainer.style.display = 'inline-block';
+    gameContainer.remove();
   }
-
-  // Adjusted layout for joystick and info container
-  infoContainer.style.display = 'inline-block';
-  infoContainer.style.marginTop = '10px';
-  infoContainer.style.marginLeft = '10px';
-
-  joystickContainer.style.display = 'inline-block';
-  joystickContainer.style.marginTop = '10px';
-  joystickContainer.style.marginLeft = '10px';
 
   // Create the canvas for the game
   const canvas = document.createElement('canvas');
-  gameContainer.appendChild(canvas);
+  infoContainer.appendChild(canvas);
   canvas.width = 2000;
   canvas.height = 600;
   const ctx = canvas.getContext('2d');
@@ -79,16 +69,16 @@ document.addEventListener('DOMContentLoaded', function () {
   let discovered = new Set();
   let points = 0; // Initialize points
   const organelles = [
-    { name: "Nucleus", x: 300, y: 200, r: 30, desc: "Controls cell activities and contains DNA." },
-    { name: "Chloroplast", x: 500, y: 150, r: 25, desc: "Performs photosynthesis." },
-    { name: "Vacuole", x: 200, y: 350, r: 35, desc: "Stores nutrients and waste products." },
-    { name: "Cell Wall", x: 600, y: 400, r: 20, desc: "Provides structural support." },
-    { name: "Cell Membrane", x: 150, y: 250, r: 20, desc: "Regulates what enters and leaves the cell." },
+    { name: "Nucleus", x: 400, y: 300, r: 30, desc: "Controls cell activities and contains DNA." },
+    { name: "Chloroplast", x: 600, y: 150, r: 25, desc: "Performs photosynthesis." },
+    { name: "Vacuole", x: 200, y: 450, r: 35, desc: "Stores nutrients and waste products." },
+    { name: "Cell Wall", x: 700, y: 500, r: 20, desc: "Provides structural support." },
+    { name: "Cell Membrane", x: 100, y: 300, r: 20, desc: "Regulates what enters and leaves the cell." },
     { name: "Cytoplasm", x: 350, y: 100, r: 20, desc: "Gel-like substance where organelles reside." },
-    { name: "Mitochondrion", x: 450, y: 300, r: 25, desc: "Produces energy for the cell." },
+    { name: "Mitochondrion", x: 500, y: 400, r: 25, desc: "Produces energy for the cell." },
     { name: "Ribosome", x: 250, y: 200, r: 15, desc: "Synthesizes proteins." },
-    { name: "Golgi Apparatus", x: 400, y: 350, r: 20, desc: "Modifies and packages proteins." },
-    { name: "Endoplasmic Reticulum", x: 200, y: 150, r: 20, desc: "Transports materials within the cell." }
+    { name: "Golgi Apparatus", x: 450, y: 500, r: 20, desc: "Modifies and packages proteins." },
+    { name: "Endoplasmic Reticulum", x: 150, y: 100, r: 20, desc: "Transports materials within the cell." }
   ];
 
   // UI Elements
@@ -172,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const joystick = nipplejs.create({
     zone: joystickDiv,
     mode: 'static',
-    position: { right: '10%', top: '50%' }, // Positioning joystick on the right side
+    position: { right: '10%', top: '30%' }, // Move joystick further up
     color: 'green'
   });
 
@@ -202,10 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- Container for game and UI -->
 <div class="container">
   <div class="row">
-    <!-- Game canvas will be appended here -->
-    <div class="col-md-8" id="game-container" style="padding: 10px;">
-    </div>
-    <div class="col-md-4" id="info-container">
+    <div class="col-md-4" id="info-container" style="margin-left: 20px;">
       <!-- Progress and organelle info will be shown here -->
     </div>
   </div>
