@@ -49,9 +49,8 @@ export class Trash extends Coin {
            // this is how you find the index of the coin - GameEnv.gameObjects.findIndex(coin => coin.id === this.id)
             this.destroy();
 
-            GameEnv.playSound("coin");
-
-            
+            GameControl.gainPill(1); // Award 5 pills (handled in gainPill)
+            GameEnv.playSound("coin"); // Retain the sound effect
         }
     }
 }

@@ -108,15 +108,15 @@ const GameControl = {
         this.updateCoinDisplay()
     },
     updatePillDisplay() {
-        const pills = GameEnv.coinScore; // Reuse coinScore for pill tracking
-        const pillDisplay = document.getElementById('coinScore'); // ID remains the same
+        const pills = GameEnv.coinScore; // Use coinScore for pill/trash/coin tracking
+        const pillDisplay = document.getElementById('pillScore'); // Updated ID for pill display
         if (!pillDisplay) {
             console.error("PILL DISPLAY DOES NOT EXIST");
         }
-        pillDisplay.textContent = pills;
+        pillDisplay.textContent = `Pills: ${pills}`; // Update display text
     },     
     gainPill(value) {
-        GameEnv.coinScore += value; // Increment pill score
+        GameEnv.coinScore += value * 5; // Increment pill/trash/coin score by 5
         this.updatePillDisplay();
     },
     /**

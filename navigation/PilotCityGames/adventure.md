@@ -65,6 +65,7 @@ Author: Zach & Ian
     <div id="score">
         Pills: <span id="coinScore">0</span>
     </div>
+    <div id="pillScore" class="text-center text-white mt-3">Pills: 0</div>
     <div id="gameBegin" hidden>
         <button id="startGame">Start Game</button>
     </div>
