@@ -91,7 +91,6 @@ export class GameEnv {
     static timerActive = false;
     static timerInterval = 10;
     static coinScore = 0;
-    static pillScore = 0; // Track pill/trash/coin count
     static time = 0;
     static darkMode = true
     static playerAttack = false;
