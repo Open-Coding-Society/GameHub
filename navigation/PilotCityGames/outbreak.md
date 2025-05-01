@@ -131,7 +131,6 @@ Author: Lars
 <body>
   <div id="wrapper">
     <div id="title">Resource Optimization Challenge</div>
-
     <div id="sidebar">
       <div class="infographic-item">
         💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk, Pop virus bubbles to stop spread
@@ -146,7 +145,7 @@ Author: Lars
     </div>
 
     <div id="crateBox">
-      <div class="crate" draggable="true" ondragstart="handleDrag(event)" id="vaccineCrate">💉</div>
+      <div class="crate" id="vaccineCrate">💉</div>
     </div>
 
     <div id="gameContainer">
@@ -170,6 +169,7 @@ Author: Lars
     const endMessage = document.getElementById("endMessage");
     const playAgainBtn = document.getElementById("playAgainBtn");
     const riskElement = document.getElementById("riskLevel");
+    const crate = document.getElementById("vaccineCrate");
 
     let isPaused = false;
     let timeLeft = 180;
@@ -187,21 +187,14 @@ Author: Lars
     ];
 
     const regionStats = {
-      "West": { allocated: 1000, health: 100 },
-      "Midwest": { allocated: 1000, health: 100 },
-      "South": { allocated: 1000, health: 100 },
-      "Northeast": { allocated: 1000, health: 100 }
+      West: { allocated: 1000, health: 100 },
+      Midwest: { allocated: 1000, health: 100 },
+      South: { allocated: 1000, health: 100 },
+      Northeast: { allocated: 1000, health: 100 }
     };
 
-    function updateRegionStats() {
-      const ul = document.getElementById("regionStats");
-      ul.innerHTML = "";
-      Object.keys(regionStats).forEach(region => {
-        const li = document.createElement("li");
-        li.textContent = `${region}: ${regionStats[region].allocated} doses | Health: ${regionStats[region].health}`;
-        ul.appendChild(li);
-      });
-    }
+    crate.setAttribute("draggable", true);
+    crate.addEventListener("dragstart", handleDrag);
 
     function handleDrag(e) {
       if (crateCooldown || isPaused) {
@@ -217,13 +210,11 @@ Author: Lars
 
     function handleDrop(e, regionName) {
       e.preventDefault();
-      if (isPaused) return;
       const type = e.dataTransfer.getData("text/plain");
       if (type === "vaccine" && !crateCooldown) {
         regionStats[regionName].allocated += 5000;
         regionStats[regionName].health = Math.min(100, regionStats[regionName].health + 5);
         updateRegionStats();
-        const crate = document.getElementById("vaccineCrate");
         crate.classList.add("cooldown");
         crate.setAttribute("draggable", false);
         crateCooldown = true;
@@ -233,6 +224,16 @@ Author: Lars
           crate.setAttribute("draggable", true);
         }, 5000);
       }
+    }
+
+    function updateRegionStats() {
+      const ul = document.getElementById("regionStats");
+      ul.innerHTML = "";
+      Object.keys(regionStats).forEach(region => {
+        const li = document.createElement("li");
+        li.textContent = `${region}: ${regionStats[region].allocated} doses | Health: ${regionStats[region].health}`;
+        ul.appendChild(li);
+      });
     }
 
     function spawnBubble(region) {
@@ -249,10 +250,6 @@ Author: Lars
       document.getElementById("gameContainer").appendChild(bubble);
       bubbles.push(bubble);
     }
-
-    background.onload = () => {
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    };
 
     window.onload = () => {
       const container = document.getElementById("gameContainer");
@@ -276,11 +273,15 @@ Author: Lars
           height: `${region.height}px`
         });
         hitbox.ondragover = allowDrop;
-        hitbox.ondrop = (e) => handleDrop(e, region.name);
+        hitbox.ondrop = e => handleDrop(e, region.name);
         container.appendChild(hitbox);
       });
 
       updateRegionStats();
+    };
+
+    background.onload = () => {
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     };
 
     setInterval(() => {
@@ -288,12 +289,11 @@ Author: Lars
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
       regions.forEach(region => {
-        const chance = Math.random();
-        if (regionStats[region.name].allocated < 10000 && chance < 0.5) {
+        if (regionStats[region.name].allocated < 10000 && Math.random() < 0.5) {
           spawnBubble(region);
         }
       });
-    }, 3000);
+    }, 750);
 
     setInterval(() => {
       if (isPaused) return;
