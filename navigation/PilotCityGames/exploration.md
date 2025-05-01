@@ -45,9 +45,8 @@ async function updatePoints(points) {
 document.addEventListener('DOMContentLoaded', function () {
   // Ensure the game-container and joystick-container exist
   const infoContainer = document.getElementById('info-container');
-  const joystickContainer = document.getElementById('joystick-container');
 
-  if (!infoContainer || !joystickContainer) {
+  if (!infoContainer) {
     console.error('Required containers are missing in the DOM.');
     return;
   }
@@ -56,6 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const gameContainer = document.getElementById('game-container');
   if (gameContainer) {
     gameContainer.remove();
+  }
+
+  // Remove joystick container
+  const joystickContainer = document.getElementById('joystick-container');
+  if (joystickContainer) {
+    joystickContainer.remove();
   }
 
   // Create the canvas for the game
@@ -96,9 +101,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const infoBox = document.createElement('div');
   infoContainer.appendChild(infoBox);
-
-  const joystickDiv = document.createElement('div');
-  joystickContainer.appendChild(joystickDiv);
 
   // Functions for the game
   function drawPlayer() {
@@ -158,24 +160,35 @@ document.addEventListener('DOMContentLoaded', function () {
     player.dy = 0;
   }
 
-  // Joystick Setup (Position joystick on the right side)
-  const joystick = nipplejs.create({
-    zone: joystickDiv,
-    mode: 'static',
-    position: { right: '10%', top: '30%' }, // Move joystick further up
-    color: 'green'
+  // Ensure WASD controls are the only input method
+  document.addEventListener('keydown', (event) => {
+    switch (event.key) {
+      case 'w':
+        player.dy = -player.speed;
+        break;
+      case 'a':
+        player.dx = -player.speed;
+        break;
+      case 's':
+        player.dy = player.speed;
+        break;
+      case 'd':
+        player.dx = player.speed;
+        break;
+    }
   });
 
-  joystick.on('move', (evt, data) => {
-    const rad = data.angle.radian;
-    // Inverting Y-axis: Multiply the Y-axis speed by -1
-    player.dx = Math.cos(rad) * player.speed;
-    player.dy = -Math.sin(rad) * player.speed;  // Invert the vertical movement
-  });
-
-  joystick.on('end', () => {
-    player.dx = 0;
-    player.dy = 0;
+  document.addEventListener('keyup', (event) => {
+    switch (event.key) {
+      case 'w':
+      case 's':
+        player.dy = 0;
+        break;
+      case 'a':
+      case 'd':
+        player.dx = 0;
+        break;
+    }
   });
 
   // Start the game loop
@@ -194,11 +207,6 @@ document.addEventListener('DOMContentLoaded', function () {
   <div class="row">
     <div class="col-md-4" id="info-container" style="margin-left: 20px;">
       <!-- Progress and organelle info will be shown here -->
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12" id="joystick-container">
-      <!-- Joystick controls will be shown here -->
     </div>
   </div>
 </div>
