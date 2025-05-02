@@ -136,65 +136,22 @@ const GameSetup = {
     return id.hidden;
   },
 
-/**
- * Level completion callback, based on Player off screen.
- * Checks if the player's x position is greater than the innerWidth of the game environment.
- * If it is, applies the required trash rule only for the Hills level.
- * If the requirements are met, resets the player for the next level and returns true.
- * If not, displays an alert and prevents the level transition.
- * @returns {boolean} Returns true if the player's x position is greater than the innerWidth and requirements are met, false otherwise.
- */
-playerOffScreenCallBack: function () {
-    // Check if the player is off the screen
+  /**
+   * Level completion callback, based on Player off screen.
+   * Checks if the player's x position is greater than the innerWidth of the game environment.
+   * If it is, resets the player for the next level and returns true.
+   * If it's not, returns false.
+   * @returns {boolean} Returns true if the player's x position is greater than the innerWidth, false otherwise.
+   */
+  playerOffScreenCallBack: function () {
+    // console.log(GameEnv.player?.x)
     if (GameEnv.player?.x > GameEnv.innerWidth) {
-        // Apply the required trash rule only for the Hills level
-        if (GameEnv.currentLevel?.tag === 'Hills') {
-            const requiredTrash = 4; // Set the required amount of trash to proceed
-            if (GameEnv.trashCount.length < requiredTrash) {
-                alert(`You need to collect at least ${requiredTrash} pieces of pills to proceed to the next level!`);
-                // Teleport the player back to the start of the level
-                GameEnv.player.setX(0); // Set the player's X position to the start
-                GameEnv.player.setY(GameEnv.bottom - GameEnv.player.canvas.height); // Set the player's Y position to the ground
-                return false; // Prevent level transition
-            }
-        }
-
-        // If requirements are met or the level is not Hills, reset the player for the next level
-        GameEnv.player = null; // Reset for the next level
-        alert("Level Complete! Click OK to continue to the next level.");
-        return true; // Allow level transition
+      GameEnv.player = null; // reset for next level
+      //Leaderboard.openLeaderboardPanel();
+      alert("Level Complete! Click OK to continue to the next level.");
+      return true;
     } else {
-        return false; // Player is still within the level
-    }
-},/**
- * Level completion callback, based on Player off screen.
- * Checks if the player's x position is greater than the innerWidth of the game environment.
- * If it is, applies the required trash rule only for the Hills level.
- * If the requirements are met, resets the player for the next level and returns true.
- * If not, displays an alert and prevents the level transition.
- * @returns {boolean} Returns true if the player's x position is greater than the innerWidth and requirements are met, false otherwise.
- */
-playerOffScreenCallBack: function () {
-    // Check if the player is off the screen
-    if (GameEnv.player?.x > GameEnv.innerWidth) {
-        // Apply the required trash rule only for the Hills level
-        if (GameEnv.currentLevel?.tag === 'Hills') {
-            const requiredTrash = 4; // Set the required amount of trash to proceed
-            if (GameEnv.trashCount.length < requiredTrash) {
-                alert(`You need to collect at least ${requiredTrash} pills to proceed to the next level!`);
-                // Teleport the player back to the start of the level
-                GameEnv.player.setX(0); // Set the player's X position to the start
-                GameEnv.player.setY(GameEnv.bottom - GameEnv.player.canvas.height); // Set the player's Y position to the ground
-                return false; // Prevent level transition
-            }
-        }
-
-        // If requirements are met or the level is not Hills, reset the player for the next level
-        GameEnv.player = null; // Reset for the next level
-        alert("Level Complete! Click OK to continue to the next level.");
-        return true; // Allow level transition
-    } else {
-        return false; // Player is still within the level
+      return false;
     }
   },
 
@@ -229,16 +186,16 @@ playerOffScreenCallBack: function () {
 
     var fun_facts = {
       //data structure
-      "Fun Fact #1": "Scripps Research is ranked as one of the most influential scientific institutions in the world.",
-      "Fun Fact #2": "Scripps Research has pioneered advancements in drug discovery and biomedical science.",
-      "Fun Fact #3": "The institute was founded in 1924 and is headquartered in La Jolla, California.",
-      "Fun Fact #4": "Scripps Research scientists have contributed to over 1,000 patents.",
-      "Fun Fact #5": "The institute is home to one of the largest graduate programs in biomedical sciences.",
-      "Fun Fact #6": "Scripps Research played a key role in the development of antiviral drugs like Tamiflu.",
-      "Fun Fact #7": "The institute's work spans chemistry, biology, and computational science.",
-      "Fun Fact #8": "Scripps Research collaborates with organizations worldwide to advance human health.",
-      "Fun Fact #9": "The institute has received numerous awards, including Nobel Prizes, for its groundbreaking research."
-    };
+      "Fun Fact #1": "Mario's full name is Mario Mario.", //key and value
+      "Fun Fact #2": "Mario's least favorite food is shiitake mushrooms.", //single quotes to include the double quotes
+      "Fun Fact #3": "Mario, in human years, is 24-25 years old.",
+      "Fun Fact #4": "Mario's girlfriend's name is Pauline.",
+      "Fun Fact #5": "Call or text 929-55-MARIO (929-556-2746) to get a fun surprise!",
+      "Fun Fact #6": "Mario's original name was Jumpman.",
+      "Fun Fact #7": "March 10th is known as Mario Day because the abbreviation for March 10th (Mar10) looks like Mario.",
+      "Fun Fact #8": "Mario was originally a carpenter, not a plumber.",
+      "Fun Fact #9": "There are actually lyrics to the Mario theme song."
+    }
     function generate() {
       var nums = Object.keys(fun_facts);
       //console.log(nums);
@@ -269,6 +226,10 @@ playerOffScreenCallBack: function () {
     GameLevelSetup(GameSetterStart, this.path, this.homeScreenCallback, true);
     // Game Levels added to the Game ...
     GameLevelSetup(GameSetterHills, this.path, this.playerOffScreenCallBack);
+    GameLevelSetup(GameSetterGreece, this.path, this.playerOffScreenCallBack);
+    GameLevelSetup(GameSetterQuidditch, this.path, this.playerOffScreenCallBack);
+    GameLevelSetup(GameSetterWinter, this.path, this.playerOffScreenCallBack);
+    GameLevelSetup(GameSetterSkibidi, this.path, this.playerOffScreenCallBack);
     GameLevelSetup(GameSetterBossFight, this.path, this.playerOffScreenCallBack);
     // End Game
     GameLevelSetup(GameSetterEnd, this.path, this.gameOverCallBack, true);

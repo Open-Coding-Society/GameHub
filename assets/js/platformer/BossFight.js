@@ -46,7 +46,7 @@ export class BossFight extends Character {
         // New property to randomize laser delay
         this.laserFireDelay = this.getRandomLaserDelay();
 
-        GameEnv.playSound("Scripps");
+        GameEnv.playSound("regicide");
     }
 
     hpLoss() {

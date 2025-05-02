@@ -41,8 +41,6 @@ export class Trash extends Coin {
     collisionAction() {
         // check player collision
         if (this.collisionData.touchPoints.other.id === "player") {
-            GameEnv.player.trashCollected = (GameEnv.player.trashCollected || 0) + 1; // Increment trash count
-            console.log(`Trash collected: ${GameEnv.player.trashCollected}`);
             if (this.id) {
                 GameEnv.trashCount.push(this.id)
             }

@@ -16,7 +16,7 @@ export class Socket{
  * @property {string} socketID - id given by the websocket server when a player connects
  */
 
-    static shouldBeSynced = false; // Default to false
+    static shouldBeSynced = true;
     static socket = io("wss://platformer.nighthawkcodingsociety.com"); //aws server
     //static socket = io(`ws://${window.location.host.split(":")[0]}:3000`); //local server
     static socketId;
@@ -47,8 +47,15 @@ export class Socket{
         this.socket.removeAllListeners();
     }
 
-    static changeStatus() {
-        // Functionality to toggle shouldBeSynced removed
+    static changeStatus(){
+        this.shouldBeSynced = !this.shouldBeSynced;
+        if(this.shouldBeSynced){
+            this.removeAllListeners();
+
+            GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
+        } else{
+            GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
+        }
         return this.shouldBeSynced;
     }
 }

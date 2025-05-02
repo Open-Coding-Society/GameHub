@@ -122,48 +122,47 @@ export class Goomba extends Character {
      */
     collisionAction() {
         const other = this.collisionData.touchPoints.other;
-    
+
         if (other.id === "finishline") {
             if (other.left || other.right) {
                 this.reverseDirection(); // Bounce back
             }
         }
-    
+
         if (other.id === "wall") {
             if (other.left || other.right) {
                 this.reverseDirection(); // Bounce back
             }
         }
-    
+
         if (other.id === "player") {
             // If the player lands on top of the Goomba and it's not immune
             if (other.bottom && this.immune === 0) {
                 GameEnv.goombaBounce = true; // Player bounces on collision
                 this.explode(); // Destroy the Goomba
                 GameEnv.playSound("goombaDeath");
-    
+
                 setTimeout(() => {
                     this.destroy(); // Remove the Goomba
                 }, 1500);
-            } else if (other.left || other.right || other.top) {
+            } else {
                 // If the player collides from the side or bottom, the player dies
                 this.triggerPlayerDeath();
             }
         }
-    
+
         if (other.id === "goomba") {
             if (GameEnv.difficulty !== "impossible" && (other.left || other.right)) {
                 this.reverseDirection(); // Bounce back on collision
             }
         }
-    
+
         if (other.id === "jumpPlatform") {
             if (other.left || other.right) {
                 this.reverseDirection(); // Bounce back
             }
         }
     }
-    
 
     /**
      * Trigger the player's death sequence.

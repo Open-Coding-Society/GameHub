@@ -95,22 +95,22 @@ export class PlayerWinter extends PlayerBase {
             case "finishline":
                 // Check if the player has collected all of the trash
                 if(GameEnv.trashCount.length < 4) {
-                    alert("Where's all the medicine? You need it to complete this level!");
-                    this.setX(0);
-                    this.setY(500);
-                    this.state.animation = 'idle';
-                    return;
+                    alert("Hey! If you don't clean up after yourself, you will never be able to leave! HAHAHA!")
+                    this.setX(0)
+                    this.setY(500)
+                    this.state.animation = 'idle'
+                    break
                 } 
                 
                 
                 // Check if the player has collected all the coins
                 var collectedAllCoins = true;
                 for (let obj of GameEnv.gameObjects) {
+                    // If coins still exist in the level, break out of the loop
                     if (obj.jsonifiedElement.id === "coin") {
                         collectedAllCoins = false;
-                        alert("You need to collect all the coins before you can leave!");
                         console.log("coin not collected, not advancing to next level");
-                        return; // Stop further execution
+                        return;
                     }
                 }
 
@@ -139,18 +139,9 @@ export class PlayerWinter extends PlayerBase {
                 this.canvas.style.zIndex = '20'
                 this.canvasHeight = this.canvasHeight * 0.9
                 this.canvasWidth = this.canvasWidth * 0.9
-                if (GameEnv.trashCount.length >= 4 && collectedAllCoins) {
-                    const currentLevelIndex = GameEnv.levels.indexOf(GameEnv.currentLevel);
-                    const nextLevelIndex = currentLevelIndex + 1;
-                
-                    if (nextLevelIndex < GameEnv.levels.length) {
-                        setTimeout(() => {
-                            GameControl.transitionToLevel(GameEnv.levels[nextLevelIndex]);
-                        }, 1000);
-                    } else {
-                        console.log("No more levels to transition to.");
-                    }
-                }
+                setTimeout(() => {
+                    GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel) + 1]);
+                }, 1000);
                 break;
             case "snowman": // Note: Goomba.js and Player.js could be refactored
                 // 1. Player jumps on goomba, interaction with Goomba.js

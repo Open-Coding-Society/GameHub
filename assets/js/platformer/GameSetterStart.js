@@ -6,7 +6,7 @@ import Background from './Background.js'
 // Define the assets
 const assets = {  
   backgrounds: {
-    start: { src: "/images/platformer/backgrounds/scripps_start.png" },
+    start: { src: "/images/platformer/backgrounds/home.png" },
   },
 };
 
