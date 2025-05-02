@@ -130,16 +130,16 @@ Author: Lars
 </head>
 <body>
   <div id="wrapper">
-    <div id="title">Resource Optimization Challenge</div>
+    <div id="title">Predict Outbreak Scenarios Challenge</div>
     <div id="sidebar">
       <div class="infographic-item">
-        💉 <strong>Drag & Drop Vaccines</strong><br>Distribute to reduce outbreak risk, Pop virus bubbles to stop spread
+        💉 <strong>Drag & Drop Vaccines</strong><br>Distribute vaccines to reduce outbreak risk, and hover over virus bubbles to stop the spreading!
       </div>
       <div class="infographic-item">
         📊 <strong>Regions Allocated & Health:</strong>
         <ul id="regionStats" style="list-style: none; padding-left: 0; font-size: 11px;"></ul>
         <button id="pauseBtn">⏸️ Pause</button>
-        <div>⏱️ Time Remaining: <span id="timeLeft">180</span>s</div>
+        <div>⏱️ Time Remaining: <span id="timeLeft">90</span>s</div>
         <div>📉 Infection Risk: <span id="riskLevel">Loading...</span></div>
       </div>
     </div>
@@ -172,7 +172,7 @@ Author: Lars
     const crate = document.getElementById("vaccineCrate");
 
     let isPaused = false;
-    let timeLeft = 180;
+    let timeLeft = 90; 
     let bubbles = [];
     let crateCooldown = false;
 
@@ -242,10 +242,12 @@ Author: Lars
       bubble.style.left = `${region.x + Math.random() * (region.width - 30)}px`;
       bubble.style.top = `${region.y + Math.random() * (region.height - 30)}px`;
       bubble.dataset.region = region.name;
-      bubble.onclick = () => {
-        bubble.remove();
-        bubbles = bubbles.filter(b => b !== bubble);
-        updateRegionStats();
+      bubble.onmouseover = () => {
+        if (!isPaused) { 
+          bubble.remove();
+          bubbles = bubbles.filter(b => b !== bubble);
+          updateRegionStats();
+        }
       };
       document.getElementById("gameContainer").appendChild(bubble);
       bubbles.push(bubble);
@@ -288,12 +290,12 @@ Author: Lars
       if (isPaused) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-      regions.forEach(region => {
-        if (regionStats[region.name].allocated < 10000 && Math.random() < 0.5) {
-          spawnBubble(region);
-        }
-      });
-    }, 750);
+
+      for (let i = 0; i < 4; i++) { 
+        const randomRegion = regions[Math.floor(Math.random() * regions.length)];
+        spawnBubble(randomRegion);
+      }
+    }, 1000); 
 
     setInterval(() => {
       if (isPaused) return;
