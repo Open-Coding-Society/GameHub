@@ -9,6 +9,10 @@ Author: Everyone
 # GenomeGamers
 This is an adventure game with numerous interactions to simulate and address real-life concerns in the field of Biotechnology. Moreover, this game highlights the numerous achievements that the Scripps Research Institute has accomplished. 
 
+### GenomeGamers Frontend & Backend Repositories
+[GenomeGamers Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
+[GenomeGamers Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
+
 ### Ideate
 The Scripps Research: Biotech Engagement Game Development project uses interactive games to introduce students to biotechnology. Each game is built around real scientific data and machine learning models, allowing players to tackle challenges like predicting disease outbreaks or designing new treatments. Through gameplay, students experience how data and AI are used in real-world research to solve major health problems.  
 
