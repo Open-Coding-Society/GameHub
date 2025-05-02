@@ -43,6 +43,8 @@ async function updatePoints(points) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.body.style.overflowX = 'hidden'; // Disable horizontal scrolling
+
   // Ensure the game-container and joystick-container exist
   const infoContainer = document.getElementById('info-container');
 
@@ -74,13 +76,13 @@ document.addEventListener('DOMContentLoaded', function () {
   let discovered = new Set();
   let points = 0; // Initialize points
   const organelles = [
-    { name: "Nucleus", x: 400, y: 300, r: 30, desc: "Controls cell activities and contains DNA." },
+    { name: "Nucleus", x: 600, y: 300, r: 30, desc: "Controls cell activities and contains DNA." },
     { name: "Chloroplast", x: 600, y: 150, r: 25, desc: "Performs photosynthesis." },
     { name: "Vacuole", x: 200, y: 450, r: 35, desc: "Stores nutrients and waste products." },
-    { name: "Cell Wall", x: 700, y: 500, r: 20, desc: "Provides structural support." },
+    { name: "Cell Wall", x: 670, y: 475, r: 20, desc: "Provides structural support." },
     { name: "Cell Membrane", x: 100, y: 300, r: 20, desc: "Regulates what enters and leaves the cell." },
     { name: "Cytoplasm", x: 350, y: 100, r: 20, desc: "Gel-like substance where organelles reside." },
-    { name: "Mitochondrion", x: 500, y: 400, r: 25, desc: "Produces energy for the cell." },
+    { name: "Mitochondrion", x: 400, y: 375, r: 25, desc: "Produces energy for the cell." },
     { name: "Ribosome", x: 250, y: 200, r: 15, desc: "Synthesizes proteins." },
     { name: "Golgi Apparatus", x: 450, y: 500, r: 20, desc: "Modifies and packages proteins." },
     { name: "Endoplasmic Reticulum", x: 150, y: 100, r: 20, desc: "Transports materials within the cell." }
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Functions for the game
   function drawPlayer() {
-    ctx.fillStyle = "#3e8e41";
+    ctx.fillStyle = "#ff0000"; // Red color for the player
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
     ctx.fill();
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
     organelles.forEach(o => {
       ctx.beginPath();
       ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
-      ctx.fillStyle = discovered.has(o.name) ? '#ffe600' : '#7ec850';
+      ctx.fillStyle = discovered.has(o.name) ? '#ffe600' : '#0000ff'; // Yellow if discovered, blue otherwise
       ctx.fill();
       ctx.stroke();
       ctx.fillStyle = '#000';
@@ -140,12 +142,20 @@ document.addEventListener('DOMContentLoaded', function () {
   function updatePlayer() {
     player.x += player.dx;
     player.y += player.dy;
-    player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
-    player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
+
+    // Restrict movement within canvas boundaries
+    player.x = Math.max(75, Math.min(725, player.x)); // Restrict x between 75 and 725
+    player.y = Math.max(50, Math.min(525, player.y)); // Restrict y between 50 and 525
   }
 
   function gameLoop() {
+    // Clear the entire canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set the playable area's background to forest green
+    ctx.fillStyle = '#228B22'; // Forest green
+    ctx.fillRect(75, 50, 650, 475); // Fill the area between x: 75-725 and y: 50-525
+
     drawOrganelles();
     drawPlayer();
     detectCollisions();
