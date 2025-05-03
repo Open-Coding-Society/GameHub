@@ -291,7 +291,7 @@ Author: Lars
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < 4; i++) { 
+      for (let i = 0; i < 3; i++) { 
         const randomRegion = regions[Math.floor(Math.random() * regions.length)];
         spawnBubble(randomRegion);
       }
