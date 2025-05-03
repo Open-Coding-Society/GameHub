@@ -6,6 +6,14 @@ permalink: /exploration
 Author: Darsh
 ---
 
+<style>
+  body {
+    background-image: url('{{site.baseurl}}/images/cellexplorationlayout.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+</style>
 
 <!-- Bootstrap CSS for styling -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -143,9 +151,9 @@ document.addEventListener('DOMContentLoaded', function () {
     player.x += player.dx;
     player.y += player.dy;
 
-    // Restrict movement within canvas boundaries
-    player.x = Math.max(75, Math.min(725, player.x)); // Restrict x between 75 and 725
-    player.y = Math.max(50, Math.min(525, player.y)); // Restrict y between 50 and 525
+    // Restrict movement within the boundaries of 0,0,750,750
+    player.x = Math.max(0 + player.size, Math.min(850 - player.size, player.x)); // Restrict x between 0 and 750
+    player.y = Math.max(0 + player.size, Math.min(600 - player.size, player.y)); // Restrict y between 0 and 750
   }
 
   function gameLoop() {
@@ -154,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Set the playable area's background to forest green
     ctx.fillStyle = '#228B22'; // Forest green
-    ctx.fillRect(75, 50, 650, 475); // Fill the area between x: 75-725 and y: 50-525
+    ctx.fillRect(0, 0, 850, 600); // Fill the area between x: 75-1375 and y: 50-1000
 
     drawOrganelles();
     drawPlayer();
@@ -214,6 +222,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!-- Container for game and UI -->
 <div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <div style="background-color: gray; color: white; padding: 15px; border-radius: 8px; margin-top: 50px;">
+        <h1>   Cell Exploration Journey</h1>
+        <p>Use the WASD keys to hover over different cellular organelles and learn what they do.</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-center" style="margin-top: 20px;">
+      <div style="background-color: black; color: white; padding: 15px; border-radius: 8px;">
+        <h3>Game Description</h3>
+        <p>Your goal is to hover over all the different organelles and learn their purposes.</p>
+        <p>Once you collect all 10 organelles, click to see the most important organelles in eukaryotic cells, or click Play Again to keep collecting points.</p>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-4" id="info-container" style="margin-left: 20px;">
       <!-- Progress and organelle info will be shown here -->
