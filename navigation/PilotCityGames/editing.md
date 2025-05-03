@@ -36,7 +36,7 @@ Author: Pradyun
           <div class="game-description">
             <h4>Game Description</h4>
             <p>Each colored block represents a number, and each slot represents a step in testing a gene. Your goal is to arrange the blocks in the slots to form a valid sequence and predict the gene's functionality.</p>
-            <p>Drag and drop the blocks into the slots. Once all slots are filled, click "Predict Functionality" to see the result.</p>
+            <p>Drag and drop the blocks into the double strand slots located in the DNA. Once all slots are filled, click "Predict Functionality" to see the result.</p>
           </div>
         </div>
       </div>
