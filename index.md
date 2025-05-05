@@ -253,11 +253,17 @@ const objects = [
   { x: 90, y: 260, width: 40, height: 40, game: 'building' }, // middle left 1
   { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // top right
   { x: 100, y: 450, width: 40, height: 40, game: 'editing' }, // middle left 2
-  { x: 250, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom left 2
+  { x: 225, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom left 2
   { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // middle right
-  { x: 250, y: 100, width: 40, height: 40, game: 'exploration' }, // top left 2
+  { x: 225, y: 100, width: 40, height: 40, game: 'exploration' }, // top left 2
   { x: 100, y: 100, width: 40, height: 40, game: 'outbreak' }, // top left
-  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }  // bottom right
+  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }, // bottom right
+  { x: 350, y: 100, width: 40, height: 40, game: 'pacman' }, // new blue square
+  { x: 475, y: 100, width: 40, height: 40, game: 'slot' }, // new blue square
+  { x: 600, y: 100, width: 40, height: 40, game: 'farming' }, // new blue square
+  { x: 350, y: 620, width: 40, height: 40, game: 'tennis' }, // new blue square
+  { x: 475, y: 620, width: 40, height: 40, game: 'tower' }, // new blue square
+  { x: 600, y: 620, width: 40, height: 40, game: 'puzzle' }  // new blue square
 ];
 
 const walls = [
@@ -357,6 +363,24 @@ function update() {
         case 'adventure':
           window.location.href = '{{site.baseurl}}/adventure';
           break; 
+        case 'pacman':
+          window.location.href = '{{site.baseurl}}/pacman';
+          break;
+        case 'slot':
+          window.location.href = '{{site.baseurl}}/slot';
+          break;
+        case 'farming':
+          window.location.href = '{{site.baseurl}}/farming';
+          break;
+        case 'tennis':
+          window.location.href = '{{site.baseurl}}/tennis';
+          break;
+        case 'tower':
+          window.location.href = '{{site.baseurl}}/tower';
+          break;
+        case 'puzzle':
+          window.location.href = '{{site.baseurl}}/puzzle';
+          break;
       }
     }
   });
