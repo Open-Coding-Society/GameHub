@@ -81,10 +81,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const player = { 
     x: 425, // Center horizontally (850 / 2)
     y: 300, // Center vertically (600 / 2)
-    size: 15, 
+    width: 75, // Match the default character width
+    height: 75, // Match the default character height
     speed: 2, 
     dx: 0, 
     dy: 0 
+  };
+
+  const spriteImage = new Image();
+  spriteImage.src = 'https://i.postimg.cc/PxDYNLjG/Default.png'; // Default character sprite
+
+  spriteImage.onload = () => {
+    gameLoop();
   };
 
   let discovered = new Set();
@@ -220,10 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Functions for the game
   function drawPlayer() {
-    ctx.fillStyle = "#ff0000"; // Red color for the player
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.drawImage(spriteImage, player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
   }
 
   function drawOrganelles() {
@@ -245,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function detectCollisions() {
     organelles.forEach(o => {
       const dist = Math.hypot(player.x - o.x, player.y - o.y);
-      if (dist < player.size + o.r && !discovered.has(o.name)) {
+      if (dist < player.width / 2 + o.r && !discovered.has(o.name)) {
         discovered.add(o.name);
         points += 10; // Add 10 points for each interaction
         document.getElementById('points-counter').textContent = points; // Update points display
@@ -267,8 +272,8 @@ document.addEventListener('DOMContentLoaded', function () {
     player.y += player.dy;
 
     // Restrict movement within the boundaries of 0,0,750,750
-    player.x = Math.max(0 + player.size, Math.min(850 - player.size, player.x)); // Restrict x between 0 and 750
-    player.y = Math.max(0 + player.size, Math.min(600 - player.size, player.y)); // Restrict y between 0 and 750
+    player.x = Math.max(0 + player.width / 2, Math.min(850 - player.width / 2, player.x)); // Restrict x between 0 and 750
+    player.y = Math.max(0 + player.height / 2, Math.min(600 - player.height / 2, player.y)); // Restrict y between 0 and 750
   }
 
   function gameLoop() {
