@@ -3,7 +3,7 @@ layout: bootstrap
 title: Exploration
 description: Exploration
 permalink: /exploration
-Author: Darsh
+Author: Zach & Darsh
 ---
 
 <style>
