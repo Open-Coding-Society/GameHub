@@ -233,7 +233,7 @@ const objectImages = {
   farming: '{{site.baseurl}}/images/icon12.png',
   tennis: '{{site.baseurl}}/images/icon13.png',
   tower: '{{site.baseurl}}/images/icon14.png',
-  puzzle: '{{site.baseurl}}/images/icon15.png'
+  clicker: '{{site.baseurl}}/images/icon15.png'
 };
 
 
@@ -269,7 +269,7 @@ const objects = [
   { x: 600, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
   { x: 350, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
   { x: 475, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 4
-  { x: 600, y: 620, width: 40, height: 40, game: 'puzzle' }  // bottom 5
+  { x: 600, y: 620, width: 40, height: 40, game: 'clicker' }  // bottom 5
 ];
 
 const walls = [
@@ -384,8 +384,8 @@ function update() {
         case 'tower':
           window.location.href = '{{site.baseurl}}/tower';
           break;
-        case 'puzzle':
-          window.location.href = '{{site.baseurl}}/puzzle';
+        case 'clicker':
+          window.location.href = '{{site.baseurl}}/clicker';
           break;
       }
     }
@@ -448,9 +448,9 @@ function draw() {
       } else if (obj.game === 'tennis') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;
-      } else if (obj.game === 'puzzle') { 
-        scaledWidth *= 0.7;
-        scaledHeight *= 0.7;
+      } else if (obj.game === 'clicker') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
       }
       
 
