@@ -23,9 +23,9 @@ const assets = {
       coin: { src: "/images/platformer/obstacles/coin.png" },
     },
     platforms: {
-      grass: { src: "/images/platformer/platforms/grass.png" },
+      grass: { src: "/images/platformer/platforms/snowyfloor.png" },
       bricks: { src: "/images/platformer/platforms/brick_wall.png" },
-      block: { src: "/images/platformer/platforms/brick_block.png" }, 
+      block: { src: "/images/platformer/platforms/cobblestone.png" }, 
       itemBlock: {
         src: "/images/platformer/sprites/key.png",
         sizeRatio: 83.2,
@@ -39,7 +39,7 @@ const assets = {
       },
     },
     backgrounds: {
-      hills: { src: "/images/platformer/backgrounds/hills.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
+      hills: { src: "/images/platformer/backgrounds/snowfall.png", parallaxSpeed: 0.4, moveOnKeyAction: true },
       mountains: { src: "/images/platformer/backgrounds/mountains.jpg", parallaxSpeed: 0.1, moveOnKeyAction: true },
       clouds: { src: "/images/platformer/backgrounds/clouds.png", parallaxSpeed: 0.5 },
     },
@@ -48,26 +48,26 @@ const assets = {
     },
     players: {
       mario: {
-        src: "/images/platformer/sprites/mario.png",
-        width: 256,
-        height: 256,
+        src: "/images/platformer/sprites/drmario.png",
+        width: 194,
+        height: 259,
         scaleSize: 80,
         speedRatio: 0.7,
         idle: {
-          left: { row: 1, frames: 15 },
-          right: { row: 0, frames: 15 },
+          left: { row: 0, frames: 0 },
+          right: { row: 0, frames: 0 },
         },
         walk: {
-          left: { row: 3, frames: 7 },
-          right: { row: 2, frames: 7 },
+          left: { row: 0, frames: 0 },
+          right: { row: 0, frames: 0 },
         },
         run: {
-          left: { row: 5, frames: 15 },
-          right: { row: 4, frames: 15 },
+          left: { row: 0, frames: 0 },
+          right: { row: 0, frames: 0 },
         },
         jump: {
-          left: { row: 11, frames: 15 },
-          right: { row: 10, frames: 15 },
+          left: { row: 0, frames: 0 },
+          right: { row: 0, frames: 0 },
         },
         hitbox: { widthPercentage: 0.3, heightPercentage: 0.8 }
       },
