@@ -436,7 +436,23 @@ function draw() {
       } else if (obj.game === 'building') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
+      } else if (obj.game === 'pacman') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
+      } else if (obj.game === 'slot') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
+      } else if (obj.game === 'farming') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
+      } else if (obj.game === 'tennis') { 
+        scaledWidth *= 0.7;
+        scaledHeight *= 0.7;
+      } else if (obj.game === 'puzzle') { 
+        scaledWidth *= 0.7;
+        scaledHeight *= 0.7;
       }
+      
 
       const offsetX = (scaledWidth - obj.width) / 2; 
       const offsetY = (scaledHeight - obj.height) / 2; 
