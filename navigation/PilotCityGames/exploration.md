@@ -104,11 +104,29 @@ document.addEventListener('DOMContentLoaded', function () {
     { name: "Cell Wall", x: 700, y: 490, r: 25, desc: "The cell wall is a stiff outer layer found in plant cells that gives the cell shape, support, and protection. It is located outside the cell membrane." },
     { name: "Cell Membrane", x: 120, y: 315, r: 25, desc: "A cell membrane is a thin, flexible layer that surrounds a cell and controls what goes in and out, helping protect and support the cell." },
     { name: "Cytoplasm", x: 445, y: 90, r: 25, desc: "The gel-like substance inside a cell where the organelles float. It helps fill the cell and supports the cell’s activities." },
-    { name: "Mitochondrion", x: 550, y: 400, r: 25, desc: "The part of a cell that makes energy from food. Oftenly referred to as the powerhouse of the cell." },
+    { name: "Mitochondria", x: 550, y: 400, r: 25, desc: "The part of a cell that makes energy from food. Oftenly referred to as the powerhouse of the cell." },
     { name: "Ribosome", x: 275, y: 200, r: 25, desc: "The ribosome is a tiny part of a cell that makes proteins, which the cell needs to grow and work properly." },
     { name: "Golgi Apparatus", x: 425, y: 510, r: 25, desc: "The part of the cell that packages and ships proteins and other materials to where they are needed. It works like a post office inside the cell." },
-    { name: "Endoplasmic Reticulum", x: 110, y: 115, r: 25, desc: "A cell part that helps make and move proteins and fats. It comes in two types: Rough ER which has ribosomes and helps make proteins and Smooth ER which has no ribosomes and helps make fats/clean the cell." }
+    { name: "Endoplasmic Reticulum", x: 110, y: 115, r: 25, desc: "A cell part that helps make and move proteins and fats. It comes in two types: Roenough ER which has ribosomes and helps make proteins and Smooth ER which has no ribosomes and helps make fats/clean the cell." }
   ];
+
+  const organelleImages = {
+    Nucleus: new Image(),
+    Chloroplast: new Image(),
+    Vacuole: new Image(),
+    "Cell Wall": new Image(),
+    "Cell Membrane": new Image(),
+    Cytoplasm: new Image(),
+    Mitochondria: new Image(),
+    Ribosome: new Image(),
+    "Golgi Apparatus": new Image(),
+    "Endoplasmic Reticulum": new Image()
+  };
+
+  // Load images for each organelle
+  Object.keys(organelleImages).forEach(name => {
+    organelleImages[name].src = `{{site.baseurl}}/images/${name.toLowerCase().replace(/ /g, '')}.png`;
+  });
 
   // Move UI elements into the white square
   const whiteSquareContainer = document.createElement('div');
@@ -233,17 +251,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function drawOrganelles() {
     organelles.forEach(o => {
-      ctx.beginPath();
-      ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
-      ctx.fillStyle = discovered.has(o.name) ? '#ffe600' : '#0000ff'; // Yellow if discovered, blue otherwise
-      ctx.fill();
-      ctx.stroke();
+      if (organelleImages[o.name]) {
+        // Draw the image for the organelle
+        if (organelleImages[o.name].complete && organelleImages[o.name].naturalWidth !== 0) {
+          ctx.drawImage(organelleImages[o.name], o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+        } else {
+          ctx.fillStyle = '#0000ff'; // Fallback to blue circle if image fails to load
+          ctx.beginPath();
+          ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        // Draw other organelles as circles
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+        ctx.fillStyle = discovered.has(o.name) ? '#ffe600' : '#0000ff'; // Yellow if discovered, blue otherwise
+        ctx.fill();
+        ctx.stroke();
+      }
 
-      // Center the text above the circle
+      // Center the text above the organelle
       ctx.fillStyle = '#000';
-      ctx.textAlign = 'center'; // Center the text horizontally
-      ctx.textBaseline = 'bottom'; // Align text just above the circle
-      ctx.fillText(o.name, o.x, o.y - o.r - 5); // Position text above the circle
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(o.name, o.x, o.y - o.r - 5);
     });
   }
 
