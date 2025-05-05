@@ -52,7 +52,7 @@ Author: Zach & Ian
   <div id="container">
       <header class="fun_facts">
       <p id="num">Fun Fact #0</p>
-      <h3 id="fun_fact">Mario is named after the frustrated landlord, Mario Segale, of the Nintendo of America building.</h3> 
+      <h3 id="fun_fact">Scripps Research is located in La Jolla, California!</h3> 
       </header>
     </div>
    <footer id="cut-story"></footer>
