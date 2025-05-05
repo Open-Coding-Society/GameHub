@@ -96,21 +96,59 @@ document.addEventListener('DOMContentLoaded', function () {
     { name: "Endoplasmic Reticulum", x: 150, y: 100, r: 20, desc: "Transports materials within the cell." }
   ];
 
-  // UI Elements
+  // Move UI elements into the white square
+  const whiteSquareContainer = document.createElement('div');
+  Object.assign(whiteSquareContainer.style, {
+    position: 'absolute',
+    top: 'calc(50% + 350px)', // Same vertical position as the black square
+    left: 'calc((100vw - 850px) / 2 - 350px)', // Mirrored horizontally to the left
+    transform: 'translateY(-50%)',
+    backgroundColor: 'white',
+    width: '250px', // Same size as the black square
+    height: '250px', // Same size as the black square
+    borderRadius: '6px',
+    zIndex: '1001', // Ensure it appears above other elements
+    padding: '10px', // Add padding for content
+    overflow: 'auto', // Allow scrolling if content overflows
+    color: 'black', // Set text color to black
+    fontSize: '14px', // Ensure readability
+    display: 'flex', // Use flexbox for better alignment
+    flexDirection: 'column',
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center' // Center content horizontally
+  });
+  document.body.appendChild(whiteSquareContainer);
+
+  // Add "Statistics" title centered at the top
+  const title = document.createElement('h3');
+  title.textContent = "Statistics";
+  title.style.marginBottom = '20px'; // Add spacing below the title
+  title.style.textAlign = 'center'; // Center the title
+  whiteSquareContainer.appendChild(title);
+
+  // Append "Organelles Discovered" text and points to the white square
   const progressSpan = document.createElement('span');
   const progressDiv = document.createElement('div');
   progressDiv.classList.add('mb-3');
   progressDiv.innerHTML = "<strong>Organelles Discovered:</strong> ";
+  progressDiv.style.color = 'black'; // Set text color to black
   progressDiv.appendChild(progressSpan);
-  infoContainer.appendChild(progressDiv);
+  whiteSquareContainer.appendChild(progressDiv);
 
   const pointsDiv = document.createElement('div'); // Points display
   pointsDiv.classList.add('mb-3');
-  pointsDiv.innerHTML = `<strong>Points:</strong> <span id="points-counter">0</span>`;
-  infoContainer.appendChild(pointsDiv);
+  pointsDiv.innerHTML = `<strong>Points:</strong> <span id="points-counter" style="color: black;">0</span>`;
+  pointsDiv.style.color = 'black'; // Set text color to black
+  whiteSquareContainer.appendChild(pointsDiv);
 
+  // Append organelle name and description to the white square
   const infoBox = document.createElement('div');
-  infoContainer.appendChild(infoBox);
+  infoBox.style.color = 'black'; // Set text color to black
+  infoBox.style.marginTop = '10px'; // Add spacing
+  whiteSquareContainer.appendChild(infoBox);
+
+  // Ensure the white square is visible and brought to the front
+  whiteSquareContainer.style.visibility = 'visible';
 
   const endScreen = document.createElement('div');
   endScreen.id = 'endScreen';
@@ -155,6 +193,21 @@ document.addEventListener('DOMContentLoaded', function () {
   iconImage.style.height = '250px'; // 5x original height
   iconContainer.appendChild(iconImage);
   document.body.appendChild(iconContainer);
+
+  // Add a white square mirrored to the left middle side
+  const whiteSquareContainerLeft = document.createElement('div');
+  Object.assign(whiteSquareContainerLeft.style, {
+    position: 'absolute',
+    top: 'calc(50% + 340px)', // Same vertical position as the black square
+    left: 'calc((100vw - 850px) / 2 - 400px)', // Mirrored horizontally to the left
+    transform: 'translateY(-50%)',
+    backgroundColor: 'white',
+    width: '350px', // Same size as the black square
+    height: '450px', // Same size as the black square
+    borderRadius: '6px',
+    zIndex: '1000'
+  });
+  document.body.appendChild(whiteSquareContainerLeft);
 
   // Functions for the game
   function drawPlayer() {
