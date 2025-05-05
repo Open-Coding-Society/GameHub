@@ -253,9 +253,9 @@ const objects = [
   { x: 90, y: 260, width: 40, height: 40, game: 'building' }, // middle left 1
   { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // top right
   { x: 100, y: 450, width: 40, height: 40, game: 'editing' }, // middle left 2
-  { x: 225, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom left 2
+  { x: 250, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom left 2
   { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // middle right
-  { x: 225, y: 100, width: 40, height: 40, game: 'exploration' }, // top left 2
+  { x: 250, y: 100, width: 40, height: 40, game: 'exploration' }, // top left 2
   { x: 100, y: 100, width: 40, height: 40, game: 'outbreak' }, // top left
   { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }  // bottom right
 ];
