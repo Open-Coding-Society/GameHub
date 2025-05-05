@@ -51,8 +51,6 @@ async function updatePoints(points) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.body.style.overflowX = 'hidden'; // Disable horizontal scrolling
-
   // Ensure the game-container and joystick-container exist
   const infoContainer = document.getElementById('info-container');
 
@@ -80,20 +78,28 @@ document.addEventListener('DOMContentLoaded', function () {
   canvas.height = 600;
   const ctx = canvas.getContext('2d');
 
-  const player = { x: 100, y: 100, size: 15, speed: 2, dx: 0, dy: 0 };
+  const player = { 
+    x: 425, // Center horizontally (850 / 2)
+    y: 300, // Center vertically (600 / 2)
+    size: 15, 
+    speed: 2, 
+    dx: 0, 
+    dy: 0 
+  };
+
   let discovered = new Set();
   let points = 0; // Initialize points
   const organelles = [
-    { name: "Nucleus", x: 600, y: 300, r: 30, desc: "Controls cell activities and contains DNA." },
-    { name: "Chloroplast", x: 600, y: 150, r: 25, desc: "Performs photosynthesis." },
-    { name: "Vacuole", x: 200, y: 450, r: 35, desc: "Stores nutrients and waste products." },
-    { name: "Cell Wall", x: 670, y: 475, r: 20, desc: "Provides structural support." },
-    { name: "Cell Membrane", x: 100, y: 300, r: 20, desc: "Regulates what enters and leaves the cell." },
-    { name: "Cytoplasm", x: 350, y: 100, r: 20, desc: "Gel-like substance where organelles reside." },
-    { name: "Mitochondrion", x: 400, y: 375, r: 25, desc: "Produces energy for the cell." },
-    { name: "Ribosome", x: 250, y: 200, r: 15, desc: "Synthesizes proteins." },
-    { name: "Golgi Apparatus", x: 450, y: 500, r: 20, desc: "Modifies and packages proteins." },
-    { name: "Endoplasmic Reticulum", x: 150, y: 100, r: 20, desc: "Transports materials within the cell." }
+    { name: "Nucleus", x: 750, y: 300, r: 25, desc: "The central part of an atom that contains protons and neutrons. Also controls cell activities and contains DNA." },
+    { name: "Chloroplast", x: 620, y: 180, r: 25, desc: "A part of a plant cell that helps the plant make its own food using sunlight, water, and carbon dioxide through photosynthesis." },
+    { name: "Vacuole", x: 210, y: 465, r: 25, desc: "A vacuole is a storage space inside a cell that holds water, nutrients, or waste. It helps keep the cell clean and supports its shape." },
+    { name: "Cell Wall", x: 700, y: 490, r: 25, desc: "The cell wall is a stiff outer layer found in plant cells that gives the cell shape, support, and protection. It is located outside the cell membrane." },
+    { name: "Cell Membrane", x: 120, y: 315, r: 25, desc: "A cell membrane is a thin, flexible layer that surrounds a cell and controls what goes in and out, helping protect and support the cell." },
+    { name: "Cytoplasm", x: 445, y: 90, r: 25, desc: "The gel-like substance inside a cell where the organelles float. It helps fill the cell and supports the cell’s activities." },
+    { name: "Mitochondrion", x: 550, y: 400, r: 25, desc: "The part of a cell that makes energy from food. Oftenly referred to as the powerhouse of the cell." },
+    { name: "Ribosome", x: 275, y: 200, r: 25, desc: "The ribosome is a tiny part of a cell that makes proteins, which the cell needs to grow and work properly." },
+    { name: "Golgi Apparatus", x: 425, y: 510, r: 25, desc: "The part of the cell that packages and ships proteins and other materials to where they are needed. It works like a post office inside the cell." },
+    { name: "Endoplasmic Reticulum", x: 110, y: 115, r: 25, desc: "A cell part that helps make and move proteins and fats. It comes in two types: Rough ER which has ribosomes and helps make proteins and Smooth ER which has no ribosomes and helps make fats/clean the cell." }
   ];
 
   // Move UI elements into the white square
@@ -105,16 +111,16 @@ document.addEventListener('DOMContentLoaded', function () {
     transform: 'translateY(-50%)',
     backgroundColor: 'white',
     width: '250px', // Same size as the black square
-    height: '250px', // Same size as the black square
+    height: 'auto', // Adjust height to fit all content
+    minHeight: '300px', // Ensure a minimum height
     borderRadius: '6px',
     zIndex: '1001', // Ensure it appears above other elements
     padding: '10px', // Add padding for content
-    overflow: 'auto', // Allow scrolling if content overflows
     color: 'black', // Set text color to black
     fontSize: '14px', // Ensure readability
     display: 'flex', // Use flexbox for better alignment
     flexDirection: 'column',
-    justifyContent: 'center', // Center content vertically
+    justifyContent: 'flex-start', // Align content to the top
     alignItems: 'center' // Center content horizontally
   });
   document.body.appendChild(whiteSquareContainer);
@@ -124,6 +130,8 @@ document.addEventListener('DOMContentLoaded', function () {
   title.textContent = "Statistics";
   title.style.marginBottom = '20px'; // Add spacing below the title
   title.style.textAlign = 'center'; // Center the title
+  title.style.color = 'black'; // Set text color to black
+  title.style.fontWeight = 'bold'; // Make the text bold
   whiteSquareContainer.appendChild(title);
 
   // Append "Organelles Discovered" text and points to the white square
@@ -145,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const infoBox = document.createElement('div');
   infoBox.style.color = 'black'; // Set text color to black
   infoBox.style.marginTop = '10px'; // Add spacing
+  infoBox.style.textAlign = 'center'; // Center the description text
   whiteSquareContainer.appendChild(infoBox);
 
   // Ensure the white square is visible and brought to the front
@@ -224,8 +233,12 @@ document.addEventListener('DOMContentLoaded', function () {
       ctx.fillStyle = discovered.has(o.name) ? '#ffe600' : '#0000ff'; // Yellow if discovered, blue otherwise
       ctx.fill();
       ctx.stroke();
+
+      // Center the text above the circle
       ctx.fillStyle = '#000';
-      ctx.fillText(o.name, o.x - o.r, o.y - o.r - 5);
+      ctx.textAlign = 'center'; // Center the text horizontally
+      ctx.textBaseline = 'bottom'; // Align text just above the circle
+      ctx.fillText(o.name, o.x, o.y - o.r - 5); // Position text above the circle
     });
   }
 
