@@ -227,7 +227,13 @@ const objectImages = {
   outline: '{{site.baseurl}}/images/icon8.png',
   exploration: '{{site.baseurl}}/images/icon3.png',
   outbreak: '{{site.baseurl}}/images/icon6.png',
-  aboutus: '{{site.baseurl}}/images/icon9.png'
+  aboutus: '{{site.baseurl}}/images/icon9.png',
+  pacman: '{{site.baseurl}}/images/icon10.png',
+  slot: '{{site.baseurl}}/images/icon11.png',
+  farming: '{{site.baseurl}}/images/icon12.png',
+  tennis: '{{site.baseurl}}/images/icon13.png',
+  tower: '{{site.baseurl}}/images/icon14.png',
+  puzzle: '{{site.baseurl}}/images/icon15.png'
 };
 
 
@@ -249,21 +255,21 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 100, y: 620, width: 40, height: 40, game: 'blackjack', icon: true }, // bottom left
-  { x: 90, y: 260, width: 40, height: 40, game: 'building' }, // middle left 1
-  { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // top right
-  { x: 100, y: 450, width: 40, height: 40, game: 'editing' }, // middle left 2
-  { x: 225, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom left 2
-  { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // middle right
-  { x: 225, y: 100, width: 40, height: 40, game: 'exploration' }, // top left 2
-  { x: 100, y: 100, width: 40, height: 40, game: 'outbreak' }, // top left
-  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }, // bottom right
-  { x: 350, y: 100, width: 40, height: 40, game: 'pacman' }, // new blue square
-  { x: 475, y: 100, width: 40, height: 40, game: 'slot' }, // new blue square
-  { x: 600, y: 100, width: 40, height: 40, game: 'farming' }, // new blue square
-  { x: 350, y: 620, width: 40, height: 40, game: 'tennis' }, // new blue square
-  { x: 475, y: 620, width: 40, height: 40, game: 'tower' }, // new blue square
-  { x: 600, y: 620, width: 40, height: 40, game: 'puzzle' }  // new blue square
+  { x: 100, y: 620, width: 40, height: 40, game: 'blackjack', icon: true }, // bottom 1
+  { x: 90, y: 260, width: 40, height: 40, game: 'building' }, // left 1
+  { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // right 1
+  { x: 100, y: 450, width: 40, height: 40, game: 'editing' }, // left 2
+  { x: 225, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom 2
+  { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // right 2
+  { x: 225, y: 100, width: 40, height: 40, game: 'exploration' }, // top 2
+  { x: 100, y: 100, width: 40, height: 40, game: 'outbreak' }, // top 1
+  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }, // right 3
+  { x: 350, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
+  { x: 475, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
+  { x: 600, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
+  { x: 350, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
+  { x: 475, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 4
+  { x: 600, y: 620, width: 40, height: 40, game: 'puzzle' }  // bottom 5
 ];
 
 const walls = [
