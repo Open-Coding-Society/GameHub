@@ -136,6 +136,26 @@ document.addEventListener('DOMContentLoaded', function () {
   endScreen.appendChild(playAgainBtn);
   document.body.appendChild(endScreen);
 
+  // Add resized icon3.png to the middle-right of the canvas
+  const iconContainer = document.createElement('div');
+  Object.assign(iconContainer.style, {
+    position: 'absolute',
+    top: 'calc(50% + 350px)', // Move 200px down
+    right: 'calc((100vw - 850px) / 2 - 350px)', // Move 400px to the right
+    transform: 'translateY(-50%)',
+    backgroundColor: 'black',
+    padding: '10px', // 5x original padding
+    borderRadius: '6px',
+    zIndex: '1000'
+  });
+  const iconImage = document.createElement('img');
+  iconImage.src = '{{ site.baseurl }}/images/icon3.png';
+  iconImage.alt = 'Icon';
+  iconImage.style.width = '250px'; // 5x original width
+  iconImage.style.height = '250px'; // 5x original height
+  iconContainer.appendChild(iconImage);
+  document.body.appendChild(iconContainer);
+
   // Functions for the game
   function drawPlayer() {
     ctx.fillStyle = "#ff0000"; // Red color for the player
