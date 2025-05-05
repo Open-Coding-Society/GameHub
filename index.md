@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Scripps Biotech ML-Based Game
+title: GenomeGamers Minigames
 description: Move your character around to enter different minigames and experiences on this map.  
 Author: Lars, Zach & Aarush
 ---
