@@ -1,7 +1,7 @@
 ---
 layout: post
 title: GenomeGamers Minigames
-description: Move your character around to enter different minigames and experiences on this map.  
+description: Move your character around with WASD to enter different minigames and experiences on this map. Click Genome Gamers in the top left to go back to the home page.
 Author: Lars, Zach & Aarush
 ---
 
