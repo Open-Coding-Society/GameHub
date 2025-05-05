@@ -186,15 +186,15 @@ const GameSetup = {
 
     var fun_facts = {
       //data structure
-      "Fun Fact #1": "Scripps is a nonprofit medical research facility.", 
-      "Fun Fact #2": "Scripps focuses on research and education in biomedical sciences.", 
-      "Fun Fact #3": "Scripps' insitute has been around for over 100 years.",
-      "Fun Fact #4": "Scripps' insitute has over 170 laboratories.",
-      "Fun Fact #5": "Scripps has over 2100 administrative staff.",
-      "Fun Fact #6": "Scripps Research integrates AI into their research.",
-      "Fun Fact #7": "Many Pilot City innovations have turned into collaborations and internships.",
-      "Fun Fact #8": "Pilot City helps make biotech accessible and understandable.",
-      "Fun Fact #9": "High School and college students have helped scientists brainstorm biotech through Pilot City."
+      "Fun Fact #1": "Sigma sigma boy sigma boy", 
+      "Fun Fact #2": "Sigma sigma boy sigma boy", 
+      "Fun Fact #3": "Sigma sigma boy sigma boy",
+      "Fun Fact #4": "Sigma sigma boy sigma boy",
+      "Fun Fact #5": "Sigma sigma boy sigma boy",
+      "Fun Fact #6": "Sigma sigma boy sigma boy",
+      "Fun Fact #7": "Sigma sigma boy sigma boy",
+      "Fun Fact #8": "Sigma sigma boy sigma boy",
+      "Fun Fact #9": "Sigma sigma boy sigma boy"
     }
     function generate() {
       var nums = Object.keys(fun_facts);
@@ -226,10 +226,6 @@ const GameSetup = {
     GameLevelSetup(GameSetterStart, this.path, this.homeScreenCallback, true);
     // Game Levels added to the Game ...
     GameLevelSetup(GameSetterHills, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterGreece, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterQuidditch, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterWinter, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterSkibidi, this.path, this.playerOffScreenCallBack);
     GameLevelSetup(GameSetterBossFight, this.path, this.playerOffScreenCallBack);
     // End Game
     GameLevelSetup(GameSetterEnd, this.path, this.gameOverCallBack, true);
