@@ -112,6 +112,30 @@ document.addEventListener('DOMContentLoaded', function () {
   const infoBox = document.createElement('div');
   infoContainer.appendChild(infoBox);
 
+  const endScreen = document.createElement('div');
+  endScreen.id = 'endScreen';
+  Object.assign(endScreen.style, {
+    display: 'none', position: 'fixed', top: '0', left: '0', width: '100vw', height: '100vh',
+    background: 'rgba(0, 0, 0, 0.85)', color: 'white', justifyContent: 'center', alignItems: 'center',
+    flexDirection: 'column', zIndex: '9999'
+  });
+  const endMessage = document.createElement('h1');
+  endMessage.id = 'endMessage';
+  const playAgainBtn = document.createElement('button');
+  playAgainBtn.id = 'playAgainBtn';
+  playAgainBtn.textContent = '🔁 Play Again';
+  playAgainBtn.style.padding = '10px 20px';
+  playAgainBtn.style.fontSize = '18px';
+  playAgainBtn.style.background = '#4caf50';
+  playAgainBtn.style.color = 'white';
+  playAgainBtn.style.border = 'none';
+  playAgainBtn.style.borderRadius = '5px';
+  playAgainBtn.style.cursor = 'pointer';
+  playAgainBtn.onclick = () => location.reload();
+  endScreen.appendChild(endMessage);
+  endScreen.appendChild(playAgainBtn);
+  document.body.appendChild(endScreen);
+
   // Functions for the game
   function drawPlayer() {
     ctx.fillStyle = "#ff0000"; // Red color for the player
@@ -143,6 +167,11 @@ document.addEventListener('DOMContentLoaded', function () {
         infoBox.style.display = 'block';
         infoBox.innerHTML = `<strong>${o.name}</strong><br>${o.desc}`;
         updatePoints(10); // Call the API to update points
+
+        if (discovered.size === organelles.length) {
+          endMessage.textContent = "🎉 You learned about all the organelles!";
+          endScreen.style.display = 'flex';
+        }
       }
     });
   }
@@ -235,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div style="background-color: black; color: white; padding: 15px; border-radius: 8px;">
         <h3>Game Description</h3>
         <p>Your goal is to hover over all the different organelles and learn their purposes.</p>
-        <p>Once you collect all 10 organelles, click to see the most important organelles in eukaryotic cells, or click Play Again to keep collecting points.</p>
+        <p>Once you collect all 10 organelles, you get 50 points and can click Play Again to keep collecting points.</p>
       </div>
     </div>
   </div>
