@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       // Center the text above the organelle
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = discovered.has(o.name) ? '#fff' : '#000'; // White if discovered, black otherwise
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillText(o.name, o.x, o.y - o.r - 5);
@@ -386,7 +386,8 @@ document.addEventListener('DOMContentLoaded', function () {
       <div style="background-color: black; color: white; padding: 15px; border-radius: 8px;">
         <h3>Game Description</h3>
         <p>Your goal is to hover over all the different organelles and learn their purposes.</p>
-        <p>Once you collect all 10 organelles, you get 50 points and can click Play Again to keep collecting points.</p>
+        <p>There is a description of each organelle on the left when you hover over an image and it will contribute to your total organelles discovered.</p>
+        <p>Once you collect all 10 organelles, you can click Play Again to keep collecting points.</p>
       </div>
     </div>
   </div>
