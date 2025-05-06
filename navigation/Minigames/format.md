@@ -93,3 +93,4 @@ Main source is using our already implemented website with the biotech games and 
 
 ### **This Issue**
 - We will add this issue onto our website for other users to see how we designed everything for our website.
+- We will add points to every game and deploy so you don't have to run backend to receive them.
