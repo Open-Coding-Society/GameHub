@@ -234,7 +234,7 @@ const objectImages = {
   tennis: '{{site.baseurl}}/images/icon13.png',
   tower: '{{site.baseurl}}/images/icon14.png',
   clicker: '{{site.baseurl}}/images/icon15.png',
-  format: '{{site.baseurl}}/images/icon8.png'
+  format: '{{site.baseurl}}/images/icon16.png'
 };
 
 
@@ -264,13 +264,13 @@ const objects = [
   { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // right 2
   { x: 225, y: 100, width: 40, height: 40, game: 'exploration' }, // top 2
   { x: 100, y: 100, width: 40, height: 40, game: 'outbreak' }, // top 1
-  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }, // right 3
+  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }, // right 4
   { x: 350, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
   { x: 475, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
   { x: 600, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
   { x: 350, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
   { x: 475, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 4
-  { x: 810, y: 500, width: 40, height: 40, game: 'format' }, // right 3
+  { x: 810, y: 495, width: 40, height: 40, game: 'format' }, // right 3
   { x: 600, y: 620, width: 40, height: 40, game: 'clicker' }  // bottom 5
 ];
 
@@ -454,8 +454,8 @@ function draw() {
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;
       } else if (obj.game === 'format') { 
-        scaledWidth *= 1.7;
-        scaledHeight *= 1.7;  
+        scaledWidth *= 0.6;
+        scaledHeight *= 0.6;  
       } else if (obj.game === 'clicker') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
