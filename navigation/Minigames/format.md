@@ -1,0 +1,95 @@
+---
+layout: bootstrap
+title: Format
+description: Our ideas and format for the other 6 games
+permalink: /format
+Author: Zach
+---
+
+# GenomeGamers
+These new 6 games we will add will add to the 6 already implemented biotech related game.
+
+### GenomeGamers Frontend & Backend Repositories
+- [GenomeGamers Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
+- [GenomeGamers Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
+
+### Ideate
+These new games will be fun and entertaining and add more variety to our biotech learning games.
+
+### What is its purpose?
+The purpose is to make users happy and show off what games we have created using frontend and backend features.
+
+### Source 
+Main source is using our already implemented website with the biotech games and adding more games that are not completely biotech related.
+
+<img width="716" alt="Image" src="https://github.com/user-attachments/assets/aef82605-b752-4937-9b41-f0423544dcbb" />
+
+### Objective
+- **Make new entertaining and engaging games** 
+- **Have fun creating them and making users know the purpose of making games**
+
+### Roles For the project
+- **Project Manager/Scrum Master** - Ian Manangan
+- **ML Engineer** - Aarush Kota
+- **Backend Developer** - Zach Peltz
+- **Frontend Developer** - Zach Peltz
+- **Testing**- Aarush Kota
+- **Data Science Lead** -  Zach Peltz
+
+
+### **1. Pacman Game**
+- **Gameplay:** Players play a game similar to pacman, the goal being to collect all the items without getting caught.
+
+[Pacman Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/49)
+
+<img width="371" alt="Image" src="https://github.com/user-attachments/assets/a9e7cf89-ca7c-47d5-91be-d4a0918f970e" />
+
+---
+
+### **2. Slot Game**  
+- **Gameplay:** Players play a slot based game where they try to earn as many blood cells as possible.
+
+[Slot Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/50)
+
+<img width="343" alt="Image" src="https://github.com/user-attachments/assets/c027d5d7-105d-4574-a34e-df4bb3124459" />
+ 
+---
+
+### **3. Farming Game**  
+- **Gameplay:** Players are on a farm collecting and as many resources as they can.
+
+[Farming Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/51)
+
+<img width="363" alt="Image" src="https://github.com/user-attachments/assets/b003aa06-7e2a-48ef-bd28-b77bac934d10" />
+
+---
+
+### **4. Table Tennis**  
+- **Gameplay:** Players will play a game of table tennis against an opponent, whoever gets the highest score wins.
+
+[Table Tennis Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/52)
+
+<img width="371" alt="Image" src="https://github.com/user-attachments/assets/ecdd9b7b-efa2-489d-8b9e-049b50e235d8" />
+
+---
+
+### **5. Tower Defense**  
+- **Gameplay:** Players will defend a base with different troops and towers against enemies.
+
+[Tower Defense Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/53)
+
+<img width="368" alt="Image" src="https://github.com/user-attachments/assets/4f57dc34-fa89-4f1c-a078-4f0837629360" />
+
+---
+
+### **6. Clicking Game**  
+- **Gameplay:** Players will play a clicking game to gain the most of a resource by buying powerups/abilities.
+
+[Clicking Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/54)
+
+<img width="374" alt="Image" src="https://github.com/user-attachments/assets/0e97db56-54c2-45c0-8384-44c91049ed1e" />
+
+---
+
+### **This Issue**
+- We will add this issue onto our website for other users to see how we designed everything for our website.
