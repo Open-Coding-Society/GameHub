@@ -1,11 +1,3 @@
----
-layout: base
-title: Slot Machine
-description: A Slot machine game inside of the brain
-permalink: /slot
-Author: Ian
----
-
 <!-- Bootstrap CDN -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -90,10 +82,46 @@ Author: Ian
     font-weight: 500;
     color: #66ffcc;
   }
+
+  /* Objective text styling */
+  .game-objective {
+    font-size: 18px;
+    color: #ffcc00;
+    font-weight: bold;
+    margin-bottom: 15px;
+    opacity: 1;
+    transition: opacity 0.25s ease;
+  }
+
+  /* Section titles */
+  .upgrade-section {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e5e5e5;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  /* Button customization for upgrades */
+  .btn-upgrade {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Highlight for the blood transfusion */
+  .btn-blood-transfusion {
+    background-color: #f1c40f;
+    color: #000;
+  }
+
+  .btn-blood-transfusion:hover {
+    background-color: #f39c12;
+  }
 </style>
 
 <div class="slot-container">
   <h2 class="mb-4">🧬 Blood Cell Slot Machine</h2>
+  <div class="game-objective" id="gameObjective">Objective: Spin the reels and win blood cells! Get up to 1,000,000 to WIN!!!</div>
   <div class="balance">Blood Cells: <span id="balance">100</span></div>
   <div class="reel-box my-4">
     <div class="reel" id="reel1">?</div>
@@ -102,11 +130,20 @@ Author: Ian
   </div>
   <button class="btn btn-spin" id="spinBtn" onclick="spin()">Spin 🎯 (-5)</button>
   <div class="result" id="result"></div>
+  
   <!-- Upgrade Buttons -->
   <div class="d-flex flex-column gap-2 mt-3">
-    <button class="btn btn-outline-success" onclick="buyUpgrade('speed')">🧠 Dopamine Rush (-50)</button>
-    <button class="btn btn-outline-warning" onclick="buyUpgrade('double')">🔥 Caffeine (Double Rewards) (-1,000)</button>
-    <button class="btn btn-outline-info" onclick="buyUpgrade('tworeel')">🎯 Vita (2-Reel Mode) (-10,000)</button>
+    <div class="upgrade-section">Beneficial Upgrades</div>
+    <button class="btn btn-outline-success btn-upgrade" onclick="buyUpgrade('speed')" data-bs-toggle="tooltip" title="Spins are 2x faster.">🧠 Dopamine Rush (-50)</button>
+    <button class="btn btn-outline-warning btn-upgrade" onclick="buyUpgrade('double')" data-bs-toggle="tooltip" title="Double your rewards on winning spins.">🔥 Caffeine (Double Rewards) (-1,000)</button>
+    <button class="btn btn-outline-info btn-upgrade" onclick="buyUpgrade('tworeel')" data-bs-toggle="tooltip" title="Only need 2 matching reels to win.">🎯 Vita (2-Reel Mode) (-10,000)</button>
+
+    <div class="upgrade-section">Risky Upgrades</div>
+    <button class="btn btn-outline-primary btn-upgrade" onclick="buyUpgrade('adrenaline')" data-bs-toggle="tooltip" title="Gain +100 blood cells after every spin, but rewards are reduced by 25%.">⚡ Adrenaline Boost (-2,000)</button>
+    <button class="btn btn-outline-danger btn-upgrade" onclick="buyUpgrade('genetherapy')" data-bs-toggle="tooltip" title="Doubles chance for '7' and 'O' symbols, but spins cost 10 blood cells.">🧪 Gene Therapy (-5,000)</button>
+
+    <div class="upgrade-section">Game-Changing Risky Upgrades</div>
+    <button class="btn btn-blood-transfusion btn-upgrade" onclick="buyUpgrade('bloodTransfusion')" data-bs-toggle="tooltip" title="Take a risky chance to either win big or lose everything.">💉 Blood Transfusion (-50,000)</button>
   </div>
 </div>
 
@@ -121,7 +158,10 @@ Author: Ian
   let upgrades = {
     speed: false,
     double: false,
-    tworeel: false
+    tworeel: false,
+    adrenaline: false,
+    genetherapy: false,
+    bloodTransfusion: false
   };
 
   const balanceEl = document.getElementById("balance");
@@ -133,11 +173,16 @@ Author: Ian
   }
 
   function weightedRandomSymbol() {
-    const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
+    const customWeights = { ...weights };
+    if (upgrades.genetherapy) {
+      customWeights["7"] *= 2;
+      customWeights["O"] *= 2;
+    }
+    const totalWeight = Object.values(customWeights).reduce((a, b) => a + b, 0);
     let rand = Math.random() * totalWeight;
-    for (let symbol in weights) {
-      if (rand < weights[symbol]) return symbol;
-      rand -= weights[symbol];
+    for (let symbol in customWeights) {
+      if (rand < customWeights[symbol]) return symbol;
+      rand -= customWeights[symbol];
     }
   }
 
@@ -155,6 +200,28 @@ Author: Ian
       upgrades.tworeel = true;
       document.getElementById('reel3').style.display = 'none';
       alert("🎯 2-Reel Mode activated! You now only need 2 matching reels to win.");
+    } else if (type === 'adrenaline' && bloodCells >= 2000 && !upgrades.adrenaline) {
+      bloodCells -= 2000;
+      upgrades.adrenaline = true;
+      alert("⚡ Adrenaline Boost activated! +100 blood cells after each spin, but rewards are reduced.");
+    } else if (type === 'genetherapy' && bloodCells >= 5000 && !upgrades.genetherapy) {
+      bloodCells -= 5000;
+      upgrades.genetherapy = true;
+      alert("🧪 Gene Therapy activated! Better odds for top symbols, but spins now cost 10 blood cells.");
+    } else if (type === 'bloodTransfusion' && bloodCells >= 50000) {
+      bloodCells -= 50000;
+      upgrades.bloodTransfusion = true;
+      let outcome = Math.random();
+      if (outcome < 0.5) {
+        // Big Win
+        let bonus = Math.floor(Math.random() * 500000) + 1000000; // Huge win, between 1M and 1.5M blood cells
+        bloodCells += bonus;
+        alert(`💉 Blood Transfusion succeeded! You gained ${bonus.toLocaleString()} blood cells!`);
+      } else {
+        // Big Loss
+        bloodCells = 0;
+        alert("💉 Blood Transfusion failed! You lost everything!");
+      }
     } else {
       alert("❌ Not enough blood cells or already purchased.");
     }
@@ -162,15 +229,17 @@ Author: Ian
   }
 
   function spin() {
-    if (bloodCells <= 0) {
-      alert("❌ Game Over! You have no more blood cells.");
+    const cost = upgrades.genetherapy ? SPIN_COST + 5 : SPIN_COST;
+
+    if (bloodCells < cost) {
+      alert("❌ Not enough blood cells.");
       return;
     }
 
-    bloodCells -= SPIN_COST;
+    bloodCells -= cost;
     updateBalanceDisplay();
 
-    if (bloodCells === 1000000) {
+    if (bloodCells >= 1000000) {
       winGame();
       return;
     }
@@ -200,6 +269,12 @@ Author: Ian
           result[i] = symbol;
           if (result.filter(Boolean).length === reelCount) {
             checkWin(result);
+
+            // Adrenaline bonus
+            if (upgrades.adrenaline) {
+              bloodCells += 100;
+              updateBalanceDisplay();
+            }
           }
         }
       }, upgrades.speed ? 50 : 100);
@@ -212,10 +287,11 @@ Author: Ian
 
     if (allMatch) {
       let reward = rewardMap[symbols[0]];
+      if (upgrades.adrenaline) reward = Math.floor(reward * 0.75);
       if (upgrades.double) reward *= 2;
       bloodCells += reward;
       resultText.innerText = `JACKPOT! You won ${reward.toLocaleString()} blood cells! 💉`;
-      triggerConfetti(); // 🎉 Heavy yellow confetti
+      triggerConfetti();
     } else {
       resultText.innerText = `No win. Try again!`;
     }
@@ -224,7 +300,7 @@ Author: Ian
   }
 
   function triggerConfetti() {
-    const duration = 5000;
+    const duration = 250;  // Reduced to 0.25 seconds
     const end = Date.now() + duration;
 
     (function frame() {
@@ -242,12 +318,23 @@ Author: Ian
   }
 
   function winGame() {
-    const resultText = document.getElementById('result');
-    resultText.innerText = "🎉 YOU WIN! You've reached 1,000,000 blood cells! 🎉";
-    triggerConfetti();
-    spinBtn.disabled = true;
-    setTimeout(() => alert("You won the game! Refresh the page to play again."), 100);
+    alert("You’ve reached the maximum blood cells! Congratulations!");
+    resetGame();
   }
 
-  updateBalanceDisplay();
+  function resetGame() {
+    bloodCells = 100;
+    upgrades = {};
+    updateBalanceDisplay();
+  }
+
+  // Objective flickering effect
+  const objective = document.getElementById('gameObjective');
+  setInterval(() => {
+    if (objective.style.opacity === '1') {
+      objective.style.opacity = '0';
+    } else {
+      objective.style.opacity = '1';
+    }
+  }, 250); // Flicker every 0.25 seconds
 </script>
