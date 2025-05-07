@@ -219,22 +219,22 @@ const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
 
 const objectImages = {
-   outbreak: '{{site.baseurl}}/images/icon6.png', 
-   building: '{{site.baseurl}}/images/icon4.png',
-   editing: '{{site.baseurl}}/images/icon2.png',
-   blackjack: '{{site.baseurl}}/images/icon1.png',
-   exploration: '{{site.baseurl}}/images/icon3.png',
-   adventure: '{{site.baseurl}}/images/icon5.png',
-   pacman: '{{site.baseurl}}/images/icon10.png',
-   slot: '{{site.baseurl}}/images/icon11.png',
-   farming: '{{site.baseurl}}/images/icon12.png',
-   tennis: '{{site.baseurl}}/images/icon13.png',
-   tower: '{{site.baseurl}}/images/icon14.png',
-   clicker: '{{site.baseurl}}/images/icon15.png',
-   skin: '{{site.baseurl}}/images/icon7.png',
-   outline: '{{site.baseurl}}/images/icon8.png',
-   format: '{{site.baseurl}}/images/icon16.png',
-   aboutus: '{{site.baseurl}}/images/icon9.png'
+   outbreak: '{{site.baseurl}}/images/icon1.png', 
+   building: '{{site.baseurl}}/images/icon2.png',
+   editing: '{{site.baseurl}}/images/icon3.png',
+   blackjack: '{{site.baseurl}}/images/icon4.png',
+   exploration: '{{site.baseurl}}/images/icon5.png',
+   adventure: '{{site.baseurl}}/images/icon6.png',
+   pacman: '{{site.baseurl}}/images/icon9.png',
+   slot: '{{site.baseurl}}/images/icon10.png',
+   farming: '{{site.baseurl}}/images/icon11.png',
+   tennis: '{{site.baseurl}}/images/icon14.png',
+   tower: '{{site.baseurl}}/images/icon15.png',
+   clicker: '{{site.baseurl}}/images/icon16.png',
+   skin: '{{site.baseurl}}/images/icon17.png',
+   outline: '{{site.baseurl}}/images/icon18.png',
+   format: '{{site.baseurl}}/images/icon19.png',
+   aboutus: '{{site.baseurl}}/images/icon20.png'
 };
 
 
