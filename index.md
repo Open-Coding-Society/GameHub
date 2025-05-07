@@ -219,22 +219,22 @@ const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
 
 const objectImages = {
-  blackjack: '{{site.baseurl}}/images/icon1.png',
-  building: '{{site.baseurl}}/images/icon4.png',
-  skin: '{{site.baseurl}}/images/icon7.png',
-  editing: '{{site.baseurl}}/images/icon2.png',
-  adventure: '{{site.baseurl}}/images/icon5.png',
-  outline: '{{site.baseurl}}/images/icon8.png',
-  exploration: '{{site.baseurl}}/images/icon3.png',
-  outbreak: '{{site.baseurl}}/images/icon6.png',
-  aboutus: '{{site.baseurl}}/images/icon9.png',
-  pacman: '{{site.baseurl}}/images/icon10.png',
-  slot: '{{site.baseurl}}/images/icon11.png',
-  farming: '{{site.baseurl}}/images/icon12.png',
-  tennis: '{{site.baseurl}}/images/icon13.png',
-  tower: '{{site.baseurl}}/images/icon14.png',
-  clicker: '{{site.baseurl}}/images/icon15.png',
-  format: '{{site.baseurl}}/images/icon16.png'
+   outbreak: '{{site.baseurl}}/images/icon6.png', 
+   building: '{{site.baseurl}}/images/icon4.png',
+   editing: '{{site.baseurl}}/images/icon2.png',
+   blackjack: '{{site.baseurl}}/images/icon1.png',
+   exploration: '{{site.baseurl}}/images/icon3.png',
+   adventure: '{{site.baseurl}}/images/icon5.png',
+   pacman: '{{site.baseurl}}/images/icon10.png',
+   slot: '{{site.baseurl}}/images/icon11.png',
+   farming: '{{site.baseurl}}/images/icon12.png',
+   tennis: '{{site.baseurl}}/images/icon13.png',
+   tower: '{{site.baseurl}}/images/icon14.png',
+   clicker: '{{site.baseurl}}/images/icon15.png',
+   skin: '{{site.baseurl}}/images/icon7.png',
+   outline: '{{site.baseurl}}/images/icon8.png',
+   format: '{{site.baseurl}}/images/icon16.png',
+   aboutus: '{{site.baseurl}}/images/icon9.png'
 };
 
 
@@ -256,22 +256,22 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 100, y: 620, width: 40, height: 40, game: 'blackjack', icon: true }, // bottom 1
-  { x: 90, y: 260, width: 40, height: 40, game: 'building' }, // left 1
+  { x: 100, y: 100, width: 40, height: 40, game: 'outbreak', icon: true }, // left 1
+  { x: 100, y: 205, width: 40, height: 40, game: 'building' }, // left 2
+  { x: 100, y: 305, width: 40, height: 40, game: 'editing' }, // left 3
+  { x: 100, y: 405, width: 40, height: 40, game: 'blackjack' }, // left 4
+  { x: 100, y: 505, width: 40, height: 40, game: 'exploration' }, // left 5
+  { x: 100, y: 620, width: 40, height: 40, game: 'adventure' }, // left 6
+  { x: 395, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
+  { x: 515, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
+  { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
+  { x: 395, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
+  { x: 520, y: 620, width: 40, height: 40, game: 'tower' }, //bottom 4
+  { x: 630, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 5
   { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 100, y: 450, width: 40, height: 40, game: 'editing' }, // left 2
-  { x: 225, y: 620, width: 40, height: 40, game: 'adventure' }, // bottom 2
   { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // right 2
-  { x: 225, y: 100, width: 40, height: 40, game: 'exploration' }, // top 2
-  { x: 100, y: 100, width: 40, height: 40, game: 'outbreak' }, // top 1
-  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' }, // right 4
-  { x: 350, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
-  { x: 475, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
-  { x: 600, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
-  { x: 350, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
-  { x: 475, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 4
   { x: 810, y: 495, width: 40, height: 40, game: 'format' }, // right 3
-  { x: 600, y: 620, width: 40, height: 40, game: 'clicker' }  // bottom 5
+  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' } // right 4
 ];
 
 const walls = [
@@ -439,8 +439,8 @@ function draw() {
         scaledWidth *= 1.7;
         scaledHeight *= 1.7;
       } else if (obj.game === 'building') { 
-        scaledWidth *= 0.8;
-        scaledHeight *= 0.8;
+        scaledWidth *= 0.7;
+        scaledHeight *= 0.7;
       } else if (obj.game === 'pacman') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
