@@ -270,16 +270,25 @@ const objects = [
   { x: 100, y: 405, width: 40, height: 40, game: 'blackjack' }, // left 4
   { x: 100, y: 505, width: 40, height: 40, game: 'exploration' }, // left 5
   { x: 100, y: 620, width: 40, height: 40, game: 'adventure' }, // left 6
-  { x: 415, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
-  { x: 520, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
-  { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
-  { x: 415, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
-  { x: 520, y: 620, width: 40, height: 40, game: 'tower' }, //bottom 4
-  { x: 610, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 5
+  { x: 175, y: 100, width: 40, height: 40, game: 'racing' }, // top 1
+  { x: 250, y: 100, width: 40, height: 40, game: 'party' }, // top 2
+  { x: 305, y: 100, width: 40, height: 40, game: 'puzzle' }, // top 3
+  { x: 415, y: 100, width: 40, height: 40, game: 'pacman' }, // top 4
+  { x: 520, y: 100, width: 40, height: 40, game: 'slot' }, // top 5
+  { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
+  { x: 675, y: 200, width: 40, height: 40, game: 'battle' }, // top 7
+  { x: 800, y: 300, width: 40, height: 40, game: 'tests' }, // top 8
+  { x: 175, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
+  { x: 250, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
+  { x: 305, y: 620, width: 40, height: 40, game: 'simulation' }, // bottom 3
+  { x: 415, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 4
+  { x: 520, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 5
+  { x: 610, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 6
   { x: 675, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 2
-  { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 3
-  { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' } // right 4
+  { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' }, // right 2
+  { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 3
+  { x: 820, y: 660, width: 40, height: 40, game: 'format' } // right 4
+  
 ];
 
 const walls = [
@@ -397,6 +406,30 @@ function update() {
         case 'format':
           window.location.href = '{{site.baseurl}}/format';
           break;  
+        case 'racing':
+          window.location.href = '{{site.baseurl}}/racing';
+          break;
+        case 'party':
+          window.location.href = '{{site.baseurl}}/party';
+          break; 
+        case 'puzzle':
+          window.location.href = '{{site.baseurl}}/puzzle';
+          break;
+        case 'battle':
+          window.location.href = '{{site.baseurl}}/battle';
+          break;
+        case 'tests':
+          window.location.href = '{{site.baseurl}}/tests';
+          break;
+        case 'strategy':
+          window.location.href = '{{site.baseurl}}/strategy';
+          break;
+        case 'survive':
+          window.location.href = '{{site.baseurl}}/survive';
+          break;
+        case 'simulation':
+          window.location.href = '{{site.baseurl}}/simulation';
+          break;                       
         case 'clicker':
           window.location.href = '{{site.baseurl}}/clicker';
           break;
