@@ -219,30 +219,30 @@ const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
 
 const objectImages = {
-   outbreak: '{{site.baseurl}}/images/icon1.png', 
-   building: '{{site.baseurl}}/images/icon2.png',
-   editing: '{{site.baseurl}}/images/icon3.png',
-   blackjack: '{{site.baseurl}}/images/icon4.png',
-   exploration: '{{site.baseurl}}/images/icon5.png',
-   adventure: '{{site.baseurl}}/images/icon6.png',
-   racing: '{{site.baseurl}}/images/icon7.png',
-   party: '{{site.baseurl}}/images/icon8.png',
-   puzzle: '{{site.baseurl}}/images/icon9.png',
-   pacman: '{{site.baseurl}}/images/icon10.png',
-   slot: '{{site.baseurl}}/images/icon11.png',
-   farming: '{{site.baseurl}}/images/icon12.png',
-   battle: '{{site.baseurl}}/images/icon13.png',
-   tests: '{{site.baseurl}}/images/icon14.png',
-   strategy: '{{site.baseurl}}/images/icon15.png',
-   survive: '{{site.baseurl}}/images/icon16.png',
-   simulation: '{{site.baseurl}}/images/icon17.png',
-   tennis: '{{site.baseurl}}/images/icon18.png',
-   tower: '{{site.baseurl}}/images/icon19.png',
-   clicker: '{{site.baseurl}}/images/icon20.png',
-   skin: '{{site.baseurl}}/images/icon21.png',
-   outline: '{{site.baseurl}}/images/icon22.png',
-   format: '{{site.baseurl}}/images/icon23.png',
-   aboutus: '{{site.baseurl}}/images/icon24.png' 
+   outbreak: '{{site.baseurl}}/images/icon1.png', // left 1
+   building: '{{site.baseurl}}/images/icon2.png', // left 2
+   editing: '{{site.baseurl}}/images/icon3.png', // left 3
+   blackjack: '{{site.baseurl}}/images/icon4.png', // left 4
+   exploration: '{{site.baseurl}}/images/icon5.png', // left 5
+   adventure: '{{site.baseurl}}/images/icon6.png', // left 6
+   racing: '{{site.baseurl}}/images/icon7.png', // top 1
+   party: '{{site.baseurl}}/images/icon8.png', // top 2
+   puzzle: '{{site.baseurl}}/images/icon9.png', // top 3
+   pacman: '{{site.baseurl}}/images/icon10.png', // top 4
+   slot: '{{site.baseurl}}/images/icon11.png', // top 5
+   farming: '{{site.baseurl}}/images/icon12.png', // top 6
+   battle: '{{site.baseurl}}/images/icon13.png', // top 7
+   tests: '{{site.baseurl}}/images/icon14.png', // top 8
+   strategy: '{{site.baseurl}}/images/icon15.png', // bottom 1
+   survive: '{{site.baseurl}}/images/icon16.png', // bottom 2
+   simulation: '{{site.baseurl}}/images/icon17.png', // bottom 3
+   tennis: '{{site.baseurl}}/images/icon18.png', // bottom 4
+   tower: '{{site.baseurl}}/images/icon19.png', // bottom 5
+   clicker: '{{site.baseurl}}/images/icon20.png', // bottom 6
+   skin: '{{site.baseurl}}/images/icon21.png', // right 1
+   aboutus: '{{site.baseurl}}/images/icon22.png' // right 2
+   outline: '{{site.baseurl}}/images/icon23.png', // right 3
+   format: '{{site.baseurl}}/images/icon24.png', // right 4
 };
 
 
