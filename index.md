@@ -1,7 +1,11 @@
 ---
 layout: post
-title: GenomeGamers Minigames
-description: Move your character around with WASD to enter different minigames and experiences on this map. Click Genome Gamers in the top left to go back to the home page.
+title: Genome Gamers Minigames
+description: >
+  <div style="text-align: center;">
+    Move your character around with WASD to enter different minigames and experiences on this map.<br>
+    Click Genome Gamers in the top left to go back to the home page.
+  </div>
 Author: Lars, Zach & Aarush
 ---
 
@@ -101,7 +105,7 @@ Author: Lars, Zach & Aarush
     grid-template-rows: repeat(2, 1fr); 
     gap: 40px; 
     justify-content: center;
-    align-items: center;
+    align-items: center.
   }
   .skin-option {
     position: relative; 
