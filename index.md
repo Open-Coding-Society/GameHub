@@ -262,16 +262,16 @@ const objects = [
   { x: 100, y: 405, width: 40, height: 40, game: 'blackjack' }, // left 4
   { x: 100, y: 505, width: 40, height: 40, game: 'exploration' }, // left 5
   { x: 100, y: 620, width: 40, height: 40, game: 'adventure' }, // left 6
-  { x: 395, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
-  { x: 515, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
+  { x: 415, y: 100, width: 40, height: 40, game: 'pacman' }, // top 3
+  { x: 520, y: 100, width: 40, height: 40, game: 'slot' }, // top 4
   { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 5
-  { x: 395, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
+  { x: 415, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 3
   { x: 520, y: 620, width: 40, height: 40, game: 'tower' }, //bottom 4
-  { x: 630, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 5
-  { x: 755, y: 250, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 735, y: 410, width: 40, height: 40, game: 'outline' }, // right 2
-  { x: 810, y: 495, width: 40, height: 40, game: 'format' }, // right 3
-  { x: 735, y: 585, width: 40, height: 40, game: 'aboutus' } // right 4
+  { x: 610, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 5
+  { x: 670, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
+  { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 2
+  { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 3
+  { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' } // right 4
 ];
 
 const walls = [
@@ -290,7 +290,7 @@ const walls = [
   { x: 0, y: 0, width: 75, height: 720 }, 
   { x: 0, y: 0, width: 960, height: 75 }, 
   { x: 885, y: 0, width: 75, height: 720 }, 
-  { x: 0, y: 670, width: 960, height: 50 },
+  { x: 0, y: 670, width: 690, height: 50 },
 ];
 
 const borderThickness = 10;
@@ -301,7 +301,7 @@ walls.push(
 { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
 );
 
-const topRightBox = { x: 755, y: 250, width: 40, height: 40 }; 
+const topRightBox = { x: 670, y: 500, width: 40, height: 40 }; 
 const skinModal = document.getElementById('skin-modal');
 const closeModal = document.getElementById('close-modal');
 const confirmButton = document.getElementById('confirm-button');
@@ -436,8 +436,8 @@ function draw() {
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
       } else if (obj.game === 'outline') { 
-        scaledWidth *= 1.7;
-        scaledHeight *= 1.7;
+        scaledWidth *= 1.8;
+        scaledHeight *= 1.8;
       } else if (obj.game === 'building') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;
