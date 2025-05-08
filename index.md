@@ -286,7 +286,6 @@ const walls = [
   { x: 800, y: 570, width: 25, height: 55 },
   { x: 755, y: 180, width: 25, height: 55 },
   { x: 675, y: 80, width: 250, height: 55 },
-  { x: 770, y: 200, width: 40, height: 40 },
   { x: 0, y: 0, width: 75, height: 720 }, 
   { x: 0, y: 0, width: 960, height: 75 }, 
   { x: 885, y: 0, width: 75, height: 720 }, 
