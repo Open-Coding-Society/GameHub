@@ -234,7 +234,15 @@ const objectImages = {
    skin: '{{site.baseurl}}/images/icon17.png',
    outline: '{{site.baseurl}}/images/icon18.png',
    format: '{{site.baseurl}}/images/icon19.png',
-   aboutus: '{{site.baseurl}}/images/icon20.png'
+   aboutus: '{{site.baseurl}}/images/icon20.png',
+   strategy: '{{site.baseurl}}/images/icon21.png', 
+   battle: '{{site.baseurl}}/images/icon22.png',
+   tests: '{{site.baseurl}}/images/icon23.png',
+   racing: '{{site.baseurl}}/images/icon24.png',
+   party: '{{site.baseurl}}/images/icon25.png',
+   simulation: '{{site.baseurl}}/images/icon26.png',
+   survive: '{{site.baseurl}}/images/icon27.png',
+   puzzle: '{{site.baseurl}}/images/icon28.png'
 };
 
 
