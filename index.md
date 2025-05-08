@@ -240,9 +240,9 @@ const objectImages = {
    tower: '{{site.baseurl}}/images/icon19.png', // bottom 5
    clicker: '{{site.baseurl}}/images/icon20.png', // bottom 6
    skin: '{{site.baseurl}}/images/icon21.png', // right 1
-   aboutus: '{{site.baseurl}}/images/icon22.png' // right 2
+   aboutus: '{{site.baseurl}}/images/icon22.png', // right 2
    outline: '{{site.baseurl}}/images/icon23.png', // right 3
-   format: '{{site.baseurl}}/images/icon24.png', // right 4
+   format: '{{site.baseurl}}/images/icon24.png' // right 4
 };
 
 
