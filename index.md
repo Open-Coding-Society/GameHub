@@ -237,16 +237,17 @@ const objectImages = {
    farming: '{{site.baseurl}}/images/icon12.png', // top 6
    battle: '{{site.baseurl}}/images/icon13.png', // top 7
    tests: '{{site.baseurl}}/images/icon14.png', // top 8
-   strategy: '{{site.baseurl}}/images/icon15.png', // bottom 1
-   survive: '{{site.baseurl}}/images/icon16.png', // bottom 2
-   simulation: '{{site.baseurl}}/images/icon17.png', // bottom 3
-   tennis: '{{site.baseurl}}/images/icon18.png', // bottom 4
-   tower: '{{site.baseurl}}/images/icon19.png', // bottom 5
-   clicker: '{{site.baseurl}}/images/icon20.png', // bottom 6
-   skin: '{{site.baseurl}}/images/icon21.png', // right 1
-   aboutus: '{{site.baseurl}}/images/icon22.png', // right 2
-   outline: '{{site.baseurl}}/images/icon23.png', // right 3
-   format: '{{site.baseurl}}/images/icon24.png' // right 4
+   stealth: '{{site.baseurl}}/images/icon15.png', // top 9
+   strategy: '{{site.baseurl}}/images/icon16.png', // bottom 1
+   survive: '{{site.baseurl}}/images/icon17.png', // bottom 2
+   simulation: '{{site.baseurl}}/images/icon18.png', // bottom 3
+   tennis: '{{site.baseurl}}/images/icon19.png', // bottom 4
+   tower: '{{site.baseurl}}/images/icon20.png', // bottom 5
+   clicker: '{{site.baseurl}}/images/icon21.png', // bottom 6
+   skin: '{{site.baseurl}}/images/icon22.png', // right 1
+   aboutus: '{{site.baseurl}}/images/icon23.png', // right 2
+   outline: '{{site.baseurl}}/images/icon24.png', // right 3
+   format: '{{site.baseurl}}/images/icon25.png' // right 4
 };
 
 
@@ -281,7 +282,8 @@ const objects = [
   { x: 540, y: 100, width: 40, height: 40, game: 'slot' }, // top 5
   { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
   { x: 700, y: 195, width: 40, height: 40, game: 'battle' }, // top 7
-  { x: 800, y: 290, width: 40, height: 40, game: 'tests' }, // top 8
+  { x: 805, y: 195, width: 40, height: 40, game: 'tests' }, // top 8
+  { x: 810, y: 330, width: 40, height: 40, game: 'stealth' }, // top 9
   { x: 185, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
   { x: 270, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
   { x: 355, y: 620, width: 40, height: 40, game: 'simulation' }, // bottom 3
@@ -307,7 +309,6 @@ const walls = [
   { x: 800, y: 570, width: 25, height: 55 },
   { x: 755, y: 180, width: 25, height: 55 },
   { x: 675, y: 80, width: 250, height: 55 },
-  { x: 770, y: 200, width: 40, height: 40 },
   { x: 0, y: 0, width: 75, height: 720 }, 
   { x: 0, y: 0, width: 960, height: 75 }, 
   { x: 885, y: 0, width: 75, height: 720 }, 
@@ -425,6 +426,9 @@ function update() {
         case 'tests':
           window.location.href = '{{site.baseurl}}/tests';
           break;
+        case 'stealth':
+          window.location.href = '{{site.baseurl}}/stealth';
+          break;  
         case 'strategy':
           window.location.href = '{{site.baseurl}}/strategy';
           break;
@@ -510,6 +514,9 @@ function draw() {
       } else if (obj.game === 'puzzle') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
+      } else if (obj.game === 'stealth') { 
+        scaledWidth *= 0.6;
+        scaledHeight *= 0.6;  
       } else if (obj.game === 'battle') { 
         scaledWidth *= 0.5;
         scaledHeight *= 0.5;
@@ -519,6 +526,9 @@ function draw() {
       } else if (obj.game === 'survive') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;  
+      } else if (obj.game === 'tests') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;   
       } else if (obj.game === 'simulation') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;       
