@@ -7,7 +7,7 @@ Author: Zach
 ---
 
 # GenomeGamers
-These new 14 games we will add to the 6 already implemented biotech related games.
+These new 15 games we will add to the 6 already implemented biotech related games.
 
 ### GenomeGamers Frontend & Backend Repositories
 - [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
@@ -32,7 +32,7 @@ Main source is using our already implemented website with the biotech games and 
 - We will add this issue onto our website for other users to see how we designed everything for our website.
 - We will add points to every game and deploy which would allow the user to not need to run the backend to receive them.
 
-<img width="709" alt="Image" src="https://github.com/user-attachments/assets/1315b8c6-b13c-4955-b516-8dec0e1b1e2e" />
+<img width="705" alt="Image" src="https://github.com/user-attachments/assets/c1ea60f8-89de-446f-b7ce-905dc9e4f9c6" />
 
 ### Objective
 - **Make new entertaining and engaging games** 
@@ -142,7 +142,16 @@ Main source is using our already implemented website with the biotech games and 
 
 ---
 
-### **12. Strategy Game**  
+### **12. Stealth Game**  
+- **Gameplay:** Players try to be sneaky and get past guards and troops without being caught.
+
+[Stealth Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/75)
+
+![Image](https://github.com/user-attachments/assets/c8d2a216-8c29-4026-971f-27e5c2c87a23)
+
+--- 
+
+### **13. Strategy Game**  
 - **Gameplay:** Players play a strategy game to break blocks and progress levels.
 
 [Strategy Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/71)
@@ -151,7 +160,7 @@ Main source is using our already implemented website with the biotech games and 
 
 ---
 
-### **13. Survive Game**  
+### **14. Survive Game**  
 - **Gameplay:** Players play a survival game to kill mobs and enemies.
 
 [Survive Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/72)
@@ -160,7 +169,7 @@ Main source is using our already implemented website with the biotech games and 
 
 ---
 
-### **14. Simulation Game**  
+### **15. Simulation Game**  
 - **Gameplay:** Players play a simulation game to collect resources and build a civilization.
 
 [Simulation Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/73)
