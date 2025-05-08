@@ -280,7 +280,7 @@ const objects = [
   { x: 460, y: 100, width: 40, height: 40, game: 'pacman' }, // top 4
   { x: 540, y: 100, width: 40, height: 40, game: 'slot' }, // top 5
   { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
-  { x: 690, y: 200, width: 40, height: 40, game: 'battle' }, // top 7
+  { x: 700, y: 195, width: 40, height: 40, game: 'battle' }, // top 7
   { x: 800, y: 290, width: 40, height: 40, game: 'tests' }, // top 8
   { x: 185, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
   { x: 270, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
@@ -511,8 +511,8 @@ function draw() {
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
       } else if (obj.game === 'battle') { 
-        scaledWidth *= 0.6;
-        scaledHeight *= 0.6;
+        scaledWidth *= 0.5;
+        scaledHeight *= 0.5;
       } else if (obj.game === 'strategy') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;    
