@@ -113,8 +113,9 @@ h2 {
 <div class="info">
   <p id="score">Score: 0</p>
   <p id="timer">Time: 0s</p>
-  <p id="victory">You Win!</p>
 </div>
+<p id="victory">You Win!</p>
+
 
 <canvas id="gameCanvas"></canvas>
 </div>
