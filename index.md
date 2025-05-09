@@ -247,7 +247,10 @@ const objectImages = {
    skin: '{{site.baseurl}}/images/icon22.png', // right 1
    aboutus: '{{site.baseurl}}/images/icon23.png', // right 2
    outline: '{{site.baseurl}}/images/icon24.png', // right 3
-   format: '{{site.baseurl}}/images/icon25.png' // right 4
+   format: '{{site.baseurl}}/images/icon25.png', // right 4
+   jump: '{{site.baseurl}}/images/icon26.png', // middle 1
+   pack: '{{site.baseurl}}/images/icon27.png', // middle 2
+   skirmish: '{{site.baseurl}}/images/icon28.png' // middle 3
 };
 
 
@@ -293,9 +296,11 @@ const objects = [
   { x: 675, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
   { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' }, // right 2
   { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 3
-  { x: 820, y: 660, width: 40, height: 40, game: 'format' } // right 4
-  
-];
+  { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 4
+  { x: 280, y: 360, width: 40, height: 40, game: 'jump' }, // middle 1
+  { x: 540, y: 360, width: 40, height: 40, game: 'pack' }, // middle 2
+  { x: 415, y: 450, width: 40, height: 40, game: 'skirmish' } // middle 3
+  ];
 
 const walls = [
   { x: 270, y: 250, width: 25, height: 55 },
@@ -435,6 +440,15 @@ function update() {
         case 'survive':
           window.location.href = '{{site.baseurl}}/survive';
           break;
+        case 'jump':
+          window.location.href = '{{site.baseurl}}/jump';
+          break;
+        case 'pack':
+          window.location.href = '{{site.baseurl}}/pack';
+          break;
+        case 'skirmish':
+          window.location.href = '{{site.baseurl}}/skirmish';
+          break;      
         case 'simulation':
           window.location.href = '{{site.baseurl}}/simulation';
           break;                       
@@ -528,7 +542,16 @@ function draw() {
         scaledHeight *= 0.7;  
       } else if (obj.game === 'tests') { 
         scaledWidth *= 0.8;
-        scaledHeight *= 0.8;   
+        scaledHeight *= 0.8; 
+      } else if (obj.game === 'jump') { 
+        scaledWidth *= 0.7;
+        scaledHeight *= 0.7;  
+      } else if (obj.game === 'pack') { 
+        scaledWidth *= 0.6;
+        scaledHeight *= 0.6;
+      } else if (obj.game === 'skirmish') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;            
       } else if (obj.game === 'simulation') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;       

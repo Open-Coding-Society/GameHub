@@ -7,7 +7,7 @@ Author: Zach
 ---
 
 # GenomeGamers
-These new 15 games we will add to the 6 already implemented biotech related games.
+These new 18 games we will add to the 6 already implemented biotech related games to make 24 total.
 
 ### GenomeGamers Frontend & Backend Repositories
 - [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
@@ -32,7 +32,7 @@ Main source is using our already implemented website with the biotech games and 
 - We will add this issue onto our website for other users to see how we designed everything for our website.
 - We will add points to every game and deploy which would allow the user to not need to run the backend to receive them.
 
-<img width="705" alt="Image" src="https://github.com/user-attachments/assets/c1ea60f8-89de-446f-b7ce-905dc9e4f9c6" />
+<img width="704" alt="Image" src="https://github.com/user-attachments/assets/d24aeb59-6ea3-429f-a178-ee89e5739119" />
 
 ### Objective
 - **Make new entertaining and engaging games** 
@@ -175,3 +175,30 @@ Main source is using our already implemented website with the biotech games and 
 [Simulation Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/73)
 
 ![Image](https://github.com/user-attachments/assets/59880bb0-6b74-44ce-92a3-f54e25eb880e)
+
+---
+
+### **16. Jump Game**  
+- **Gameplay:** Players play a jumping game where they jump and dodge obstacles to make it to the end of a course.
+
+[Jump Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/77)
+
+![Image](https://github.com/user-attachments/assets/06e8e9db-e87b-424e-890d-e5ccc17f55bd)
+
+---
+
+### **17. Pack Game**  
+- **Gameplay:** Players play a pack game where the user opens packs to collect rewards and resources.
+
+[Pack Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/79)
+
+![Image](https://github.com/user-attachments/assets/e683aa98-6527-430b-ac0b-e83006f2ac88)
+
+---
+
+### **18. Skirmish Game**  
+- **Gameplay:** Players play a skirmish 5v5 game to eliminate the other team.
+
+[Skirmish Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/81)
+
+![Image](https://github.com/user-attachments/assets/f539be97-e772-452e-ba62-a93ff64b2bb2)
