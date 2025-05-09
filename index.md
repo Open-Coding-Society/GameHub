@@ -11,11 +11,14 @@ Author: Lars, Zach & Aarush
 
 <style>
   body {
+    background-image: url('{{site.baseurl}}/images/homebackground.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
     margin: 0;
-    font-family: sans-serif;
-    text-align: center;
-    background: #111;
-    color: #fff;
+    padding: 0;
   }
   h1 {
     margin-top: 20px;
