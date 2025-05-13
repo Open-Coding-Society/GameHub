@@ -1,9 +1,9 @@
-title: Genome Gamers
+title: Game Hub
 description: "Pilot City Project: A platform for gamers to share their experiences and connect with others."
 owner_name: Pradyun Gowda
 github_username: Prad-coder
 github_repo: "GenomeGamersFrontend" 
-baseurl: "/GenomeGamersFrontend"
+baseurl: "/gamehub"
 future: true
 remote_theme: jekyll/minima
 minima:

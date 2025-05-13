@@ -6,7 +6,7 @@ permalink: /aboutus
 Author: Zach
 ---
 
-## Welcome to GenomeGamers About Page 
+## Welcome to Game Hub About Page 
 
 <style>
     * {
@@ -136,6 +136,6 @@ Author: Zach
 </div>
 
 <div class="footer-text">
-    <p>&copy; 2025 GenomeGamers Minigames. Designed and developed by <a href="#">Pradyun, Zach, Lars, Ian, Darsh, Aarush</a>.</p>
+    <p>&copy; 2025 Game Hub Minigames. Designed and developed by <a href="#">Pradyun, Zach, Lars, Ian, Darsh, Aarush</a>.</p>
 </div>
 

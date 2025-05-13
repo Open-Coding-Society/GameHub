@@ -9,7 +9,7 @@ Author: Everyone
 # Pilot City Project Minigames
 This is an adventure game with numerous interactions to simulate and address real-life concerns in the field of Biotechnology. Moreover, this game highlights the numerous achievements that the Scripps Research Institute has accomplished. 
 
-### GenomeGamers Frontend & Backend Repositories
+### Game Hub Frontend & Backend Repositories
 - [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
 - [Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
 

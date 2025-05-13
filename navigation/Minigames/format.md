@@ -6,10 +6,10 @@ permalink: /format
 Author: Zach
 ---
 
-# GenomeGamers
+# Game Hub
 These new 18 games we will add to the 6 already implemented biotech related games to make 24 total.
 
-### GenomeGamers Frontend & Backend Repositories
+### Game Hub Frontend & Backend Repositories
 - [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
 - [Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
 

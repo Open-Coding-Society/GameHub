@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Genome Gamers Minigames
+title: Game Hub
 description: >
-  <div style="text-align: center;">
+  <div style="text-align: center; font-family: 'Open Sans', sans-serif;">
     Move your character around with WASD to enter different minigames and experiences on this map.<br>
-    Click Genome Gamers in the top left to go back to the home page.
+    Click Game Hub in the top left to go back to the home page.
   </div>
 Author: Lars, Zach & Aarush
 ---
@@ -22,6 +22,7 @@ Author: Lars, Zach & Aarush
   }
   h1 {
     margin-top: 20px;
+    font-family: 'Open Sans', sans-serif;
   }
   #loading {
     font-size: 1.2em;
