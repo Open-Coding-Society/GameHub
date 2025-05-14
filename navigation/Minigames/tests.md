@@ -15,7 +15,7 @@ Author: Ian
       <a href="{{site.baseurl}}/aim" class="text-decoration-none">
         <div class="card game-card h-100 p-4 text-start">
           <h4 class="text-success">🎯 Aim Trainer</h4>
-          <p class="text-light">Test how quickly and accurately you can click targets.</p>
+          <p class="text-dark">Test how quickly and accurately you can click targets.</p>
         </div>
       </a>
     </div>
@@ -23,7 +23,7 @@ Author: Ian
       <a href="{{site.baseurl}}/number" class="text-decoration-none">
         <div class="card game-card h-100 p-4 text-start">
           <h4 class="text-success">🔢 Number Memory</h4>
-          <p class="text-light">Remember and repeat numbers that get longer each round.</p>
+          <p class="text-dark">Remember and repeat numbers that get longer each round.</p>
         </div>
       </a>
     </div>
@@ -31,7 +31,7 @@ Author: Ian
       <a href="{{site.baseurl}}/reaction" class="text-decoration-none">
         <div class="card game-card h-100 p-4 text-start">
           <h4 class="text-success">⚡ Reaction Time</h4>
-          <p class="text-light">Measure how fast you can respond to visual signals.</p>
+          <p class="text-dark">Measure how fast you can respond to visual signals.</p>
         </div>
       </a>
     </div>
@@ -39,7 +39,7 @@ Author: Ian
       <a href="{{site.baseurl}}/sequence" class="text-decoration-none">
         <div class="card game-card h-100 p-4 text-start">
           <h4 class="text-success">🔁 Sequence Memory</h4>
-          <p class="text-light">Repeat the visual sequence as it grows longer each round.</p>
+          <p class="text-dark">Repeat the visual sequence as it grows longer each round.</p>
         </div>
       </a>
     </div>
@@ -47,7 +47,15 @@ Author: Ian
       <a href="{{site.baseurl}}/typing" class="text-decoration-none">
         <div class="card game-card h-100 p-4 text-start">
           <h4 class="text-success">⌨️ Typing Test</h4>
-          <p class="text-light">Type a sentence as fast and accurately as possible.</p>
+          <p class="text-dark">Type a sentence as fast and accurately as possible.</p>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="{{site.baseurl}}/memory" class="text-decoration-none">
+        <div class="card game-card h-100 p-4 text-start">
+          <h4 class="text-success">🧩 Visual Memory</h4>
+          <p class="text-dark">Test your ability to remember and identify visual patterns.</p>
         </div>
       </a>
     </div>
@@ -60,6 +68,7 @@ Author: Ian
     border: 1px solid #30363d;
     border-radius: 1rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%; /* Ensure consistent height */
   }
 
   .game-card:hover {
