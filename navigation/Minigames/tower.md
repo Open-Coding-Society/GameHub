@@ -6,9 +6,7 @@ permalink: /tower
 Author: Ian
 ---
 
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial="1.0">
 <title>Bunker Defense - Tower Defense Game</title>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
