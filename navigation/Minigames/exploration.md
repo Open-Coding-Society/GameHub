@@ -12,6 +12,7 @@ Author: Zach & Darsh
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
   }
 </style>
 
@@ -222,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
     zIndex: '1000'
   });
   const iconImage = document.createElement('img');
-  iconImage.src = '{{ site.baseurl }}/images/icon3.png';
+  iconImage.src = '{{ site.baseurl }}/images/icon5.png';
   iconImage.alt = 'Icon';
   iconImage.style.width = '250px'; // 5x original width
   iconImage.style.height = '250px'; // 5x original height
