@@ -30,29 +30,35 @@ Author: Aarush
   const canvas = document.getElementById('pacmanCanvas');
   const ctx = canvas.getContext('2d');
 
-  const tileSize = 32; // Increased tile size for larger game elements
-  const rows = canvas.height / tileSize;
-  const cols = canvas.width / tileSize;
+  const tileSize = 32; // Use the current tile size
+  const rows = Math.floor(canvas.height / tileSize); // 960/32 = 30
+  const cols = Math.floor(canvas.width / tileSize);  // 896/32 = 28
 
-  const maze = [
-    // 0 = wall, 1 = pellet, 2 = empty space
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ];
+  // Fill the maze with a border of walls and pellets inside
+  const maze = [];
+  for (let r = 0; r < rows; r++) {
+    const row = [];
+    for (let c = 0; c < cols; c++) {
+      if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) {
+        row.push(0); // wall
+      } else if ((r % 4 === 0 && c % 4 === 0) || (r % 6 === 0 && c % 6 === 0)) {
+        row.push(0); // add some internal walls for interest
+      } else {
+        row.push(1); // pellet
+      }
+    }
+    maze.push(row);
+  }
 
   const pacman = { x: 1, y: 1, dx: 0, dy: 0 };
   const ghosts = [
-    { x: 12, y: 10, dx: 1, dy: 0, color: 'red' },
-    { x: 14, y: 10, dx: -1, dy: 0, color: 'pink' },
-    { x: 16, y: 12, dx: 0, dy: 1, color: 'cyan' },
-    { x: 18, y: 12, dx: 0, dy: -1, color: 'orange' },
+    { x: Math.floor(cols / 2), y: Math.floor(rows / 2), dx: 1, dy: 0, color: 'red' },
+    { x: Math.floor(cols / 2) + 2, y: Math.floor(rows / 2), dx: -1, dy: 0, color: 'pink' },
+    { x: Math.floor(cols / 2), y: Math.floor(rows / 2) + 2, dx: 0, dy: 1, color: 'cyan' },
+    { x: Math.floor(cols / 2), y: Math.floor(rows / 2) - 2, dx: 0, dy: -1, color: 'orange' },
   ];
 
-  let pacmanDirection = 'right'; // Tracks the current direction of Pacman
+  let pacmanDirection = 'right';
 
   function drawMaze() {
     for (let row = 0; row < maze.length; row++) {
@@ -66,7 +72,7 @@ Author: Aarush
           ctx.arc(
             col * tileSize + tileSize / 2,
             row * tileSize + tileSize / 2,
-            tileSize / 6,
+            tileSize / 8,
             0,
             Math.PI * 2
           );
@@ -170,8 +176,8 @@ Author: Aarush
     pacman.dy = 0;
     pacmanDirection = 'right';
     ghosts.forEach((ghost, index) => {
-      ghost.x = 12 + index * 2;
-      ghost.y = 10;
+      ghost.x = Math.floor(cols / 2) + index * 2;
+      ghost.y = Math.floor(rows / 2);
     });
   }
 
