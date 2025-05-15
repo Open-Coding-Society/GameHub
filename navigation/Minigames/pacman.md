@@ -283,16 +283,16 @@ Author: Aarush
     if (!force && now - lastPacmanMove < pacmanMoveInterval) return;
     lastPacmanMove = now;
 
-    // Handle direction change before moving
+    // Try to change direction if possible, even while moving
     if (desiredDirection) {
       const testX = pacman.x + desiredDirection.dx;
       const testY = pacman.y + desiredDirection.dy;
-      if (maze[testY][testX] !== 0 && pacmanAnimStep === 0) {
+      // Allow direction change if the next tile in the desired direction is open and Pacman is aligned to the grid
+      if (pacmanAnimStep === 0 && maze[testY][testX] !== 0) {
         pacman.dx = desiredDirection.dx;
         pacman.dy = desiredDirection.dy;
         pacmanDirection = desiredDirection.dir;
       }
-      // Always clear after processing
       desiredDirection = null;
     }
 
@@ -443,20 +443,20 @@ Author: Aarush
     }
     if (gameOver) return;
     if (!gameStarted) return;
-    switch (e.key) {
-      case 'ArrowUp':
+    // Always set desired direction on key press
+    switch (e.key.toLowerCase()) {
+      case 'w':
         desiredDirection = { dx: 0, dy: -1, dir: 'up' };
         break;
-      case 'ArrowDown':
+      case 's':
         desiredDirection = { dx: 0, dy: 1, dir: 'down' };
         break;
-      case 'ArrowLeft':
+      case 'a':
         desiredDirection = { dx: -1, dy: 0, dir: 'left' };
         break;
-      case 'ArrowRight':
+      case 'd':
         desiredDirection = { dx: 1, dy: 0, dir: 'right' };
         break;
-      case 'Shift':
       case 'shift':
         if (pacman.dx !== 0 || pacman.dy !== 0) {
           bullets.push({
