@@ -435,6 +435,7 @@ Author: Aarush
     document.getElementById('difficulty').disabled = true;
     startGame();
   });
+  let currentDirection = { dx: 0, dy: 0, dir: null };  // persistent current direction
 
   document.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'r') {
@@ -443,32 +444,71 @@ Author: Aarush
     }
     if (gameOver) return;
     if (!gameStarted) return;
-    // Always set desired direction on key press
+
     switch (e.key.toLowerCase()) {
       case 'w':
-        desiredDirection = { dx: 0, dy: -1, dir: 'up' };
+        currentDirection = { dx: 0, dy: -1, dir: 'up' };
         break;
       case 's':
-        desiredDirection = { dx: 0, dy: 1, dir: 'down' };
+        currentDirection = { dx: 0, dy: 1, dir: 'down' };
         break;
       case 'a':
-        desiredDirection = { dx: -1, dy: 0, dir: 'left' };
+        currentDirection = { dx: -1, dy: 0, dir: 'left' };
         break;
       case 'd':
-        desiredDirection = { dx: 1, dy: 0, dir: 'right' };
+        currentDirection = { dx: 1, dy: 0, dir: 'right' };
         break;
-      case 'shift':
-        if (pacman.dx !== 0 || pacman.dy !== 0) {
-          bullets.push({
-            x: pacman.x,
-            y: pacman.y,
-            dx: pacman.dx,
-            dy: pacman.dy
-          });
-        }
-        break;
-    }
+                               }
   });
+
+  function updatePacman(force) {
+    if (gameOver) return;
+    const now = performance.now();
+    if (!force && now - lastPacmanMove < pacmanMoveInterval) return;
+    lastPacmanMove = now;
+
+    // Instead of desiredDirection, use currentDirection persistently
+    if (currentDirection.dir) {
+      const testX = pacman.x + currentDirection.dx;
+      const testY = pacman.y + currentDirection.dy;
+      if (pacmanAnimStep === 0 && maze[testY][testX] !== 0) {
+        pacman.dx = currentDirection.dx;
+        pacman.dy = currentDirection.dy;
+        pacmanDirection = currentDirection.dir;
+      }
+    }
+
+    if (pacmanAnimStep === 0) {
+      const nextX = pacman.x + pacman.dx;
+      const nextY = pacman.y + pacman.dy;
+      if (maze[nextY][nextX] !== 0) {
+        pacmanTargetX = nextX;
+        pacmanTargetY = nextY;
+        pacmanAnimStep = moveAnimSteps;
+      } else {
+        pacman.dx = 0;
+        pacman.dy = 0;
+      }
+      if (maze[pacman.y][pacman.x] === 1) {
+        maze[pacman.y][pacman.x] = 2; // Eat pellet
+      }
+    }
+
+    if (pacmanAnimStep > 0) {
+      const dx = (pacmanTargetX - pacman.x) * tileSize / moveAnimSteps;
+      const dy = (pacmanTargetY - pacman.y) * tileSize / moveAnimSteps;
+      pacmanPixelX += dx;
+      pacmanPixelY += dy;
+      pacmanAnimStep--;
+      if (pacmanAnimStep === 0) {
+        pacman.x = pacmanTargetX;
+        pacman.y = pacmanTargetY;
+        pacmanPixelX = pacman.x * tileSize;
+        pacmanPixelY = pacman.y * tileSize;
+      }
+    }
+  }
+
 
   function gameLoop() {
     if (!gameStarted) return;
