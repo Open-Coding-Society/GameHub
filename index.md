@@ -248,6 +248,7 @@ const objectImages = {
    tennis: '{{site.baseurl}}/images/icon19.png', // bottom 4
    tower: '{{site.baseurl}}/images/icon20.png', // bottom 5
    clicker: '{{site.baseurl}}/images/icon21.png', // bottom 6
+   flappy: '{{site.baseurl}}/images/icon23.png', // bottom 6
    skin: '{{site.baseurl}}/images/icon22.png', // right 1
    aboutus: '{{site.baseurl}}/images/icon23.png', // right 2
    outline: '{{site.baseurl}}/images/icon24.png', // right 3
@@ -297,6 +298,7 @@ const objects = [
   { x: 440, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 4
   { x: 525, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 5
   { x: 610, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 6
+  { x: 415, y: 550, width: 40, height: 40, game: 'flappy' }, // bottom 6
   { x: 675, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
   { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' }, // right 2
   { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 3
@@ -459,6 +461,9 @@ function update() {
         case 'clicker':
           window.location.href = '{{site.baseurl}}/clicker';
           break;
+        case 'flappy':
+          window.location.href = '{{site.baseurl}}/flappy';
+          break;
       }
     }
   });
@@ -562,8 +567,10 @@ function draw() {
       } else if (obj.game === 'clicker') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
+      } else if (obj.game === 'flappy') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;
       }
-      
 
       const offsetX = (scaledWidth - obj.width) / 2; 
       const offsetY = (scaledHeight - obj.height) / 2; 
