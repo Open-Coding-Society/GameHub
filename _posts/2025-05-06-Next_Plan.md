@@ -32,7 +32,7 @@ Main source is using our already implemented website with the biotech games and 
 - We will add this issue onto our website for other users to see how we designed everything for our website.
 - We will add points to every game and deploy which would allow the user to not need to run the backend to receive them.
 
-<img width="704" alt="Image" src="https://github.com/user-attachments/assets/d24aeb59-6ea3-429f-a178-ee89e5739119" />
+<img width="671" alt="Image" src="https://github.com/user-attachments/assets/f2260911-5dc7-4c81-a445-ea4353c61bea" />
 
 ### Objective
 - **Make new entertaining and engaging games** 
@@ -115,12 +115,12 @@ Main source is using our already implemented website with the biotech games and 
 
 ---
 
-### **9. Puzzle Game**  
-- **Gameplay:** Players a puzzle game to match lines in a specific order.
+### **9. Flappy Game**  
+- **Gameplay:** Players play a flappy game to get through obstacles and make it as far as they can.
 
-[Puzzle Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/68)
+[Flappy Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/68)
 
-![Image](https://github.com/user-attachments/assets/7cf442fa-eb75-4b68-9a28-68b00e2d789c)
+![Image](https://github.com/user-attachments/assets/f0889f46-d70b-49eb-a276-40b0fbd4d014)
 
 ---
 
