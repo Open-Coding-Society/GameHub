@@ -235,7 +235,7 @@ const objectImages = {
    adventure: '{{site.baseurl}}/images/icon6.png', // left 6
    racing: '{{site.baseurl}}/images/icon7.png', // top 1
    party: '{{site.baseurl}}/images/icon8.png', // top 2
-   puzzle: '{{site.baseurl}}/images/icon9.png', // top 3
+   flappy: '{{site.baseurl}}/images/icon9.png', // top 3
    pacman: '{{site.baseurl}}/images/icon10.png', // top 4
    slot: '{{site.baseurl}}/images/icon11.png', // top 5
    farming: '{{site.baseurl}}/images/icon12.png', // top 6
@@ -284,7 +284,7 @@ const objects = [
   { x: 100, y: 580, width: 40, height: 40, game: 'adventure' }, // left 6
   { x: 190, y: 100, width: 40, height: 40, game: 'racing' }, // top 1
   { x: 280, y: 100, width: 40, height: 40, game: 'party' }, // top 2
-  { x: 370, y: 100, width: 40, height: 40, game: 'puzzle' }, // top 3
+  { x: 370, y: 100, width: 40, height: 40, game: 'flappy' }, // top 3
   { x: 460, y: 100, width: 40, height: 40, game: 'pacman' }, // top 4
   { x: 540, y: 100, width: 40, height: 40, game: 'slot' }, // top 5
   { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
@@ -426,8 +426,8 @@ function update() {
         case 'party':
           window.location.href = '{{site.baseurl}}/party';
           break; 
-        case 'puzzle':
-          window.location.href = '{{site.baseurl}}/puzzle';
+        case 'flappy':
+          window.location.href = '{{site.baseurl}}/flappy';
           break;
         case 'battle':
           window.location.href = '{{site.baseurl}}/battle';
@@ -529,9 +529,9 @@ function draw() {
       } else if (obj.game === 'party') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7; 
-      } else if (obj.game === 'puzzle') { 
-        scaledWidth *= 0.8;
-        scaledHeight *= 0.8;
+      } else if (obj.game === 'flappy') { 
+        scaledWidth *= 1.2;
+        scaledHeight *= 1.2;
       } else if (obj.game === 'stealth') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  
