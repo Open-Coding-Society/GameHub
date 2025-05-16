@@ -1,11 +1,7 @@
 ---
 layout: post
-title: Game Hub
-description: >
-  <div style="text-align: center; font-family: 'Open Sans', sans-serif;">
-    Move your character around with WASD to enter different minigames and experiences on this map.<br>
-    Click Game Hub in the top left to go back to the home page.
-  </div>
+title: Combat Zone
+description: Battle, Skirmish, Survive
 permalink: /world5
 Author: Zach, Ian, Aarush
 ---
