@@ -273,34 +273,9 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 100, y: 140, width: 40, height: 40, game: 'outbreak', icon: true }, // left 1
   { x: 95, y: 250, width: 40, height: 40, game: 'building' }, // left 2
   { x: 105, y: 325, width: 40, height: 40, game: 'editing' }, // left 3
-  { x: 100, y: 400, width: 40, height: 40, game: 'blackjack' }, // left 4
-  { x: 100, y: 470, width: 40, height: 40, game: 'exploration' }, // left 5
-  { x: 100, y: 580, width: 40, height: 40, game: 'adventure' }, // left 6
-  { x: 190, y: 100, width: 40, height: 40, game: 'racing' }, // top 1
-  { x: 280, y: 100, width: 40, height: 40, game: 'party' }, // top 2
-  { x: 370, y: 100, width: 40, height: 40, game: 'flappy' }, // top 3
-  { x: 460, y: 100, width: 40, height: 40, game: 'pacman' }, // top 4
-  { x: 540, y: 100, width: 40, height: 40, game: 'slot' }, // top 5
-  { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
-  { x: 700, y: 195, width: 40, height: 40, game: 'battle' }, // top 7
-  { x: 805, y: 195, width: 40, height: 40, game: 'tests' }, // top 8
-  { x: 810, y: 330, width: 40, height: 40, game: 'stealth' }, // top 9
-  { x: 185, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
-  { x: 270, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
-  { x: 355, y: 620, width: 40, height: 40, game: 'simulation' }, // bottom 3
-  { x: 440, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 4
-  { x: 525, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 5
-  { x: 610, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 6
-  { x: 675, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' }, // right 2
-  { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 3
-  { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 4
-  { x: 280, y: 360, width: 40, height: 40, game: 'jump' }, // middle 1
-  { x: 540, y: 360, width: 40, height: 40, game: 'pack' }, // middle 2
-  { x: 415, y: 450, width: 40, height: 40, game: 'skirmish' } // middle 3
+  { x: 100, y: 400, width: 40, height: 40, game: 'blackjack' } // left 4
   ];
 
 const walls = [
@@ -359,17 +334,6 @@ function update() {
   if (!hittingWall) {
     player.x = nextX;
     player.y = nextY;
-  }
-
-  
-  if (isColliding(player, topRightBox)) {
-    if (hasLeftBox) { 
-      skinModal.style.display = 'block';
-      isModalOpen = true;
-      hasLeftBox = false; 
-    }
-  } else {
-    hasLeftBox = true; 
   }
 
   objects.forEach(obj => {
