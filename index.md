@@ -262,10 +262,10 @@ const objects = [
   { x: 105, y: 450, width: 40, height: 40, game: 'world2' }, // left 3
   { x: 220, y: 580, width: 40, height: 40, game: 'world3' }, // left 4
   { x: 440, y: 580, width: 40, height: 40, game: 'world4' }, // left 5
-  { x: 650, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
+  { x: 600, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
   { x: 290, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
-  { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
-  { x: 670, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
+  { x: 450, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
+  { x: 610, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
   ];
 
 const walls = [
@@ -448,8 +448,8 @@ function draw() {
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
       } else if (obj.game === 'world2') { 
-        scaledWidth *= 1.1;
-        scaledHeight *= 1.1;
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;
       } else if (obj.game === 'world5') { 
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
@@ -457,8 +457,8 @@ function draw() {
         scaledWidth *= 1.8;
         scaledHeight *= 1.8;
       } else if (obj.game === 'world1') { 
-        scaledWidth *= 0.7;
-        scaledHeight *= 0.7;
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;
       } else if (obj.game === 'pacman') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;
@@ -478,8 +478,8 @@ function draw() {
         scaledWidth *= 0.8;
         scaledHeight *= 0.8; 
       } else if (obj.game === 'world7') { 
-        scaledWidth *= 0.7;
-        scaledHeight *= 0.7; 
+        scaledWidth *= 1.1;
+        scaledHeight *= 1.1; 
       } else if (obj.game === 'world8') { 
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
