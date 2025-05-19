@@ -208,7 +208,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const roomImage = new Image();
-roomImage.src = 'https://i.postimg.cc/4xLtFzbV/Screenshot-2025-04-04-at-10-24-02-AM.png';
+roomImage.src = '{{site.baseurl}}/images/worldbackground3.png';
 
 const spriteImages = [
   'https://i.postimg.cc/PxDYNLjG/Default.png', // Default Character
