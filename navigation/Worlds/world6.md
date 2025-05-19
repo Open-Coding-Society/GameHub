@@ -254,7 +254,6 @@ const objectImages = {
    skirmish: '{{site.baseurl}}/images/icon28.png' // middle 3
 };
 
-
 const loadedObjectImages = {};
 for (const game in objectImages) {
   const img = new Image();
@@ -264,7 +263,7 @@ for (const game in objectImages) {
 
 const player = {
   x: 400,
-  y: 325,
+  y: 600,
   width: 75,
   height: 75,
   speed: 4
@@ -273,24 +272,24 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 185, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
-  { x: 355, y: 620, width: 40, height: 40, game: 'simulation' }, // bottom 3
-  { x: 525, y: 620, width: 40, height: 40, game: 'tower' } // bottom 5
-  ];
+  { x: 435, y: 200, width: 40, height: 40, game: 'strategy' }, // bottom 1
+  { x: 605, y: 200, width: 40, height: 40, game: 'simulation' }, // bottom 3
+  { x: 800, y: 200, width: 40, height: 40, game: 'simulation' }, // bottom 3
+  { x: 275, y: 200, width: 40, height: 40, game: 'tower' } // bottom 5
+];
 
+// Only the pool at the middle is a barrier
 const walls = [
-  { x: 0, y: 0, width: 25, height: 720 }, 
-  { x: 0, y: 0, width: 960, height: 25 }, 
-  { x: 935, y: 0, width: 25, height: 720 }, 
-  { x: 0, y: 695, width: 960, height: 25 },
+  // Central pool block (adjust size/position as needed to match the pool)
+  { x: 420, y: 300, width: 120, height: 60 }
 ];
 
 const borderThickness = 10;
 walls.push(
-{ x: 0, y: 0, width: canvas.width, height: borderThickness }, // top
-{ x: 0, y: canvas.height - borderThickness, width: canvas.width, height: borderThickness }, // bottom
-{ x: 0, y: 0, width: borderThickness, height: canvas.height }, // left
-{ x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
+  { x: 0, y: 0, width: canvas.width, height: borderThickness }, // top
+  { x: 0, y: canvas.height - borderThickness, width: canvas.width, height: borderThickness }, // bottom
+  { x: 0, y: 0, width: borderThickness, height: canvas.height }, // left
+  { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
 );
 
 const topRightBox = { x: 675, y: 500, width: 40, height: 40 }; 
@@ -415,13 +414,10 @@ function update() {
 
 }
 
-
-
 function draw() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  
   if (roomImage.complete && roomImage.naturalWidth !== 0) {
     ctx.drawImage(roomImage, 0, 0, canvas.width, canvas.height);
   } else {
@@ -429,6 +425,14 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
+  // Draw barriers in red
+  ctx.save();
+  ctx.globalAlpha = 0.7;
+  ctx.fillStyle = 'red';
+  walls.forEach(wall => {
+    ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+  });
+  ctx.restore();
 
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
@@ -552,7 +556,6 @@ window.addEventListener('keyup', (e) => {
   keys[e.key.toLowerCase()] = false;
 });
 
-
 let imagesLoaded = 0;
 function tryStartGame() {
   imagesLoaded++;
@@ -629,3 +632,4 @@ async function fetchPoints() {
 
 fetchPoints();
 </script>
+

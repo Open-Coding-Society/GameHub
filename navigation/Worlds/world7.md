@@ -273,8 +273,8 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 805, y: 195, width: 40, height: 40, game: 'tests' }, // top 8
-  { x: 810, y: 330, width: 40, height: 40, game: 'stealth' }, // top 9
+  { x: 200, y: 520, width: 40, height: 40, game: 'tests' }, // top 8
+  { x: 710, y: 520, width: 40, height: 40, game: 'stealth' }, // top 9
   { x: 440, y: 620, width: 40, height: 40, game: 'tennis' } // bottom 4
   ];
 
