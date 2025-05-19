@@ -12,7 +12,10 @@ Author: Zach, Ian, Aarush
 
 <style>
   body {
-    background-color: black;
+    background-image: url('{{site.baseurl}}/images/homebackground.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
     margin: 0;
