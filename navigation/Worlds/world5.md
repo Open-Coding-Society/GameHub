@@ -273,9 +273,9 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 700, y: 195, width: 40, height: 40, game: 'battle' }, // top 7
-  { x: 270, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
-  { x: 415, y: 450, width: 40, height: 40, game: 'skirmish' } // middle 3
+  { x: 700, y: 350, width: 40, height: 40, game: 'battle' }, // top 7
+  { x: 220, y: 350, width: 40, height: 40, game: 'survive' }, // bottom 2
+  { x: 570, y: 345, width: 40, height: 40, game: 'skirmish' } // middle 3
   ];
 
 const walls = [

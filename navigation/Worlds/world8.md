@@ -273,9 +273,9 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 310, y: 120, width: 40, height: 40, game: 'racing' }, // top 1
-  { x: 750, y: 200, width: 40, height: 40, game: 'farming' }, // top 6
-  { x: 490, y: 270, width: 40, height: 40, game: 'clicker' } // bottom 6
+  { x: 180, y: 180, width: 40, height: 40, game: 'racing' }, // top 1
+  { x: 750, y: 210, width: 40, height: 40, game: 'farming' }, // top 6
+  { x: 620, y: 430, width: 40, height: 40, game: 'clicker' } // bottom 6
   ];
 
 const walls = [

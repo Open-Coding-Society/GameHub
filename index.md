@@ -257,15 +257,15 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 100, y: 140, width: 40, height: 40, game: 'world0', icon: true }, // left 1
+  { x: 140, y: 140, width: 40, height: 40, game: 'world0', icon: true }, // left 1
   { x: 95, y: 300, width: 40, height: 40, game: 'world1' }, // left 2
   { x: 105, y: 450, width: 40, height: 40, game: 'world2' }, // left 3
   { x: 220, y: 580, width: 40, height: 40, game: 'world3' }, // left 4
-  { x: 440, y: 580, width: 40, height: 40, game: 'world4' }, // left 5
-  { x: 600, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
-  { x: 290, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
-  { x: 450, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
-  { x: 610, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
+  { x: 410, y: 580, width: 40, height: 40, game: 'world4' }, // left 5
+  { x: 580, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
+  { x: 330, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
+  { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
+  { x: 660, y: 250, width: 40, height: 40, game: 'world8' }, // top 3
   ];
 
 const walls = [

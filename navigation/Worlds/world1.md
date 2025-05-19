@@ -274,8 +274,8 @@ const keys = {};
 
 const objects = [
   { x: 95, y: 250, width: 40, height: 40, game: 'building' }, // left 2
-  { x: 105, y: 325, width: 40, height: 40, game: 'editing' }, // left 3
-  { x: 100, y: 400, width: 40, height: 40, game: 'blackjack' } // left 4
+  { x: 850, y: 225, width: 40, height: 40, game: 'editing' }, // left 3
+  { x: 680, y: 540, width: 40, height: 40, game: 'blackjack' } // left 4
   ];
 
 const walls = [

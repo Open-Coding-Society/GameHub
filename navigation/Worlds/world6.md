@@ -272,16 +272,16 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 435, y: 200, width: 40, height: 40, game: 'strategy' }, // bottom 1
-  { x: 605, y: 200, width: 40, height: 40, game: 'simulation' }, // bottom 3
-  { x: 800, y: 200, width: 40, height: 40, game: 'simulation' }, // bottom 3
-  { x: 275, y: 200, width: 40, height: 40, game: 'tower' } // bottom 5
+  { x: 620, y: 250, width: 40, height: 40, game: 'strategy' }, // bottom 1
+  { x: 700, y: 590, width: 40, height: 40, game: 'simulation' }, // bottom 3
+  { x: 350, y: 250, width: 40, height: 40, game: 'tower' } // bottom 5
 ];
 
-// Only the pool at the middle is a barrier
 const walls = [
-  // Central pool block (adjust size/position as needed to match the pool)
-  { x: 420, y: 300, width: 120, height: 60 }
+  { x: 0, y: 0, width: 25, height: 720 }, 
+  { x: 0, y: 0, width: 960, height: 25 }, 
+  { x: 935, y: 0, width: 25, height: 720 }, 
+  { x: 0, y: 695, width: 960, height: 25 },
 ];
 
 const borderThickness = 10;

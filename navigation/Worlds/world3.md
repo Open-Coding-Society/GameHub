@@ -273,9 +273,9 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 370, y: 100, width: 40, height: 40, game: 'flappy' }, // top 3
-  { x: 460, y: 100, width: 40, height: 40, game: 'pacman' }, // top 4
-  { x: 280, y: 360, width: 40, height: 40, game: 'jump' } // middle 1
+  { x: 670, y: 640, width: 40, height: 40, game: 'flappy' }, // top 3
+  { x: 860, y: 490, width: 40, height: 40, game: 'pacman' }, // top 4
+  { x: 240, y: 640, width: 40, height: 40, game: 'jump' } // middle 1
   ];
 
 const walls = [

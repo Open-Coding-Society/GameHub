@@ -273,9 +273,9 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 675, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' }, // right 2
-  { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 3
+  { x: 220, y: 540, width: 40, height: 40, game: 'skin' }, // right 1
+  { x: 220, y: 660, width: 40, height: 40, game: 'aboutus' }, // right 2
+  { x: 820, y: 530, width: 40, height: 40, game: 'outline' }, // right 3
   { x: 820, y: 660, width: 40, height: 40, game: 'format' } // right 4
   ];
 
@@ -294,7 +294,7 @@ walls.push(
 { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
 );
 
-const topRightBox = { x: 675, y: 500, width: 40, height: 40 }; 
+const topRightBox = { x: 220, y: 540, width: 40, height: 40 }; 
 const skinModal = document.getElementById('skin-modal');
 const closeModal = document.getElementById('close-modal');
 const confirmButton = document.getElementById('confirm-button');
