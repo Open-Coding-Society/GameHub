@@ -17,7 +17,7 @@ These new 18 games we will add to the 6 already implemented biotech related game
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
 ### Initial Plan
-[Initial Plan](http://127.0.0.1:4887/GenomeGamersFrontend/games/2025/05/06/Initial_Plan.html)
+[Initial Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Initial_Plan.html)
 
 ### Ideate
 These new games will be fun and entertaining and add more variety to our biotech learning games.

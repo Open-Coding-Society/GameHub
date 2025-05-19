@@ -17,7 +17,7 @@ This is an adventure game with numerous interactions to simulate and address rea
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
 ### Next Plan
-[Next Plan](http://127.0.0.1:4887/GenomeGamersFrontend/games/2025/05/06/Next_Plan.html)
+[Next Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Next_Plan.html)
 
 ### Ideate
 The Scripps Research: Biotech Engagement Game Development project uses interactive games to introduce students to biotechnology. Each game is built around real scientific data and machine learning models, allowing players to tackle challenges like predicting disease outbreaks or designing new treatments. Through gameplay, students experience how data and AI are used in real-world research to solve major health problems.  
@@ -41,6 +41,8 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - **Encourage problem-solving** – Let players analyze data, make decisions, and see real-world outcomes.  
 - **Raise awareness about biotech’s impact** – Highlight how biotechnology helps in medicine, genetics, and public health.  
 - **Inspire future scientists** – Spark interest in STEM careers by making biotech exciting and accessible.
+
+<img width="624" alt="Image" src="https://github.com/user-attachments/assets/5e3e1831-a7a2-45c6-ae70-c7f8cab754a1" />
 
 ### Roles For the project
 #### Team 1
