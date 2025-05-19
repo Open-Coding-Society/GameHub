@@ -280,21 +280,10 @@ const objects = [
   ];
 
 const walls = [
-  { x: 270, y: 250, width: 25, height: 55 },
-  { x: 420, y: 250, width: 25, height: 25 },
-  { x: 560, y: 250, width: 25, height: 55 },
-  { x: 270, y: 450, width: 25, height: 55 },
-  { x: 560, y: 450, width: 25, height: 55 },
-  { x: 680, y: 400, width: 25, height: 55 },
-  { x: 800, y: 400, width: 25, height: 55 },
-  { x: 680, y: 570, width: 25, height: 55 },
-  { x: 800, y: 570, width: 25, height: 55 },
-  { x: 755, y: 180, width: 25, height: 55 },
-  { x: 675, y: 80, width: 250, height: 55 },
-  { x: 0, y: 0, width: 75, height: 720 }, 
-  { x: 0, y: 0, width: 960, height: 75 }, 
-  { x: 885, y: 0, width: 75, height: 720 }, 
-  { x: 0, y: 670, width: 690, height: 50 },
+  { x: 0, y: 0, width: 25, height: 720 }, 
+  { x: 0, y: 0, width: 960, height: 25 }, 
+  { x: 935, y: 0, width: 25, height: 720 }, 
+  { x: 0, y: 695, width: 960, height: 25 },
 ];
 
 const borderThickness = 10;
