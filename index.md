@@ -227,34 +227,15 @@ const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
 
 const objectImages = {
-   outbreak: '{{site.baseurl}}/images/icon1.png', // left 1
-   building: '{{site.baseurl}}/images/icon2.png', // left 2
-   editing: '{{site.baseurl}}/images/icon3.png', // left 3
-   blackjack: '{{site.baseurl}}/images/icon4.png', // left 4
-   exploration: '{{site.baseurl}}/images/icon5.png', // left 5
-   adventure: '{{site.baseurl}}/images/icon6.png', // left 6
-   racing: '{{site.baseurl}}/images/icon7.png', // top 1
-   party: '{{site.baseurl}}/images/icon8.png', // top 2
-   flappy: '{{site.baseurl}}/images/icon9.png', // top 3
-   pacman: '{{site.baseurl}}/images/icon10.png', // top 4
-   slot: '{{site.baseurl}}/images/icon11.png', // top 5
-   farming: '{{site.baseurl}}/images/icon12.png', // top 6
-   battle: '{{site.baseurl}}/images/icon13.png', // top 7
-   tests: '{{site.baseurl}}/images/icon14.png', // top 8
-   stealth: '{{site.baseurl}}/images/icon15.png', // top 9
-   strategy: '{{site.baseurl}}/images/icon16.png', // bottom 1
-   survive: '{{site.baseurl}}/images/icon17.png', // bottom 2
-   simulation: '{{site.baseurl}}/images/icon18.png', // bottom 3
-   tennis: '{{site.baseurl}}/images/icon19.png', // bottom 4
-   tower: '{{site.baseurl}}/images/icon20.png', // bottom 5
-   clicker: '{{site.baseurl}}/images/icon21.png', // bottom 6
-   skin: '{{site.baseurl}}/images/icon22.png', // right 1
-   aboutus: '{{site.baseurl}}/images/icon23.png', // right 2
-   outline: '{{site.baseurl}}/images/icon24.png', // right 3
-   format: '{{site.baseurl}}/images/icon25.png', // right 4
-   jump: '{{site.baseurl}}/images/icon26.png', // middle 1
-   pack: '{{site.baseurl}}/images/icon27.png', // middle 2
-   skirmish: '{{site.baseurl}}/images/icon28.png' // middle 3
+   world0: '{{site.baseurl}}/images/symbol0.png', // left 1
+   world1: '{{site.baseurl}}/images/symbol1.png', // left 2
+   world2: '{{site.baseurl}}/images/symbol2.png', // left 3
+   world3: '{{site.baseurl}}/images/symbol3.png', // left 4
+   world4: '{{site.baseurl}}/images/symbol4.png', // left 5
+   world5: '{{site.baseurl}}/images/symbol5.png', // left 6
+   world6: '{{site.baseurl}}/images/symbol6.png', // top 1
+   world7: '{{site.baseurl}}/images/symbol7.png', // top 2
+   world8: '{{site.baseurl}}/images/symbol8.png' // top 3
 };
 
 
@@ -276,34 +257,15 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 100, y: 140, width: 40, height: 40, game: 'outbreak', icon: true }, // left 1
-  { x: 95, y: 250, width: 40, height: 40, game: 'building' }, // left 2
-  { x: 105, y: 325, width: 40, height: 40, game: 'editing' }, // left 3
-  { x: 100, y: 400, width: 40, height: 40, game: 'blackjack' }, // left 4
-  { x: 100, y: 470, width: 40, height: 40, game: 'exploration' }, // left 5
-  { x: 100, y: 580, width: 40, height: 40, game: 'adventure' }, // left 6
-  { x: 190, y: 100, width: 40, height: 40, game: 'racing' }, // top 1
-  { x: 280, y: 100, width: 40, height: 40, game: 'party' }, // top 2
-  { x: 370, y: 100, width: 40, height: 40, game: 'flappy' }, // top 3
-  { x: 460, y: 100, width: 40, height: 40, game: 'pacman' }, // top 4
-  { x: 540, y: 100, width: 40, height: 40, game: 'slot' }, // top 5
-  { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
-  { x: 700, y: 195, width: 40, height: 40, game: 'battle' }, // top 7
-  { x: 805, y: 195, width: 40, height: 40, game: 'tests' }, // top 8
-  { x: 810, y: 330, width: 40, height: 40, game: 'stealth' }, // top 9
-  { x: 185, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
-  { x: 270, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
-  { x: 355, y: 620, width: 40, height: 40, game: 'simulation' }, // bottom 3
-  { x: 440, y: 620, width: 40, height: 40, game: 'tennis' }, // bottom 4
-  { x: 525, y: 620, width: 40, height: 40, game: 'tower' }, // bottom 5
-  { x: 610, y: 620, width: 40, height: 40, game: 'clicker' }, // bottom 6
-  { x: 675, y: 500, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 810, y: 495, width: 40, height: 40, game: 'aboutus' }, // right 2
-  { x: 665, y: 670, width: 40, height: 40, game: 'outline' }, // right 3
-  { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 4
-  { x: 280, y: 360, width: 40, height: 40, game: 'jump' }, // middle 1
-  { x: 540, y: 360, width: 40, height: 40, game: 'pack' }, // middle 2
-  { x: 415, y: 450, width: 40, height: 40, game: 'skirmish' } // middle 3
+  { x: 100, y: 140, width: 40, height: 40, game: 'world0', icon: true }, // left 1
+  { x: 95, y: 250, width: 40, height: 40, game: 'world1' }, // left 2
+  { x: 105, y: 325, width: 40, height: 40, game: 'world2' }, // left 3
+  { x: 100, y: 400, width: 40, height: 40, game: 'world3' }, // left 4
+  { x: 100, y: 470, width: 40, height: 40, game: 'world4' }, // left 5
+  { x: 100, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
+  { x: 190, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
+  { x: 280, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
+  { x: 370, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
   ];
 
 const walls = [
@@ -364,34 +326,23 @@ function update() {
     player.y = nextY;
   }
 
-  
-  if (isColliding(player, topRightBox)) {
-    if (hasLeftBox) { 
-      skinModal.style.display = 'block';
-      isModalOpen = true;
-      hasLeftBox = false; 
-    }
-  } else {
-    hasLeftBox = true; 
-  }
-
   objects.forEach(obj => {
     if (isColliding(player, obj)) {
       switch (obj.game) {
-        case 'blackjack':
-          window.location.href = '{{site.baseurl}}/blackjack';
+        case 'world3':
+          window.location.href = '{{site.baseurl}}/world3';
           break;
-        case 'building':
-          window.location.href = '{{site.baseurl}}/building';
+        case 'world1':
+          window.location.href = '{{site.baseurl}}/world1';
           break;
-        case 'editing':
-          window.location.href = '{{site.baseurl}}/editing';
+        case 'world2':
+          window.location.href = '{{site.baseurl}}/world2';
           break;
-        case 'exploration':
-          window.location.href = '{{site.baseurl}}/exploration';
+        case 'world4':
+          window.location.href = '{{site.baseurl}}/world4';
           break;
-        case 'outbreak':
-          window.location.href = '{{site.baseurl}}/outbreak';
+        case 'world0':
+          window.location.href = '{{site.baseurl}}/world0';
           break;
         case 'aboutus':
           window.location.href = '{{site.baseurl}}/aboutus';
@@ -399,8 +350,8 @@ function update() {
         case 'outline':
           window.location.href = '{{site.baseurl}}/outline';
           break;
-        case 'adventure':
-          window.location.href = '{{site.baseurl}}/adventure';
+        case 'world5':
+          window.location.href = '{{site.baseurl}}/world5';
           break; 
         case 'pacman':
           window.location.href = '{{site.baseurl}}/pacman';
@@ -420,14 +371,14 @@ function update() {
         case 'format':
           window.location.href = '{{site.baseurl}}/format';
           break;  
-        case 'racing':
-          window.location.href = '{{site.baseurl}}/racing';
+        case 'world6':
+          window.location.href = '{{site.baseurl}}/world6';
           break;
-        case 'party':
-          window.location.href = '{{site.baseurl}}/party';
+        case 'world7':
+          window.location.href = '{{site.baseurl}}/world7';
           break; 
-        case 'flappy':
-          window.location.href = '{{site.baseurl}}/flappy';
+        case 'world8':
+          window.location.href = '{{site.baseurl}}/world8';
           break;
         case 'battle':
           window.location.href = '{{site.baseurl}}/battle';
@@ -493,19 +444,19 @@ function draw() {
       let scaledWidth = 40 * 0.9 * 3; 
       let scaledHeight = 40 * 0.9 * 3;
 
-      if (obj.game === 'blackjack') { 
+      if (obj.game === 'world3') { 
         scaledWidth *= 1.3;
         scaledHeight *= 1.3;
-      } else if (obj.game === 'editing') { 
+      } else if (obj.game === 'world2') { 
         scaledWidth *= 1.1;
         scaledHeight *= 1.1;
-      } else if (obj.game === 'adventure') { 
+      } else if (obj.game === 'world5') { 
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
       } else if (obj.game === 'outline') { 
         scaledWidth *= 1.8;
         scaledHeight *= 1.8;
-      } else if (obj.game === 'building') { 
+      } else if (obj.game === 'world1') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;
       } else if (obj.game === 'pacman') { 
@@ -523,13 +474,13 @@ function draw() {
       } else if (obj.game === 'format') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  
-      } else if (obj.game === 'racing') { 
+      } else if (obj.game === 'world6') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8; 
-      } else if (obj.game === 'party') { 
+      } else if (obj.game === 'world7') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7; 
-      } else if (obj.game === 'flappy') { 
+      } else if (obj.game === 'world8') { 
         scaledWidth *= 1.2;
         scaledHeight *= 1.2;
       } else if (obj.game === 'stealth') { 
