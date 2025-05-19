@@ -19,6 +19,9 @@ These new 18 games we will add to the 6 already implemented biotech related game
 ### Initial Plan
 [Initial Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Initial_Plan.html)
 
+### Final Plan
+[Final Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/19/Final_Plan.html)
+
 ### Ideate
 These new games will be fun and entertaining and add more variety to our biotech learning games.
 
