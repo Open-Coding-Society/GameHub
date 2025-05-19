@@ -258,14 +258,14 @@ const keys = {};
 
 const objects = [
   { x: 100, y: 140, width: 40, height: 40, game: 'world0', icon: true }, // left 1
-  { x: 95, y: 250, width: 40, height: 40, game: 'world1' }, // left 2
-  { x: 105, y: 325, width: 40, height: 40, game: 'world2' }, // left 3
-  { x: 100, y: 400, width: 40, height: 40, game: 'world3' }, // left 4
-  { x: 100, y: 470, width: 40, height: 40, game: 'world4' }, // left 5
-  { x: 100, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
-  { x: 190, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
-  { x: 280, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
-  { x: 370, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
+  { x: 95, y: 300, width: 40, height: 40, game: 'world1' }, // left 2
+  { x: 105, y: 450, width: 40, height: 40, game: 'world2' }, // left 3
+  { x: 220, y: 580, width: 40, height: 40, game: 'world3' }, // left 4
+  { x: 440, y: 580, width: 40, height: 40, game: 'world4' }, // left 5
+  { x: 650, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
+  { x: 290, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
+  { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
+  { x: 670, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
   ];
 
 const walls = [
@@ -445,8 +445,8 @@ function draw() {
       let scaledHeight = 40 * 0.9 * 3;
 
       if (obj.game === 'world3') { 
-        scaledWidth *= 1.3;
-        scaledHeight *= 1.3;
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;
       } else if (obj.game === 'world2') { 
         scaledWidth *= 1.1;
         scaledHeight *= 1.1;
@@ -481,8 +481,8 @@ function draw() {
         scaledWidth *= 0.7;
         scaledHeight *= 0.7; 
       } else if (obj.game === 'world8') { 
-        scaledWidth *= 1.2;
-        scaledHeight *= 1.2;
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;
       } else if (obj.game === 'stealth') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  
