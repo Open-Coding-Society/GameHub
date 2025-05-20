@@ -166,15 +166,6 @@ Author: Lars, Zach & Aarush
   }
 </style>
 
-<!-- Add this just before <div id="loading"> -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<div style="text-align:center; margin-top: 30px; margin-bottom: 30px;">
-  <a href="{{site.baseurl}}/help" class="btn btn-primary btn-lg" style="font-size:2.2rem; padding: 20px 60px; border-radius: 15px;">
-    Help &amp; Instructions
-  </a>
-</div>
-
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
 <div id="points-display">Points: 0</div>
@@ -266,7 +257,8 @@ const objectImages = {
    world5: '{{site.baseurl}}/images/symbol5.png', // left 6
    world6: '{{site.baseurl}}/images/symbol6.png', // top 1
    world7: '{{site.baseurl}}/images/symbol7.png', // top 2
-   world8: '{{site.baseurl}}/images/symbol8.png' // top 3
+   world8: '{{site.baseurl}}/images/symbol8.png', // top 3 
+   help: '{{site.baseurl}}/images/helpbutton.png' // top 4
 };
 
 
@@ -297,6 +289,8 @@ const objects = [
   { x: 660, y: 250, width: 40, height: 40, game: 'world6' }, // top 1
   { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
   { x: 330, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
+  { x: 730, y: 495, width: 40, height: 40, game: 'help' } // top 4
+
   ];
 
 const walls = [
@@ -414,6 +408,9 @@ function update() {
         case 'battle':
           window.location.href = '{{site.baseurl}}/battle';
           break;
+        case 'help':
+          window.location.href = '{{site.baseurl}}/help';
+          break;  
         case 'tests':
           window.location.href = '{{site.baseurl}}/tests';
           break;
@@ -514,6 +511,9 @@ function draw() {
       } else if (obj.game === 'world8') { 
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
+      } else if (obj.game === 'help') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;  
       } else if (obj.game === 'stealth') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  
