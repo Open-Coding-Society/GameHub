@@ -208,6 +208,27 @@ Author: Zach, Ian, Aarush
 </div>
 
 <script>
+// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// ...existing code...
+
+// --- Background Music ---
+const music = new Audio('{{site.baseurl}}/assets/audio/El_Gigante_De_Hierro.mp3'); // Change path as needed
+music.loop = true;
+music.volume = 0.5;
+
+// Play music after first user interaction (required by browsers)
+function startMusicOnce() {
+  music.play().catch(() => {});
+  window.removeEventListener('click', startMusicOnce);
+  window.removeEventListener('keydown', startMusicOnce);
+}
+window.addEventListener('click', startMusicOnce);
+window.addEventListener('keydown', startMusicOnce);
+</script>
+
+
+
+<script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
