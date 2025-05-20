@@ -13,6 +13,11 @@ These new 18 games we will add to the 6 already implemented biotech related game
 - [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
 - [Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
 
+### Game Hub Links
+- [Worlds 0-8](https://prad-coder.github.io/GenomeGamersFrontend/)
+- [Original Design Minigames - World 9](https://prad-coder.github.io/GenomeGamersFrontend/world9)
+- [Pilot City Minigames: World 10](https://prad-coder.github.io/GenomeGamersFrontend/world10)
+
 ### KanBan Board
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
@@ -31,11 +36,11 @@ The purpose is to make users content and show off what games we have created usi
 ### Source 
 Main source is using our already implemented website with the biotech games and adding more games that are not completely biotech related.
 
+<img width="1280" alt="Image" src="https://github.com/user-attachments/assets/cf32f25d-8680-42a5-9e61-f110d4fd863d" />
+
 ### This Issue
 - We will add this issue onto our website for other users to see how we designed everything for our website.
 - We will add points to every game and deploy which would allow the user to not need to run the backend to receive them.
-
-<img width="671" alt="Image" src="https://github.com/user-attachments/assets/f2260911-5dc7-4c81-a445-ea4353c61bea" />
 
 ### Objective
 - **Make new entertaining and engaging games** 

@@ -13,6 +13,11 @@ This is an adventure game with numerous interactions to simulate and address rea
 - [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
 - [Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
 
+### Game Hub Links
+- [Worlds 0-8](https://prad-coder.github.io/GenomeGamersFrontend/)
+- [Original Design Minigames - World 9](https://prad-coder.github.io/GenomeGamersFrontend/world9)
+- [Pilot City Minigames: World 10](https://prad-coder.github.io/GenomeGamersFrontend/world10)
+
 ### KanBan Board
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
@@ -45,7 +50,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - **Raise awareness about biotech’s impact** – Highlight how biotechnology helps in medicine, genetics, and public health.  
 - **Inspire future scientists** – Spark interest in STEM careers by making biotech exciting and accessible.
 
-<img width="624" alt="Image" src="https://github.com/user-attachments/assets/5e3e1831-a7a2-45c6-ae70-c7f8cab754a1" />
+<img width="1278" alt="Image" src="https://github.com/user-attachments/assets/07d72c97-c2bf-40ab-8fda-f3fc65942dcc" />
 
 ### Roles For the project
 #### Team 1

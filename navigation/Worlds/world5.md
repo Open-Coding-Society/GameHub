@@ -263,7 +263,7 @@ for (const game in objectImages) {
 }
 
 const player = {
-  x: 400,
+  x: 440,
   y: 325,
   width: 75,
   height: 75,
