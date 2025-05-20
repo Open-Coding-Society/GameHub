@@ -166,6 +166,15 @@ Author: Lars, Zach & Aarush
   }
 </style>
 
+<!-- Add this just before <div id="loading"> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div style="text-align:center; margin-top: 30px; margin-bottom: 30px;">
+  <a href="{{site.baseurl}}/help" class="btn btn-primary btn-lg" style="font-size:2.2rem; padding: 20px 60px; border-radius: 15px;">
+    Help &amp; Instructions
+  </a>
+</div>
+
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
 <div id="points-display">Points: 0</div>
@@ -205,6 +214,8 @@ Author: Lars, Zach & Aarush
     <button id="confirm-button">Confirm</button>
   </div>
 </div>
+
+
 
 <script>
 // filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
