@@ -103,7 +103,20 @@ Author: Zach
         color: #4CAF50;
         text-decoration: none;
     }
+
+    .top-right-icon {
+        position: absolute;
+        top: 160px; 
+        right: 10px;
+        width: 90px; 
+        height: 90px; 
+        cursor: pointer;
+    }
 </style>
+
+<a href="{{site.baseurl}}/world0">
+    <img src="{{site.baseurl}}/images/icon30.png" alt="Home Icon" class="top-right-icon">
+</a>
 
 <div class="container">
     <h2>Meet the Developers</h2>
