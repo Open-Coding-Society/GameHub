@@ -249,6 +249,7 @@ const objectImages = {
    aboutus: '{{site.baseurl}}/images/icon23.png', // right 2
    outline: '{{site.baseurl}}/images/icon24.png', // right 3
    format: '{{site.baseurl}}/images/icon25.png', // right 4
+   synopsis: '{{site.baseurl}}/images/icon29.png', // right 5
    jump: '{{site.baseurl}}/images/icon26.png', // middle 1
    pack: '{{site.baseurl}}/images/icon27.png', // middle 2
    skirmish: '{{site.baseurl}}/images/icon28.png' // middle 3
@@ -275,8 +276,9 @@ const keys = {};
 const objects = [
   { x: 220, y: 540, width: 40, height: 40, game: 'skin' }, // right 1
   { x: 220, y: 660, width: 40, height: 40, game: 'aboutus' }, // right 2
-  { x: 820, y: 530, width: 40, height: 40, game: 'outline' }, // right 3
-  { x: 820, y: 660, width: 40, height: 40, game: 'format' } // right 4
+  { x: 820, y: 540, width: 40, height: 40, game: 'outline' }, // right 3
+  { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 4
+  { x: 620, y: 530, width: 40, height: 40, game: 'synopsis' } // right 5
   ];
 
 const walls = [
@@ -363,7 +365,10 @@ function update() {
           break;
         case 'adventure':
           window.location.href = '{{site.baseurl}}/adventure';
-          break; 
+          break;
+        case 'synopsis':
+          window.location.href = '{{site.baseurl}}/synopsis';
+          break;    
         case 'pacman':
           window.location.href = '{{site.baseurl}}/pacman';
           break;
@@ -479,6 +484,9 @@ function draw() {
       } else if (obj.game === 'farming') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8;
+      } else if (obj.game === 'synopsis') { 
+        scaledWidth *= 0.6;
+        scaledHeight *= 0.6;  
       } else if (obj.game === 'tennis') { 
         scaledWidth *= 0.7;
         scaledHeight *= 0.7;
