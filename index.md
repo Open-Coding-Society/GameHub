@@ -263,9 +263,9 @@ const objects = [
   { x: 220, y: 580, width: 40, height: 40, game: 'world3' }, // left 4
   { x: 410, y: 580, width: 40, height: 40, game: 'world4' }, // left 5
   { x: 580, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
-  { x: 330, y: 100, width: 40, height: 40, game: 'world6' }, // top 1
+  { x: 660, y: 250, width: 40, height: 40, game: 'world6' }, // top 1
   { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
-  { x: 660, y: 250, width: 40, height: 40, game: 'world8' }, // top 3
+  { x: 330, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
   ];
 
 const walls = [
