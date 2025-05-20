@@ -425,15 +425,6 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  // Draw barriers in red
-  ctx.save();
-  ctx.globalAlpha = 0.7;
-  ctx.fillStyle = 'red';
-  walls.forEach(wall => {
-    ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-  });
-  ctx.restore();
-
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
   const baseWidth = 40 * 0.9; 
