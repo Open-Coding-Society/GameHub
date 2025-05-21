@@ -253,8 +253,7 @@ const objectImages = {
    world5: '{{site.baseurl}}/images/symbol5.png', // left 6
    world6: '{{site.baseurl}}/images/symbol6.png', // top 1
    world7: '{{site.baseurl}}/images/symbol7.png', // top 2
-   world8: '{{site.baseurl}}/images/symbol8.png', // top 3 
-   help: '{{site.baseurl}}/images/helpbutton.png' // top 4
+   world8: '{{site.baseurl}}/images/symbol8.png' // top 3 
 };
 
 
@@ -284,8 +283,7 @@ const objects = [
   { x: 580, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
   { x: 660, y: 250, width: 40, height: 40, game: 'world6' }, // top 1
   { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
-  { x: 330, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
-  { x: 730, y: 495, width: 40, height: 40, game: 'help' } // top 4
+  { x: 330, y: 100, width: 40, height: 40, game: 'world8' } // top 3
 
   ];
 
@@ -404,9 +402,6 @@ function update() {
         case 'battle':
           window.location.href = '{{site.baseurl}}/battle';
           break;
-        case 'help':
-          window.location.href = '{{site.baseurl}}/help';
-          break;  
         case 'tests':
           window.location.href = '{{site.baseurl}}/tests';
           break;
@@ -507,9 +502,6 @@ function draw() {
       } else if (obj.game === 'world8') { 
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
-      } else if (obj.game === 'help') { 
-        scaledWidth *= 0.8;
-        scaledHeight *= 0.8;  
       } else if (obj.game === 'stealth') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  

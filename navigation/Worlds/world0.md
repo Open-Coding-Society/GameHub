@@ -272,7 +272,8 @@ const objectImages = {
    synopsis: '{{site.baseurl}}/images/icon29.png', // right 5
    jump: '{{site.baseurl}}/images/icon26.png', // middle 1
    pack: '{{site.baseurl}}/images/icon27.png', // middle 2
-   skirmish: '{{site.baseurl}}/images/icon28.png' // middle 3
+   skirmish: '{{site.baseurl}}/images/icon28.png', // middle 3
+   help: '{{site.baseurl}}/images/helpbutton.png' // right 6
 };
 
 
@@ -284,8 +285,8 @@ for (const game in objectImages) {
 }
 
 const player = {
-  x: 490,
-  y: 570,
+  x: 570,
+  y: 520,
   width: 75,
   height: 75,
   speed: 4
@@ -294,11 +295,12 @@ const player = {
 const keys = {};
 
 const objects = [
-  { x: 220, y: 540, width: 40, height: 40, game: 'skin' }, // right 1
-  { x: 220, y: 660, width: 40, height: 40, game: 'aboutus' }, // right 2
+  { x: 120, y: 540, width: 40, height: 40, game: 'skin' }, // right 1
+  { x: 350, y: 660, width: 40, height: 40, game: 'aboutus' }, // right 2
   { x: 820, y: 540, width: 40, height: 40, game: 'outline' }, // right 3
   { x: 820, y: 660, width: 40, height: 40, game: 'format' }, // right 4
-  { x: 620, y: 530, width: 40, height: 40, game: 'synopsis' } // right 5
+  { x: 580, y: 660, width: 40, height: 40, game: 'synopsis' }, // right 5
+  { x: 120, y: 660, width: 40, height: 40, game: 'help' } // right 6
   ];
 
 const walls = [
@@ -316,7 +318,7 @@ walls.push(
 { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
 );
 
-const topRightBox = { x: 220, y: 540, width: 40, height: 40 }; 
+const topRightBox = { x: 120, y: 540, width: 40, height: 40 }; 
 const skinModal = document.getElementById('skin-modal');
 const closeModal = document.getElementById('close-modal');
 const confirmButton = document.getElementById('confirm-button');
@@ -386,6 +388,9 @@ function update() {
         case 'adventure':
           window.location.href = '{{site.baseurl}}/adventure';
           break;
+        case 'help':
+          window.location.href = '{{site.baseurl}}/help';
+          break;    
         case 'synopsis':
           window.location.href = '{{site.baseurl}}/synopsis';
           break;    
@@ -513,6 +518,9 @@ function draw() {
       } else if (obj.game === 'format') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  
+      } else if (obj.game === 'help') { 
+        scaledWidth *= 0.8;
+        scaledHeight *= 0.8;    
       } else if (obj.game === 'racing') { 
         scaledWidth *= 0.8;
         scaledHeight *= 0.8; 
