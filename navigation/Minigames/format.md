@@ -216,7 +216,7 @@ Main source is using our already implemented website with the biotech games and 
 // ...existing code...
 
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/shyguyfalls.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/31dsneobowsercity.mp3'); // Change path as needed
 music.loop = true;
 music.volume = 0.5;
 

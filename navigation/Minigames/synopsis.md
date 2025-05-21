@@ -237,7 +237,7 @@ Serves as the central hub for all experiences that don’t fit into the main the
 // ...existing code...
 
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/gcnbabypark.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/33electrodome.mp3'); // Change path as needed
 music.loop = true;
 music.volume = 0.5;
 
