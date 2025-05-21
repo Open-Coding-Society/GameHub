@@ -130,3 +130,22 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - Cosmetics: A way to change your outfit before selecting a minigame
 - Outline: Our outline of this in our website and how we designed everything
 - About us: About the creators - team roles of our minigames and website
+
+<script>
+// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// ...existing code...
+
+// --- Background Music ---
+const music = new Audio('{{site.baseurl}}/assets/audio/shyguyfallsminer.mp3'); // Change path as needed
+music.loop = true;
+music.volume = 0.5;
+
+// Play music after first user interaction (required by browsers)
+function startMusicOnce() {
+  music.play().catch(() => {});
+  window.removeEventListener('click', startMusicOnce);
+  window.removeEventListener('keydown', startMusicOnce);
+}
+window.addEventListener('click', startMusicOnce);
+window.addEventListener('keydown', startMusicOnce);
+</script>

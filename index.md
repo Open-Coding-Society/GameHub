@@ -3,7 +3,7 @@ layout: post
 title: Game Hub
 description: >
   <div style="text-align: center; font-family: 'Open Sans', sans-serif;">
-    Move your character around with WASD to enter different worlds, minigames and experiences on this map.<br>
+    Move your character around with WASD to enter different worlds, minigames, and experiences on this map.<br>
     Click Game Hub in the top left to go back to this page.
   </div>
 Author: Lars, Zach & Aarush

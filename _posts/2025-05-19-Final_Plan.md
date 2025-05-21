@@ -231,3 +231,22 @@ Serves as the central hub for all experiences that don’t fit into the main the
 - Format
 
 <img width="1280" alt="Image" src="https://github.com/user-attachments/assets/28c5d020-745f-4b8c-a54f-76fc64062db8" />
+
+<script>
+// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// ...existing code...
+
+// --- Background Music ---
+const music = new Audio('{{site.baseurl}}/assets/audio/gcnbabypark.mp3'); // Change path as needed
+music.loop = true;
+music.volume = 0.5;
+
+// Play music after first user interaction (required by browsers)
+function startMusicOnce() {
+  music.play().catch(() => {});
+  window.removeEventListener('click', startMusicOnce);
+  window.removeEventListener('keydown', startMusicOnce);
+}
+window.addEventListener('click', startMusicOnce);
+window.addEventListener('keydown', startMusicOnce);
+</script>
