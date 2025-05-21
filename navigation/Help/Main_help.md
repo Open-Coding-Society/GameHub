@@ -25,18 +25,27 @@ Author: Ian, Zach, Aarush
     <div class="col-md-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
-          <h5 class="card-title">Game Help</h5>
-          <p class="card-text">Guides and Overview of different games inside of Game Hub and changes that can be implemented.</p>
-          <a href="{{site.baseurl}}/game_help" class="btn btn-primary">View FAQ</a>
+          <h5 class="card-title">Adventure Help</h5>
+          <p class="card-text">Adventure Platformer Game Overview, Guide and possible Ideations to make.</p>
+          <a href="{{site.baseurl}}/adventure_help" class="btn btn-primary">View Guide</a>
+        </div>
+      </div>
+    </div>
+        <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Skin Help</h5>
+          <p class="card-text">Skin Overview, Guide, Help, possible Ideations to make.</p>
+          <a href="{{site.baseurl}}/skin_help" class="btn btn-primary">View Guide</a>
         </div>
       </div>
     </div>
     <div class="col-md-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
-          <h5 class="card-title">Skins</h5>
-          <p class="card-text">Customize, add new skins, and an overview of skin selection</p>
-          <a href="{{site.baseurl}}/technical_help" class="btn btn-primary">Troubleshoot</a>
+          <h5 class="card-title">Game Help</h5>
+          <p class="card-text">Stuck on figuring out how a main portion of a game works? Learn more about how each game works and possible ways to make the code better?</p>
+          <a href="{{site.baseurl}}/game_help" class="btn btn-primary">Troubleshoot</a>
         </div>
       </div>
     </div>
