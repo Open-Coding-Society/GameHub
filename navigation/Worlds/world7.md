@@ -208,7 +208,7 @@ Author: Zach, Ian, Aarush
 // ...existing code...
 
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/twighlightprincess.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/twilightprincess.mp3'); // Change path as needed
 music.loop = true;
 music.volume = 0.5;
 
