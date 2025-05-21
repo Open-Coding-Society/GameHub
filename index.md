@@ -207,22 +207,21 @@ Author: Lars, Zach & Aarush
 </div>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/rooftoprun.mp3'); // Change path as needed
 music.loop = true;
 music.volume = 0.5;
 
-// Play music after first user interaction (required by browsers)
-function startMusicOnce() {
-  music.play().catch(() => {});
-  window.removeEventListener('click', startMusicOnce);
-  window.removeEventListener('keydown', startMusicOnce);
+// Ensure music starts on user interaction
+function enableMusicPlayback() {
+  music.play().catch(() => {
+    console.error('Audio playback failed. Ensure user interaction occurs.');
+  });
 }
-window.addEventListener('click', startMusicOnce);
-window.addEventListener('keydown', startMusicOnce);
+
+// Add event listeners for user interaction
+document.addEventListener('click', enableMusicPlayback, { once: true });
+document.addEventListener('keydown', enableMusicPlayback, { once: true });
 </script>
 
 <script>
