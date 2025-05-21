@@ -27,7 +27,7 @@ Author: Ian, Zach, Aarush
         <div class="card-body">
           <h5 class="card-title">Game Help</h5>
           <p class="card-text">Guides and Overview of different games inside of Game Hub and changes that can be implemented.</p>
-          <a href="{{site.baseurl}}/help/gameplay-faq" class="btn btn-primary">View FAQ</a>
+          <a href="{{site.baseurl}}/game_help" class="btn btn-primary">View FAQ</a>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ Author: Ian, Zach, Aarush
         <div class="card-body">
           <h5 class="card-title">Skins</h5>
           <p class="card-text">Customize, add new skins, and an overview of skin selection</p>
-          <a href="{{site.baseurl}}/help/technical" class="btn btn-primary">Troubleshoot</a>
+          <a href="{{site.baseurl}}/technical_help" class="btn btn-primary">Troubleshoot</a>
         </div>
       </div>
     </div>
