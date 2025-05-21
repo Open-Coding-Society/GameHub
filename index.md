@@ -3,8 +3,8 @@ layout: post
 title: Game Hub
 description: >
   <div style="text-align: center; font-family: 'Open Sans', sans-serif;">
-    Move your character around with WASD to enter different minigames and experiences on this map.<br>
-    Click Game Hub in the top left to go back to the home page.
+    Move your character around with WASD to enter different worlds, minigames and experiences on this map.<br>
+    Click Game Hub in the top left to go back to this page.
   </div>
 Author: Lars, Zach & Aarush
 ---
@@ -206,8 +206,6 @@ Author: Lars, Zach & Aarush
   </div>
 </div>
 
-
-
 <script>
 // filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
 // ...existing code...
@@ -226,7 +224,6 @@ function startMusicOnce() {
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
 </script>
-
 
 <script>
 const canvas = document.getElementById('gameCanvas');
