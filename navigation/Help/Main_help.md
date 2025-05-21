@@ -1,23 +1,20 @@
 ---
 layout: post
-title: Help Page
-description: Main Help Page
+title: Help Center
+description: Find answers, tutorials, and contact support for your Bioverse experience.
 permalink: /help
 Author: Ian, Zach, Aarush
 ---
 
 <!-- Help Homepage - Styled with Bootstrap and Pilot Cities-like UI -->
 
-<div class="container my-5">
-  <h1 class="display-4 text-center mb-4">Help Center</h1>
-  <p class="lead text-center mb-5">Find answers, tutorials, and contact support for your Bioverse experience.</p>
-
+<div class="text-center" style="margin-left: 375px;">
   <div class="row">
     <div class="col-md-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Getting Started</h5>
-          <p class="card-text">Learn how to navigate Bioverse Central through Worlds, and modify game positions.</p>
+          <p class="card-text">Learn how to navigate Bioverse Central through worlds, and modify game positions.</p>
           <a href="{{site.baseurl}}/world_help" class="btn btn-primary">View Guide</a>
         </div>
       </div>
@@ -26,16 +23,16 @@ Author: Ian, Zach, Aarush
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Adventure Help</h5>
-          <p class="card-text">Adventure Platformer Game Overview, Guide and possible Ideations to make.</p>
+          <p class="card-text">Adventure Platformer Game overview, guides, and possible ideations to make.</p>
           <a href="{{site.baseurl}}/adventure_help" class="btn btn-primary">View Guide</a>
         </div>
       </div>
     </div>
-        <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Skin Help</h5>
-          <p class="card-text">Skin Overview, Guide, Help, possible Ideations to make.</p>
+          <p class="card-text">Skin overview, guides, help, and possible ideations to make.</p>
           <a href="{{site.baseurl}}/skin_help" class="btn btn-primary">View Guide</a>
         </div>
       </div>
@@ -44,7 +41,7 @@ Author: Ian, Zach, Aarush
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Game Help</h5>
-          <p class="card-text">Stuck on figuring out how a main portion of a game works? Learn more about how each game works and possible ways to make the code better?</p>
+          <p class="card-text">Stuck on figuring out how a portion of a game works? Learn more about how each game works here!</p>
           <a href="{{site.baseurl}}/game_help" class="btn btn-primary">Troubleshoot</a>
         </div>
       </div>
@@ -54,7 +51,6 @@ Author: Ian, Zach, Aarush
 
 <script>
 // filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
 
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/toadharbor.mp3'); // Change path as needed
