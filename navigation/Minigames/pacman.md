@@ -16,8 +16,10 @@ Author: Aarush
   canvas {
     display: block;
     margin: 20px auto;
-    background-color: black;
-    border: 2px solid #e5e5e5;
+    background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+    /* Pacman blue gradient */
+    border: 2px solid #ffd700; /* Pacman yellow border */
+    box-shadow: 0 0 30px #00f6ff, 0 0 10px #ffd700 inset;
   }
   .restart-hint {
     text-align: center;
@@ -26,6 +28,24 @@ Author: Aarush
     margin-bottom: 8px;
     margin-top: 0;
     letter-spacing: 1px;
+  }
+  #difficulty {
+    background: #000428;
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00f6ff inset;
+  }
+  #restartBtn {
+    background: #ffd700;
+    color: #222;
+    border: 2px solid #ffd700;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-left: 10px;
+    box-shadow: 0 0 10px #ffd70066;
   }
 </style>
 
@@ -266,13 +286,20 @@ Author: Aarush
         return false;
       }
       // Remove ghosts hit by bullet
+      let hit = false;
       for (let i = ghosts.length - 1; i >= 0; i--) {
-        if (ghosts[i].x === bullet.x && ghosts[i].y === bullet.y) {
+        if (
+          Math.round(ghostPixelPositions[i]?.x / tileSize) === bullet.x &&
+          Math.round(ghostPixelPositions[i]?.y / tileSize) === bullet.y
+        ) {
           ghosts.splice(i, 1);
-          return false;
+          ghostPixelPositions.splice(i, 1);
+          ghostAnimSteps.splice(i, 1);
+          hit = true;
+          break;
         }
       }
-      return true;
+      return !hit; // Only remove bullet if it hit a ghost
     });
   }
 
