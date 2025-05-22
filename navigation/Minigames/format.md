@@ -1,5 +1,5 @@
 ---
-layout: bootstrap
+layout: post
 title: Format
 description: Our ideas and format for the other 6 games
 permalink: /format

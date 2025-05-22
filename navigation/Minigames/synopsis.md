@@ -1,5 +1,5 @@
 ---
-layout: bootstrap
+layout: post
 title: Synopsis
 description: Our ideas and snyopsis for worlds/levels
 permalink: /synopsis

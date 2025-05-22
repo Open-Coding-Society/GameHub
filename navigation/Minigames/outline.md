@@ -1,5 +1,5 @@
 ---
-layout: bootstrap
+layout: post
 title: Outline
 description: Our ideas and outline for making this project
 permalink: /outline
