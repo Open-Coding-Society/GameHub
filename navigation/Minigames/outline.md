@@ -25,7 +25,7 @@ This is an adventure game with numerous interactions to simulate and address rea
 [Next Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Next_Plan.html)
 
 ### Final Plan
-[Final Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/19/Final_Plan.html)
+[Final Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Final_Plan.html)
 
 ### Ideate
 The Scripps Research: Biotech Engagement Game Development project uses interactive games to introduce students to biotechnology. Each game is built around real scientific data and machine learning models, allowing players to tackle challenges like predicting disease outbreaks or designing new treatments. Through gameplay, students experience how data and AI are used in real-world research to solve major health problems.  
