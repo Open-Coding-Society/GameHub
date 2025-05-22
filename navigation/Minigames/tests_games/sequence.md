@@ -127,7 +127,7 @@ Author: Ian
 // ...existing code...
 
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/smashbrosmaintheme.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/25moomoomeadows.mp3'); // Change path as needed
 music.loop = true;
 music.volume = 0.5;
 
