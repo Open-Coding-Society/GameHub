@@ -3,7 +3,7 @@ toc: true
 layout: post
 title: Final Plan
 description: Game Hub Final Plan for website
-categories: [Games]
+categories: [Planning]
 ---
 
 # Game Hub

@@ -3,7 +3,7 @@ toc: true
 layout: post
 title: Initial Plan
 description: Game Hub Initial Plan for website
-categories: [Games]
+categories: [Planning]
 ---
 
 # Pilot City Project Minigames
