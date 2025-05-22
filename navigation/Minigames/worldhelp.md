@@ -1,5 +1,5 @@
 ---
-layout: bootstrap
+layout: post
 title: Worlds Help Page
 description: Main World Help Page
 permalink: /worldhelp
