@@ -170,17 +170,24 @@ Author: Zach, Ian, Aarush
   .skin-option.selected .checkmark {
     display: block; 
   }
+  .top-right-icon {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    z-index: 10;
+  }
 </style>
 
 <div id="loading">Loading game assets...</div>
-<div id="canvas-container">
+<div id="canvas-container" style="position: relative;">
   <div id="points-display">Points: 0</div>
-  <div id="home-btn-container">
-    <a href="{{site.baseurl}}/" id="home-btn" class="btn btn-warning" style="font-size: 1.3em; padding: 10px 28px; border-radius: 8px;">
-      Back to Home
-    </a>
-  </div>
   <canvas id="gameCanvas" width="960" height="720"></canvas>
+  <a href="{{site.baseurl}}/">
+    <img src="{{site.baseurl}}/images/icon30.png" alt="Home Icon" class="top-right-icon">
+  </a>
 </div>
 
 <div id="skin-modal">
