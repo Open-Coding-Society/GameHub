@@ -69,16 +69,18 @@ Author: Aarush
     5: { spawnRate: 36, minSpike: 32, maxSpike: 72, doubleChance: 0.33, platformChance: 0.8, topObstacleChance: 0.18, padChance: 0.22, movingPlatformChance: 0.08 }
   };
 
-  // Player (fixed jump/gravity, increased jump height)
+  // Player (fixed jump/gravity, slightly lower jump, slightly faster speed)
   const player = {
     x: 100,
     y: height - 80,
     size: 40,
     velocityY: 0,
     gravity: 1.1,
-    jumpPower: -24, // Increased jump height
+    jumpPower: -20, // Slightly lower jump
     onGround: true
   };
+
+  let obstacleSpeed = 10; // Slightly increased speed
 
   // Obstacles and platforms
   let obstacles = [];
@@ -91,12 +93,38 @@ Author: Aarush
   let topObstacleChance = difficultySettings[3].topObstacleChance;
   let padChance = difficultySettings[3].padChance;
   let movingPlatformChance = difficultySettings[3].movingPlatformChance;
-  let obstacleSpeed = 8;
   let frame = 0;
   let score = 0;
   let bestScore = 0;
   let gameOver = false;
   let started = false;
+
+  // Helper to generate a "chain" of platforms, spread out for jumping
+  function generatePlatformChain(startX, startY, count, minGap, maxGap, minY, maxY) {
+    const chain = [];
+    let lastX = startX;
+    let lastY = startY;
+    for (let i = 0; i < count; i++) {
+      const pfWidth = 80 + Math.random() * 60;
+      const pfHeight = 18;
+      // Spread out platforms: gap is based on jump distance
+      // Player jumpPower and gravity allow about 170-190px horizontal jump at obstacleSpeed=10
+      const gap = minGap + Math.random() * (maxGap - minGap); // e.g. 120-180px
+      lastX += pfWidth + gap;
+      // Next platform Y is close to previous, but random within jumpable range
+      lastY += (Math.random() - 0.5) * 40;
+      lastY = Math.max(minY, Math.min(maxY, lastY));
+      chain.push({
+        x: lastX,
+        y: lastY,
+        width: pfWidth,
+        height: pfHeight,
+        type: "static",
+        vy: 0
+      });
+    }
+    return chain;
+  }
 
   function applyDifficulty() {
     const diff = difficultySelect.value;
@@ -319,19 +347,16 @@ Author: Aarush
       }
       // Chance for platform (jumpable)
       if (Math.random() < platformChance) {
-        const pfWidth = 80 + Math.random() * 60;
-        const pfHeight = 18;
-        // Place platform at a lower, more reachable height above ground
-        // Platforms will be between 40 and 120 pixels above the ground
-        const pfY = height - 40 - (40 + Math.random() * 80);
-        platforms.push({
-          x: width,
-          y: pfY,
-          width: pfWidth,
-          height: pfHeight,
-          type: Math.random() < movingPlatformChance ? "moving" : "static",
-          vy: Math.random() < movingPlatformChance ? (Math.random() < 0.5 ? 1.5 : -1.5) : 0
-        });
+        // Start the chain at a reachable height above ground
+        const baseY = height - 40 - (40 + Math.random() * 60);
+        const chainCount = 2 + Math.floor(Math.random() * 3); // 2-4 platforms per chain
+        // Spread out: minGap/maxGap based on jump distance (tune as needed)
+        const minGap = 110, maxGap = 170;
+        const minY = height - 40 - 120;
+        const maxY = height - 40 - 30;
+        // Start X is just off the right edge
+        const chain = generatePlatformChain(width, baseY, chainCount, minGap, maxGap, minY, maxY);
+        platforms.push(...chain);
       }
       // Chance for jumper pad
       if (Math.random() < padChance) {
