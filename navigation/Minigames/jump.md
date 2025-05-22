@@ -40,6 +40,14 @@ Author: Aarush
 <h1 class="gdash-center">Geometry Dash Mini</h1>
 <p class="gdash-center">Press <b>Space</b> or click/tap to jump! Avoid the spikes!</p>
 <div class="gdash-center">
+  <label for="gdashDifficulty" style="font-size:1.1em;">Difficulty: </label>
+  <select id="gdashDifficulty" style="font-size:1.1em;">
+    <option value="1">Very Easy</option>
+    <option value="2">Easy</option>
+    <option value="3" selected>Normal</option>
+    <option value="4">Hard</option>
+    <option value="5">Insane</option>
+  </select>
   <button id="gdashRestart" class="gdash-btn" style="display:none;">Restart</button>
 </div>
 <canvas id="gdashCanvas" width="900" height="400"></canvas>
@@ -51,19 +59,38 @@ Author: Aarush
   const width = canvas.width;
   const height = canvas.height;
 
-  // Player
+  // Difficulty settings (more platforms, lower platforms)
+  const difficultySelect = document.getElementById('gdashDifficulty');
+  const difficultySettings = {
+    1: { spawnRate: 90, minSpike: 32, maxSpike: 40, doubleChance: 0, platformChance: 0.25, topObstacleChance: 0.02, padChance: 0.03, movingPlatformChance: 0.01 },
+    2: { spawnRate: 75, minSpike: 32, maxSpike: 48, doubleChance: 0.08, platformChance: 0.35, topObstacleChance: 0.04, padChance: 0.06, movingPlatformChance: 0.02 },
+    3: { spawnRate: 60, minSpike: 32, maxSpike: 56, doubleChance: 0.15, platformChance: 0.5, topObstacleChance: 0.07, padChance: 0.10, movingPlatformChance: 0.03 },
+    4: { spawnRate: 48, minSpike: 32, maxSpike: 64, doubleChance: 0.22, platformChance: 0.65, topObstacleChance: 0.12, padChance: 0.15, movingPlatformChance: 0.05 },
+    5: { spawnRate: 36, minSpike: 32, maxSpike: 72, doubleChance: 0.33, platformChance: 0.8, topObstacleChance: 0.18, padChance: 0.22, movingPlatformChance: 0.08 }
+  };
+
+  // Player (fixed jump/gravity, increased jump height)
   const player = {
     x: 100,
     y: height - 80,
     size: 40,
     velocityY: 0,
     gravity: 1.1,
-    jumpPower: -18,
+    jumpPower: -24, // Increased jump height
     onGround: true
   };
 
-  // Obstacles
+  // Obstacles and platforms
   let obstacles = [];
+  let platforms = [];
+  let spawnRate = difficultySettings[3].spawnRate;
+  let minSpike = difficultySettings[3].minSpike;
+  let maxSpike = difficultySettings[3].maxSpike;
+  let doubleChance = difficultySettings[3].doubleChance;
+  let platformChance = difficultySettings[3].platformChance;
+  let topObstacleChance = difficultySettings[3].topObstacleChance;
+  let padChance = difficultySettings[3].padChance;
+  let movingPlatformChance = difficultySettings[3].movingPlatformChance;
   let obstacleSpeed = 8;
   let frame = 0;
   let score = 0;
@@ -71,15 +98,35 @@ Author: Aarush
   let gameOver = false;
   let started = false;
 
+  function applyDifficulty() {
+    const diff = difficultySelect.value;
+    spawnRate = difficultySettings[diff].spawnRate;
+    minSpike = difficultySettings[diff].minSpike;
+    maxSpike = difficultySettings[diff].maxSpike;
+    doubleChance = difficultySettings[diff].doubleChance;
+    platformChance = difficultySettings[diff].platformChance;
+    topObstacleChance = difficultySettings[diff].topObstacleChance;
+    padChance = difficultySettings[diff].padChance;
+    movingPlatformChance = difficultySettings[diff].movingPlatformChance;
+  }
+
+  difficultySelect.addEventListener('change', () => {
+    applyDifficulty();
+    resetGame();
+    draw();
+  });
+
   function resetGame() {
     player.y = height - 80;
     player.velocityY = 0;
     player.onGround = true;
     obstacles = [];
+    platforms = [];
     frame = 0;
     score = 0;
     gameOver = false;
     started = false;
+    applyDifficulty();
     document.getElementById('gdashScore').textContent = '';
     document.getElementById('gdashRestart').style.display = 'none';
   }
@@ -105,15 +152,64 @@ Author: Aarush
 
   function drawObstacles() {
     ctx.save();
-    ctx.fillStyle = "#ffd700";
-    ctx.strokeStyle = "#e1a800";
-    ctx.lineWidth = 2;
     obstacles.forEach(obs => {
+      if (obs.type === "spike") {
+        ctx.fillStyle = "#ffd700";
+        ctx.strokeStyle = "#e1a800";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(obs.x, obs.y + obs.height);
+        ctx.lineTo(obs.x + obs.width / 2, obs.y);
+        ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      } else if (obs.type === "top") {
+        ctx.fillStyle = "#ffd700";
+        ctx.strokeStyle = "#e1a800";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(obs.x, obs.y);
+        ctx.lineTo(obs.x + obs.width / 2, obs.y + obs.height);
+        ctx.lineTo(obs.x + obs.width, obs.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      } else if (obs.type === "pad") {
+        // Jumper pad
+        ctx.fillStyle = "#00ff00";
+        ctx.strokeStyle = "#006600";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(obs.x + obs.width / 2, obs.y + obs.height / 2, obs.width / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        // Arrow
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.moveTo(obs.x + obs.width / 2, obs.y + 8);
+        ctx.lineTo(obs.x + obs.width / 2 - 8, obs.y + obs.height - 8);
+        ctx.lineTo(obs.x + obs.width / 2 + 8, obs.y + obs.height - 8);
+        ctx.closePath();
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+  }
+
+  function drawPlatforms() {
+    ctx.save();
+    platforms.forEach(pf => {
+      if (pf.type === "moving") {
+        ctx.fillStyle = "#ffb347";
+        ctx.strokeStyle = "#b36b00";
+      } else {
+        ctx.fillStyle = "#8fffa0";
+        ctx.strokeStyle = "#2e7d32";
+      }
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(obs.x, obs.y + obs.height);
-      ctx.lineTo(obs.x + obs.width / 2, obs.y);
-      ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
-      ctx.closePath();
+      ctx.rect(pf.x, pf.y, pf.width, pf.height);
       ctx.fill();
       ctx.stroke();
     });
@@ -147,50 +243,153 @@ Author: Aarush
     player.velocityY += player.gravity;
     player.y += player.velocityY;
 
+    // Platform collision (player can land on platforms)
+    player.onGround = false;
+    platforms.forEach(pf => {
+      // Moving platform logic
+      if (pf.type === "moving") {
+        pf.y += pf.vy;
+        if (pf.y < 80 || pf.y > height - 120) pf.vy *= -1;
+      }
+      if (
+        player.x + player.size > pf.x &&
+        player.x < pf.x + pf.width &&
+        player.y + player.size > pf.y &&
+        player.y + player.size - player.velocityY <= pf.y
+      ) {
+        player.y = pf.y - player.size;
+        player.velocityY = 0;
+        player.onGround = true;
+      }
+    });
+
+    // Jumper pad collision
+    obstacles.forEach(obs => {
+      if (obs.type === "pad") {
+        if (
+          player.x + player.size > obs.x &&
+          player.x < obs.x + obs.width &&
+          player.y + player.size > obs.y &&
+          player.y + player.size - player.velocityY <= obs.y + obs.height
+        ) {
+          player.velocityY = -28; // Strong jump
+        }
+      }
+    });
+
     // Ground collision
     if (player.y + player.size > height - 40) {
       player.y = height - 40 - player.size;
       player.velocityY = 0;
       player.onGround = true;
-    } else {
-      player.onGround = false;
     }
 
-    // Add obstacles
-    if (frame % 60 === 0) {
-      const widthSpike = 32 + Math.random() * 16;
+    // Add obstacles (course generation based on difficulty)
+    if (frame % spawnRate === 0) {
+      // Bottom spike
+      const widthSpike = minSpike + Math.random() * (maxSpike - minSpike);
       obstacles.push({
         x: width,
         y: height - 40 - widthSpike,
         width: widthSpike,
-        height: widthSpike
+        height: widthSpike,
+        type: "spike"
       });
+      // Chance for double spike (harder difficulties)
+      if (Math.random() < doubleChance) {
+        const widthSpike2 = minSpike + Math.random() * (maxSpike - minSpike);
+        obstacles.push({
+          x: width + widthSpike + 24,
+          y: height - 40 - widthSpike2,
+          width: widthSpike2,
+          height: widthSpike2,
+          type: "spike"
+        });
+      }
+      // Chance for top obstacle (spike on ceiling)
+      if (Math.random() < topObstacleChance) {
+        const widthTop = minSpike + Math.random() * (maxSpike - minSpike);
+        obstacles.push({
+          x: width,
+          y: 0,
+          width: widthTop,
+          height: widthTop,
+          type: "top"
+        });
+      }
+      // Chance for platform (jumpable)
+      if (Math.random() < platformChance) {
+        const pfWidth = 80 + Math.random() * 60;
+        const pfHeight = 18;
+        // Place platform at a lower, more reachable height above ground
+        // Platforms will be between 40 and 120 pixels above the ground
+        const pfY = height - 40 - (40 + Math.random() * 80);
+        platforms.push({
+          x: width,
+          y: pfY,
+          width: pfWidth,
+          height: pfHeight,
+          type: Math.random() < movingPlatformChance ? "moving" : "static",
+          vy: Math.random() < movingPlatformChance ? (Math.random() < 0.5 ? 1.5 : -1.5) : 0
+        });
+      }
+      // Chance for jumper pad
+      if (Math.random() < padChance) {
+        const padSize = 32;
+        obstacles.push({
+          x: width,
+          y: height - 40 - padSize,
+          width: padSize,
+          height: padSize,
+          type: "pad"
+        });
+      }
     }
 
     // Move obstacles and check for collision
     obstacles.forEach(obs => {
       obs.x -= obstacleSpeed;
-      // Collision detection
-      if (
-        player.x + player.size > obs.x &&
-        player.x < obs.x + obs.width &&
-        player.y + player.size > obs.y &&
-        player.y < obs.y + obs.height
-      ) {
-        gameOver = true;
-        bestScore = Math.max(score, bestScore);
-        document.getElementById('gdashScore').innerHTML = `<b>Game Over!</b> Score: ${score} &nbsp; | &nbsp; Best: ${bestScore}`;
-        document.getElementById('gdashRestart').style.display = '';
+      // Collision detection (bottom and top spikes)
+      if (obs.type === "spike") {
+        if (
+          player.x + player.size > obs.x &&
+          player.x < obs.x + obs.width &&
+          player.y + player.size > obs.y &&
+          player.y < obs.y + obs.height
+        ) {
+          gameOver = true;
+          bestScore = Math.max(score, bestScore);
+          document.getElementById('gdashScore').innerHTML = `<b>Game Over!</b> Score: ${score} &nbsp; | &nbsp; Best: ${bestScore}`;
+          document.getElementById('gdashRestart').style.display = '';
+        }
+        if (!obs.passed && obs.x + obs.width < player.x) {
+          score++;
+          obs.passed = true;
+        }
+      } else if (obs.type === "top") {
+        if (
+          player.x + player.size > obs.x &&
+          player.x < obs.x + obs.width &&
+          player.y < obs.y + obs.height &&
+          player.y + player.size > obs.y
+        ) {
+          gameOver = true;
+          bestScore = Math.max(score, bestScore);
+          document.getElementById('gdashScore').innerHTML = `<b>Game Over!</b> Score: ${score} &nbsp; | &nbsp; Best: ${bestScore}`;
+          document.getElementById('gdashRestart').style.display = '';
+        }
       }
-      // Score
-      if (!obs.passed && obs.x + obs.width < player.x) {
-        score++;
-        obs.passed = true;
-      }
+      // Pad collision handled above
     });
 
-    // Remove off-screen obstacles
+    // Move platforms
+    platforms.forEach(pf => {
+      pf.x -= obstacleSpeed;
+    });
+
+    // Remove off-screen obstacles and platforms
     obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
+    platforms = platforms.filter(pf => pf.x + pf.width > 0);
 
     frame++;
   }
@@ -198,6 +397,7 @@ Author: Aarush
   function draw() {
     ctx.clearRect(0, 0, width, height);
     drawGround();
+    drawPlatforms();
     drawObstacles();
     drawPlayer();
     drawScore();
