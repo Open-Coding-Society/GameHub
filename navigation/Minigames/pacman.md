@@ -66,6 +66,15 @@ Author: Aarush
   <button id="restartBtn" style="font-size:1.1em;">Restart</button>
 </div>
 
+<!-- Speed Settings -->
+<div style="text-align:center;margin:10px;">
+  <label for="pacmanSpeed" style="font-size:1.1em;color:#ffd700;">Pacman Speed: <span id="pacmanSpeedValue"></span></label>
+  <input type="range" id="pacmanSpeed" min="2" max="40" step="1" value="10" style="width:120px;vertical-align:middle;">
+  &nbsp;&nbsp;
+  <label for="ghostSpeed" style="font-size:1.1em;color:#ffd700;">Squid Speed: <span id="ghostSpeedValue"></span></label>
+  <input type="range" id="ghostSpeed" min="2" max="40" step="1" value="20" style="width:120px;vertical-align:middle;">
+</div>
+
 <script>
   const canvas = document.getElementById('pacmanCanvas');
   const ctx = canvas.getContext('2d');
@@ -78,8 +87,8 @@ Author: Aarush
   let lastPacmanMove = 0;
   let lastGhostMove = 0;
   let lastBulletMove = 0;
-  const pacmanMoveInterval = 10; // ms, extremely fast
-  const ghostMoveInterval = 20;  // ms, extremely fast
+  let pacmanMoveInterval = 10; // ms, extremely fast
+  let ghostMoveInterval = 20;  // ms, extremely fast
   const bulletMoveInterval = 10; // ms, extremely fast
 
   let pacmanPixelX, pacmanPixelY;
@@ -286,20 +295,23 @@ Author: Aarush
         return false;
       }
       // Remove ghosts hit by bullet
-      let hit = false;
-      for (let i = ghosts.length - 1; i >= 0; i--) {
+      let hitIndex = -1;
+      for (let i = 0; i < ghosts.length; i++) {
         if (
           Math.round(ghostPixelPositions[i]?.x / tileSize) === bullet.x &&
           Math.round(ghostPixelPositions[i]?.y / tileSize) === bullet.y
         ) {
-          ghosts.splice(i, 1);
-          ghostPixelPositions.splice(i, 1);
-          ghostAnimSteps.splice(i, 1);
-          hit = true;
+          hitIndex = i;
           break;
         }
       }
-      return !hit; // Only remove bullet if it hit a ghost
+      if (hitIndex !== -1) {
+        ghosts.splice(hitIndex, 1);
+        ghostPixelPositions.splice(hitIndex, 1);
+        ghostAnimSteps.splice(hitIndex, 1);
+        return false; // Remove bullet only if it hit a ghost
+      }
+      return true; // Keep bullet if it didn't hit a ghost
     });
   }
 
@@ -542,19 +554,14 @@ Author: Aarush
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawMaze();
 
-    // Call update functions every frame, but they only move if enough time has passed
+    // Always update movement, even after gameOver, but only allow input/movement if not gameOver
     updatePacman();
     updateBullets();
+    updateGhosts();
     drawPacman();
     drawBullets();
-    updateGhosts();
     drawGhosts();
 
-    // Prevent further movement after game over
-    if (gameOver) {
-      pacman.dx = 0;
-      pacman.dy = 0;
-    }
     requestAnimationFrame(gameLoop);
   }
 
