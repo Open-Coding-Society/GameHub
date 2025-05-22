@@ -152,30 +152,64 @@ Author: Aarush
 
   function drawBird() {
     ctx.save();
+    // Body (ellipse)
     ctx.beginPath();
-    ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+    ctx.ellipse(bird.x, bird.y, bird.radius + 6, bird.radius, 0, 0, Math.PI * 2);
     ctx.fillStyle = "#ffe066";
+    ctx.shadowColor = "#e1a800";
+    ctx.shadowBlur = 10;
     ctx.fill();
+    ctx.shadowBlur = 0;
     ctx.strokeStyle = "#e1a800";
     ctx.lineWidth = 2;
     ctx.stroke();
-    // Eye
+
+    // Wing
+    ctx.save();
+    ctx.translate(bird.x - 8, bird.y + 2);
+    ctx.rotate(-0.2);
     ctx.beginPath();
-    ctx.arc(bird.x + 8, bird.y - 5, 4, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
+    ctx.ellipse(0, 0, bird.radius / 1.7, bird.radius / 2.2, 0, 0, Math.PI * 2);
+    ctx.fillStyle = "#fffbe0";
+    ctx.globalAlpha = 0.85;
     ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.restore();
+
+    // Beak (triangle)
     ctx.beginPath();
-    ctx.arc(bird.x + 9, bird.y - 5, 2, 0, Math.PI * 2);
-    ctx.fillStyle = "#222";
-    ctx.fill();
-    // Beak
-    ctx.beginPath();
-    ctx.moveTo(bird.x + bird.radius, bird.y);
-    ctx.lineTo(bird.x + bird.radius + 10, bird.y - 4);
-    ctx.lineTo(bird.x + bird.radius + 10, bird.y + 4);
+    ctx.moveTo(bird.x + bird.radius + 10, bird.y - 2);
+    ctx.lineTo(bird.x + bird.radius + 22, bird.y - 6);
+    ctx.lineTo(bird.x + bird.radius + 10, bird.y + 6);
     ctx.closePath();
     ctx.fillStyle = "#ff9900";
     ctx.fill();
+    ctx.strokeStyle = "#d17a00";
+    ctx.stroke();
+
+    // Eye white
+    ctx.beginPath();
+    ctx.arc(bird.x + 12, bird.y - 7, 7, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff";
+    ctx.fill();
+    ctx.strokeStyle = "#bbb";
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // Eye black
+    ctx.beginPath();
+    ctx.arc(bird.x + 14, bird.y - 7, 3, 0, Math.PI * 2);
+    ctx.fillStyle = "#222";
+    ctx.fill();
+
+    // Eyebrow
+    ctx.beginPath();
+    ctx.moveTo(bird.x + 8, bird.y - 13);
+    ctx.lineTo(bird.x + 18, bird.y - 15);
+    ctx.strokeStyle = "#222";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
     ctx.restore();
   }
 
