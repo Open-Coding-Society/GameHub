@@ -15,7 +15,7 @@ Author: Everyone
         <div class="card-body">
           <h5 class="card-title">Getting Started</h5>
           <p class="card-text">Learn how to navigate Bioverse Central through worlds, and modify game positions.</p>
-          <a href="{{site.baseurl}}/world_help" class="btn btn-primary">View Guide</a>
+          <a href="{{site.baseurl}}/worldhelp" class="btn btn-primary">View Guide</a>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@ Author: Everyone
         <div class="card-body">
           <h5 class="card-title">Adventure Help</h5>
           <p class="card-text">Adventure Platformer Game overview, guides, and possible ideations to make.</p>
-          <a href="{{site.baseurl}}/adventure_help" class="btn btn-primary">View Guide</a>
+          <a href="{{site.baseurl}}/adventurehelp" class="btn btn-primary">View Guide</a>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@ Author: Everyone
         <div class="card-body">
           <h5 class="card-title">Skin Help</h5>
           <p class="card-text">Skin overview, guides, help, and possible ideations to make.</p>
-          <a href="{{site.baseurl}}/skin_help" class="btn btn-primary">View Guide</a>
+          <a href="{{site.baseurl}}/skinhelp" class="btn btn-primary">View Guide</a>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@ Author: Everyone
         <div class="card-body">
           <h5 class="card-title">Game Help</h5>
           <p class="card-text">Stuck on figuring out how a portion of a game works? Learn more about how each game works here!</p>
-          <a href="{{site.baseurl}}/game_help" class="btn btn-primary">Troubleshoot</a>
+          <a href="{{site.baseurl}}/gamehelp" class="btn btn-primary">Troubleshoot</a>
         </div>
       </div>
     </div>

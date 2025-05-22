@@ -2,7 +2,7 @@
 layout: bootstrap
 title: Worlds Help Page
 description: Main World Help Page
-permalink: /world_help
+permalink: /worldhelp
 Author: Everyone
 ---
 
@@ -140,7 +140,8 @@ objectImages.format = '{{site.baseurl}}/images/newIcon.png';
 - Make worlds scrollable or paginated if too many icons.
 
 <script>
-// filepath: /home/zachpeltz/nighthawk/GenomeGamersFrontend/navigation/Help/World_help.md
+// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// ...existing code...
 
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/34gbaskygarden.mp3'); // Change path as needed
@@ -152,11 +153,7 @@ function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
   window.removeEventListener('keydown', startMusicOnce);
-  window.removeEventListener('mousedown', startMusicOnce);
-  window.removeEventListener('touchstart', startMusicOnce);
 }
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
-window.addEventListener('mousedown', startMusicOnce);
-window.addEventListener('touchstart', startMusicOnce);
 </script>

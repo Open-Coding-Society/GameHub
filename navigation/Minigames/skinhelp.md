@@ -2,7 +2,7 @@
 layout: bootstrap
 title: Skins Help Page
 description: Main Skin Help Page
-permalink: /skin_help
+permalink: /skinhelp
 Author: Everyone
 ---
 
@@ -139,7 +139,8 @@ confirmButton.addEventListener('click', () => {
 The skin system is modular and easy to extend. You can add more skins, enforce unlock requirements, and persist user choices with minor code changes.
 
 <script>
-// filepath: /home/zachpeltz/nighthawk/GenomeGamersFrontend/navigation/Help/Skin_help.md
+// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// ...existing code...
 
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/36wiimushroomgorge.mp3'); // Change path as needed
@@ -151,11 +152,7 @@ function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
   window.removeEventListener('keydown', startMusicOnce);
-  window.removeEventListener('mousedown', startMusicOnce);
-  window.removeEventListener('touchstart', startMusicOnce);
 }
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
-window.addEventListener('mousedown', startMusicOnce);
-window.addEventListener('touchstart', startMusicOnce);
 </script>
