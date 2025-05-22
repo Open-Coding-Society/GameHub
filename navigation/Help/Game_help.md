@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Games Help Page
 description: Main Game Help Page
 permalink: /game_help
