@@ -284,7 +284,7 @@ const objectImages = {
    farming: '{{site.baseurl}}/images/icon12.png', // top 6
    battle: '{{site.baseurl}}/images/icon13.png', // top 7
    tests: '{{site.baseurl}}/images/icon14.png', // top 8
-   stealth: '{{site.baseurl}}/images/icon15.png', // top 9
+   road: '{{site.baseurl}}/images/icon15.png', // top 9
    strategy: '{{site.baseurl}}/images/icon16.png', // bottom 1
    survive: '{{site.baseurl}}/images/icon17.png', // bottom 2
    simulation: '{{site.baseurl}}/images/icon18.png', // bottom 3
@@ -333,7 +333,7 @@ const objects = [
   { x: 630, y: 100, width: 40, height: 40, game: 'farming' }, // top 6
   { x: 700, y: 195, width: 40, height: 40, game: 'battle' }, // top 7
   { x: 805, y: 195, width: 40, height: 40, game: 'tests' }, // top 8
-  { x: 810, y: 330, width: 40, height: 40, game: 'stealth' }, // top 9
+  { x: 810, y: 330, width: 40, height: 40, game: 'road' }, // top 9
   { x: 185, y: 620, width: 40, height: 40, game: 'strategy' }, // bottom 1
   { x: 270, y: 620, width: 40, height: 40, game: 'survive' }, // bottom 2
   { x: 355, y: 620, width: 40, height: 40, game: 'simulation' }, // bottom 3
@@ -478,8 +478,8 @@ function update() {
         case 'tests':
           window.location.href = '{{site.baseurl}}/tests';
           break;
-        case 'stealth':
-          window.location.href = '{{site.baseurl}}/stealth';
+        case 'road':
+          window.location.href = '{{site.baseurl}}/road';
           break;  
         case 'strategy':
           window.location.href = '{{site.baseurl}}/strategy';
@@ -575,9 +575,9 @@ function draw() {
       } else if (obj.game === 'flappy') { 
         scaledWidth *= 1.2;
         scaledHeight *= 1.2;
-      } else if (obj.game === 'stealth') { 
-        scaledWidth *= 0.6;
-        scaledHeight *= 0.6;  
+      } else if (obj.game === 'road') { 
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;  
       } else if (obj.game === 'battle') { 
         scaledWidth *= 0.5;
         scaledHeight *= 0.5;

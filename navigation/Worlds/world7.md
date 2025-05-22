@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Sneak & Skill
-description: Stealth, Table Tennis, Tests
+title: Skill & React
+description: Road, Table Tennis, Tests
 permalink: /world7
 Author: Zach, Ian, Aarush
 ---
@@ -280,7 +280,7 @@ const objectImages = {
    farming: '{{site.baseurl}}/images/icon12.png', // top 6
    battle: '{{site.baseurl}}/images/icon13.png', // top 7
    tests: '{{site.baseurl}}/images/icon14.png', // top 8
-   stealth: '{{site.baseurl}}/images/icon15.png', // top 9
+   road: '{{site.baseurl}}/images/icon15.png', // top 9
    strategy: '{{site.baseurl}}/images/icon16.png', // bottom 1
    survive: '{{site.baseurl}}/images/icon17.png', // bottom 2
    simulation: '{{site.baseurl}}/images/icon18.png', // bottom 3
@@ -316,7 +316,7 @@ const keys = {};
 
 const objects = [
   { x: 200, y: 500, width: 40, height: 40, game: 'tests' }, // top 8
-  { x: 710, y: 520, width: 40, height: 40, game: 'stealth' }, // top 9
+  { x: 710, y: 520, width: 40, height: 40, game: 'road' }, // top 9
   { x: 460, y: 620, width: 40, height: 40, game: 'tennis' } // bottom 4
   ];
 
@@ -427,8 +427,8 @@ function update() {
         case 'tests':
           window.location.href = '{{site.baseurl}}/tests';
           break;
-        case 'stealth':
-          window.location.href = '{{site.baseurl}}/stealth';
+        case 'road':
+          window.location.href = '{{site.baseurl}}/road';
           break;  
         case 'strategy':
           window.location.href = '{{site.baseurl}}/strategy';
@@ -524,9 +524,9 @@ function draw() {
       } else if (obj.game === 'flappy') { 
         scaledWidth *= 1.2;
         scaledHeight *= 1.2;
-      } else if (obj.game === 'stealth') { 
-        scaledWidth *= 0.6;
-        scaledHeight *= 0.6;  
+      } else if (obj.game === 'road') { 
+        scaledWidth *= 0.9;
+        scaledHeight *= 0.9;  
       } else if (obj.game === 'battle') { 
         scaledWidth *= 0.5;
         scaledHeight *= 0.5;
