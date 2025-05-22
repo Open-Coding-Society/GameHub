@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Help Center
 description: Find answers, tutorials, and contact support for your Bioverse experience.
 permalink: /help

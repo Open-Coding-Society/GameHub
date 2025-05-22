@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Adventures Help Page
 description: Main Adventure Help Page
 permalink: /adventure_help

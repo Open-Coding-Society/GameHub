@@ -3,9 +3,7 @@ toc: true
 layout: post
 title: Adventures Help Page
 description: Main Adventure Help Page
-permalink: /adventure_help
 categories: [Help]
-Author: Ian, Zach, Aarush
 ---
 
 # Platformer Biotech Game Overview

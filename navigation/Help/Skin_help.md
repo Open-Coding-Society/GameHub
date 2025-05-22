@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: bootstrap
 title: Skins Help Page
 description: Main Skin Help Page
 permalink: /skin_help

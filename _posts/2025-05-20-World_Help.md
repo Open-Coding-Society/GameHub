@@ -3,9 +3,7 @@ toc: true
 layout: post
 title: Worlds Help Page
 description: Main World Help Page
-permalink: /world_help
 categories: [Help]
-Author: Ian, Zach, Aarush
 ---
 
 # 🧠 High-Level Overview
