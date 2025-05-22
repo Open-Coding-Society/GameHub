@@ -47,6 +47,15 @@ Author: Zach, Ian, Aarush
     display: inline-block;
   }
 
+  #home-btn-container {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    z-index: 2;
+    /* Make sure it's above the canvas */
+    pointer-events: auto;
+  }
+
   #skin-modal {
     display: none;
     position: fixed;
@@ -165,8 +174,13 @@ Author: Zach, Ian, Aarush
 
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
-<div id="points-display">Points: 0</div>
-<canvas id="gameCanvas" width="960" height="720"></canvas>
+  <div id="points-display">Points: 0</div>
+  <div id="home-btn-container">
+    <a href="{{site.baseurl}}/" id="home-btn" class="btn btn-warning" style="font-size: 1.3em; padding: 10px 28px; border-radius: 8px;">
+      Back to Home
+    </a>
+  </div>
+  <canvas id="gameCanvas" width="960" height="720"></canvas>
 </div>
 
 <div id="skin-modal">
