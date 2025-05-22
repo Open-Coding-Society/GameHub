@@ -3,7 +3,7 @@ layout: bootstrap
 title: Adventures Help Page
 description: Main Adventure Help Page
 permalink: /adventure_help
-Author: Ian, Zach, Aarush
+Author: Everyone
 ---
 
 # Platformer Biotech Game Overview
@@ -107,8 +107,7 @@ document.getElementById('skin-button').onclick = () => {
 This code sets up a modular, audio-rich platformer game. To add skin support, you’d need to add UI for skin selection and update the player rendering logic to use the chosen skin, similar to your Game Hub implementation.
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
+// filepath: /home/zachpeltz/nighthawk/GenomeGamersFrontend/navigation/Help/Adventure_help.md
 
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/35wiidksummit.mp3'); // Change path as needed
@@ -120,7 +119,11 @@ function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
   window.removeEventListener('keydown', startMusicOnce);
+  window.removeEventListener('mousedown', startMusicOnce);
+  window.removeEventListener('touchstart', startMusicOnce);
 }
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
+window.addEventListener('mousedown', startMusicOnce);
+window.addEventListener('touchstart', startMusicOnce);
 </script>

@@ -3,7 +3,7 @@ layout: bootstrap
 title: Games Help Page
 description: Main Game Help Page
 permalink: /game_help
-Author: Ian, Zach, Aarush
+Author: Everyone
 ---
 
 # Help Center: Game Ideations & Main Code Snippets
@@ -403,8 +403,7 @@ Controls player movement on the map and triggers discovery events for organelles
 For each game, you can add a skin system, point rewards, or leaderboards to increase replay value and user engagement!
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
+// filepath: /home/zachpeltz/nighthawk/GenomeGamersFrontend/navigation/Help/Game_help.md
 
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/37yoshisisland.mp3'); // Change path as needed
@@ -416,7 +415,11 @@ function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
   window.removeEventListener('keydown', startMusicOnce);
+  window.removeEventListener('mousedown', startMusicOnce);
+  window.removeEventListener('touchstart', startMusicOnce);
 }
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
+window.addEventListener('mousedown', startMusicOnce);
+window.addEventListener('touchstart', startMusicOnce);
 </script>
