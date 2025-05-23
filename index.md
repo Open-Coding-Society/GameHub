@@ -206,9 +206,12 @@ Author: Lars, Zach & Aarush
   </div>
 </div>
 
-<!-- NPC Modal for world entry -->
+<!-- NPC Modal for world entry with dialogue -->
 <div id="npc-modal" style="display:none; position:fixed; top:30%; left:30%; width:40%; background:#001f3f; color:white; z-index:2000; border-radius:10px; text-align:center; padding:30px;">
   <div id="npc-message" style="font-size:1.5em; margin-bottom:20px;"></div>
+  <div id="npc-dialogue" style="font-size:1.1em; margin-bottom:20px; min-height:40px;"></div>
+  <button id="npc-talk-btn" style="background:#0074D9; color:white; border:none; padding:10px 20px; border-radius:10px; font-size:1em; cursor:pointer; margin-bottom:10px;">Talk</button>
+  <br>
   <button id="npc-enter-btn" style="background:#d4af37; color:white; border:none; padding:15px 30px; border-radius:10px; font-size:1.2em; cursor:pointer;">Enter</button>
   <button id="npc-cancel-btn" style="background:#333; color:white; border:none; padding:10px 20px; border-radius:10px; font-size:1em; cursor:pointer; margin-left:20px;">Cancel</button>
 </div>
@@ -327,33 +330,127 @@ const confirmButton = document.getElementById('confirm-button');
 let isModalOpen = false; 
 let hasLeftBox = true; 
 
-// --- NPC Modal logic and world mapping ---
+// --- NPC Modal logic and world mapping with personality, game hints, and dialogue ---
 const worldNPCs = {
-  world0: { message: "Welcome to World 0! Ready to enter?", url: '{{site.baseurl}}/world0' },
-  world1: { message: "This is World 1. Adventure awaits!", url: '{{site.baseurl}}/world1' },
-  world2: { message: "World 2 is full of mysteries. Proceed?", url: '{{site.baseurl}}/world2' },
-  world3: { message: "World 3: Only the brave may enter!", url: '{{site.baseurl}}/world3' },
-  world4: { message: "World 4: Challenge yourself!", url: '{{site.baseurl}}/world4' },
-  world5: { message: "World 5: Are you prepared?", url: '{{site.baseurl}}/world5' },
-  world6: { message: "World 6: Enter if you dare!", url: '{{site.baseurl}}/world6' },
-  world7: { message: "World 7: A new journey begins.", url: '{{site.baseurl}}/world7' },
-  world8: { message: "World 8: The final frontier!", url: '{{site.baseurl}}/world8' }
+  world0: {
+    message: "👨‍🔬 Professor Oak: Welcome to World 0, the Science Lab! Here you'll find quiz games and brain teasers. Ready to test your knowledge?",
+    url: '{{site.baseurl}}/world0',
+    dialogue: [
+      "Professor Oak: Science is about curiosity! Ask me anything.",
+      "Professor Oak: You can earn points by solving quizzes here.",
+      "Professor Oak: If you get stuck, try talking to other NPCs for hints.",
+      "Professor Oak: Remember, every mistake is a chance to learn!"
+    ]
+  },
+  world1: {
+    message: "🧙‍♂️ Merlin: Ah, World 1, the Realm of Magic! Puzzle games and logic await. Can you outsmart the enchanted riddles?",
+    url: '{{site.baseurl}}/world1',
+    dialogue: [
+      "Merlin: Magic is just science we don't understand yet.",
+      "Merlin: Some puzzles here require creative thinking.",
+      "Merlin: If you need a hint, just ask!",
+      "Merlin: May your mind be as sharp as your wand."
+    ]
+  },
+  world2: {
+    message: "🤠 Sheriff Bandit: Howdy, partner! World 2 is the Wild West Arcade. Fast-paced minigames and quick reflexes rule here. Saddle up?",
+    url: '{{site.baseurl}}/world2',
+    dialogue: [
+      "Sheriff Bandit: Quick on the draw? You'll need it here!",
+      "Sheriff Bandit: Try to beat your best time in the minigames.",
+      "Sheriff Bandit: Don't forget to collect your rewards.",
+      "Sheriff Bandit: If you lose, dust yourself off and try again!"
+    ]
+  },
+  world3: {
+    message: "🦸‍♀️ Captain Pixel: Welcome to World 3, the Hero's Arena! Battle games and action challenges await. Only the brave may enter!",
+    url: '{{site.baseurl}}/world3',
+    dialogue: [
+      "Captain Pixel: Heroes never give up!",
+      "Captain Pixel: Try different strategies to win battles.",
+      "Captain Pixel: Power-ups can turn the tide in your favor.",
+      "Captain Pixel: Remember, teamwork makes the dream work."
+    ]
+  },
+  world4: {
+    message: "👾 Glitch: World 4 is the Retro Zone! Classic arcade games and high scores. Can you beat the leaderboard?",
+    url: '{{site.baseurl}}/world4',
+    dialogue: [
+      "Glitch: Retro games are all about skill and timing.",
+      "Glitch: Watch out for hidden easter eggs!",
+      "Glitch: High scores are meant to be broken.",
+      "Glitch: Sometimes, the simplest games are the hardest."
+    ]
+  },
+  world5: {
+    message: "🌱 Farmer Willow: World 5 is the Farming Fields! Relax with simulation and strategy games. Ready to grow your skills?",
+    url: '{{site.baseurl}}/world5',
+    dialogue: [
+      "Farmer Willow: Patience is the key to a good harvest.",
+      "Farmer Willow: Try planning ahead for the best results.",
+      "Farmer Willow: Take your time and enjoy the process.",
+      "Farmer Willow: Every crop you grow brings you closer to mastery."
+    ]
+  },
+  world6: {
+    message: "🎾 Coach Ace: Welcome to World 6, the Sports Complex! Compete in tennis, soccer, and more. Are you game?",
+    url: '{{site.baseurl}}/world6',
+    dialogue: [
+      "Coach Ace: Practice makes perfect!",
+      "Coach Ace: Try to beat your own records.",
+      "Coach Ace: Sportsmanship is just as important as winning.",
+      "Coach Ace: Stay hydrated and have fun!"
+    ]
+  },
+  world7: {
+    message: "🧑‍🚀 Commander Nova: World 7 is the Space Frontier! Explore adventure and platformer games. Prepare for liftoff?",
+    url: '{{site.baseurl}}/world7',
+    dialogue: [
+      "Commander Nova: The universe is full of secrets.",
+      "Commander Nova: Explore every corner for hidden bonuses.",
+      "Commander Nova: Gravity can be your friend or your foe.",
+      "Commander Nova: Don't be afraid to take a leap of faith!"
+    ]
+  },
+  world8: {
+    message: "🐉 Elder Drakon: World 8, the Final Frontier! The toughest challenges and boss battles await. Only legends enter here!",
+    url: '{{site.baseurl}}/world8',
+    dialogue: [
+      "Elder Drakon: Only the strongest survive here.",
+      "Elder Drakon: Study your opponents for victory.",
+      "Elder Drakon: Every defeat is a lesson.",
+      "Elder Drakon: Prove yourself, and glory will be yours!"
+    ]
+  }
 };
 
 let pendingWorld = null; // Track which world the player is interacting with
 
 const npcModal = document.getElementById('npc-modal');
 const npcMessage = document.getElementById('npc-message');
+const npcDialogue = document.getElementById('npc-dialogue');
+const npcTalkBtn = document.getElementById('npc-talk-btn');
 const npcEnterBtn = document.getElementById('npc-enter-btn');
 const npcCancelBtn = document.getElementById('npc-cancel-btn');
 let npcModalOpen = false;
+let npcDialogueIndex = 0;
 
 function showNPCModal(worldKey) {
   pendingWorld = worldKey;
   npcMessage.textContent = worldNPCs[worldKey].message;
+  npcDialogue.textContent = ""; // Clear previous dialogue
+  npcDialogueIndex = 0;
   npcModal.style.display = 'block';
   npcModalOpen = true;
 }
+
+npcTalkBtn.onclick = function() {
+  if (pendingWorld && worldNPCs[pendingWorld] && worldNPCs[pendingWorld].dialogue) {
+    const lines = worldNPCs[pendingWorld].dialogue;
+    npcDialogue.textContent = lines[npcDialogueIndex % lines.length];
+    npcDialogueIndex++;
+  }
+};
 
 npcEnterBtn.onclick = function() {
   if (pendingWorld && worldNPCs[pendingWorld]) {
@@ -365,6 +462,8 @@ npcCancelBtn.onclick = function() {
   npcModal.style.display = 'none';
   npcModalOpen = false;
   pendingWorld = null;
+  npcDialogue.textContent = "";
+  npcDialogueIndex = 0;
 };
 
 // Prevent player from overlapping with world object
