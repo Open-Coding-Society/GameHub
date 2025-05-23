@@ -42,35 +42,41 @@ const CAR_WIDTH = 60;
 let player = { x: Math.floor(COLS/2), y: ROWS-1 };
 let score = 0;
 let gameOver = false;
-let speedMultiplier = 1;
 
-function randomCarRowObj(row) {
-  let dir = Math.random() > 0.5 ? 1 : -1;
-  let speed = (1 + Math.random() * 2) * speedMultiplier;
-  let x = dir === 1 ? -CAR_WIDTH : canvas.width;
-  return { x, y: row, dir, speed };
+function randomCarRow() {
+  // Cars only on rows 1-8 (not start/end)
+  let rows = [];
+  for (let i = 1; i < ROWS-1; i++) rows.push(i);
+  return rows;
 }
 
 let cars = [];
+function addCarRowAtTop() {
+  // Randomly decide to add a car or not in each lane
+  for (let col = 0; col < COLS; col++) {
+    if (Math.random() < 0.5) {
+      let dir = Math.random() > 0.5 ? 1 : -1;
+      let speed = 1 + Math.random() * 2;
+      let x = dir === 1 ? -CAR_WIDTH : canvas.width;
+      cars.push({ x, y: 1, dir, speed, col });
+    }
+  }
+}
 function resetCars() {
   cars = [];
+  // Fill initial cars except for row 0 and last row
   for (let row = 1; row < ROWS-1; row++) {
-    cars.push(randomCarRowObj(row));
+    for (let col = 0; col < COLS; col++) {
+      if (Math.random() < 0.5) {
+        let dir = Math.random() > 0.5 ? 1 : -1;
+        let speed = 1 + Math.random() * 2;
+        let x = dir === 1 ? -CAR_WIDTH : canvas.width;
+        cars.push({ x, y: row, dir, speed, col });
+      }
+    }
   }
 }
 resetCars();
-
-function shiftCarsAndPlayerDown() {
-  // Move all cars and player down by 1 row
-  for (let car of cars) {
-    car.y += 1;
-  }
-  player.y = ROWS-1;
-  // Remove cars that are now off the board
-  cars = cars.filter(car => car.y < ROWS-1);
-  // Add a new car at the top row (row 1)
-  cars.push(randomCarRowObj(1));
-}
 
 function drawPlayer() {
   ctx.save();
@@ -108,7 +114,7 @@ function drawCars() {
 function moveCars() {
   for (let car of cars) {
     car.x += car.dir * car.speed;
-    // Loop cars
+    // Loop cars horizontally
     if (car.dir === 1 && car.x > canvas.width) car.x = -CAR_WIDTH;
     if (car.dir === -1 && car.x < -CAR_WIDTH) car.x = canvas.width;
   }
@@ -154,8 +160,15 @@ function update() {
   }
   if (player.y === 0) {
     score++;
-    speedMultiplier += 0.05; // Increase difficulty
-    shiftCarsAndPlayerDown();
+    // Move everything down by one row
+    player.y++;
+    for (let car of cars) {
+      car.y++;
+    }
+    // Remove cars that go off the bottom
+    cars = cars.filter(car => car.y < ROWS-1);
+    // Add new car row at the top
+    addCarRowAtTop();
     document.getElementById('crossyScore').textContent = "Score: " + score;
   }
 }
