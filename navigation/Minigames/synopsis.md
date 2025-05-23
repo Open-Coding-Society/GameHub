@@ -23,10 +23,10 @@ We will add 8 worlds with 3 levels each to make 24 total games in different plac
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
 ### Initial Plan
-[Initial Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Initial_Plan.html)
+[Initial Plan](https://prad-coder.github.io/GenomeGamersFrontend/planning/2025/05/06/Initial_Plan.html)
 
 ### Next Plan
-[Next Plan](https://prad-coder.github.io/GenomeGamersFrontend/games/2025/05/06/Next_Plan.html)
+[Next Plan](https://prad-coder.github.io/GenomeGamersFrontend/planning/2025/05/06/Next_Plan.html)
 
 ### Ideate
 These new worlds and levels will sort and separate our games into categories making it more engaging and UI friendly.
