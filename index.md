@@ -206,6 +206,13 @@ Author: Lars, Zach & Aarush
   </div>
 </div>
 
+<!-- NPC Modal for world entry -->
+<div id="npc-modal" style="display:none; position:fixed; top:30%; left:30%; width:40%; background:#001f3f; color:white; z-index:2000; border-radius:10px; text-align:center; padding:30px;">
+  <div id="npc-message" style="font-size:1.5em; margin-bottom:20px;"></div>
+  <button id="npc-enter-btn" style="background:#d4af37; color:white; border:none; padding:15px 30px; border-radius:10px; font-size:1.2em; cursor:pointer;">Enter</button>
+  <button id="npc-cancel-btn" style="background:#333; color:white; border:none; padding:10px 20px; border-radius:10px; font-size:1em; cursor:pointer; margin-left:20px;">Cancel</button>
+</div>
+
 <script>
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/rooftoprun.mp3'); // Change path as needed
@@ -320,11 +327,71 @@ const confirmButton = document.getElementById('confirm-button');
 let isModalOpen = false; 
 let hasLeftBox = true; 
 
+// --- NPC Modal logic and world mapping ---
+const worldNPCs = {
+  world0: { message: "Welcome to World 0! Ready to enter?", url: '{{site.baseurl}}/world0' },
+  world1: { message: "This is World 1. Adventure awaits!", url: '{{site.baseurl}}/world1' },
+  world2: { message: "World 2 is full of mysteries. Proceed?", url: '{{site.baseurl}}/world2' },
+  world3: { message: "World 3: Only the brave may enter!", url: '{{site.baseurl}}/world3' },
+  world4: { message: "World 4: Challenge yourself!", url: '{{site.baseurl}}/world4' },
+  world5: { message: "World 5: Are you prepared?", url: '{{site.baseurl}}/world5' },
+  world6: { message: "World 6: Enter if you dare!", url: '{{site.baseurl}}/world6' },
+  world7: { message: "World 7: A new journey begins.", url: '{{site.baseurl}}/world7' },
+  world8: { message: "World 8: The final frontier!", url: '{{site.baseurl}}/world8' }
+};
+
+let pendingWorld = null; // Track which world the player is interacting with
+
+const npcModal = document.getElementById('npc-modal');
+const npcMessage = document.getElementById('npc-message');
+const npcEnterBtn = document.getElementById('npc-enter-btn');
+const npcCancelBtn = document.getElementById('npc-cancel-btn');
+let npcModalOpen = false;
+
+function showNPCModal(worldKey) {
+  pendingWorld = worldKey;
+  npcMessage.textContent = worldNPCs[worldKey].message;
+  npcModal.style.display = 'block';
+  npcModalOpen = true;
+}
+
+npcEnterBtn.onclick = function() {
+  if (pendingWorld && worldNPCs[pendingWorld]) {
+    window.location.href = worldNPCs[pendingWorld].url;
+  }
+};
+
+npcCancelBtn.onclick = function() {
+  npcModal.style.display = 'none';
+  npcModalOpen = false;
+  pendingWorld = null;
+};
+
+// Prevent player from overlapping with world object
+function resolveTouch(player, obj) {
+  // Simple axis-aligned separation
+  const dx = (player.x + player.width / 2) - (obj.x + obj.width / 2);
+  const dy = (player.y + player.height / 2) - (obj.y + obj.height / 2);
+  const absDX = Math.abs(dx);
+  const absDY = Math.abs(dy);
+
+  if (absDX > absDY) {
+    // Move horizontally
+    if (dx > 0) player.x = obj.x + obj.width;
+    else player.x = obj.x - player.width;
+  } else {
+    // Move vertically
+    if (dy > 0) player.y = obj.y + obj.height;
+    else player.y = obj.y - player.height;
+  }
+}
+
+// --- MODIFIED update() function ---
 function update() {
   let nextX = player.x;
   let nextY = player.y;
 
-  if (!isModalOpen) { 
+  if (!isModalOpen && !npcModalOpen) { 
     if (keys['w']) nextY -= player.speed;
     if (keys['s']) nextY += player.speed;
     if (keys['a']) nextX -= player.speed;
@@ -339,103 +406,25 @@ function update() {
   };
 
   const hittingWall = walls.some(wall => isColliding(futureBox, wall));
-
   if (!hittingWall) {
     player.x = nextX;
     player.y = nextY;
   }
 
+  // World/NPC collision
+  let collidedWorld = null;
   objects.forEach(obj => {
-    if (isColliding(player, obj)) {
-      switch (obj.game) {
-        case 'world3':
-          window.location.href = '{{site.baseurl}}/world3';
-          break;
-        case 'world1':
-          window.location.href = '{{site.baseurl}}/world1';
-          break;
-        case 'world2':
-          window.location.href = '{{site.baseurl}}/world2';
-          break;
-        case 'world4':
-          window.location.href = '{{site.baseurl}}/world4';
-          break;
-        case 'world0':
-          window.location.href = '{{site.baseurl}}/world0';
-          break;
-        case 'aboutus':
-          window.location.href = '{{site.baseurl}}/aboutus';
-          break;
-        case 'outline':
-          window.location.href = '{{site.baseurl}}/outline';
-          break;
-        case 'world5':
-          window.location.href = '{{site.baseurl}}/world5';
-          break; 
-        case 'pacman':
-          window.location.href = '{{site.baseurl}}/pacman';
-          break;
-        case 'slot':
-          window.location.href = '{{site.baseurl}}/slot';
-          break;
-        case 'farming':
-          window.location.href = '{{site.baseurl}}/farming';
-          break;
-        case 'tennis':
-          window.location.href = '{{site.baseurl}}/tennis';
-          break;
-        case 'tower':
-          window.location.href = '{{site.baseurl}}/tower';
-          break;
-        case 'format':
-          window.location.href = '{{site.baseurl}}/format';
-          break;  
-        case 'world6':
-          window.location.href = '{{site.baseurl}}/world6';
-          break;
-        case 'world7':
-          window.location.href = '{{site.baseurl}}/world7';
-          break; 
-        case 'world8':
-          window.location.href = '{{site.baseurl}}/world8';
-          break;
-        case 'battle':
-          window.location.href = '{{site.baseurl}}/battle';
-          break;
-        case 'tests':
-          window.location.href = '{{site.baseurl}}/tests';
-          break;
-        case 'stealth':
-          window.location.href = '{{site.baseurl}}/stealth';
-          break;  
-        case 'strategy':
-          window.location.href = '{{site.baseurl}}/strategy';
-          break;
-        case 'survive':
-          window.location.href = '{{site.baseurl}}/survive';
-          break;
-        case 'jump':
-          window.location.href = '{{site.baseurl}}/jump';
-          break;
-        case 'pack':
-          window.location.href = '{{site.baseurl}}/pack';
-          break;
-        case 'skirmish':
-          window.location.href = '{{site.baseurl}}/skirmish';
-          break;      
-        case 'simulation':
-          window.location.href = '{{site.baseurl}}/simulation';
-          break;                       
-        case 'clicker':
-          window.location.href = '{{site.baseurl}}/clicker';
-          break;
-      }
+    if (worldNPCs[obj.game] && isColliding(player, obj)) {
+      collidedWorld = obj.game;
     }
   });
 
+  if (collidedWorld && !npcModalOpen) {
+    // Move player back so they only touch, not overlap
+    resolveTouch(player, objects.find(o => o.game === collidedWorld));
+    showNPCModal(collidedWorld);
+  }
 }
-
-
 
 function draw() {
 
