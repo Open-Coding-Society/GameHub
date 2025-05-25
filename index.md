@@ -164,6 +164,29 @@ Author: Lars, Zach & Aarush
   .skin-option.selected .checkmark {
     display: block; 
   }
+
+  .npc-modal-btn {
+    background: #d4af37;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    font-size: 1.2em;
+    border-radius: 10px;
+    text-transform: uppercase;
+    margin: 0 0 0 0;
+    min-width: 120px;
+    transition: background 0.2s;
+  }
+  #npc-talk-btn.npc-modal-btn {
+    background: #0074D9;
+  }
+  #npc-cancel-btn.npc-modal-btn {
+    background: #333;
+  }
+  .npc-modal-btn:not(:last-child) {
+    margin-right: 0;
+  }
 </style>
 
 <div id="loading">Loading game assets...</div>
@@ -210,10 +233,11 @@ Author: Lars, Zach & Aarush
 <div id="npc-modal" style="display:none; position:fixed; top:30%; left:30%; width:40%; background:#001f3f; color:white; z-index:2000; border-radius:10px; text-align:center; padding:30px;">
   <div id="npc-message" style="font-size:1.5em; margin-bottom:20px;"></div>
   <div id="npc-dialogue" style="font-size:1.1em; margin-bottom:20px; min-height:40px;"></div>
-  <button id="npc-talk-btn" style="background:#0074D9; color:white; border:none; padding:10px 20px; border-radius:10px; font-size:1em; cursor:pointer; margin-bottom:10px;">Talk</button>
-  <br>
-  <button id="npc-enter-btn" style="background:#d4af37; color:white; border:none; padding:15px 30px; border-radius:10px; font-size:1.2em; cursor:pointer;">Enter</button>
-  <button id="npc-cancel-btn" style="background:#333; color:white; border:none; padding:10px 20px; border-radius:10px; font-size:1em; cursor:pointer; margin-left:20px;">Cancel</button>
+  <div style="display:flex; justify-content:center; gap:20px; margin-top:10px;">
+    <button id="npc-enter-btn" class="npc-modal-btn">Enter</button>
+    <button id="npc-talk-btn" class="npc-modal-btn">Talk</button>
+    <button id="npc-cancel-btn" class="npc-modal-btn">Cancel</button>
+  </div>
 </div>
 
 <script>
@@ -333,96 +357,106 @@ let hasLeftBox = true;
 // --- NPC Modal logic and world mapping with personality, game hints, and dialogue ---
 const worldNPCs = {
   world0: {
-    message: "👨‍🔬 Professor Oak: Welcome to World 0, the Science Lab! Here you'll find quiz games and brain teasers. Ready to test your knowledge?",
+    message: "👨‍🔬 Professor Oak: Welcome to Bioverse Central! Explore options like skins, help, outlines, and more to begin your journey.",
     url: '{{site.baseurl}}/world0',
     dialogue: [
-      "Professor Oak: Science is about curiosity! Ask me anything.",
-      "Professor Oak: You can earn points by solving quizzes here.",
-      "Professor Oak: If you get stuck, try talking to other NPCs for hints.",
-      "Professor Oak: Remember, every mistake is a chance to learn!"
+      "Professor Oak: This is your launch pad to all worlds.",
+      "Professor Oak: Don't forget to check out the About Us section!",
+      "Professor Oak: Need help? Click the help page for guidance.",
+      "Professor Oak: Skins can be changed here. Style matters!",
+      "Professor Oak: Come back often for new updates and info!"
     ]
   },
   world1: {
-    message: "🧙‍♂️ Merlin: Ah, World 1, the Realm of Magic! Puzzle games and logic await. Can you outsmart the enchanted riddles?",
+    message: "🧼 Mr. Bubbles: Welcome to Genomic Architects! Build DNA, edit genes, or relax with a game of blackjack.",
     url: '{{site.baseurl}}/world1',
     dialogue: [
-      "Merlin: Magic is just science we don't understand yet.",
-      "Merlin: Some puzzles here require creative thinking.",
-      "Merlin: If you need a hint, just ask!",
-      "Merlin: May your mind be as sharp as your wand."
+      "Mr. Bubbles: DNA is like a recipe—let’s get creative!",
+      "Mr. Bubbles: Ever played blackjack with biology on the line?",
+      "Mr. Bubbles: Editing genes? Don’t forget the base pairs!",
+      "Mr. Bubbles: Build something groundbreaking today.",
+      "Mr. Bubbles: The genome is your playground."
     ]
   },
   world2: {
-    message: "🤠 Sheriff Bandit: Howdy, partner! World 2 is the Wild West Arcade. Fast-paced minigames and quick reflexes rule here. Saddle up?",
+    message: "🧬 Medic: Welcome to Pathogen Patrol! Predict outbreaks, explore organelles, and play through scientific adventures.",
     url: '{{site.baseurl}}/world2',
     dialogue: [
-      "Sheriff Bandit: Quick on the draw? You'll need it here!",
-      "Sheriff Bandit: Try to beat your best time in the minigames.",
-      "Sheriff Bandit: Don't forget to collect your rewards.",
-      "Sheriff Bandit: If you lose, dust yourself off and try again!"
+      "Medic: Every outbreak starts somewhere. Can you stop it?",
+      "Medic: Learn the parts of a cell on your next exploration.",
+      "Medic: Adventure awaits those curious about biotech!",
+      "Medic: Each pathogen behaves differently—stay sharp!",
+      "Medic: Ready to patrol the microscopic world?"
     ]
   },
   world3: {
-    message: "🦸‍♀️ Captain Pixel: Welcome to World 3, the Hero's Arena! Battle games and action challenges await. Only the brave may enter!",
+    message: "🦾 Spring Man: Welcome to Arcade Rush! Master fast-paced classics like Pac-Man, Flappy Bird, and Geometry Dash.",
     url: '{{site.baseurl}}/world3',
     dialogue: [
-      "Captain Pixel: Heroes never give up!",
-      "Captain Pixel: Try different strategies to win battles.",
-      "Captain Pixel: Power-ups can turn the tide in your favor.",
-      "Captain Pixel: Remember, teamwork makes the dream work."
+      "Spring Man: Think fast, tap faster!",
+      "Spring Man: Reflexes make the difference here!",
+      "Spring Man: Want the high score? You've gotta grind!",
+      "Spring Man: Just one more try—this could be it!",
+      "Spring Man: Classic games, modern thrill."
     ]
   },
   world4: {
-    message: "👾 Glitch: World 4 is the Retro Zone! Classic arcade games and high scores. Can you beat the leaderboard?",
+    message: "🍌 Peely: Welcome to Party Time! Spin the slot machine, open digital packs, or jump into a party game.",
     url: '{{site.baseurl}}/world4',
     dialogue: [
-      "Glitch: Retro games are all about skill and timing.",
-      "Glitch: Watch out for hidden easter eggs!",
-      "Glitch: High scores are meant to be broken.",
-      "Glitch: Sometimes, the simplest games are the hardest."
+      "Peely: It's always party time somewhere!",
+      "Peely: Luck and laughs await in the blood cell slots!",
+      "Peely: Did you pull a legendary? Show me!",
+      "Peely: Party games are best with friends!",
+      "Peely: Let’s make it a celebration!"
     ]
   },
   world5: {
-    message: "🌱 Farmer Willow: World 5 is the Farming Fields! Relax with simulation and strategy games. Ready to grow your skills?",
+    message: "🪖 Master Chief: Welcome to Combat Zone. Enter the skirmish, plan your 5v5 tactics, or survive the swarm.",
     url: '{{site.baseurl}}/world5',
     dialogue: [
-      "Farmer Willow: Patience is the key to a good harvest.",
-      "Farmer Willow: Try planning ahead for the best results.",
-      "Farmer Willow: Take your time and enjoy the process.",
-      "Farmer Willow: Every crop you grow brings you closer to mastery."
+      "Master Chief: Load up—your squad is counting on you.",
+      "Master Chief: Victory comes to those who adapt.",
+      "Master Chief: Pick your role and hold the line!",
+      "Master Chief: Every battle teaches something new.",
+      "Master Chief: Stay alert. The storm is closing in."
     ]
   },
   world6: {
-    message: "🎾 Coach Ace: Welcome to World 6, the Sports Complex! Compete in tennis, soccer, and more. Are you game?",
+    message: "🌸 Ezili: Welcome to Strategy Core! Fire up the tower defense, simulate a new life, or sling some birds.",
     url: '{{site.baseurl}}/world6',
     dialogue: [
-      "Coach Ace: Practice makes perfect!",
-      "Coach Ace: Try to beat your own records.",
-      "Coach Ace: Sportsmanship is just as important as winning.",
-      "Coach Ace: Stay hydrated and have fun!"
+      "Ezili: Strategy is about patience and precision.",
+      "Ezili: Simulations are stories you write yourself.",
+      "Ezili: Know your enemy, then plan your path.",
+      "Ezili: Tower defense is all about timing.",
+      "Ezili: Think, plan, win."
     ]
   },
   world7: {
-    message: "🧑‍🚀 Commander Nova: World 7 is the Space Frontier! Explore adventure and platformer games. Prepare for liftoff?",
+    message: "🥊 Matt: Welcome to Skill & React! It's table tennis, crossy road, and reflex challenges galore.",
     url: '{{site.baseurl}}/world7',
     dialogue: [
-      "Commander Nova: The universe is full of secrets.",
-      "Commander Nova: Explore every corner for hidden bonuses.",
-      "Commander Nova: Gravity can be your friend or your foe.",
-      "Commander Nova: Don't be afraid to take a leap of faith!"
+      "Matt: Test your reflexes—I'm not going easy on you!",
+      "Matt: Beat your best time and come back for more!",
+      "Matt: Every second counts in the Skill Zone.",
+      "Matt: Stay sharp. It’s all about timing.",
+      "Matt: Are you quick enough to top the leaderboard?"
     ]
   },
   world8: {
-    message: "🐉 Elder Drakon: World 8, the Final Frontier! The toughest challenges and boss battles await. Only legends enter here!",
+    message: "🏁 Octane: Welcome to Click & Collect! Farm like a pro, race like a champ, and click like there’s no tomorrow.",
     url: '{{site.baseurl}}/world8',
     dialogue: [
-      "Elder Drakon: Only the strongest survive here.",
-      "Elder Drakon: Study your opponents for victory.",
-      "Elder Drakon: Every defeat is a lesson.",
-      "Elder Drakon: Prove yourself, and glory will be yours!"
+      "Octane: Click fast, collect faster!",
+      "Octane: Time to grind—farm, race, repeat!",
+      "Octane: This is your speed zone!",
+      "Octane: Nothing beats a clean drift and a full harvest!",
+      "Octane: Turbo mode: ON!"
     ]
   }
 };
+
 
 let pendingWorld = null; // Track which world the player is interacting with
 
@@ -708,6 +742,13 @@ skinOptions.forEach((option, index) => {
   if (index === 0) {
     option.classList.add('selected');
   }
+});
+
+// Set button text to Capitalized (first letter upper, rest lower)
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('npc-enter-btn').textContent = 'Enter';
+  document.getElementById('npc-talk-btn').textContent = 'Talk';
+  document.getElementById('npc-cancel-btn').textContent = 'Cancel';
 });
 </script>
 <script type="module">
