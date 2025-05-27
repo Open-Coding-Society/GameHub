@@ -86,10 +86,19 @@ Author: Zach & Ian
     color: #c9d1d9;
     font-size: 1rem;
   }
+  .timer {
+    color: #f1e05a;
+    font-size: 1.2rem;
+    margin-top: 8px;
+    text-align: center;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    letter-spacing: 0.03em;
+  }
 </style>
 
 <div class="racing-container" id="gameContainer" style="display:none;">
   <h1>Racing Game</h1>
+  <div class="timer" id="timer"></div>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div class="hud" id="hud"></div>
 </div>
@@ -101,7 +110,7 @@ Author: Zach & Ian
       Complete 3 laps and use items to win.</p>
     <ul>
       <li><strong>W</strong> - Accelerate</li>
-      <li><strong>S</strong> - Brake/Reverse</li>
+      <li><strong>S</strong> - Brake/Reverse (use to avoid obstacles!)</li>
       <li><strong>Space</strong> - Use Item</li>
     </ul>
     <button id="startBtn" class="btn btn-success mt-3">Start Race</button>
@@ -111,6 +120,7 @@ Author: Zach & Ian
 <div id="winScreen" class="win-screen" style="display:none;">
   <h2>🏁 You Win! 🏁</h2>
   <p>Congratulations! You finished all 3 laps.</p>
+  <div class="timer" id="finalTime"></div>
   <button onclick="returnToMenu()">Return to Menu</button>
 </div>
 
@@ -128,8 +138,75 @@ const path = [
   {x: 150, y: 300}, {x: 400, y: 120}, {x: 650, y: 300}, {x: 400, y: 480}, {x: 150, y: 300}
 ];
 
+// --- Timed Obstacles ---
+const obstacles = [
+  // Each obstacle is {pos: index on path, t: progress (0-1), active: true/false, timer: ms}
+  {pos: 0, t: 0.5, active: false, timer: 0, period: 3000, duration: 1200},
+  {pos: 2, t: 0.5, active: false, timer: 0, period: 4000, duration: 1500},
+  {pos: 3, t: 0.2, active: false, timer: 0, period: 5000, duration: 1800}
+];
+
+// Helper to get obstacle XY
+function getObstacleXY(ob) {
+  const p1 = path[ob.pos];
+  const p2 = path[(ob.pos + 1) % path.length];
+  return {
+    x: p1.x + (p2.x - p1.x) * ob.t,
+    y: p1.y + (p2.y - p1.y) * ob.t
+  };
+}
+
+// Update obstacle timers and toggle active state
+function updateObstacles(dt) {
+  for (const ob of obstacles) {
+    ob.timer += dt;
+    if (!ob.active && ob.timer >= ob.period) {
+      ob.active = true;
+      ob.timer = 0;
+    } else if (ob.active && ob.timer >= ob.duration) {
+      ob.active = false;
+      ob.timer = 0;
+    }
+  }
+}
+
+// Draw obstacles
+function drawObstacles() {
+  for (const ob of obstacles) {
+    const {x, y} = getObstacleXY(ob);
+    ctx.save();
+    ctx.globalAlpha = ob.active ? 1 : 0.3;
+    ctx.fillStyle = ob.active ? "#ffbe00" : "#555";
+    ctx.beginPath();
+    ctx.arc(x, y, 22, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#fff";
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+// Check if car collides with any active obstacle
+function checkObstacleCollision(car) {
+  for (const ob of obstacles) {
+    if (!ob.active) continue;
+    const carXY = getCarXY(car);
+    const obXY = getObstacleXY(ob);
+    const dx = carXY.x - obXY.x, dy = carXY.y - obXY.y;
+    if (dx*dx + dy*dy < 30*30) {
+      return true;
+    }
+  }
+  return false;
+}
+
 let canvas, ctx;
 let player, npcs, keys, lapMessage, gameEnded, itemInterval;
+let timerStart = null;
+let timerInterval = null;
+let elapsedMs = 0;
+let lastFrameTime = null;
 
 function resetGameState() {
   player = {
@@ -139,16 +216,32 @@ function resetGameState() {
     item: null,
     stunned: 0,
     boost: 0,
-    color: "#ff5e57"
+    color: "#ff5e57",
+    obstaclePenalty: 0
   };
   npcs = [
-    { pos: 1, t: 0.2, lap: 1, stunned: 0, color: "#58a6ff", speed: 0.0085 },
-    { pos: 2, t: 0.5, lap: 1, stunned: 0, color: "#2ea043", speed: 0.0075 },
-    { pos: 3, t: 0.7, lap: 1, stunned: 0, color: "#f1e05a", speed: 0.009 }
+    { pos: 1, t: 0.2, lap: 1, stunned: 0, color: "#58a6ff", speed: 0.0085, obstaclePenalty: 0 },
+    { pos: 2, t: 0.5, lap: 1, stunned: 0, color: "#2ea043", speed: 0.0075, obstaclePenalty: 0 },
+    { pos: 3, t: 0.7, lap: 1, stunned: 0, color: "#f1e05a", speed: 0.009, obstaclePenalty: 0 }
   ];
   keys = {};
   lapMessage = "";
   gameEnded = false;
+  timerStart = null;
+  elapsedMs = 0;
+  lastFrameTime = null;
+  for (const ob of obstacles) {
+    ob.active = false;
+    ob.timer = Math.random() * ob.period; // randomize initial timers
+  }
+}
+
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const tenths = Math.floor((ms % 1000) / 100);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}.${tenths}`;
 }
 
 // Item logic
@@ -187,6 +280,10 @@ document.addEventListener("keyup", (e) => {
 function moveCar(car, isPlayer = false) {
   if (car.stunned > 0) {
     car.stunned--;
+    return;
+  }
+  if (car.obstaclePenalty > 0) {
+    car.obstaclePenalty--;
     return;
   }
   let speed = isPlayer ? 0.012 : (car.speed || 0.009);
@@ -292,24 +389,63 @@ function drawHUD() {
   let html = `<strong>Lap:</strong> ${Math.min(player.lap,3)}/3`;
   if (player.item && !gameEnded) html += ` &nbsp; <strong>Item:</strong> ${player.item}`;
   if (lapMessage) html += `<br><span style="color:#58a6ff;font-weight:bold">${lapMessage}</span>`;
+  if (!gameEnded) html += `<br><span style="color:#ffbe00">Avoid obstacles! Brake (<b>S</b>) to stop in time.</span>`;
   hud.innerHTML = html;
+}
+
+// Draw Timer
+function drawTimer() {
+  const timerDiv = document.getElementById("timer");
+  if (!timerDiv) return;
+  let ms = elapsedMs;
+  if (!gameEnded && timerStart !== null) {
+    ms = Date.now() - timerStart;
+    elapsedMs = ms;
+  }
+  timerDiv.textContent = `Time: ${formatTime(ms)}`;
 }
 
 // Main game loop
 let animationFrameId;
-function gameLoop() {
+function gameLoop(now) {
   if (gameEnded) return;
+  if (!lastFrameTime) lastFrameTime = now;
+  const dt = now - lastFrameTime;
+  lastFrameTime = now;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   drawTrack();
+  updateObstacles(dt);
+  drawObstacles();
 
   moveCar(player, true);
   npcs.forEach(npc => moveCar(npc));
+
+  // Obstacle collision for player
+  if (checkObstacleCollision(player)) {
+    // If braking, avoid penalty
+    if (!keys["s"] && player.obstaclePenalty === 0) {
+      player.obstaclePenalty = 60; // 1 second penalty (60 frames)
+      lapMessage = "Hit obstacle! Brake to avoid!";
+      setTimeout(() => { if (lapMessage === "Hit obstacle! Brake to avoid!") lapMessage = ""; }, 2000);
+    }
+  }
+
+  // Obstacle collision for NPCs (random chance to avoid)
+  for (const npc of npcs) {
+    if (checkObstacleCollision(npc) && npc.obstaclePenalty === 0) {
+      if (Math.random() < 0.7) { // 70% chance to get penalized
+        npc.obstaclePenalty = 60;
+      }
+    }
+  }
 
   drawCar(player);
   npcs.forEach(drawCar);
 
   drawHUD();
+  drawTimer();
 
   // End game after 3 laps
   if (player.lap > 3) {
@@ -331,9 +467,21 @@ function stopItemInterval() {
   itemInterval = null;
 }
 
+// Timer interval for updating timer display
+function startTimerInterval() {
+  timerInterval = setInterval(drawTimer, 100);
+}
+function stopTimerInterval() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+}
+
 function endGame() {
   gameEnded = true;
   stopItemInterval();
+  stopTimerInterval();
+  // Show final time on win screen
+  document.getElementById("finalTime").textContent = `Final Time: ${formatTime(elapsedMs)}`;
   document.getElementById("winScreen").style.display = "flex";
 }
 
@@ -343,18 +491,25 @@ function startGame() {
   document.getElementById("winScreen").style.display = "none";
   document.getElementById("gameContainer").style.display = "block";
   stopItemInterval();
+  stopTimerInterval();
+  timerStart = Date.now();
+  elapsedMs = 0;
+  lastFrameTime = null;
   startItemInterval();
+  startTimerInterval();
   cancelAnimationFrame(animationFrameId);
-  gameLoop();
+  animationFrameId = requestAnimationFrame(gameLoop);
 }
 
 function returnToMenu() {
   stopItemInterval();
+  stopTimerInterval();
   cancelAnimationFrame(animationFrameId);
   document.getElementById("gameContainer").style.display = "none";
   document.getElementById("winScreen").style.display = "none";
   document.getElementById("startMenu").style.display = "flex";
   resetGameState();
+  drawTimer();
 }
 
 document.getElementById("startBtn").onclick = startGame;
@@ -369,6 +524,8 @@ window.onload = function() {
   document.getElementById("gameContainer").style.display = "none";
   document.getElementById("winScreen").style.display = "none";
   stopItemInterval();
+  stopTimerInterval();
+  drawTimer();
 
   document.getElementById("startBtn").onclick = startGame;
 };
@@ -389,3 +546,4 @@ function startMusicOnce() {
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
 </script>
+
