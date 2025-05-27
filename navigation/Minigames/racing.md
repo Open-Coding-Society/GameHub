@@ -42,7 +42,7 @@ Author: Zach & Ian
     font-size: 1.1rem;
     letter-spacing: 0.01em;
   }
-  .win-screen {
+  .win-screen, .start-menu {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(13,17,23,0.96);
@@ -52,12 +52,12 @@ Author: Zach & Ian
     justify-content: center;
     z-index: 1000;
   }
-  .win-screen h2 {
+  .win-screen h2, .start-menu h2 {
     color: #58a6ff;
     font-size: 2.5rem;
     margin-bottom: 18px;
   }
-  .win-screen button {
+  .win-screen button, .start-menu button {
     background: #238636;
     color: #fff;
     border: none;
@@ -68,20 +68,50 @@ Author: Zach & Ian
     margin-top: 18px;
     transition: background 0.2s;
   }
-  .win-screen button:hover {
+  .win-screen button:hover, .start-menu button:hover {
     background: #2ea043;
+  }
+  .start-menu .card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+    padding: 32px 40px;
+    text-align: center;
+    max-width: 400px;
+  }
+  .start-menu ul {
+    text-align: left;
+    margin: 18px 0 0 0;
+    color: #c9d1d9;
+    font-size: 1rem;
   }
 </style>
 
-<div class="racing-container">
+<div class="racing-container" id="gameContainer" style="display:none;">
   <h1>Racing Game</h1>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div class="hud" id="hud"></div>
 </div>
+
+<div id="startMenu" class="start-menu">
+  <div class="card">
+    <h2>🏎️ Racing Game</h2>
+    <p>Race against 3 computer opponents!<br>
+      Complete 3 laps and use items to win.</p>
+    <ul>
+      <li><strong>W</strong> - Accelerate</li>
+      <li><strong>S</strong> - Brake/Reverse</li>
+      <li><strong>Space</strong> - Use Item</li>
+    </ul>
+    <button id="startBtn" class="btn btn-success mt-3">Start Race</button>
+  </div>
+</div>
+
 <div id="winScreen" class="win-screen" style="display:none;">
   <h2>🏁 You Win! 🏁</h2>
   <p>Congratulations! You finished all 3 laps.</p>
-  <button onclick="restartGame()">Restart</button>
+  <button onclick="returnToMenu()">Return to Menu</button>
 </div>
 
 <script>
@@ -98,28 +128,28 @@ const path = [
   {x: 150, y: 300}, {x: 400, y: 120}, {x: 650, y: 300}, {x: 400, y: 480}, {x: 150, y: 300}
 ];
 
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+let canvas, ctx;
+let player, npcs, keys, lapMessage, gameEnded, itemInterval;
 
-let player = {
-  pos: 0, // index on path
-  t: 0,   // progress between path points (0-1)
-  lap: 1,
-  item: null,
-  stunned: 0,
-  boost: 0,
-  color: "#ff5e57"
-};
-
-let npcs = [
-  { pos: 0, t: 0, lap: 1, stunned: 0, color: "#58a6ff" },
-  { pos: 0, t: 0, lap: 1, stunned: 0, color: "#2ea043" },
-  { pos: 0, t: 0, lap: 1, stunned: 0, color: "#f1e05a" }
-];
-
-let keys = {};
-let lapMessage = "";
-let gameEnded = false;
+function resetGameState() {
+  player = {
+    pos: 0, // index on path
+    t: 0,   // progress between path points (0-1)
+    lap: 1,
+    item: null,
+    stunned: 0,
+    boost: 0,
+    color: "#ff5e57"
+  };
+  npcs = [
+    { pos: 1, t: 0.2, lap: 1, stunned: 0, color: "#58a6ff", speed: 0.0085 },
+    { pos: 2, t: 0.5, lap: 1, stunned: 0, color: "#2ea043", speed: 0.0075 },
+    { pos: 3, t: 0.7, lap: 1, stunned: 0, color: "#f1e05a", speed: 0.009 }
+  ];
+  keys = {};
+  lapMessage = "";
+  gameEnded = false;
+}
 
 // Item logic
 const items = ["shell", "mushroom"];
@@ -144,13 +174,13 @@ function npcDistance(a, b) {
 
 // Controls
 document.addEventListener("keydown", (e) => {
-  if (gameEnded) return;
-  keys[e.key] = true;
+  if (gameEnded || document.getElementById("gameContainer").style.display === "none") return;
+  keys[e.key.toLowerCase()] = true;
   if (e.key === " ") useItem();
 });
 document.addEventListener("keyup", (e) => {
-  if (gameEnded) return;
-  keys[e.key] = false;
+  if (gameEnded || document.getElementById("gameContainer").style.display === "none") return;
+  keys[e.key.toLowerCase()] = false;
 });
 
 // Move along path
@@ -159,7 +189,7 @@ function moveCar(car, isPlayer = false) {
     car.stunned--;
     return;
   }
-  let speed = isPlayer ? 0.012 : 0.009;
+  let speed = isPlayer ? 0.012 : (car.speed || 0.009);
   if (car.boost > 0) {
     speed *= 2;
     car.boost--;
@@ -181,13 +211,14 @@ function moveCar(car, isPlayer = false) {
       car.t = car.t - 1;
     }
   } else {
+    // NPCs always move forward
     car.t += speed;
     if (car.t > 1) {
       car.pos++;
       car.t = car.t - 1;
     }
   }
-  // Lap logic
+  // Lap logic for both player and NPCs
   if (car.pos >= path.length - 1) {
     car.pos = 0;
     car.t = 0;
@@ -265,6 +296,7 @@ function drawHUD() {
 }
 
 // Main game loop
+let animationFrameId;
 function gameLoop() {
   if (gameEnded) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -285,43 +317,61 @@ function gameLoop() {
     return;
   }
 
-  requestAnimationFrame(gameLoop);
+  animationFrameId = requestAnimationFrame(gameLoop);
 }
 
 // Item pickup every 5 seconds randomly
-let itemInterval = setInterval(() => {
-  if (!player.item && !gameEnded) player.item = items[Math.floor(Math.random() * items.length)];
-}, 5000);
+function startItemInterval() {
+  itemInterval = setInterval(() => {
+    if (!player.item && !gameEnded) player.item = items[Math.floor(Math.random() * items.length)];
+  }, 5000);
+}
+function stopItemInterval() {
+  if (itemInterval) clearInterval(itemInterval);
+  itemInterval = null;
+}
 
 function endGame() {
   gameEnded = true;
+  stopItemInterval();
   document.getElementById("winScreen").style.display = "flex";
 }
 
-function restartGame() {
-  // Reset all game state
-  player = {
-    pos: 0,
-    t: 0,
-    lap: 1,
-    item: null,
-    stunned: 0,
-    boost: 0,
-    color: "#ff5e57"
-  };
-  npcs = [
-    { pos: 0, t: 0, lap: 1, stunned: 0, color: "#58a6ff" },
-    { pos: 0, t: 0, lap: 1, stunned: 0, color: "#2ea043" },
-    { pos: 0, t: 0, lap: 1, stunned: 0, color: "#f1e05a" }
-  ];
-  keys = {};
-  lapMessage = "";
-  gameEnded = false;
+function startGame() {
+  resetGameState();
+  document.getElementById("startMenu").style.display = "none";
   document.getElementById("winScreen").style.display = "none";
+  document.getElementById("gameContainer").style.display = "block";
+  stopItemInterval();
+  startItemInterval();
+  cancelAnimationFrame(animationFrameId);
   gameLoop();
 }
 
-gameLoop();
+function returnToMenu() {
+  stopItemInterval();
+  cancelAnimationFrame(animationFrameId);
+  document.getElementById("gameContainer").style.display = "none";
+  document.getElementById("winScreen").style.display = "none";
+  document.getElementById("startMenu").style.display = "flex";
+  resetGameState();
+}
+
+document.getElementById("startBtn").onclick = startGame;
+
+// On page load, show start menu, hide game/win screens
+window.onload = function() {
+  canvas = document.getElementById("gameCanvas");
+  ctx = canvas.getContext("2d");
+  resetGameState();
+
+  document.getElementById("startMenu").style.display = "flex";
+  document.getElementById("gameContainer").style.display = "none";
+  document.getElementById("winScreen").style.display = "none";
+  stopItemInterval();
+
+  document.getElementById("startBtn").onclick = startGame;
+};
 </script>
 
 <script>
@@ -339,4 +389,3 @@ function startMusicOnce() {
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
 </script>
-
