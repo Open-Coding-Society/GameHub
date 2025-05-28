@@ -86,18 +86,18 @@ Author: Lars, Zach & Aarush
     font-size: 1.5em; 
   }
   #confirm-button {
-  background: #d4af37;
-  color: white;
-  border: none;
-  padding: 15px 30px; 
-  cursor: pointer;
-  font-size: 1.2em; 
-  border-radius: 10px;
-  position: relative; 
-  margin: 20px auto 0; 
-  display: block; 
-  text-transform: uppercase; 
-}
+    background: #d4af37;
+    color: white;
+    border: none;
+    padding: 15px 30px; 
+    cursor: pointer;
+    font-size: 1.2em; 
+    border-radius: 10px;
+    position: relative; 
+    margin: 20px auto 0; 
+    display: block; 
+    text-transform: uppercase; 
+  }
   #skin-options {
     position: relative;
     width: 70%; 
@@ -109,7 +109,7 @@ Author: Lars, Zach & Aarush
     grid-template-rows: repeat(2, 1fr); 
     gap: 40px; 
     justify-content: center;
-    align-items: center.
+    align-items: center;
   }
   .skin-option {
     position: relative; 
@@ -132,24 +132,6 @@ Author: Lars, Zach & Aarush
     padding: 2px 5px;
     border-radius: 5px;
   }
-  .skin-option:nth-child(1) {
-    background-image: url('https://i.postimg.cc/PxDYNLjG/Default.png'); 
-  }
-  .skin-option:nth-child(2) {
-    background-image: url('https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png'); 
-  }
-  .skin-option:nth-child(3) {
-    background-image: url('https://i.postimg.cc/K8wLmvh6/Dialga.png'); 
-  }
-  .skin-option:nth-child(4) {
-    background-image: url('https://i.postimg.cc/VsKW3w58/Jett.png'); 
-  }
-  .skin-option:nth-child(5) {
-    background-image: url('https://i.postimg.cc/VsF0hWG0/Goku.png'); 
-  }
-  .skin-option:nth-child(6) {
-    background-image: url('https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'); 
-  }
   .skin-option .checkmark {
     display: none; 
     position: absolute;
@@ -163,6 +145,85 @@ Author: Lars, Zach & Aarush
   }
   .skin-option.selected .checkmark {
     display: block; 
+  }
+
+  /* Cosmetics Modal Styles */
+  #cosmetic-modal {
+    display: none;
+    position: fixed;
+    top: 28%;
+    left: 28%;
+    width: 44%;
+    height: 44%;
+    background: #003366;
+    color: white;
+    z-index: 1100;
+    text-align: center;
+    border-radius: 10px;
+    padding: 30px 0 0 0;
+  }
+  #cosmetic-modal-content {
+    position: relative;
+    padding: 20px 20px 40px 20px;
+    background: #003366;
+    border-radius: 10px;
+  }
+  #close-cosmetic-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: black;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.2em;
+  }
+  #cosmetic-options {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .cosmetic-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  .cosmetic-title {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  .cosmetic-option {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 3px solid transparent;
+    transition: border 0.2s;
+    margin-bottom: 5px;
+  }
+  .cosmetic-option.selected {
+    border: 3px solid #d4af37;
+  }
+  #confirm-cosmetic-button {
+    background: #d4af37;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 10px;
+    margin-top: 10px;
+    text-transform: uppercase;
   }
 
   .npc-modal-btn {
@@ -187,14 +248,33 @@ Author: Lars, Zach & Aarush
   .npc-modal-btn:not(:last-child) {
     margin-right: 0;
   }
+  /* Cosmetic button */
+  #open-cosmetic-modal {
+    background: #0074D9;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 8px;
+    margin: 10px 0 0 0;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    position: absolute;
+    right: 20px;
+    top: 22px;
+    z-index: 2;
+  }
 </style>
 
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
-<div id="points-display">Points: 0</div>
-<canvas id="gameCanvas" width="960" height="720"></canvas>
+  <div id="points-display">Points: 0</div>
+  <button id="open-cosmetic-modal">Cosmetics</button>
+  <canvas id="gameCanvas" width="960" height="720"></canvas>
 </div>
 
+<!-- Skin Modal -->
 <div id="skin-modal">
   <div id="skin-modal-content">
     <button id="close-modal">X</button>
@@ -226,6 +306,29 @@ Author: Lars, Zach & Aarush
       </div>
     </div>
     <button id="confirm-button">Confirm</button>
+  </div>
+</div>
+
+<!-- Cosmetics Modal -->
+<div id="cosmetic-modal">
+  <div id="cosmetic-modal-content">
+    <button id="close-cosmetic-modal">X</button>
+    <p style="font-size:1.5em; margin-bottom:10px;">Equip Cosmetics</p>
+    <div id="cosmetic-options">
+      <div class="cosmetic-group" id="hat-group">
+        <div class="cosmetic-title">Hat</div>
+        <div class="cosmetic-option" data-type="hat" data-index="0" style="background-image:url('https://i.postimg.cc/3x3QzSGq/none.png');"></div>
+        <div class="cosmetic-option" data-type="hat" data-index="1" style="background-image:url('https://i.postimg.cc/3Jw6vQkD/redcap.png');"></div>
+        <div class="cosmetic-option" data-type="hat" data-index="2" style="background-image:url('https://i.postimg.cc/8zq7yQwB/crown.png');"></div>
+      </div>
+      <div class="cosmetic-group" id="shoes-group">
+        <div class="cosmetic-title">Shoes</div>
+        <div class="cosmetic-option" data-type="shoes" data-index="0" style="background-image:url('https://i.postimg.cc/3x3QzSGq/none.png');"></div>
+        <div class="cosmetic-option" data-type="shoes" data-index="1" style="background-image:url('https://i.postimg.cc/8c2wQk8d/sneakers.png');"></div>
+        <div class="cosmetic-option" data-type="shoes" data-index="2" style="background-image:url('https://i.postimg.cc/8zq7yQwB/boots.png');"></div>
+      </div>
+    </div>
+    <button id="confirm-cosmetic-button">Confirm</button>
   </div>
 </div>
 
@@ -274,9 +377,38 @@ const spriteImages = [
   'https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'  // Boss Bandit
 ];
 
+// Cosmetics image URLs
+const hatImages = [
+  '', // None
+  'https://i.postimg.cc/3Jw6vQkD/redcap.png', // Red Cap
+  'https://i.postimg.cc/8zq7yQwB/crown.png'   // Crown
+];
+const shoesImages = [
+  '', // None
+  'https://i.postimg.cc/8c2wQk8d/sneakers.png', // Sneakers
+  'https://i.postimg.cc/8zq7yQwB/boots.png'     // Boots
+];
+
+// Preload cosmetic images
+const loadedHatImages = hatImages.map(src => {
+  if (!src) return null;
+  const img = new Image();
+  img.src = src;
+  return img;
+});
+const loadedShoesImages = shoesImages.map(src => {
+  if (!src) return null;
+  const img = new Image();
+  img.src = src;
+  return img;
+});
+
 let currentSpriteIndex = 0;
 const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
+
+let currentHatIndex = 0;
+let currentShoesIndex = 0;
 
 const objectImages = {
    world0: '{{site.baseurl}}/images/symbol0.png', // left 1
@@ -289,7 +421,6 @@ const objectImages = {
    world7: '{{site.baseurl}}/images/symbol7.png', // top 2
    world8: '{{site.baseurl}}/images/symbol8.png' // top 3 
 };
-
 
 const loadedObjectImages = {};
 for (const game in objectImages) {
@@ -318,8 +449,7 @@ const objects = [
   { x: 660, y: 250, width: 40, height: 40, game: 'world6' }, // top 1
   { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
   { x: 330, y: 100, width: 40, height: 40, game: 'world8' } // top 3
-
-  ];
+];
 
 const walls = [
   { x: 270, y: 250, width: 25, height: 55 },
@@ -353,6 +483,64 @@ const closeModal = document.getElementById('close-modal');
 const confirmButton = document.getElementById('confirm-button');
 let isModalOpen = false; 
 let hasLeftBox = true; 
+
+// --- Cosmetics Modal Logic ---
+const cosmeticModal = document.getElementById('cosmetic-modal');
+const openCosmeticModalBtn = document.getElementById('open-cosmetic-modal');
+const closeCosmeticModalBtn = document.getElementById('close-cosmetic-modal');
+const confirmCosmeticBtn = document.getElementById('confirm-cosmetic-button');
+const cosmeticOptions = document.querySelectorAll('.cosmetic-option');
+
+let selectedHatIndex = 0;
+let selectedShoesIndex = 0;
+let confirmedHatIndex = 0;
+let confirmedShoesIndex = 0;
+let isCosmeticModalOpen = false;
+
+function openCosmeticModal() {
+  // Set selection to current confirmed
+  cosmeticOptions.forEach(opt => opt.classList.remove('selected'));
+  cosmeticOptions.forEach(opt => {
+    if (opt.dataset.type === 'hat' && Number(opt.dataset.index) === confirmedHatIndex) {
+      opt.classList.add('selected');
+      selectedHatIndex = confirmedHatIndex;
+    }
+    if (opt.dataset.type === 'shoes' && Number(opt.dataset.index) === confirmedShoesIndex) {
+      opt.classList.add('selected');
+      selectedShoesIndex = confirmedShoesIndex;
+    }
+  });
+  cosmeticModal.style.display = 'block';
+  isCosmeticModalOpen = true;
+}
+function closeCosmeticModal() {
+  cosmeticModal.style.display = 'none';
+  isCosmeticModalOpen = false;
+}
+openCosmeticModalBtn.addEventListener('click', openCosmeticModal);
+closeCosmeticModalBtn.addEventListener('click', closeCosmeticModal);
+
+cosmeticOptions.forEach(opt => {
+  opt.addEventListener('click', () => {
+    if (opt.dataset.type === 'hat') {
+      document.querySelectorAll('.cosmetic-option[data-type="hat"]').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedHatIndex = Number(opt.dataset.index);
+    }
+    if (opt.dataset.type === 'shoes') {
+      document.querySelectorAll('.cosmetic-option[data-type="shoes"]').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedShoesIndex = Number(opt.dataset.index);
+    }
+  });
+});
+confirmCosmeticBtn.addEventListener('click', () => {
+  confirmedHatIndex = selectedHatIndex;
+  confirmedShoesIndex = selectedShoesIndex;
+  currentHatIndex = confirmedHatIndex;
+  currentShoesIndex = confirmedShoesIndex;
+  closeCosmeticModal();
+});
 
 // --- NPC Modal logic and world mapping with personality, game hints, and dialogue ---
 const worldNPCs = {
@@ -457,7 +645,6 @@ const worldNPCs = {
   }
 };
 
-
 let pendingWorld = null; // Track which world the player is interacting with
 
 const npcModal = document.getElementById('npc-modal');
@@ -469,19 +656,54 @@ const npcCancelBtn = document.getElementById('npc-cancel-btn');
 let npcModalOpen = false;
 let npcDialogueIndex = 0;
 
+let typewriterTimeout = null;
+let isTyping = false;
+
+function typeDialogue(text, callback) {
+  npcDialogue.textContent = "";
+  let i = 0;
+  isTyping = true;
+
+  function typeNext() {
+    if (i < text.length) {
+      npcDialogue.textContent += text[i];
+      i++;
+      typewriterTimeout = setTimeout(typeNext, 18); // Adjust speed here (ms per char)
+    } else {
+      isTyping = false;
+      if (callback) callback();
+    }
+  }
+  typeNext();
+}
+
 function showNPCModal(worldKey) {
   pendingWorld = worldKey;
   npcMessage.textContent = worldNPCs[worldKey].message;
-  npcDialogue.textContent = ""; // Clear previous dialogue
+  npcDialogue.textContent = "";
   npcDialogueIndex = 0;
   npcModal.style.display = 'block';
   npcModalOpen = true;
+  // Start first line animated
+  if (worldNPCs[worldKey].dialogue && worldNPCs[worldKey].dialogue.length > 0) {
+    typeDialogue(worldNPCs[worldKey].dialogue[0]);
+    npcDialogueIndex = 1;
+  }
 }
 
+
 npcTalkBtn.onclick = function() {
+  if (isTyping) {
+    // Instantly finish current line if typing
+    clearTimeout(typewriterTimeout);
+    const lines = worldNPCs[pendingWorld].dialogue;
+    npcDialogue.textContent = lines[(npcDialogueIndex - 1) % lines.length];
+    isTyping = false;
+    return;
+  }
   if (pendingWorld && worldNPCs[pendingWorld] && worldNPCs[pendingWorld].dialogue) {
     const lines = worldNPCs[pendingWorld].dialogue;
-    npcDialogue.textContent = lines[npcDialogueIndex % lines.length];
+    typeDialogue(lines[npcDialogueIndex % lines.length]);
     npcDialogueIndex++;
   }
 };
@@ -524,7 +746,7 @@ function update() {
   let nextX = player.x;
   let nextY = player.y;
 
-  if (!isModalOpen && !npcModalOpen) { 
+  if (!isModalOpen && !npcModalOpen && !isCosmeticModalOpen) { 
     if (keys['w']) nextY -= player.speed;
     if (keys['s']) nextY += player.speed;
     if (keys['a']) nextX -= player.speed;
@@ -560,10 +782,8 @@ function update() {
 }
 
 function draw() {
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  
   if (roomImage.complete && roomImage.naturalWidth !== 0) {
     ctx.drawImage(roomImage, 0, 0, canvas.width, canvas.height);
   } else {
@@ -571,9 +791,33 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-
+  // Draw player base sprite
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
 
+  // Draw hat if equipped
+  if (currentHatIndex > 0 && loadedHatImages[currentHatIndex]) {
+    // Position hat above head
+    const hatImg = loadedHatImages[currentHatIndex];
+    // Adjust offsets for hat placement
+    const hatWidth = player.width * 0.7;
+    const hatHeight = player.height * 0.35;
+    const hatX = player.x + player.width * 0.15;
+    const hatY = player.y - player.height * 0.18;
+    ctx.drawImage(hatImg, hatX, hatY, hatWidth, hatHeight);
+  }
+
+  // Draw shoes if equipped
+  if (currentShoesIndex > 0 && loadedShoesImages[currentShoesIndex]) {
+    const shoesImg = loadedShoesImages[currentShoesIndex];
+    // Adjust offsets for shoes placement
+    const shoesWidth = player.width * 0.7;
+    const shoesHeight = player.height * 0.22;
+    const shoesX = player.x + player.width * 0.15;
+    const shoesY = player.y + player.height * 0.78;
+    ctx.drawImage(shoesImg, shoesX, shoesY, shoesWidth, shoesHeight);
+  }
+
+  // Draw world objects
   const baseWidth = 40 * 0.9; 
   const baseHeight = 40 * 0.9; 
   const scaledWidth = baseWidth * 3; 
@@ -694,7 +938,6 @@ window.addEventListener('keyup', (e) => {
   keys[e.key.toLowerCase()] = false;
 });
 
-
 let imagesLoaded = 0;
 function tryStartGame() {
   imagesLoaded++;
@@ -710,6 +953,9 @@ spriteImage.onload = tryStartGame;
 
 roomImage.onerror = () => alert('Failed to load room image');
 spriteImage.onerror = () => alert('Failed to load sprite image');
+
+const skinOptions = document.querySelectorAll('.skin-option');
+let confirmedSelection = 0; 
 
 closeModal.addEventListener('click', () => {
   skinOptions.forEach(opt => opt.classList.remove('selected'));
@@ -729,9 +975,6 @@ confirmButton.addEventListener('click', () => {
   skinModal.style.display = 'none';
   isModalOpen = false; 
 });
-
-const skinOptions = document.querySelectorAll('.skin-option');
-let confirmedSelection = 0; 
 
 skinOptions.forEach((option, index) => {
   option.addEventListener('click', () => {
