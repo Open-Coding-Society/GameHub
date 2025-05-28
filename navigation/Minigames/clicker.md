@@ -6,6 +6,9 @@ permalink: /clicker
 Author: Zach
 ---
 
+<!-- Include Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
   body {
     background-color: #0e1111;
@@ -16,25 +19,35 @@ Author: Zach
   #game {
     display: flex;
     justify-content: space-between;
+    gap: 40px;
     padding: 20px;
   }
 
   #cookie-container {
     text-align: center;
+    flex: 1;
   }
 
   #cookie {
     width: 200px;
     cursor: pointer;
+    margin-bottom: 20px;
   }
 
   #upgrades {
-    width: 300px;
+    width: 350px;
+    flex-shrink: 0;
   }
 
-  #upgrade-list li {
-    margin: 10px 0;
-    cursor: pointer;
+  .text-box {
+    background-color: #1e3a8a; /* Robinhood-style deep blue */
+    padding: 10px 15px;
+    border-radius: 0.5rem;
+    margin-bottom: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    font-weight: 500;
+    font-size: 1rem;
+    color: #e5e5e5;
   }
 
   #golden-cookie {
@@ -47,32 +60,29 @@ Author: Zach
     border-radius: 50%;
     cursor: pointer;
     animation: pulse 1s infinite;
+    font-weight: bold;
   }
 
   @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
   }
 </style>
 
-<div id="game">
-  <div id="cookie-container">
-    <img id="cookie" src="{{site.baseurl}}/images/cookie.jpg" alt="Cookie" />
-    <p id="cookie-count">Cookies: 0</p>
-    <p id="cookies-per-second">Cookies per second: 0</p>
-  </div>
-  <div id="upgrades">
-    <h2>Upgrades</h2>
-    <ul id="upgrade-list">
-      <!-- Upgrades will be dynamically populated -->
-    </ul>
+<div class="container py-4">
+  <div id="game">
+    <div id="cookie-container">
+      <img id="cookie" src="{{site.baseurl}}/images/cookie.png" alt="Cookie" />
+      <p id="cookie-count" class="text-box">Cookies: 0</p>
+      <p id="cookies-per-second" class="text-box">Cookies per second: 0</p>
+    </div>
+    <div id="upgrades">
+      <h2 class="text-box">Upgrades</h2>
+      <ul id="upgrade-list" class="list-unstyled">
+        <!-- Dynamically added upgrades -->
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -114,7 +124,7 @@ Author: Zach
     upgradeList.innerHTML = "";
     upgrades.forEach((upgrade, index) => {
       const li = document.createElement("li");
-      li.textContent = `${upgrade.name} - Cost: ${upgrade.cost} - CPS: ${upgrade.cps}`;
+      li.innerHTML = `<div class="text-box">${upgrade.name} - Cost: ${upgrade.cost} - CPS: ${upgrade.cps}</div>`;
       li.onclick = () => buyUpgrade(index);
       upgradeList.appendChild(li);
     });
@@ -142,22 +152,17 @@ Author: Zach
     updateDisplay();
   }, 100);
 
-  setInterval(spawnGoldenCookie, Math.random() * (300000 - 180000) + 180000); // Spawn every 3-5 minutes
+  setInterval(spawnGoldenCookie, Math.random() * (300000 - 180000) + 180000); // Spawn every 3–5 minutes
 
   renderUpgrades();
   updateDisplay();
 </script>
 
+<!-- Background music setup -->
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
-// --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/28cheepcheepbeach.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/28cheepcheepbeach.mp3');
 music.loop = true;
 music.volume = 0.5;
-
-// Play music after first user interaction (required by browsers)
 function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
