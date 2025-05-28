@@ -497,7 +497,24 @@ Author: Aarush
       case 'd':
         currentDirection = { dx: 1, dy: 0, dir: 'right' };
         break;
-                               }
+    }
+
+    // Shoot bullet with Shift key (either left or right shift)
+    if (e.key === 'Shift') {
+      if (pacman.dx !== 0 || pacman.dy !== 0) {
+        const exists = bullets.some(
+          b => b.x === pacman.x && b.y === pacman.y && b.dx === pacman.dx && b.dy === pacman.dy
+        );
+        if (!exists) {
+          bullets.push({
+            x: pacman.x,
+            y: pacman.y,
+            dx: pacman.dx,
+            dy: pacman.dy
+          });
+        }
+      }
+    }
   });
 
   function updatePacman(force) {
