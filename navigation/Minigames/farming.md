@@ -20,6 +20,7 @@ Author: Zach & Ian
     border-radius: 5px;
     background-color: #8b9d83;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
   }
   .inventory-slot {
     width: 50px;
@@ -81,10 +82,16 @@ Author: Zach & Ian
     <div class="col-lg-8">
       <div class="controls mb-3">
         <h5>Controls</h5>
-        <p><strong>WASD</strong> to move | <strong>E</strong> to interact | <strong>Click</strong> inventory items to select</p>
-        <p>Face the merchant (blue square) and press E to buy/sell items</p>
+        <p>
+          <strong>WASD</strong> to move |
+          <strong>E</strong> or <strong>Click</strong> to interact |
+          <strong>Click</strong> inventory items to select
+        </p>
+        <p>
+          Interact with objects and the merchant by facing them and pressing <strong>E</strong> or <strong>clicking</strong> on them in the game area.
+        </p>
       </div>
-      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      <canvas id="gameCanvas" width="800" height="600" tabindex="0"></canvas>
     </div>
     <div class="col-lg-4">
       <div class="card mb-3">
@@ -207,47 +214,122 @@ Author: Zach & Ian
   const currentToolDisplay = document.getElementById('currentTool');
   let merchantModal = null;
 
+  // --- Helper: Get tile under pixel coordinates ---
+  function getTileAtPixel(x, y) {
+    return {
+      tileX: Math.floor(x / gameState.map.tileSize),
+      tileY: Math.floor(y / gameState.map.tileSize)
+    };
+  }
+
+  // --- Helper: Get object at tile ---
+  function getObjectAtTile(tileX, tileY) {
+    // Merchant
+    if (tileX === gameState.map.merchantPosition.x && tileY === gameState.map.merchantPosition.y) {
+      return { type: 'merchant' };
+    }
+    // Crop
+    const cropIndex = gameState.crops.findIndex(c =>
+      Math.floor(c.x / gameState.map.tileSize) === tileX &&
+      Math.floor(c.y / gameState.map.tileSize) === tileY
+    );
+    if (cropIndex !== -1) return { type: 'crop', index: cropIndex };
+    // Ore
+    const oreIndex = gameState.ores.findIndex(o =>
+      Math.floor(o.x / gameState.map.tileSize) === tileX &&
+      Math.floor(o.y / gameState.map.tileSize) === tileY
+    );
+    if (oreIndex !== -1) return { type: 'ore', index: oreIndex };
+    // Tilled soil
+    if (gameState.map.tiles[tileY] && gameState.map.tiles[tileY][tileX] === 'tilled_soil') {
+      return { type: 'tilled_soil' };
+    }
+    return null;
+  }
+
   // Initialize the game
   function initGame() {
-    // Generate map
     generateMap();
-    
-    // Generate initial ores
     generateOres();
-    
-    // Setup player inventory
     setupInventory();
-    
-    // Start with basic tools
     gameState.player.inventory.push(gameState.player.tools.sickle);
     gameState.player.inventory.push(gameState.player.tools.pickaxe);
-    
-    // Initialize merchant modal
     merchantModal = new bootstrap.Modal(document.getElementById('merchantModal'));
-    
-    // Game loop
     setInterval(() => {
       if (!gameState.time.paused) {
         updateTime();
         updatePlayerPosition();
       }
       drawGame();
-    }, 1000/60); // 60 FPS
-    
-    // Handle keyboard input
+    }, 1000/60);
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
-    
-    // Initial draw
+    // --- Add mouse click interaction on canvas ---
+    canvas.addEventListener('click', handleCanvasClick);
+    // --- Add hover effect for pointer cursor on interactive objects ---
+    canvas.addEventListener('mousemove', handleCanvasHover);
+    // --- Allow keyboard focus for accessibility ---
+    canvas.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        interact();
+      }
+    });
     drawGame();
   }
 
-  // Map generation
+  // --- Mouse click handler for easier interaction ---
+  function handleCanvasClick(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
+    const obj = getObjectAtTile(tileX, tileY);
+
+    if (!obj) return;
+
+    if (obj.type === 'merchant') {
+      openMerchant();
+    } else if (obj.type === 'crop') {
+      // Try to harvest crop
+      harvestCrop(obj.index, true);
+    } else if (obj.type === 'ore') {
+      // Try to mine ore
+      mineOre(obj.index, true);
+    } else if (obj.type === 'tilled_soil') {
+      // Try to plant seed
+      plantCrop(tileX, tileY, getSelectedSeed());
+    }
+  }
+
+  // --- Change cursor to pointer if hovering interactive object ---
+  function handleCanvasHover(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
+    const obj = getObjectAtTile(tileX, tileY);
+    if (obj) {
+      canvas.style.cursor = 'pointer';
+    } else {
+      canvas.style.cursor = 'default';
+    }
+  }
+
+  // --- Helper: Get selected seed from inventory ---
+  function getSelectedSeed() {
+    if (gameState.player.selectedSlot !== null) {
+      const item = gameState.player.inventory[gameState.player.selectedSlot];
+      if (item && item.type === 'seed') return item;
+    }
+    // If no seed selected, try to find first seed in inventory
+    return gameState.player.inventory.find(item => item.type === 'seed');
+  }
+
+  // Map generation (unchanged)
   function generateMap() {
     for (let y = 0; y < gameState.map.height; y++) {
       gameState.map.tiles[y] = [];
       for (let x = 0; x < gameState.map.width; x++) {
-        // Basic terrain types
         if (Math.random() < 0.1) {
           gameState.map.tiles[y][x] = 'water';
         } else if (Math.random() < 0.2) {
@@ -257,19 +339,15 @@ Author: Zach & Ian
         }
       }
     }
-    
-    // Create a farmable area
     for (let y = 20; y < 30; y++) {
       for (let x = 30; x < 50; x++) {
         gameState.map.tiles[y][x] = 'tilled_soil';
       }
     }
-    
-    // Ensure merchant position is walkable
     gameState.map.tiles[gameState.map.merchantPosition.y][gameState.map.merchantPosition.x] = 'dirt';
   }
 
-  // Ore generation
+  // Ore generation (unchanged)
   function generateOres() {
     gameState.ores = [];
     const oreTypes = [
@@ -278,7 +356,6 @@ Author: Zach & Ian
       { name: 'Gold Ore', rarity: 'rare', value: 100, spawnChance: 0.02 },
       { name: 'Diamond', rarity: 'legendary', value: 500, spawnChance: 0.005 }
     ];
-    
     for (let y = 0; y < gameState.map.height; y++) {
       for (let x = 0; x < gameState.map.width; x++) {
         if (gameState.map.tiles[y][x] === 'dirt' || gameState.map.tiles[y][x] === 'grass') {
@@ -291,7 +368,7 @@ Author: Zach & Ian
                 rarity: ore.rarity,
                 value: ore.value
               });
-              break; // Only one ore per tile
+              break;
             }
           }
         }
@@ -299,24 +376,19 @@ Author: Zach & Ian
     }
   }
 
-  // Inventory management
+  // Inventory management (unchanged)
   function setupInventory() {
     inventoryDiv.innerHTML = '';
-    
     for (let i = 0; i < 10; i++) {
       const slot = document.createElement('div');
       slot.className = 'inventory-slot';
       slot.id = `slot-${i}`;
       slot.addEventListener('click', () => selectItem(i));
-      
       if (gameState.player.inventory[i]) {
         slot.textContent = gameState.player.inventory[i].name.substring(0, 3);
         slot.title = gameState.player.inventory[i].name;
-        
         if (i === gameState.player.selectedSlot) {
           slot.classList.add('selected-slot');
-          
-          // Update current tool display
           if (gameState.player.inventory[i].type === 'tool') {
             currentToolDisplay.textContent = gameState.player.inventory[i].name;
           } else {
@@ -324,11 +396,8 @@ Author: Zach & Ian
           }
         }
       }
-      
       inventoryDiv.appendChild(slot);
     }
-    
-    // Update coins display
     coinsDisplay.textContent = gameState.player.coins;
   }
 
@@ -337,40 +406,32 @@ Author: Zach & Ian
     setupInventory();
   }
 
-  // Time system
+  // Time system (unchanged)
   function updateTime() {
     gameState.time.minute += 10;
     if (gameState.time.minute >= 60) {
       gameState.time.minute = 0;
       gameState.time.hour++;
-      
       if (gameState.time.hour >= 24) {
         gameState.time.hour = 6;
         gameState.time.day++;
-        
-        // New day logic
         updateCrops();
-        
-        // Small chance to regenerate some ores
         if (Math.random() < 0.3) {
           generateOres();
         }
       }
     }
-    
-    // Update time display
     const hourStr = gameState.time.hour.toString().padStart(2, '0');
     const minuteStr = gameState.time.minute.toString().padStart(2, '0');
     timeDisplay.textContent = `${hourStr}:${minuteStr}`;
     dayDisplay.textContent = gameState.time.day;
   }
 
-  // Crop growth
+  // Crop growth (unchanged)
   function updateCrops() {
     for (const crop of gameState.crops) {
       if (crop.growth < crop.growthTime) {
         crop.growth++;
-        
         if (crop.growth === crop.growthTime) {
           crop.ready = true;
         }
@@ -378,17 +439,13 @@ Author: Zach & Ian
     }
   }
 
-  // Drawing functions
+  // Drawing functions (unchanged)
   function drawGame() {
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw map
     for (let y = 0; y < gameState.map.height; y++) {
       for (let x = 0; x < gameState.map.width; x++) {
         const tileX = x * gameState.map.tileSize;
         const tileY = y * gameState.map.tileSize;
-        
         switch (gameState.map.tiles[y][x]) {
           case 'water':
             ctx.fillStyle = '#4a8df0';
@@ -399,14 +456,12 @@ Author: Zach & Ian
           case 'tilled_soil':
             ctx.fillStyle = '#8b5a2b';
             break;
-          default: // dirt
+          default:
             ctx.fillStyle = '#a67c52';
         }
-        
         ctx.fillRect(tileX, tileY, gameState.map.tileSize, gameState.map.tileSize);
       }
     }
-    
     // Draw merchant
     const merchantX = gameState.map.merchantPosition.x * gameState.map.tileSize;
     const merchantY = gameState.map.merchantPosition.y * gameState.map.tileSize;
@@ -415,7 +470,6 @@ Author: Zach & Ian
     ctx.fillStyle = '#ffffff';
     ctx.font = '8px Arial';
     ctx.fillText('$', merchantX + 3, merchantY + gameState.map.tileSize - 3);
-    
     // Draw ores
     for (const ore of gameState.ores) {
       ctx.fillStyle = getOreColor(ore.type);
@@ -423,35 +477,27 @@ Author: Zach & Ian
       ctx.arc(ore.x + gameState.map.tileSize/2, ore.y + gameState.map.tileSize/2, 
           gameState.map.tileSize/2, 0, Math.PI * 2);
       ctx.fill();
-      
-      // Draw ore value indicator
       ctx.fillStyle = '#ffffff';
       ctx.font = '8px Arial';
       ctx.fillText(ore.value, ore.x + 2, ore.y + gameState.map.tileSize - 2);
     }
-    
     // Draw crops
     for (const crop of gameState.crops) {
       if (crop.ready) {
         ctx.fillStyle = getCropColor(crop.type);
       } else {
-        ctx.fillStyle = '#5a9e4a'; // Green for growing
+        ctx.fillStyle = '#5a9e4a';
       }
       ctx.fillRect(crop.x, crop.y, gameState.map.tileSize, gameState.map.tileSize);
-      
-      // Growth indicator
       if (!crop.ready) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(crop.x, crop.y + gameState.map.tileSize - 2, 
               gameState.map.tileSize * (crop.growth / crop.growthTime), 2);
       }
     }
-    
     // Draw player
     ctx.fillStyle = '#dc3545';
     ctx.fillRect(gameState.player.x, gameState.player.y, 15, 15);
-    
-    // Draw direction indicator
     ctx.fillStyle = '#ffffff';
     switch (gameState.player.direction) {
       case 'up':
@@ -493,7 +539,6 @@ Author: Zach & Ian
     const key = e.key.toLowerCase();
     if (key in gameState.keys) {
       gameState.keys[key] = true;
-      
       if (key === 'e') {
         interact();
       }
@@ -524,12 +569,11 @@ Author: Zach & Ian
       gameState.player.x += gameState.player.speed;
       gameState.player.direction = 'right';
     }
-    
-    // Simple boundary checking
     gameState.player.x = Math.max(0, Math.min(canvas.width - 15, gameState.player.x));
     gameState.player.y = Math.max(0, Math.min(canvas.height - 15, gameState.player.y));
   }
 
+  // --- Improved interact: also triggers on click, and highlights nearest object ---
   function interact() {
     // Get tile player is facing
     let tileX, tileY;
@@ -551,67 +595,47 @@ Author: Zach & Ian
         tileY = Math.floor(gameState.player.y / gameState.map.tileSize);
         break;
     }
-    
-    // Check if tile is valid
-    if (tileX >= 0 && tileX < gameState.map.width && tileY >= 0 && tileY < gameState.map.height) {
-      // Check for merchant
-      if (tileX === gameState.map.merchantPosition.x && tileY === gameState.map.merchantPosition.y) {
-        openMerchant();
-        return;
-      }
-      
-      // Check for crops to harvest
-      const cropIndex = gameState.crops.findIndex(c => 
-        Math.floor(c.x / gameState.map.tileSize) === tileX && 
-        Math.floor(c.y / gameState.map.tileSize) === tileY);
-      
-      if (cropIndex !== -1 && gameState.crops[cropIndex].ready) {
-        harvestCrop(cropIndex);
-        return;
-      }
-      
-      // Check for ores to mine
-      const oreIndex = gameState.ores.findIndex(o => 
-        Math.floor(o.x / gameState.map.tileSize) === tileX && 
-        Math.floor(o.y / gameState.map.tileSize) === tileY);
-      
-      if (oreIndex !== -1) {
-        mineOre(oreIndex);
-        return;
-      }
-      
-      // Check for tillable soil to plant
-      if (gameState.map.tiles[tileY][tileX] === 'tilled_soil') {
-        // Check if player has selected a seed
-        const selectedItem = gameState.player.selectedSlot !== null 
-          ? gameState.player.inventory[gameState.player.selectedSlot] 
-          : null;
-        
-        if (selectedItem && selectedItem.type === 'seed') {
-          plantCrop(tileX, tileY, selectedItem);
-        }
-      }
+    const obj = getObjectAtTile(tileX, tileY);
+    if (!obj) return;
+    if (obj.type === 'merchant') {
+      openMerchant();
+      return;
+    }
+    if (obj.type === 'crop') {
+      harvestCrop(obj.index, false);
+      return;
+    }
+    if (obj.type === 'ore') {
+      mineOre(obj.index, false);
+      return;
+    }
+    if (obj.type === 'tilled_soil') {
+      plantCrop(tileX, tileY, getSelectedSeed());
     }
   }
 
-  function harvestCrop(index) {
+  // --- Allow click/keyboard harvest/mine to skip tool selection if possible ---
+  function harvestCrop(index, viaClick = false) {
     const crop = gameState.crops[index];
-    const selectedItem = gameState.player.selectedSlot !== null 
+    let selectedItem = gameState.player.selectedSlot !== null 
       ? gameState.player.inventory[gameState.player.selectedSlot] 
       : null;
-    
-    // Check if player has sickle equipped
+    // If not sickle, but via click, auto-equip sickle if available
+    if ((!selectedItem || selectedItem.name !== 'Sickle') && viaClick) {
+      const sickleIndex = gameState.player.inventory.findIndex(i => i.name === 'Sickle');
+      if (sickleIndex !== -1) {
+        gameState.player.selectedSlot = sickleIndex;
+        setupInventory();
+        selectedItem = gameState.player.inventory[sickleIndex];
+      }
+    }
     const sickleEquipped = selectedItem && selectedItem.name === 'Sickle';
-    
     if (sickleEquipped) {
-      // Create harvested item
       const harvestedItem = {
         name: crop.type,
         type: 'crop',
         value: getCropValue(crop.type)
       };
-      
-      // Add to inventory if space available
       if (gameState.player.inventory.length < 10) {
         gameState.player.inventory.push(harvestedItem);
         gameState.crops.splice(index, 1);
@@ -625,31 +649,32 @@ Author: Zach & Ian
   }
 
   function getCropValue(cropType) {
-    // Find the seed that produces this crop
     const seed = gameState.merchant.items.find(item => 
       item.produces === cropType);
-    
-    return seed ? seed.price * 2 : 10; // Default value if not found
+    return seed ? seed.price * 2 : 10;
   }
 
-  function mineOre(index) {
+  function mineOre(index, viaClick = false) {
     const ore = gameState.ores[index];
-    const selectedItem = gameState.player.selectedSlot !== null 
+    let selectedItem = gameState.player.selectedSlot !== null 
       ? gameState.player.inventory[gameState.player.selectedSlot] 
       : null;
-    
-    // Check if player has pickaxe equipped
+    // If not pickaxe, but via click, auto-equip pickaxe if available
+    if ((!selectedItem || selectedItem.name !== 'Pickaxe') && viaClick) {
+      const pickaxeIndex = gameState.player.inventory.findIndex(i => i.name === 'Pickaxe');
+      if (pickaxeIndex !== -1) {
+        gameState.player.selectedSlot = pickaxeIndex;
+        setupInventory();
+        selectedItem = gameState.player.inventory[pickaxeIndex];
+      }
+    }
     const pickaxeEquipped = selectedItem && selectedItem.name === 'Pickaxe';
-    
     if (pickaxeEquipped) {
-      // Create ore item
       const oreItem = {
         name: ore.type,
         type: 'ore',
         value: ore.value
       };
-      
-      // Add to inventory if space available
       if (gameState.player.inventory.length < 10) {
         gameState.player.inventory.push(oreItem);
         gameState.ores.splice(index, 1);
@@ -663,12 +688,13 @@ Author: Zach & Ian
   }
 
   function plantCrop(tileX, tileY, seed) {
-    // Remove seed from inventory
+    if (!seed) {
+      alert('Select a seed in your inventory to plant!');
+      return;
+    }
     const seedIndex = gameState.player.inventory.indexOf(seed);
     if (seedIndex !== -1) {
       gameState.player.inventory.splice(seedIndex, 1);
-      
-      // Add crop
       gameState.crops.push({
         x: tileX * gameState.map.tileSize,
         y: tileY * gameState.map.tileSize,
@@ -677,7 +703,6 @@ Author: Zach & Ian
         growthTime: seed.growthTime,
         ready: false
       });
-      
       setupInventory();
     }
   }
@@ -685,8 +710,6 @@ Author: Zach & Ian
   function openMerchant() {
     const merchantItemsDiv = document.getElementById('merchantItems');
     merchantItemsDiv.innerHTML = '';
-    
-    // Display merchant items
     gameState.merchant.items.forEach((item, index) => {
       const itemDiv = document.createElement('div');
       itemDiv.className = 'col-md-6 mb-3 merchant-item';
@@ -704,20 +727,14 @@ Author: Zach & Ian
       `;
       merchantItemsDiv.appendChild(itemDiv);
     });
-    
-    // Update sell preview
     updateSellPreview();
-    
     merchantModal.show();
-    
-    // Add event listeners after modal is shown
     document.querySelectorAll('.buy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const index = parseInt(e.target.getAttribute('data-index'));
         buyItem(index);
       });
     });
-    
     document.querySelectorAll('.sell-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const action = e.target.textContent;
@@ -745,29 +762,24 @@ Author: Zach & Ian
     const sellPreview = document.getElementById('sellPreview');
     const crops = gameState.player.inventory.filter(item => item.type === 'crop');
     const ores = gameState.player.inventory.filter(item => item.type === 'ore');
-    
     let previewHTML = '';
-    
     if (crops.length > 0) {
       const cropValue = crops.reduce((sum, crop) => sum + crop.value, 0);
       previewHTML += `<p><strong>Crops:</strong> ${crops.length} items worth ${cropValue} coins</p>`;
     } else {
       previewHTML += `<p class="text-muted">No crops to sell</p>`;
     }
-    
     if (ores.length > 0) {
       const oreValue = ores.reduce((sum, ore) => sum + ore.value, 0);
       previewHTML += `<p><strong>Ores:</strong> ${ores.length} items worth ${oreValue} coins</p>`;
     } else {
       previewHTML += `<p class="text-muted">No ores to sell</p>`;
     }
-    
     sellPreview.innerHTML = previewHTML;
   }
 
   function buyItem(index) {
     const item = gameState.merchant.items[index];
-    
     if (gameState.player.coins >= item.price) {
       if (gameState.player.inventory.length < 10) {
         gameState.player.coins -= item.price;
@@ -785,7 +797,6 @@ Author: Zach & Ian
   function sellItems(type) {
     let itemsToSell = [];
     let itemsToKeep = [];
-    
     if (type === 'all') {
       itemsToSell = gameState.player.inventory.filter(item => item.type === 'crop' || item.type === 'ore');
       itemsToKeep = gameState.player.inventory.filter(item => item.type !== 'crop' && item.type !== 'ore');
@@ -793,16 +804,12 @@ Author: Zach & Ian
       itemsToSell = gameState.player.inventory.filter(item => item.type === type);
       itemsToKeep = gameState.player.inventory.filter(item => item.type !== type);
     }
-    
     const total = itemsToSell.reduce((sum, item) => sum + item.value, 0);
-    
     if (itemsToSell.length > 0) {
       gameState.player.inventory = itemsToKeep;
       gameState.player.coins += total;
       setupInventory();
       updateSellPreview();
-      
-      // Show feedback
       const feedback = document.createElement('div');
       feedback.className = 'alert alert-success mt-3';
       feedback.textContent = `Sold ${itemsToSell.length} items for ${total} coins!`;
@@ -817,7 +824,6 @@ Author: Zach & Ian
     }
   }
 
-  // Initialize the game when the page loads
   window.onload = initGame;
 </script>
 
