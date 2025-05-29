@@ -49,7 +49,6 @@ Author: Lars, Zach & Aarush
     position: relative;
     display: inline-block;
   }
-
   #skin-modal {
     display: none;
     position: fixed;
@@ -132,6 +131,24 @@ Author: Lars, Zach & Aarush
     padding: 2px 5px;
     border-radius: 5px;
   }
+  .skin-option:nth-child(1) {
+    background-image: url('https://i.postimg.cc/PxDYNLjG/Default.png'); 
+  }
+  .skin-option:nth-child(2) {
+    background-image: url('https://i.postimg.cc/C5gp0YzS/True-Gold-Melodie.png'); 
+  }
+  .skin-option:nth-child(3) {
+    background-image: url('https://i.postimg.cc/K8wLmvh6/Dialga.png'); 
+  }
+  .skin-option:nth-child(4) {
+    background-image: url('https://i.postimg.cc/VsKW3w58/Jett.png'); 
+  }
+  .skin-option:nth-child(5) {
+    background-image: url('https://i.postimg.cc/VsF0hWG0/Goku.png'); 
+  }
+  .skin-option:nth-child(6) {
+    background-image: url('https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'); 
+  }
   .skin-option .checkmark {
     display: none; 
     position: absolute;
@@ -145,85 +162,6 @@ Author: Lars, Zach & Aarush
   }
   .skin-option.selected .checkmark {
     display: block; 
-  }
-
-  /* Cosmetics Modal Styles */
-  #cosmetic-modal {
-    display: none;
-    position: fixed;
-    top: 28%;
-    left: 28%;
-    width: 44%;
-    height: 44%;
-    background: #003366;
-    color: white;
-    z-index: 1100;
-    text-align: center;
-    border-radius: 10px;
-    padding: 30px 0 0 0;
-  }
-  #cosmetic-modal-content {
-    position: relative;
-    padding: 20px 20px 40px 20px;
-    background: #003366;
-    border-radius: 10px;
-  }
-  #close-cosmetic-modal {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: black;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1.2em;
-  }
-  #cosmetic-options {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
-  .cosmetic-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-  .cosmetic-title {
-    font-size: 1.1em;
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  .cosmetic-option {
-    width: 80px;
-    height: 80px;
-    background: white;
-    border-radius: 10px;
-    cursor: pointer;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: 3px solid transparent;
-    transition: border 0.2s;
-    margin-bottom: 5px;
-  }
-  .cosmetic-option.selected {
-    border: 3px solid #d4af37;
-  }
-  #confirm-cosmetic-button {
-    background: #d4af37;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    cursor: pointer;
-    font-size: 1.1em;
-    border-radius: 10px;
-    margin-top: 10px;
-    text-transform: uppercase;
   }
 
   .npc-modal-btn {
@@ -248,29 +186,11 @@ Author: Lars, Zach & Aarush
   .npc-modal-btn:not(:last-child) {
     margin-right: 0;
   }
-  /* Cosmetic button */
-  #open-cosmetic-modal {
-    background: #0074D9;
-    color: white;
-    border: none;
-    padding: 10px 22px;
-    cursor: pointer;
-    font-size: 1.1em;
-    border-radius: 8px;
-    margin: 10px 0 0 0;
-    text-transform: uppercase;
-    transition: background 0.2s;
-    position: absolute;
-    right: 20px;
-    top: 22px;
-    z-index: 2;
-  }
 </style>
 
 <div id="loading">Loading game assets...</div>
 <div id="canvas-container">
   <div id="points-display">Points: 0</div>
-  <button id="open-cosmetic-modal">Cosmetics</button>
   <canvas id="gameCanvas" width="960" height="720"></canvas>
 </div>
 
@@ -306,29 +226,6 @@ Author: Lars, Zach & Aarush
       </div>
     </div>
     <button id="confirm-button">Confirm</button>
-  </div>
-</div>
-
-<!-- Cosmetics Modal -->
-<div id="cosmetic-modal">
-  <div id="cosmetic-modal-content">
-    <button id="close-cosmetic-modal">X</button>
-    <p style="font-size:1.5em; margin-bottom:10px;">Equip Cosmetics</p>
-    <div id="cosmetic-options">
-      <div class="cosmetic-group" id="hat-group">
-        <div class="cosmetic-title">Hat</div>
-        <div class="cosmetic-option" data-type="hat" data-index="0" style="background-image:url('https://i.postimg.cc/3x3QzSGq/none.png');"></div>
-        <div class="cosmetic-option" data-type="hat" data-index="1" style="background-image:url('https://i.postimg.cc/3Jw6vQkD/redcap.png');"></div>
-        <div class="cosmetic-option" data-type="hat" data-index="2" style="background-image:url('https://i.postimg.cc/8zq7yQwB/crown.png');"></div>
-      </div>
-      <div class="cosmetic-group" id="shoes-group">
-        <div class="cosmetic-title">Shoes</div>
-        <div class="cosmetic-option" data-type="shoes" data-index="0" style="background-image:url('https://i.postimg.cc/3x3QzSGq/none.png');"></div>
-        <div class="cosmetic-option" data-type="shoes" data-index="1" style="background-image:url('https://i.postimg.cc/8c2wQk8d/sneakers.png');"></div>
-        <div class="cosmetic-option" data-type="shoes" data-index="2" style="background-image:url('https://i.postimg.cc/8zq7yQwB/boots.png');"></div>
-      </div>
-    </div>
-    <button id="confirm-cosmetic-button">Confirm</button>
   </div>
 </div>
 
@@ -377,38 +274,9 @@ const spriteImages = [
   'https://i.postimg.cc/rygC4TLH/Boss-Bandit.png'  // Boss Bandit
 ];
 
-// Cosmetics image URLs
-const hatImages = [
-  '', // None
-  'https://i.postimg.cc/3Jw6vQkD/redcap.png', // Red Cap
-  'https://i.postimg.cc/8zq7yQwB/crown.png'   // Crown
-];
-const shoesImages = [
-  '', // None
-  'https://i.postimg.cc/8c2wQk8d/sneakers.png', // Sneakers
-  'https://i.postimg.cc/8zq7yQwB/boots.png'     // Boots
-];
-
-// Preload cosmetic images
-const loadedHatImages = hatImages.map(src => {
-  if (!src) return null;
-  const img = new Image();
-  img.src = src;
-  return img;
-});
-const loadedShoesImages = shoesImages.map(src => {
-  if (!src) return null;
-  const img = new Image();
-  img.src = src;
-  return img;
-});
-
 let currentSpriteIndex = 0;
 const spriteImage = new Image();
 spriteImage.src = spriteImages[currentSpriteIndex];
-
-let currentHatIndex = 0;
-let currentShoesIndex = 0;
 
 const objectImages = {
    world0: '{{site.baseurl}}/images/symbol0.png', // left 1
@@ -419,7 +287,8 @@ const objectImages = {
    world5: '{{site.baseurl}}/images/symbol5.png', // left 6
    world6: '{{site.baseurl}}/images/symbol6.png', // top 1
    world7: '{{site.baseurl}}/images/symbol7.png', // top 2
-   world8: '{{site.baseurl}}/images/symbol8.png' // top 3 
+   world8: '{{site.baseurl}}/images/symbol8.png', // top 3 
+   skin: '{{site.baseurl}}/images/icon22.png' // skin
 };
 
 const loadedObjectImages = {};
@@ -448,7 +317,8 @@ const objects = [
   { x: 580, y: 580, width: 40, height: 40, game: 'world5' }, // left 6
   { x: 660, y: 250, width: 40, height: 40, game: 'world6' }, // top 1
   { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
-  { x: 330, y: 100, width: 40, height: 40, game: 'world8' } // top 3
+  { x: 330, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
+  { x: 730, y: 500, width: 40, height: 40, game: 'skin' } // skin icon
 ];
 
 const walls = [
@@ -482,65 +352,7 @@ const skinModal = document.getElementById('skin-modal');
 const closeModal = document.getElementById('close-modal');
 const confirmButton = document.getElementById('confirm-button');
 let isModalOpen = false; 
-let hasLeftBox = true; 
-
-// --- Cosmetics Modal Logic ---
-const cosmeticModal = document.getElementById('cosmetic-modal');
-const openCosmeticModalBtn = document.getElementById('open-cosmetic-modal');
-const closeCosmeticModalBtn = document.getElementById('close-cosmetic-modal');
-const confirmCosmeticBtn = document.getElementById('confirm-cosmetic-button');
-const cosmeticOptions = document.querySelectorAll('.cosmetic-option');
-
-let selectedHatIndex = 0;
-let selectedShoesIndex = 0;
-let confirmedHatIndex = 0;
-let confirmedShoesIndex = 0;
-let isCosmeticModalOpen = false;
-
-function openCosmeticModal() {
-  // Set selection to current confirmed
-  cosmeticOptions.forEach(opt => opt.classList.remove('selected'));
-  cosmeticOptions.forEach(opt => {
-    if (opt.dataset.type === 'hat' && Number(opt.dataset.index) === confirmedHatIndex) {
-      opt.classList.add('selected');
-      selectedHatIndex = confirmedHatIndex;
-    }
-    if (opt.dataset.type === 'shoes' && Number(opt.dataset.index) === confirmedShoesIndex) {
-      opt.classList.add('selected');
-      selectedShoesIndex = confirmedShoesIndex;
-    }
-  });
-  cosmeticModal.style.display = 'block';
-  isCosmeticModalOpen = true;
-}
-function closeCosmeticModal() {
-  cosmeticModal.style.display = 'none';
-  isCosmeticModalOpen = false;
-}
-openCosmeticModalBtn.addEventListener('click', openCosmeticModal);
-closeCosmeticModalBtn.addEventListener('click', closeCosmeticModal);
-
-cosmeticOptions.forEach(opt => {
-  opt.addEventListener('click', () => {
-    if (opt.dataset.type === 'hat') {
-      document.querySelectorAll('.cosmetic-option[data-type="hat"]').forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      selectedHatIndex = Number(opt.dataset.index);
-    }
-    if (opt.dataset.type === 'shoes') {
-      document.querySelectorAll('.cosmetic-option[data-type="shoes"]').forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      selectedShoesIndex = Number(opt.dataset.index);
-    }
-  });
-});
-confirmCosmeticBtn.addEventListener('click', () => {
-  confirmedHatIndex = selectedHatIndex;
-  confirmedShoesIndex = selectedShoesIndex;
-  currentHatIndex = confirmedHatIndex;
-  currentShoesIndex = confirmedShoesIndex;
-  closeCosmeticModal();
-});
+let hasLeftSkinBox = true; 
 
 // --- NPC Modal logic and world mapping with personality, game hints, and dialogue ---
 const worldNPCs = {
@@ -746,7 +558,7 @@ function update() {
   let nextX = player.x;
   let nextY = player.y;
 
-  if (!isModalOpen && !npcModalOpen && !isCosmeticModalOpen) { 
+  if (!isModalOpen && !npcModalOpen) { 
     if (keys['w']) nextY -= player.speed;
     if (keys['s']) nextY += player.speed;
     if (keys['a']) nextX -= player.speed;
@@ -769,13 +581,24 @@ function update() {
   // World/NPC collision
   let collidedWorld = null;
   objects.forEach(obj => {
-    if (worldNPCs[obj.game] && isColliding(player, obj)) {
+    if (obj.game === 'skin' && isColliding(player, obj)) {
+      if (hasLeftSkinBox && !isModalOpen) {
+        skinModal.style.display = 'block';
+        isModalOpen = true;
+        hasLeftSkinBox = false;
+      }
+    } else if (obj.game !== 'skin' && worldNPCs[obj.game] && isColliding(player, obj)) {
       collidedWorld = obj.game;
     }
   });
 
+  // Handle leaving skin box
+  const skinObj = objects.find(o => o.game === 'skin');
+  if (!isColliding(player, skinObj)) {
+    hasLeftSkinBox = true;
+  }
+
   if (collidedWorld && !npcModalOpen) {
-    // Move player back so they only touch, not overlap
     resolveTouch(player, objects.find(o => o.game === collidedWorld));
     showNPCModal(collidedWorld);
   }
@@ -793,29 +616,6 @@ function draw() {
 
   // Draw player base sprite
   ctx.drawImage(spriteImage, player.x, player.y, player.width, player.height);
-
-  // Draw hat if equipped
-  if (currentHatIndex > 0 && loadedHatImages[currentHatIndex]) {
-    // Position hat above head
-    const hatImg = loadedHatImages[currentHatIndex];
-    // Adjust offsets for hat placement
-    const hatWidth = player.width * 0.7;
-    const hatHeight = player.height * 0.35;
-    const hatX = player.x + player.width * 0.15;
-    const hatY = player.y - player.height * 0.18;
-    ctx.drawImage(hatImg, hatX, hatY, hatWidth, hatHeight);
-  }
-
-  // Draw shoes if equipped
-  if (currentShoesIndex > 0 && loadedShoesImages[currentShoesIndex]) {
-    const shoesImg = loadedShoesImages[currentShoesIndex];
-    // Adjust offsets for shoes placement
-    const shoesWidth = player.width * 0.7;
-    const shoesHeight = player.height * 0.22;
-    const shoesX = player.x + player.width * 0.15;
-    const shoesY = player.y + player.height * 0.78;
-    ctx.drawImage(shoesImg, shoesX, shoesY, shoesWidth, shoesHeight);
-  }
 
   // Draw world objects
   const baseWidth = 40 * 0.9; 
@@ -954,6 +754,7 @@ spriteImage.onload = tryStartGame;
 roomImage.onerror = () => alert('Failed to load room image');
 spriteImage.onerror = () => alert('Failed to load sprite image');
 
+/* Skin Modal Logic (from world0) */
 const skinOptions = document.querySelectorAll('.skin-option');
 let confirmedSelection = 0; 
 
@@ -985,13 +786,6 @@ skinOptions.forEach((option, index) => {
   if (index === 0) {
     option.classList.add('selected');
   }
-});
-
-// Set button text to Capitalized (first letter upper, rest lower)
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('npc-enter-btn').textContent = 'Enter';
-  document.getElementById('npc-talk-btn').textContent = 'Talk';
-  document.getElementById('npc-cancel-btn').textContent = 'Cancel';
 });
 </script>
 <script type="module">
