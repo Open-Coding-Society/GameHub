@@ -104,7 +104,7 @@ h2 {
 
 <!-- Start Menu -->
 <div id="startMenu" class="start-menu">
-<h2>Brawl Stars Mini Game</h2>
+<h2>Battle Games</h2>
 <button id="startButton" class="btn btn-primary btn-lg">Start Game</button>
 </div>
 

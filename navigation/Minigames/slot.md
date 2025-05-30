@@ -180,6 +180,14 @@ Author: Ian
     spinBtn.disabled = bloodCells < SPIN_COST;
   }
 
+  // Prevent "Enter" key from triggering spin button
+  spinBtn.addEventListener('keydown', (e) => {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      e.preventDefault();
+    }
+  });
+
+
   function weightedRandomSymbol() {
     const customWeights = { ...weights };
     if (upgrades.genetherapy) {
@@ -236,7 +244,11 @@ Author: Ian
     updateBalanceDisplay();
   }
 
+let spinning = false;
+
   function spin() {
+    if (spinning) return;  // Prevent spin if already spinning
+
     const cost = upgrades.genetherapy ? SPIN_COST + 5 : SPIN_COST;
 
     if (bloodCells < cost) {
@@ -244,11 +256,16 @@ Author: Ian
       return;
     }
 
+    spinning = true;
+    spinBtn.disabled = true;  // Disable button immediately
+
     bloodCells -= cost;
     updateBalanceDisplay();
 
     if (bloodCells >= 1000000) {
       winGame();
+      spinning = false;
+      spinBtn.disabled = false;
       return;
     }
 
@@ -263,6 +280,8 @@ Author: Ian
       reels.push(document.getElementById(`reel${i + 1}`));
     }
 
+    let reelsCompleted = 0;
+
     reels.forEach((reel, i) => {
       let spins = 10 + i * 5;
       if (upgrades.speed) spins = Math.floor(spins / 2);
@@ -275,7 +294,8 @@ Author: Ian
         if (count >= spins) {
           clearInterval(interval);
           result[i] = symbol;
-          if (result.filter(Boolean).length === reelCount) {
+          reelsCompleted++;
+          if (reelsCompleted === reelCount) {
             checkWin(result);
 
             // Adrenaline bonus
@@ -283,11 +303,16 @@ Author: Ian
               bloodCells += 100;
               updateBalanceDisplay();
             }
+
+            // Re-enable button and reset spinning flag after spin finishes
+            spinning = false;
+            spinBtn.disabled = bloodCells < (upgrades.genetherapy ? SPIN_COST + 5 : SPIN_COST);
           }
         }
       }, upgrades.speed ? 50 : 100);
     });
   }
+
 
   function checkWin(symbols) {
     const resultText = document.getElementById('result');
