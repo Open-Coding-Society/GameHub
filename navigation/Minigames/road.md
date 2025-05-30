@@ -244,7 +244,7 @@ window.addEventListener('keydown', startMusicOnce);
   function drawScore() {
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
-    ctx.fillText(`Score: ${Math.floor(-score)}`, 80, 20);
+    ctx.fillText(`Score: ${Math.floor(score)}`, 80, 20); // Remove the "-" sign from the score display
   }
 
   function updateObstacles() {
@@ -322,7 +322,13 @@ window.addEventListener('keydown', startMusicOnce);
   }
 
   function startGame() {
-    player = { x: Math.floor(cols / 2), y: 0 };
+    let safeSpawn = false;
+    while (!safeSpawn) {
+      player = { x: Math.floor(cols / 2), y: 1 }; // Spawn the player in a safe zone without obstacles
+      const playerLaneObs = lanes.get(player.y) || [];
+      safeSpawn = playerLaneObs.every(obs => obs.type === "grass");
+    }
+
     cameraY = 0;
     lanes.clear();
     score = 0;
@@ -334,6 +340,7 @@ window.addEventListener('keydown', startMusicOnce);
     updateLanes();
     gameLoop();
   }
+
 
   window.addEventListener("keydown", (e) => {
     if (!gameActive) return;
