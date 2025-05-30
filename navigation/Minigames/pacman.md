@@ -17,8 +17,7 @@ Author: Aarush
     display: block;
     margin: 20px auto;
     background: linear-gradient(135deg, #000428 0%, #004e92 100%);
-    /* Pacman blue gradient */
-    border: 2px solid #ffd700; /* Pacman yellow border */
+    border: 2px solid #ffd700;
     box-shadow: 0 0 30px #00f6ff, 0 0 10px #ffd700 inset;
   }
   .restart-hint {
@@ -50,7 +49,7 @@ Author: Aarush
 </style>
 
 <h1 style="text-align: center;">Pacman Game</h1>
-<p style="text-align: center;">Use W, A, S, D keys to move Pacman! Avoid the squids!</p>
+<p style="text-align: center;">Use W, A, S, D keys to move Pacman! Hold Shift + Direction to shoot!</p>
 
 <p class="restart-hint">Press <b>R</b> to restart</p>
 
@@ -79,53 +78,78 @@ Author: Aarush
   const canvas = document.getElementById('pacmanCanvas');
   const ctx = canvas.getContext('2d');
 
-  const tileSize = 32; // Use the current tile size
-  const rows = Math.floor(canvas.height / tileSize); // 960/32 = 30
-  const cols = Math.floor(canvas.width / tileSize);  // 896/32 = 28
+  const tileSize = 32;
+  const rows = Math.floor(canvas.height / tileSize);
+  const cols = Math.floor(canvas.width / tileSize);
 
+  let maze = [];
+  let gameOver = false;
+  let gameStarted = false;
+
+  // Pacman state
+  let pacman = {
+    x: 1,
+    y: 1,
+    pixelX: 1 * tileSize,
+    pixelY: 1 * tileSize,
+    dir: 'right',
+    dx: 0,
+    dy: 0,
+  };
+
+  // Ghosts array
+  let ghosts = [];
+
+  // Bullets array
   let bullets = [];
-  let lastPacmanMove = 0;
-  let lastGhostMove = 0;
-  let lastBulletMove = 0;
-  let pacmanMoveInterval = 10; // ms, extremely fast
-  let ghostMoveInterval = 20;  // ms, extremely fast
-  const bulletMoveInterval = 10; // ms, extremely fast
 
-  let pacmanPixelX, pacmanPixelY;
-  let ghostPixelPositions = [];
-  const moveAnimSteps = 4; // fewer steps for snappier fast movement
-  let pacmanAnimStep = 0;
-  let ghostAnimSteps = [];
-  let pacmanTargetX = 1, pacmanTargetY = 1;
+  // Difficulty
+  const difficultySelect = document.getElementById('difficulty');
 
-  let desiredDirection = null;
+  // Speed control (pixels per frame)
+  let pacmanSpeed = 2;  // px per frame
+  let ghostSpeed = 1.5; // px per frame
 
-  // Map generator based on difficulty, now with random generation
+  // UI Elements for speed display and control
+  const pacmanSpeedSlider = document.getElementById('pacmanSpeed');
+  const ghostSpeedSlider = document.getElementById('ghostSpeed');
+  const pacmanSpeedValue = document.getElementById('pacmanSpeedValue');
+  const ghostSpeedValue = document.getElementById('ghostSpeedValue');
+
+  function updateSpeedFromSliders() {
+    // Convert slider value (2 to 40) to px/frame speeds scaled for smoothness
+    pacmanSpeed = pacmanSpeedSlider.value / 4;  // around 0.5 to 10 px/frame
+    ghostSpeed = ghostSpeedSlider.value / 10;   // around 0.2 to 4 px/frame
+    pacmanSpeedValue.textContent = pacmanSpeedSlider.value;
+    ghostSpeedValue.textContent = ghostSpeedSlider.value;
+  }
+
+  pacmanSpeedSlider.addEventListener('input', updateSpeedFromSliders);
+  ghostSpeedSlider.addEventListener('input', updateSpeedFromSliders);
+  updateSpeedFromSliders();
+
+  // Generate maze randomly based on difficulty
   function generateMaze(difficulty) {
     const maze = [];
     let wallChance;
     if (difficulty === 'easy') wallChance = 0.07;
     else if (difficulty === 'medium') wallChance = 0.15;
-    else wallChance = 0.25; // hard
+    else wallChance = 0.25;
 
     for (let r = 0; r < rows; r++) {
       const row = [];
       for (let c = 0; c < cols; c++) {
-        // Always border walls
         if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) {
           row.push(0);
           continue;
         }
-        // Don't block the starting area for Pacman and ghosts
         const safeZone =
           (Math.abs(r - 1) <= 1 && Math.abs(c - 1) <= 1) ||
           (Math.abs(r - Math.floor(rows / 2)) <= 2 && Math.abs(c - Math.floor(cols / 2)) <= 2);
-
-        // Randomly place walls, but not in the safe zones
         if (!safeZone && Math.random() < wallChance) {
-          row.push(0); // wall
+          row.push(0);
         } else {
-          row.push(1); // pellet
+          row.push(1);
         }
       }
       maze.push(row);
@@ -133,69 +157,58 @@ Author: Aarush
     return maze;
   }
 
-  let maze = generateMaze(document.getElementById('difficulty').value);
-
-  const pacman = { x: 1, y: 1, dx: 0, dy: 0 };
-  const ghostColors = ['red', 'pink', 'cyan', 'orange', 'green', 'purple', 'blue', 'magenta', 'lime', 'yellow'];
-  let ghosts = [];
-  let pacmanDirection = 'right';
-  let gameOver = false;
-  let gameStarted = false;
-
-  // Difficulty logic
-  function getGhostCount() {
-    const diff = (document.getElementById('difficulty') || {}).value || 'medium';
-    if (diff === 'easy') return 4;
-    if (diff === 'hard') return 8;
-    return 6; // medium
+  // Check if tile is walkable (not wall)
+  function canMoveTo(x, y) {
+    return x >= 0 && x < cols && y >= 0 && y < rows && maze[y][x] !== 0;
   }
 
+  // Initialize ghosts
   function initGhosts() {
     ghosts = [];
-    const count = getGhostCount();
+    let count = 6;
+    if (difficultySelect.value === 'easy') count = 4;
+    else if (difficultySelect.value === 'hard') count = 8;
+    const centerX = Math.floor(cols / 2);
+    const centerY = Math.floor(rows / 2);
+
     for (let i = 0; i < count; i++) {
       ghosts.push({
-        x: Math.floor(cols / 2) + (i % 5) * 2 - 4,
-        y: Math.floor(rows / 2) + Math.floor(i / 5) * 2 - 1,
-        dx: [1, -1, 0, 0][i % 4],
-        dy: [0, 0, 1, -1][i % 4],
-        color: ghostColors[i % ghostColors.length]
+        x: centerX + (i % 5) * 2 - 4,
+        y: centerY + Math.floor(i / 5) * 2 - 1,
+        pixelX: (centerX + (i % 5) * 2 - 4) * tileSize,
+        pixelY: (centerY + Math.floor(i / 5) * 2 - 1) * tileSize,
+        dx: 1,
+        dy: 0,
+        color: ['red', 'pink', 'cyan', 'orange', 'green', 'purple', 'blue', 'magenta'][i % 8],
       });
     }
   }
 
-  initGhosts();
-
+  // Draw maze
   function drawMaze() {
-    for (let row = 0; row < maze.length; row++) {
-      for (let col = 0; col < maze[row].length; col++) {
-        if (maze[row][col] === 0) {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (maze[r][c] === 0) {
           ctx.fillStyle = 'blue';
-          ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
-        } else if (maze[row][col] === 1) {
+          ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+        } else if (maze[r][c] === 1) {
           ctx.fillStyle = 'white';
           ctx.beginPath();
-          ctx.arc(
-            col * tileSize + tileSize / 2,
-            row * tileSize + tileSize / 2,
-            tileSize / 8,
-            0,
-            Math.PI * 2
-          );
+          ctx.arc(c * tileSize + tileSize / 2, r * tileSize + tileSize / 2, tileSize / 8, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
   }
 
+  // Draw Pacman smoothly at pixel coords
   function drawPacman() {
     ctx.fillStyle = 'yellow';
     ctx.beginPath();
-    // Use pixel position for smooth animation
-    let px = pacmanPixelX + tileSize / 2;
-    let py = pacmanPixelY + tileSize / 2;
+    let px = pacman.pixelX + tileSize / 2;
+    let py = pacman.pixelY + tileSize / 2;
     let startAngle, endAngle;
-    switch (pacmanDirection) {
+    switch (pacman.dir) {
       case 'up':
         startAngle = 1.75 * Math.PI;
         endAngle = 1.25 * Math.PI;
@@ -219,396 +232,287 @@ Author: Aarush
     ctx.fill();
   }
 
-  function drawGhosts() {
-    ghosts.forEach((ghost, i) => {
-      ctx.save();
-      // Use pixel position for smooth animation
-      let gx = ghostPixelPositions[i]?.x ?? ghost.x * tileSize;
-      let gy = ghostPixelPositions[i]?.y ?? ghost.y * tileSize;
-      ctx.translate(gx + tileSize / 2, gy + tileSize / 2);
-      // Body base
-      ctx.beginPath();
-      ctx.moveTo(-tileSize / 2, tileSize / 4);
-      ctx.lineTo(-tileSize / 2, 0);
-      ctx.arc(0, 0, tileSize / 2, Math.PI, 0, false);
-      ctx.lineTo(tileSize / 2, tileSize / 4);
-      let waveCount = 4;
-      let waveWidth = tileSize / waveCount;
-      for (let j = waveCount - 1; j >= 0; j--) {
-        let x = -tileSize / 2 + j * waveWidth;
-        let y = tileSize / 4 + (j % 2 === 0 ? tileSize / 8 : 0);
-        ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-      ctx.fillStyle = ghost.color;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(-tileSize / 6, -tileSize / 8, tileSize / 8, 0, Math.PI * 2);
-      ctx.arc(tileSize / 6, -tileSize / 8, tileSize / 8, 0, Math.PI * 2);
-      ctx.fillStyle = 'white';
-      ctx.fill();
-      let px = pacman.x - ghost.x;
-      let py = pacman.y - ghost.y;
-      let mag = Math.sqrt(px * px + py * py) || 1;
-      let pupilOffsetX = (px / mag) * tileSize / 16;
-      let pupilOffsetY = (py / mag) * tileSize / 16;
-      ctx.beginPath();
-      ctx.arc(-tileSize / 6 + pupilOffsetX, -tileSize / 8 + pupilOffsetY, tileSize / 20, 0, Math.PI * 2);
-      ctx.arc(tileSize / 6 + pupilOffsetX, -tileSize / 8 + pupilOffsetY, tileSize / 20, 0, Math.PI * 2);
-      ctx.fillStyle = 'blue';
-      ctx.fill();
-      ctx.restore();
-    });
+  // Draw ghosts smoothly
+  function drawGhost(ghost) {
+    ctx.fillStyle = ghost.color;
+    ctx.beginPath();
+    let px = ghost.pixelX + tileSize / 2;
+    let py = ghost.pixelY + tileSize / 2;
+    ctx.arc(px, py, tileSize / 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eyes
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(px - 6, py - 5, 6, 0, Math.PI * 2);
+    ctx.arc(px + 6, py - 5, 6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.arc(px - 6, py - 5, 3, 0, Math.PI * 2);
+    ctx.arc(px + 6, py - 5, 3, 0, Math.PI * 2);
+    ctx.fill();
   }
 
+  // Draw bullets smoothly
   function drawBullets() {
-    ctx.fillStyle = 'yellow';
-    bullets.forEach(bullet => {
+    ctx.fillStyle = 'white';
+    for (const bullet of bullets) {
       ctx.beginPath();
-      ctx.arc(
-        bullet.x * tileSize + tileSize / 2,
-        bullet.y * tileSize + tileSize / 2,
-        tileSize / 6,
-        0,
-        Math.PI * 2
-      );
+      ctx.arc(bullet.pixelX + tileSize / 2, bullet.pixelY + tileSize / 2, tileSize / 6, 0, Math.PI * 2);
       ctx.fill();
-    });
+    }
   }
 
-  function updateBullets(force) {
-    const now = performance.now();
-    if (!force && now - lastBulletMove < bulletMoveInterval) return;
-    lastBulletMove = now;
+  // Movement interpolation for Pacman
+  function updatePacman() {
+    if (pacman.targetX === undefined) return;
 
-    bullets.forEach(bullet => {
-      bullet.x += bullet.dx;
-      bullet.y += bullet.dy;
-    });
+    const targetPixelX = pacman.targetX * tileSize;
+    const targetPixelY = pacman.targetY * tileSize;
 
-    bullets = bullets.filter(bullet => {
-      if (
-        bullet.x < 0 || bullet.x >= cols ||
-        bullet.y < 0 || bullet.y >= rows ||
-        maze[bullet.y][bullet.x] === 0
-      ) {
-        return false;
-      }
-      // Remove ghosts hit by bullet
-      let hitIndex = -1;
-      for (let i = 0; i < ghosts.length; i++) {
-        if (
-          Math.round(ghostPixelPositions[i]?.x / tileSize) === bullet.x &&
-          Math.round(ghostPixelPositions[i]?.y / tileSize) === bullet.y
-        ) {
-          hitIndex = i;
-          break;
+    const diffX = targetPixelX - pacman.pixelX;
+    const diffY = targetPixelY - pacman.pixelY;
+
+    const dist = Math.sqrt(diffX * diffX + diffY * diffY);
+
+    if (dist < pacmanSpeed) {
+      // Snap to target tile pixel position
+      pacman.pixelX = targetPixelX;
+      pacman.pixelY = targetPixelY;
+      pacman.x = pacman.targetX;
+      pacman.y = pacman.targetY;
+      pacman.targetX = undefined;
+      pacman.targetY = undefined;
+    } else {
+      // Move towards target pixel position
+      pacman.pixelX += (diffX / dist) * pacmanSpeed;
+      pacman.pixelY += (diffY / dist) * pacmanSpeed;
+    }
+  }
+
+  // Movement interpolation for ghosts
+  function updateGhosts(deltaTime) {
+    for (const ghost of ghosts) {
+      if (ghost.targetX === undefined) {
+        // Choose new target tile for ghost based on random direction
+        const directions = [
+          { dx: 1, dy: 0 },
+          { dx: -1, dy: 0 },
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 }
+        ];
+        const validDirs = directions.filter(d => canMoveTo(ghost.x + d.dx, ghost.y + d.dy));
+        if (validDirs.length > 0) {
+          const choice = validDirs[Math.floor(Math.random() * validDirs.length)];
+          ghost.targetX = ghost.x + choice.dx;
+          ghost.targetY = ghost.y + choice.dy;
         }
       }
-      if (hitIndex !== -1) {
-        ghosts.splice(hitIndex, 1);
-        ghostPixelPositions.splice(hitIndex, 1);
-        ghostAnimSteps.splice(hitIndex, 1);
-        return false; // Remove bullet only if it hit a ghost
-      }
-      return true; // Keep bullet if it didn't hit a ghost
-    });
-  }
 
-  // Smooth movement for Pacman
-  function updatePacman(force) {
-    if (gameOver) return;
-    const now = performance.now();
-    if (!force && now - lastPacmanMove < pacmanMoveInterval) return;
-    lastPacmanMove = now;
+      if (ghost.targetX !== undefined) {
+        const targetPixelX = ghost.targetX * tileSize;
+        const targetPixelY = ghost.targetY * tileSize;
+        const diffX = targetPixelX - ghost.pixelX;
+        const diffY = targetPixelY - ghost.pixelY;
+        const dist = Math.sqrt(diffX * diffX + diffY * diffY);
 
-    // Try to change direction if possible, even while moving
-    if (desiredDirection) {
-      const testX = pacman.x + desiredDirection.dx;
-      const testY = pacman.y + desiredDirection.dy;
-      // Allow direction change if the next tile in the desired direction is open and Pacman is aligned to the grid
-      if (pacmanAnimStep === 0 && maze[testY][testX] !== 0) {
-        pacman.dx = desiredDirection.dx;
-        pacman.dy = desiredDirection.dy;
-        pacmanDirection = desiredDirection.dir;
-      }
-      desiredDirection = null;
-    }
-
-    // Only move to next tile if not already animating
-    if (pacmanAnimStep === 0) {
-      const nextX = pacman.x + pacman.dx;
-      const nextY = pacman.y + pacman.dy;
-      if (maze[nextY][nextX] !== 0) {
-        pacmanTargetX = nextX;
-        pacmanTargetY = nextY;
-        pacmanAnimStep = moveAnimSteps;
-      } else {
-        pacman.dx = 0;
-        pacman.dy = 0;
-      }
-      if (maze[pacman.y][pacman.x] === 1) {
-        maze[pacman.y][pacman.x] = 2; // Eat pellet
-      }
-    }
-    // Animate pixel position
-    if (pacmanAnimStep > 0) {
-      const dx = (pacmanTargetX - pacman.x) * tileSize / moveAnimSteps;
-      const dy = (pacmanTargetY - pacman.y) * tileSize / moveAnimSteps;
-      pacmanPixelX += dx;
-      pacmanPixelY += dy;
-      pacmanAnimStep--;
-      if (pacmanAnimStep === 0) {
-        pacman.x = pacmanTargetX;
-        pacman.y = pacmanTargetY;
-        pacmanPixelX = pacman.x * tileSize;
-        pacmanPixelY = pacman.y * tileSize;
+        if (dist < ghostSpeed) {
+          ghost.pixelX = targetPixelX;
+          ghost.pixelY = targetPixelY;
+          ghost.x = ghost.targetX;
+          ghost.y = ghost.targetY;
+          ghost.targetX = undefined;
+          ghost.targetY = undefined;
+        } else {
+          ghost.pixelX += (diffX / dist) * ghostSpeed;
+          ghost.pixelY += (diffY / dist) * ghostSpeed;
+        }
       }
     }
   }
 
-  // Smooth movement for ghosts
-  function updateGhosts(force) {
-    if (gameOver) return;
-    const now = performance.now();
-    if (!force && now - lastGhostMove < ghostMoveInterval) return;
-    lastGhostMove = now;
+  // Update bullets positions smoothly
+  function updateBullets() {
+    bullets = bullets.filter(bullet => {
+      if (bullet.targetX === undefined) {
+        bullet.targetX = bullet.x + bullet.dx;
+        bullet.targetY = bullet.y + bullet.dy;
+        bullet.pixelX = bullet.x * tileSize;
+        bullet.pixelY = bullet.y * tileSize;
+      }
 
-    ghosts.forEach((ghost, i) => {
-      if (!ghostAnimSteps[i]) ghostAnimSteps[i] = 0;
-      if (ghostAnimSteps[i] === 0) {
-        let possibleDirs = [
-          { dx: 1, dy: 0 },   // right
-          { dx: -1, dy: 0 },  // left
-          { dx: 0, dy: 1 },   // down
-          { dx: 0, dy: -1 }   // up
-        ];
-        const nextX = ghost.x + ghost.dx;
-        const nextY = ghost.y + ghost.dy;
-        if (
-          maze[nextY][nextX] === 0 ||
-          Math.random() < 0.1
-        ) {
-          const validDirs = possibleDirs.filter(dir => {
-            const tx = ghost.x + dir.dx;
-            const ty = ghost.y + dir.dy;
-            return maze[ty][tx] !== 0 && !(dir.dx === -ghost.dx && dir.dy === -ghost.dy);
-          });
-          if (validDirs.length > 0) {
-            const newDir = validDirs[Math.floor(Math.random() * validDirs.length)];
-            ghost.dx = newDir.dx;
-            ghost.dy = newDir.dy;
+      const targetPixelX = bullet.targetX * tileSize;
+      const targetPixelY = bullet.targetY * tileSize;
+
+      const diffX = targetPixelX - bullet.pixelX;
+      const diffY = targetPixelY - bullet.pixelY;
+      const dist = Math.sqrt(diffX * diffX + diffY * diffY);
+
+      const bulletSpeed = 8; // pixels per frame, bullets are fast
+
+      if (dist < bulletSpeed) {
+        bullet.pixelX = targetPixelX;
+        bullet.pixelY = targetPixelY;
+        bullet.x = bullet.targetX;
+        bullet.y = bullet.targetY;
+
+        // Check collisions
+        if (!canMoveTo(bullet.x, bullet.y)) return false; // hits wall - remove
+
+        // Check ghosts
+        for (let i = 0; i < ghosts.length; i++) {
+          if (ghosts[i].x === bullet.x && ghosts[i].y === bullet.y) {
+            ghosts.splice(i, 1);
+            return false; // bullet disappears
           }
         }
-        ghost.x += ghost.dx;
-        ghost.y += ghost.dy;
-        ghostAnimSteps[i] = moveAnimSteps;
+
+        // Move bullet forward one tile again next update
+        bullet.targetX = bullet.x + bullet.dx;
+        bullet.targetY = bullet.y + bullet.dy;
+      } else {
+        bullet.pixelX += (diffX / dist) * bulletSpeed;
+        bullet.pixelY += (diffY / dist) * bulletSpeed;
       }
-      // Animate pixel position
-      if (!ghostPixelPositions[i]) ghostPixelPositions[i] = { x: ghost.x * tileSize, y: ghost.y * tileSize };
-      if (ghostAnimSteps[i] > 0) {
-        ghostPixelPositions[i].x += (ghost.dx * tileSize) / moveAnimSteps;
-        ghostPixelPositions[i].y += (ghost.dy * tileSize) / moveAnimSteps;
-        ghostAnimSteps[i]--;
-        if (ghostAnimSteps[i] === 0) {
-          ghostPixelPositions[i].x = ghost.x * tileSize;
-          ghostPixelPositions[i].y = ghost.y * tileSize;
-        }
-      }
-      // Check collision with Pacman
-      if (
-        Math.round(ghostPixelPositions[i].x / tileSize) === pacman.x &&
-        Math.round(ghostPixelPositions[i].y / tileSize) === pacman.y
-      ) {
-        gameOver = true;
-        setTimeout(() => {
-          alert('Game Over! You were caught by a squid!');
-        }, 10);
-      }
+      return true;
     });
   }
 
-  function resetGame() {
-    pacman.x = 1;
-    pacman.y = 1;
-    pacman.dx = 0;
-    pacman.dy = 0;
-    pacmanDirection = 'right';
-    maze = generateMaze(document.getElementById('difficulty').value);
-    initGhosts();
-    bullets = [];
-    gameOver = false;
-    pacmanPixelX = pacman.x * tileSize;
-    pacmanPixelY = pacman.y * tileSize;
-    pacmanAnimStep = 0;
-    pacmanTargetX = pacman.x;
-    pacmanTargetY = pacman.y;
-    ghostPixelPositions = ghosts.map(g => ({ x: g.x * tileSize, y: g.y * tileSize }));
-    ghostAnimSteps = ghosts.map(() => 0);
-  }
-
-  function startGame() {
-    if (!gameStarted) {
-      gameStarted = true;
-      resetGame();
-      requestAnimationFrame(gameLoop);
+  // Eat pellets
+  function eatPellet() {
+    if (maze[pacman.y][pacman.x] === 1) {
+      maze[pacman.y][pacman.x] = 2;
     }
   }
 
-  // Hide canvas and controls until difficulty is chosen
-  canvas.style.display = 'none';
-  document.getElementById('restartBtn').style.display = 'none';
+  // Check if any ghost collides with Pacman
+  function checkCollisions() {
+    for (const ghost of ghosts) {
+      const px = Math.round(pacman.pixelX / tileSize);
+      const py = Math.round(pacman.pixelY / tileSize);
+      if (ghost.x === px && ghost.y === py) {
+        gameOver = true;
+      }
+    }
+  }
 
-  // Show start button and wait for difficulty selection
-  const startBtn = document.createElement('button');
-  startBtn.textContent = 'Start Game';
-  startBtn.style.fontSize = '1.1em';
-  startBtn.style.marginLeft = '10px';
-  const diffDiv = document.getElementById('difficulty').parentElement;
-  diffDiv.appendChild(startBtn);
-
-  startBtn.addEventListener('click', () => {
-    canvas.style.display = '';
-    document.getElementById('restartBtn').style.display = '';
-    startBtn.style.display = 'none';
-    document.getElementById('difficulty').disabled = true;
-    startGame();
-  });
-  let currentDirection = { dx: 0, dy: 0, dir: null };  // persistent current direction
+  // Handle keyboard input
+  let inputDir = null;
 
   document.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'r') {
+    if (gameOver) return;
+
+    const key = e.key.toLowerCase();
+
+    const directionMap = {
+      'w': { dx: 0, dy: -1, dir: 'up' },
+      'a': { dx: -1, dy: 0, dir: 'left' },
+      's': { dx: 0, dy: 1, dir: 'down' },
+      'd': { dx: 1, dy: 0, dir: 'right' },
+    };
+
+    if (key === 'r') {
       resetGame();
       return;
     }
-    if (gameOver) return;
-    if (!gameStarted) return;
 
-    switch (e.key.toLowerCase()) {
-      case 'w':
-        currentDirection = { dx: 0, dy: -1, dir: 'up' };
-        break;
-      case 's':
-        currentDirection = { dx: 0, dy: 1, dir: 'down' };
-        break;
-      case 'a':
-        currentDirection = { dx: -1, dy: 0, dir: 'left' };
-        break;
-      case 'd':
-        currentDirection = { dx: 1, dy: 0, dir: 'right' };
-        break;
-    }
+    if (key in directionMap) {
+      inputDir = directionMap[key];
 
-    // Shoot bullet with Shift key (either left or right shift)
-    if (e.key === 'Shift') {
-      if (pacman.dx !== 0 || pacman.dy !== 0) {
-        const exists = bullets.some(
-          b => b.x === pacman.x && b.y === pacman.y && b.dx === pacman.dx && b.dy === pacman.dy
-        );
-        if (!exists) {
-          bullets.push({
-            x: pacman.x,
-            y: pacman.y,
-            dx: pacman.dx,
-            dy: pacman.dy
-          });
-        }
+      // Shoot bullet if shift held
+      if (e.shiftKey) {
+        // Add bullet at pacman's current tile with direction
+        bullets.push({
+          x: pacman.x,
+          y: pacman.y,
+          dx: inputDir.dx,
+          dy: inputDir.dy,
+          pixelX: pacman.pixelX,
+          pixelY: pacman.pixelY,
+          targetX: undefined,
+          targetY: undefined,
+        });
       }
     }
   });
 
-  function updatePacman(force) {
-    if (gameOver) return;
-    const now = performance.now();
-    if (!force && now - lastPacmanMove < pacmanMoveInterval) return;
-    lastPacmanMove = now;
-
-    // Instead of desiredDirection, use currentDirection persistently
-    if (currentDirection.dir) {
-      const testX = pacman.x + currentDirection.dx;
-      const testY = pacman.y + currentDirection.dy;
-      if (pacmanAnimStep === 0 && maze[testY][testX] !== 0) {
-        pacman.dx = currentDirection.dx;
-        pacman.dy = currentDirection.dy;
-        pacmanDirection = currentDirection.dir;
-      }
-    }
-
-    if (pacmanAnimStep === 0) {
-      const nextX = pacman.x + pacman.dx;
-      const nextY = pacman.y + pacman.dy;
-      if (maze[nextY][nextX] !== 0) {
-        pacmanTargetX = nextX;
-        pacmanTargetY = nextY;
-        pacmanAnimStep = moveAnimSteps;
-      } else {
-        pacman.dx = 0;
-        pacman.dy = 0;
-      }
-      if (maze[pacman.y][pacman.x] === 1) {
-        maze[pacman.y][pacman.x] = 2; // Eat pellet
-      }
-    }
-
-    if (pacmanAnimStep > 0) {
-      const dx = (pacmanTargetX - pacman.x) * tileSize / moveAnimSteps;
-      const dy = (pacmanTargetY - pacman.y) * tileSize / moveAnimSteps;
-      pacmanPixelX += dx;
-      pacmanPixelY += dy;
-      pacmanAnimStep--;
-      if (pacmanAnimStep === 0) {
-        pacman.x = pacmanTargetX;
-        pacman.y = pacmanTargetY;
-        pacmanPixelX = pacman.x * tileSize;
-        pacmanPixelY = pacman.y * tileSize;
-      }
-    }
+  // Game reset logic
+  function resetGame() {
+    gameOver = false;
+    gameStarted = true;
+    maze = generateMaze(difficultySelect.value);
+    pacman.x = 1;
+    pacman.y = 1;
+    pacman.pixelX = pacman.x * tileSize;
+    pacman.pixelY = pacman.y * tileSize;
+    pacman.dir = 'right';
+    pacman.dx = 0;
+    pacman.dy = 0;
+    pacman.targetX = undefined;
+    pacman.targetY = undefined;
+    inputDir = null;
+    bullets = [];
+    initGhosts();
   }
 
+  difficultySelect.addEventListener('change', resetGame);
+  document.getElementById('restartBtn').addEventListener('click', resetGame);
 
+  // Main game loop using requestAnimationFrame
   function gameLoop() {
-    if (!gameStarted) return;
+    if (!gameStarted) {
+      resetGame();
+      gameStarted = true;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     drawMaze();
 
-    // Always update movement, even after gameOver, but only allow input/movement if not gameOver
+    if (!gameOver) {
+      // Move Pacman tile if reached target tile or no target
+      if (pacman.targetX === undefined && inputDir) {
+        const newX = pacman.x + inputDir.dx;
+        const newY = pacman.y + inputDir.dy;
+        if (canMoveTo(newX, newY)) {
+          pacman.targetX = newX;
+          pacman.targetY = newY;
+          pacman.dir = inputDir.dir;
+          pacman.dx = inputDir.dx;
+          pacman.dy = inputDir.dy;
+        } else {
+          pacman.dx = 0;
+          pacman.dy = 0;
+        }
+      }
+    }
+
     updatePacman();
-    updateBullets();
+    eatPellet();
     updateGhosts();
-    drawPacman();
+    updateBullets();
+
     drawBullets();
-    drawGhosts();
+
+    for (const ghost of ghosts) {
+      drawGhost(ghost);
+    }
+
+    drawPacman();
+
+    checkCollisions();
+
+    if (gameOver) {
+      ctx.fillStyle = 'red';
+      ctx.font = '48px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Game Over! Press R to Restart', canvas.width / 2, canvas.height / 2);
+    }
 
     requestAnimationFrame(gameLoop);
   }
 
-  // Only allow difficulty change before game starts
-  document.getElementById('difficulty').addEventListener('change', () => {
-    if (!gameStarted) {
-      maze = generateMaze(document.getElementById('difficulty').value);
-      resetGame();
-    }
-  });
-  document.getElementById('restartBtn').addEventListener('click', () => {
-    resetGame();
-  });
-</script>
-
-<script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
-// --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/6scatteredandlost.mp3'); // Change path as needed
-music.loop = true;
-music.volume = 0.5;
-
-// Play music after first user interaction (required by browsers)
-function startMusicOnce() {
-  music.play().catch(() => {});
-  window.removeEventListener('click', startMusicOnce);
-  window.removeEventListener('keydown', startMusicOnce);
-}
-window.addEventListener('click', startMusicOnce);
-window.addEventListener('keydown', startMusicOnce);
+  requestAnimationFrame(gameLoop);
 </script>
