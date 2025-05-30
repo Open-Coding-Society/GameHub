@@ -110,34 +110,22 @@ Author: Zach
     <h2>Meet the Developers</h2>
     <div class="devs">
         <div class="dev-card">
-            <h3>Pradyun</h3>
-            <p>Project Manager/Scrum Master</p>
+            <h3>Ian Manangan</h3>
+            <p>Project Manager, Scrum Master, and Testing</p>
         </div>
         <div class="dev-card">
-            <h3>Zach</h3>
-            <p>Frontend/Backend Developer</p>
+            <h3>Zach Peltz</h3>
+            <p>Frontend and Backend Developer</p>
         </div>
         <div class="dev-card">
-            <h3>Lars</h3>
-            <p>Frontend/Backend Developer</p>
-        </div>
-        <div class="dev-card">
-            <h3>Ian</h3>
-            <p>Data Science Lead</p>
-        </div>
-        <div class="dev-card">
-            <h3>Darsh</h3>
-            <p>ML Engineer</p>
-        </div>
-        <div class="dev-card">
-            <h3>Aarush</h3>
-            <p>Testing/Developer</p>
+            <h3>Aarush Kota</h3>
+            <p>ML Engineer and Data Science Lead</p>
         </div>
     </div>
 </div>
 
 <div class="footer-text">
-    <p>&copy; 2025 Game Hub Minigames. Designed and developed by <a href="#">Pradyun, Zach, Lars, Ian, Darsh, Aarush</a>.</p>
+    <p>&copy; 2025 Game Hub Minigames. Designed and developed by <a href="#">Ian, Zach, and Aarush</a>.</p>
 </div>
 
 <script>
