@@ -96,19 +96,105 @@ Author: Zach & Ian
     font-size: 1.2em;
     margin-bottom: 15px;
   }
+  /* Binder button orange */
+  .binder-btn {
+    background-color: orange !important;
+    color: white !important;
+    border: none !important;
+  }
+  /* Custom popup styles */
+  .popup-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 260px;
+    background: #fff;
+    color: #222;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    z-index: 9999;
+    padding: 24px 20px 16px 20px;
+    text-align: left;
+    font-size: 1.1em;
+    display: none;
+  }
+  .popup-modal .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #888;
+    cursor: pointer;
+  }
+  .popup-modal h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.15em;
+    font-weight: bold;
+  }
+  .popup-modal ul {
+    padding-left: 18px;
+    margin-bottom: 0;
+  }
+  .btn-chances {
+    background: #ffb6c1 !important;
+    color: #b71c1c !important;
+    border: none !important;
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+  .btn-coins {
+    background: #222 !important;
+    color: #fff !important;
+    border: none !important;
+    margin-left: 5px;
+  }
 </style>
 </head>
 <body>
 <div class="container mt-5">
   <h1>Pack Opening Game</h1>
   <div id="coinBalance">Coins: 100</div>
-  <p>Each pack costs 5 coins.</p>
+  <p>
+    Each pack costs 10 coins.
+    <button class="btn btn-chances" id="chancesBtn">Chances</button>
+    <button class="btn btn-coins" id="coinsBtn">Coins</button>
+  </p>
+  <div id="chancesPopup" class="popup-modal">
+    <button class="close-btn" onclick="closePopup('chancesPopup')">&times;</button>
+    <h4>Rarity Chances</h4>
+    <ul style="margin-bottom:0;">
+      <li><span style="color:gray;">Common</span>: 35%</li>
+      <li><span style="color:green;">Uncommon</span>: 25%</li>
+      <li><span style="color:#003366;">Rare</span>: 15%</li>
+      <li><span style="color:purple;">Epic</span>: 10%</li>
+      <li><span style="color:orange;">Legendary</span>: 8%</li>
+      <li><span style="color:red;">Mythic</span>: 5%</li>
+      <li><span style="color:#00bfff;">Exotic</span>: 2%</li>
+    </ul>
+  </div>
+  <div id="coinsPopup" class="popup-modal">
+    <button class="close-btn" onclick="closePopup('coinsPopup')">&times;</button>
+    <h4>Coin Rewards</h4>
+    <ul style="margin-bottom:0;">
+      <li><span style="color:gray;">Common</span>: 0 coins</li>
+      <li><span style="color:green;">Uncommon</span>: 1 coin</li>
+      <li><span style="color:#003366;">Rare</span>: 2 coins</li>
+      <li><span style="color:purple;">Epic</span>: 3 coins</li>
+      <li><span style="color:orange;">Legendary</span>: 5 coins</li>
+      <li><span style="color:red;">Mythic</span>: 10 coins</li>
+      <li><span style="color:#00bfff;">Exotic</span>: 20 coins</li>
+    </ul>
+  </div>
   <p>Choose a pack to open:</p>
   <button class="btn btn-success pack-btn" id="jungleBtn" onclick="openPack('jungle')">🌴 Jungle Pack</button>
   <button class="btn btn-primary pack-btn" id="oceanBtn" onclick="openPack('ocean')">🌊 Ocean Pack</button>
   <button class="btn btn-warning pack-btn" id="desertBtn" onclick="openPack('desert')">🏜️ Desert Pack</button>
   <button class="btn btn-info pack-btn" id="arcticBtn" onclick="openPack('arctic')">⛄ Arctic Pack</button>
-  <button class="btn btn-warning binder-btn" onclick="showBinder()">📓 Binder</button>
+  <button class="btn binder-btn" onclick="showBinder()">📓 Binder</button>
   <div id="openingText" class="pack-opening d-none">Opening Pack...</div>
   <div id="cardArea" class="card-container"></div>
   <div id="binderArea" class="card-container d-none"></div>
@@ -116,11 +202,20 @@ Author: Zach & Ian
 
 <script>
   let coins = 100;
-  const packCost = 5;
+  const packCost = 10;
   let isOpening = false;
   const collectedCards = JSON.parse(localStorage.getItem('collectedCards') || '[]');
 
-  const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'exotic'];
+  // --- Rarity and color definitions ---
+  const rarityOrder = [
+    'common',     // gray
+    'uncommon',   // green
+    'rare',       // dark blue
+    'epic',       // purple
+    'legendary',  // gold
+    'mythic',     // red
+    'exotic'      // light blue
+  ];
   const dropRates = [0.35, 0.25, 0.15, 0.10, 0.08, 0.05, 0.02];
   const coinRewards = {
     common: 0,
@@ -132,103 +227,216 @@ Author: Zach & Ian
     exotic: 20
   };
 
-  const packs = {
-    arctic: [
-      { name: 'Fox', rarity: 'common' },
-      { name: 'Rabbit', rarity: 'common' },
-      { name: 'Deer', rarity: 'uncommon' },
-      { name: 'Owl', rarity: 'uncommon' },
-      { name: 'Wolf', rarity: 'rare' },
-      { name: 'Bear', rarity: 'rare' },
-      { name: 'Lynx', rarity: 'epic' },
-      { name: 'Eagle', rarity: 'legendary' },
-      { name: 'Phoenix', rarity: 'mythic' },
-      { name: 'Dragon', rarity: 'exotic' }
-    ],
-    jungle: [
-      { name: 'Monkey', rarity: 'common' },
-      { name: 'Parrot', rarity: 'common' },
-      { name: 'Tiger', rarity: 'uncommon' },
-      { name: 'Jaguar', rarity: 'uncommon' },
-      { name: 'Anaconda', rarity: 'rare' },
-      { name: 'Cheetah', rarity: 'rare' },
-      { name: 'Panther', rarity: 'epic' },
-      { name: 'Gorilla', rarity: 'legendary' },
-      { name: 'Hydra', rarity: 'mythic' },
-      { name: 'Chimera', rarity: 'exotic' }
-    ],
-    ocean: [
-      { name: 'Clownfish', rarity: 'common' },
-      { name: 'Seahorse', rarity: 'common' },
-      { name: 'Turtle', rarity: 'uncommon' },
-      { name: 'Crab', rarity: 'uncommon' },
-      { name: 'Shark', rarity: 'rare' },
-      { name: 'Dolphin', rarity: 'rare' },
-      { name: 'Manta Ray', rarity: 'epic' },
-      { name: 'Whale', rarity: 'legendary' },
-      { name: 'Kraken', rarity: 'mythic' },
-      { name: 'Leviathan', rarity: 'exotic' }
-    ],
-    desert: [
-      { name: 'Scorpion', rarity: 'common' },
-      { name: 'Lizard', rarity: 'common' },
-      { name: 'Camel', rarity: 'uncommon' },
-      { name: 'Vulture', rarity: 'uncommon' },
-      { name: 'Coyote', rarity: 'rare' },
-      { name: 'Fennec Fox', rarity: 'rare' },
-      { name: 'Sandworm', rarity: 'epic' },
-      { name: 'Manticore', rarity: 'legendary' },
-      { name: 'Sphinx', rarity: 'mythic' },
-      { name: 'Djinn', rarity: 'exotic' }
-    ],
+  // --- Animal name pools for each pack (100 unique animals per pack) ---
+  // For brevity, only a few animals are shown per rarity. Fill with your own animal names as needed.
+  const animalNames = {
+    arctic: {
+      common: [
+        "Fox", "Seal", "Hare", "Lemming", "Ptarmigan", "Snowy Owl", "Muskox", "Reindeer", "Walrus", "Narwhal",
+        "Beluga", "Arctic Wolf", "Arctic Tern", "Snow Goose", "Ermine", "Wolverine", "Caribou", "Ivory Gull", "Ringed Seal", "Bearded Seal",
+        "Polar Cod", "Arctic Char", "Greenland Shark", "Snow Bunting", "Arctic Skua", "Dovekie", "Little Auk", "King Eider", "Long-tailed Duck", "Ruddy Turnstone",
+        "Purple Sandpiper", "Black Guillemot", "Thick-billed Murre", "Glaucous Gull", "Ross's Gull"
+      ],
+      uncommon: [
+        "Puffin", "Lapland Longspur", "Red-throated Loon", "Northern Fulmar", "Brunnich's Guillemot", "Sabine's Gull", "Arctic Fox", "Bowhead Whale", "Harlequin Duck", "Spectacled Eider",
+        "Steller's Eider", "Common Eider", "White Whale", "Greenland Halibut", "Arctic Lamprey", "Snow Sheep", "Yakutian Horse", "Yakutian Cattle", "Yakutian Laika", "Yakutian Pig",
+        "Yakutian Reindeer", "Yakutian Sable", "Yakutian Hare", "Yakutian Shrew", "Yakutian Vole"
+      ],
+      rare: [
+        "Ivory Gull", "Arctic Ground Squirrel", "Northern Pika", "Arctic Hare", "Arctic Foxhound", "Arctic Weasel", "Arctic Marten", "Arctic Stoat", "Arctic Lemming", "Arctic Shag",
+        "Arctic Warbler", "Arctic Redpoll", "Arctic Bluethroat", "Arctic Pipit", "Arctic Swallow"
+      ],
+      epic: [
+        "Greenland Wolf", "Greenland Falcon", "Greenland Caribou", "Greenland Lemming", "Greenland Hare", "Greenland Fox", "Greenland Seal", "Greenland Bear", "Greenland Goose", "Greenland Gull"
+      ],
+      legendary: [
+        "Spirit Bear", "Ice Lynx", "Frost Owl", "Aurora Fox", "Crystal Wolf", "Blizzard Hare", "Glacier Seal", "Snowstorm Owl"
+      ],
+      mythic: [
+        "Yeti", "Frost Phoenix", "Ice Dragon", "Aurora Unicorn", "Blizzard Griffin"
+      ],
+      exotic: [
+        "Arctic Kirin", "Polar Leviathan"
+      ]
+    },
+    jungle: {
+      common: [
+        "Monkey", "Parrot", "Toucan", "Sloth", "Tapir", "Capybara", "Agouti", "Coati", "Ocelot", "Howler Monkey",
+        "Spider Monkey", "Tamarin", "Marmoset", "Macaw", "Peccary", "Armadillo", "Anteater", "Caiman", "Iguana", "Boa",
+        "Tree Frog", "Leafcutter Ant", "Jaguarundi", "Paca", "Kinkajou", "Margay", "Bushmaster", "Anole", "Vine Snake", "Poison Dart Frog",
+        "Harpy Eagle", "Sunbittern", "Curassow", "Guianan Cock-of-the-rock", "Manakin"
+      ],
+      uncommon: [
+        "Jaguar", "Tiger", "Leopard", "Puma", "Civet", "Binturong", "Gibbon", "Orangutan", "Proboscis Monkey", "Saki Monkey",
+        "Uakari", "Squirrel Monkey", "Red Brocket", "Sambar", "Muntjac", "Serow", "Tapeti", "Agouti Paca", "Olingo", "Olinguito",
+        "Tamandua", "Giant Anteater", "Pangolin", "Aye-aye", "Fossa"
+      ],
+      rare: [
+        "Okapi", "Quetzal", "Cassowary", "Hornbill", "Drongo", "Crowned Eagle", "Clouded Leopard", "Golden Lion Tamarin", "Cotton-top Tamarin", "Sifaka",
+        "Indri", "Galago", "Potto", "Loris", "Slow Loris"
+      ],
+      epic: [
+        "Emerald Tree Boa", "Green Anaconda", "Goliath Birdeater", "Giant River Otter", "Capuchin Monkey", "Spectacled Bear", "Jaguarundi", "Bush Dog", "Maned Wolf", "Red Uakari"
+      ],
+      legendary: [
+        "White Tiger", "Golden Jaguar", "Rainbow Macaw", "Emerald Python", "Spirit Sloth", "Sun Parakeet", "Shadow Ocelot", "Thunder Monkey"
+      ],
+      mythic: [
+        "Jungle Kirin", "Rainforest Dragon", "Emerald Phoenix", "Thunder Griffin", "Spirit Anaconda"
+      ],
+      exotic: [
+        "Jungle Leviathan", "Mythic Quetzal"
+      ]
+    },
+    ocean: {
+      common: [
+        "Clownfish", "Seahorse", "Turtle", "Crab", "Starfish", "Sea Urchin", "Sea Cucumber", "Jellyfish", "Shrimp", "Lobster",
+        "Anchovy", "Sardine", "Mackerel", "Herring", "Cod", "Flounder", "Halibut", "Plaice", "Sole", "Skate",
+        "Ray", "Dogfish", "Catfish", "Eel", "Pipefish", "Blenny", "Gobies", "Wrasse", "Parrotfish", "Butterflyfish",
+        "Angelfish", "Damselfish", "Surgeonfish", "Triggerfish", "Boxfish"
+      ],
+      uncommon: [
+        "Shark", "Dolphin", "Porpoise", "Beluga", "Narwhal", "Orca", "Pilot Whale", "Minke Whale", "Humpback Whale", "Blue Whale",
+        "Fin Whale", "Sperm Whale", "Bowhead Whale", "Gray Whale", "Right Whale", "Manatee", "Dugong", "Sea Otter", "Walrus", "Sea Lion",
+        "Fur Seal", "Elephant Seal", "Leopard Seal", "Weddell Seal", "Ross Seal"
+      ],
+      rare: [
+        "Swordfish", "Marlin", "Sailfish", "Barracuda", "Giant Squid", "Colossal Squid", "Vampire Squid", "Oarfish", "Sunfish", "Mola Mola",
+        "Oceanic Whitetip", "Thresher Shark", "Hammerhead", "Basking Shark", "Greenland Shark"
+      ],
+      epic: [
+        "Manta Ray", "Mobula Ray", "Giant Manta", "Devil Ray", "Blue Ringed Octopus", "Giant Pacific Octopus", "Cuttlefish", "Nautilus", "Moray Eel", "Ribbon Eel"
+      ],
+      legendary: [
+        "White Whale", "Golden Dolphin", "Rainbow Eel", "Spirit Shark", "Thunder Whale", "Shadow Squid", "Sunfish King", "Pearl Orca"
+      ],
+      mythic: [
+        "Ocean Kirin", "Sea Dragon", "Abyssal Phoenix", "Storm Leviathan", "Mythic Narwhal"
+      ],
+      exotic: [
+        "Ocean Leviathan", "Mythic Kraken"
+      ]
+    },
+    desert: {
+      common: [
+        "Scorpion", "Lizard", "Camel", "Vulture", "Coyote", "Fennec Fox", "Jerboa", "Sand Cat", "Horned Viper", "Desert Hedgehog",
+        "Desert Tortoise", "Gila Monster", "Roadrunner", "Jackrabbit", "Kangaroo Rat", "Sidewinder", "Desert Iguana", "Sandfish", "Monitor Lizard", "Desert Locust",
+        "Dung Beetle", "Antlion", "Desert Spider", "Trapdoor Spider", "Desert Hare", "Desert Fox", "Desert Wolf", "Desert Lynx", "Desert Finch", "Desert Sparrow",
+        "Desert Warbler", "Desert Wheatear", "Desert Shrike", "Desert Pipit", "Desert Lark"
+      ],
+      uncommon: [
+        "Addax", "Oryx", "Gazelle", "Springbok", "Dromedary", "Bactrian Camel", "Sand Boa", "Horned Lizard", "Desert Monitor", "Desert Skink",
+        "Desert Gecko", "Desert Cobra", "Desert Horned Viper", "Desert Racer", "Desert Chameleon", "Desert Hedgehog", "Desert Bat", "Desert Mole", "Desert Rat", "Desert Mouse",
+        "Desert Jerboa", "Desert Hare", "Desert Fox", "Desert Cat", "Desert Dog"
+      ],
+      rare: [
+        "Caracal", "Serval", "Sand Grouse", "Bustard", "Desert Eagle Owl", "Desert Falcon", "Desert Buzzard", "Desert Kite", "Desert Hawk", "Desert Raven",
+        "Desert Crow", "Desert Magpie", "Desert Jay", "Desert Starling", "Desert Robin"
+      ],
+      epic: [
+        "Sandworm", "Deathstalker", "Giant Desert Centipede", "Giant Desert Scorpion", "Giant Desert Lizard", "Giant Desert Spider", "Giant Desert Beetle", "Giant Desert Ant", "Giant Desert Locust", "Giant Desert Mantis"
+      ],
+      legendary: [
+        "Golden Scorpion", "Golden Lizard", "Golden Camel", "Golden Vulture", "Golden Coyote", "Golden Fox", "Golden Wolf", "Golden Lynx"
+      ],
+      mythic: [
+        "Desert Kirin", "Sand Dragon", "Sun Phoenix", "Storm Griffin", "Mythic Jackal"
+      ],
+      exotic: [
+        "Desert Leviathan", "Mythic Sphinx"
+      ]
+    }
   };
 
-  const cardImageMap = {
-    // Arctic
-    'Fox': '{{site.baseurl}}/images/symbol100.png',
-    'Rabbit': '{{site.baseurl}}/images/symbol100.png',
-    'Deer': '{{site.baseurl}}/images/symbol100.png',
-    'Owl': '{{site.baseurl}}/images/symbol100.png',
-    'Wolf': '{{site.baseurl}}/images/symbol100.png',
-    'Bear': '{{site.baseurl}}/images/symbol100.png',
-    'Lynx': '{{site.baseurl}}/images/symbol100.png',
-    'Eagle': '{{site.baseurl}}/images/symbol100.png',
-    'Phoenix': '{{site.baseurl}}/images/symbol100.png',
-    'Dragon': '{{site.baseurl}}/images/symbol100.png',
-    // Jungle
-    'Monkey': '{{site.baseurl}}/images/symbol100.png',
-    'Parrot': '{{site.baseurl}}/images/symbol100.png',
-    'Tiger': '{{site.baseurl}}/images/symbol100.png',
-    'Jaguar': '{{site.baseurl}}/images/symbol100.png',
-    'Anaconda': '{{site.baseurl}}/images/symbol100.png',
-    'Cheetah': '{{site.baseurl}}/images/symbol100.png',
-    'Panther': '{{site.baseurl}}/images/symbol100.png',
-    'Gorilla': '{{site.baseurl}}/images/symbol100.png',
-    'Hydra': '{{site.baseurl}}/images/symbol100.png',
-    'Chimera': '{{site.baseurl}}/images/symbol100.png',
-    // Ocean
-    'Clownfish': '{{site.baseurl}}/images/symbol100.png',
-    'Seahorse': '{{site.baseurl}}/images/symbol100.png',
-    'Turtle': '{{site.baseurl}}/images/symbol100.png',
-    'Crab': '{{site.baseurl}}/images/symbol100.png',
-    'Shark': '{{site.baseurl}}/images/symbol100.png',
-    'Dolphin': '{{site.baseurl}}/images/symbol100.png',
-    'Manta Ray': '{{site.baseurl}}/images/symbol100.png',
-    'Whale': '{{site.baseurl}}/images/symbol100.png',
-    'Kraken': '{{site.baseurl}}/images/symbol100.png',
-    'Leviathan': '{{site.baseurl}}/images/symbol100.png',
-    // Desert
-    'Scorpion': '{{site.baseurl}}/images/symbol100.png',
-    'Lizard': '{{site.baseurl}}/images/symbol100.png',
-    'Camel': '{{site.baseurl}}/images/symbol100.png',
-    'Vulture': '{{site.baseurl}}/images/symbol100.png',
-    'Coyote': '{{site.baseurl}}/images/symbol100.png',
-    'Fennec Fox': '{{site.baseurl}}/images/symbol100.png',
-    'Sandworm': '{{site.baseurl}}/images/symbol100.png',
-    'Manticore': '{{site.baseurl}}/images/symbol100.png',
-    'Sphinx': '{{site.baseurl}}/images/symbol100.png',
-    'Djinn': '{{site.baseurl}}/images/symbol100.png',
+  // Helper to fill up each rarity to the required count with unique names
+  function fillRarity(arr, count, prefix) {
+    let base = arr.slice();
+    let i = 1;
+    while (base.length < count) {
+      base.push(`${prefix} ${i++}`);
+    }
+    return base.slice(0, count);
+  }
+
+  // Generate 100 unique cards per pack, split by rarity
+  function generatePackCards(theme) {
+    const animals = animalNames[theme];
+    return [
+      ...fillRarity(animals.common, 35, "Common " + theme),
+      ...fillRarity(animals.uncommon, 25, "Uncommon " + theme),
+      ...fillRarity(animals.rare, 15, "Rare " + theme),
+      ...fillRarity(animals.epic, 10, "Epic " + theme),
+      ...fillRarity(animals.legendary, 8, "Legendary " + theme),
+      ...fillRarity(animals.mythic, 5, "Mythic " + theme),
+      ...fillRarity(animals.exotic, 2, "Exotic " + theme)
+    ].map((name, idx) => {
+      let rarity;
+      if (idx < 35) rarity = 'common';
+      else if (idx < 60) rarity = 'uncommon';
+      else if (idx < 75) rarity = 'rare';
+      else if (idx < 85) rarity = 'epic';
+      else if (idx < 93) rarity = 'legendary';
+      else if (idx < 98) rarity = 'mythic';
+      else rarity = 'exotic';
+      return { name, rarity };
+    });
+  }
+
+  // --- Packs with 100 unique animals each ---
+  const packs = {
+    arctic: generatePackCards('arctic'),
+    jungle: generatePackCards('jungle'),
+    ocean: generatePackCards('ocean'),
+    desert: generatePackCards('desert')
   };
+
+  // --- Card image map: use an emoji for each animal name (fallback to 🐾 if not found) ---
+  const animalEmojis = {
+    // Arctic
+    "Fox": "🦊", "Seal": "🦭", "Hare": "🐇", "Lemming": "🐭", "Ptarmigan": "🐦", "Snowy Owl": "🦉", "Muskox": "🐂", "Reindeer": "🦌", "Walrus": "🦭", "Narwhal": "🐋",
+    "Beluga": "🐋", "Arctic Wolf": "🐺", "Arctic Tern": "🐦", "Snow Goose": "🦢", "Ermine": "🐀", "Wolverine": "🦡", "Caribou": "🦌", "Ivory Gull": "🕊️", "Ringed Seal": "🦭", "Bearded Seal": "🦭",
+    "Polar Cod": "🐟", "Arctic Char": "🐟", "Greenland Shark": "🦈", "Snow Bunting": "🐦", "Arctic Skua": "🐦", "Dovekie": "🐧", "Little Auk": "🐧", "King Eider": "🦆", "Long-tailed Duck": "🦆", "Ruddy Turnstone": "🐦",
+    "Purple Sandpiper": "🐦", "Black Guillemot": "🐧", "Thick-billed Murre": "🐧", "Glaucous Gull": "🕊️", "Ross's Gull": "🕊️",
+    // Jungle
+    "Monkey": "🐒", "Parrot": "🦜", "Toucan": "🦜", "Sloth": "🦥", "Tapir": "🦛", "Capybara": "🐹", "Agouti": "🐭", "Coati": "🦝", "Ocelot": "🐆", "Howler Monkey": "🐒",
+    "Spider Monkey": "🐒", "Tamarin": "🐒", "Marmoset": "🐒", "Macaw": "🦜", "Peccary": "🐗", "Armadillo": "🐾", "Anteater": "🐾", "Caiman": "🐊", "Iguana": "🦎", "Boa": "🐍",
+    "Tree Frog": "🐸", "Leafcutter Ant": "🐜", "Jaguarundi": "🐆", "Paca": "🐭", "Kinkajou": "🦝", "Margay": "🐆", "Bushmaster": "🐍", "Anole": "🦎", "Vine Snake": "🐍", "Poison Dart Frog": "🐸",
+    "Harpy Eagle": "🦅", "Sunbittern": "🐦", "Curassow": "🐦", "Guianan Cock-of-the-rock": "🐦", "Manakin": "🐦",
+    // Ocean
+    "Clownfish": "🐠", "Seahorse": "🐎", "Turtle": "🐢", "Crab": "🦀", "Starfish": "🌟", "Sea Urchin": "🦔", "Sea Cucumber": "🥒", "Jellyfish": "🎐", "Shrimp": "🦐", "Lobster": "🦞",
+    "Anchovy": "🐟", "Sardine": "🐟", "Mackerel": "🐟", "Herring": "🐟", "Cod": "🐟", "Flounder": "🐟", "Halibut": "🐟", "Plaice": "🐟", "Sole": "🐟", "Skate": "🐟",
+    "Ray": "🐟", "Dogfish": "🐟", "Catfish": "🐟", "Eel": "🐍", "Pipefish": "🐟", "Blenny": "🐟", "Gobies": "🐟", "Wrasse": "🐟", "Parrotfish": "🐠", "Butterflyfish": "🐠",
+    "Angelfish": "🐠", "Damselfish": "🐠", "Surgeonfish": "🐠", "Triggerfish": "🐠", "Boxfish": "🐠",
+    // Desert
+    "Scorpion": "🦂", "Lizard": "🦎", "Camel": "🐫", "Vulture": "🦅", "Coyote": "🦊", "Fennec Fox": "🦊", "Jerboa": "🐭", "Sand Cat": "🐱", "Horned Viper": "🐍", "Desert Hedgehog": "🦔",
+    "Desert Tortoise": "🐢", "Gila Monster": "🦎", "Roadrunner": "🐦", "Jackrabbit": "🐇", "Kangaroo Rat": "🐭", "Sidewinder": "🐍", "Desert Iguana": "🦎", "Sandfish": "🐟", "Monitor Lizard": "🦎", "Desert Locust": "🦗",
+    "Dung Beetle": "🐞", "Antlion": "🐜", "Desert Spider": "🕷️", "Trapdoor Spider": "🕷️", "Desert Hare": "🐇", "Desert Fox": "🦊", "Desert Wolf": "🐺", "Desert Lynx": "🐱", "Desert Finch": "🐦", "Desert Sparrow": "🐦",
+    "Desert Warbler": "🐦", "Desert Wheatear": "🐦", "Desert Shrike": "🐦", "Desert Pipit": "🐦", "Desert Lark": "🐦"
+    // Add more as needed for all animals in your lists
+  };
+  
+  const cardImageMap = {};
+  Object.values(packs).flat().forEach(card => {
+    // Center emoji, make it 0.7x the previous size, and keep the animal name below the emoji
+    cardImageMap[card.name] = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:105px;width:105px;margin:auto;">
+      <span style="font-size:84px;line-height:1;">${animalEmojis[card.name] || "🐾"}</span>
+      <div style="font-size:1em;margin-top:2px;">${card.name}</div>
+    </div>`;
+  });
+
+  // --- Rarity color mapping ---
+  function getRarityColor(rarity) {
+    switch (rarity) {
+      case 'common': return 'secondary';   // gray
+      case 'uncommon': return 'success';   // green
+      case 'rare': return 'primary';       // dark blue
+      case 'epic': return 'purple';        // purple
+      case 'legendary': return 'warning';  // gold
+      case 'mythic': return 'danger';      // red
+      case 'exotic': return 'info';        // light blue
+      default: return 'secondary';
+    }
+  }
 
   function getRandomRarity() {
     const rand = Math.random();
@@ -276,20 +484,46 @@ Author: Zach & Ian
     }, 1500);
   }
 
+  function getPackIcon(pack) {
+    switch (pack) {
+      case 'jungle': return '🌴';
+      case 'ocean': return '🌊';
+      case 'desert': return '🏜️';
+      case 'arctic': return '⛄';
+      default: return '';
+    }
+  }
+
   function displayCards(cards) {
     const cardArea = document.getElementById('cardArea');
     cardArea.innerHTML = '';
     let coinsEarned = 0;
+    // Find which pack was opened by checking the last opened pack button
+    let lastPack = null;
+    // Try to infer from the last opened pack button (since openPack is called with the pack name)
+    // We'll store the last opened pack in a variable
+    if (displayCards.lastPack) lastPack = displayCards.lastPack;
+
     cards.forEach(card => {
       const cardDiv = document.createElement('div');
       cardDiv.className = `card game-card border border-${card.rarity} bg-light shadow-sm`;
       cardDiv.style.width = '150px';
 
+      // Use emoji HTML for image (centered, smaller, name below)
+      let imgHtml = cardImageMap[card.name];
+
+      // Find the pack for this card (since all cards in a pack opening are from the same pack)
+      let packIcon = lastPack ? getPackIcon(lastPack) : '';
+
       cardDiv.innerHTML = `
-        <img src="${cardImageMap[card.name] || 'https://via.placeholder.com/150'}" class="card-img-top" alt="${card.name}" />
-        <div class="card-body p-2">
-          <h5 class="card-title mb-1">${card.name}</h5>
-          <p class="card-text mb-0"><span class="badge bg-${getRarityColor(card.rarity)}">${capitalize(card.rarity)}</span></p>
+        ${imgHtml}
+        <div class="card-body p-2" style="padding-top:0;">
+          <p class="card-text mb-0" style="margin:0;">
+            <span class="badge bg-${getRarityColor(card.rarity)}">
+              ${capitalize(card.rarity)}
+              <span style="margin-left:6px;">${packIcon}</span>
+            </span>
+          </p>
         </div>
       `;
       cardDiv.classList.add(card.rarity);
@@ -315,6 +549,13 @@ Author: Zach & Ian
     updateCoins();
   }
 
+  // Patch openPack to remember the last opened pack for displayCards
+  const _openPack = openPack;
+  openPack = function(pack) {
+    displayCards.lastPack = pack;
+    return _openPack.apply(this, arguments);
+  };
+
   function addToBinder(card) {
     // Track the last 50 opened cards in localStorage
     let lastOpened = JSON.parse(localStorage.getItem('lastOpenedCards') || '[]');
@@ -338,6 +579,16 @@ Author: Zach & Ian
     }
     lastOpened = lastOpened.slice().reverse(); // Most recent first
 
+    // Helper to find which pack a card is from
+    function findPackForCard(card) {
+      for (const packName of Object.keys(packs)) {
+        if (packs[packName].some(c => c.name === card.name && c.rarity === card.rarity)) {
+          return packName;
+        }
+      }
+      return null;
+    }
+
     // Show 5 cards per line, up to 10 lines, card size same as pack opening (150px)
     for (let i = 0; i < Math.min(10, Math.ceil(lastOpened.length / 5)); i++) {
       const rowDiv = document.createElement('div');
@@ -351,11 +602,21 @@ Author: Zach & Ian
         const cardDiv = document.createElement('div');
         cardDiv.className = `card game-card border border-${card.rarity} bg-light shadow-sm`;
         cardDiv.style.width = '150px';
+
+        // Use emoji HTML for image (centered, smaller, name below)
+        let imgHtml = cardImageMap[card.name];
+
+        // Find the pack for this card
+        let packName = findPackForCard(card);
+        let packIcon = packName ? getPackIcon(packName) : '';
+
         cardDiv.innerHTML = `
-          <img src="${cardImageMap[card.name] || 'https://via.placeholder.com/150'}" class="card-img-top" alt="${card.name}" style="width:150px;height:150px;" />
-          <div class="card-body p-2">
-            <div style="font-size:1em;">${card.name}</div>
-            <span class="badge bg-${getRarityColor(card.rarity)}" style="font-size:1em;">${capitalize(card.rarity)}</span>
+          ${imgHtml}
+          <div class="card-body p-2" style="padding-top:0;">
+            <span class="badge bg-${getRarityColor(card.rarity)}" style="font-size:1em;">
+              ${capitalize(card.rarity)}
+              <span style="margin-left:6px;">${packIcon}</span>
+            </span>
           </div>
         `;
         rowDiv.appendChild(cardDiv);
@@ -372,17 +633,15 @@ Author: Zach & Ian
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  function getRarityColor(rarity) {
-    switch (rarity) {
-      case 'common': return 'secondary';
-      case 'uncommon': return 'success';
-      case 'rare': return 'primary';
-      case 'epic': return 'purple'; // custom purple class defined in CSS
-      case 'legendary': return 'warning';
-      case 'mythic': return 'danger';
-      case 'exotic': return 'info';
-      default: return 'secondary';
-    }
+  // Popup logic for Chances and Coins
+  document.getElementById('chancesBtn').onclick = function() {
+    document.getElementById('chancesPopup').style.display = 'block';
+  };
+  document.getElementById('coinsBtn').onclick = function() {
+    document.getElementById('coinsPopup').style.display = 'block';
+  };
+  function closePopup(id) {
+    document.getElementById(id).style.display = 'none';
   }
 
   updateCoins();
