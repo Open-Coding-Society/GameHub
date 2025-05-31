@@ -3,7 +3,7 @@ layout: post
 title: Help Center
 description: Find answers, tutorials, and contact support for your Bioverse experience.
 permalink: /help
-Author: Everyone
+Author: Zach & Ian
 ---
 
 <!-- Help Homepage - Styled with Bootstrap and Pilot Cities-like UI -->

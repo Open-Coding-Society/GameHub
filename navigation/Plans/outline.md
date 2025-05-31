@@ -3,7 +3,7 @@ layout: post
 title: Outline
 description: Our ideas and outline for making this project
 permalink: /outline
-Author: Everyone
+Author: Zach
 ---
 
 # Pilot City Project Minigames

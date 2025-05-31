@@ -3,7 +3,7 @@ layout: post
 title: Worlds Help Page
 description: Main World Help Page
 permalink: /worldhelp
-Author: Everyone
+Author: Ian
 ---
 
 # 🧠 High-Level Overview

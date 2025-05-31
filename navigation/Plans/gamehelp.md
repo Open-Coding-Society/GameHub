@@ -3,7 +3,7 @@ layout: post
 title: Games Help Page
 description: Main Game Help Page
 permalink: /gamehelp
-Author: Everyone
+Author: Ian
 ---
 
 # Help Center: Game Ideations & Main Code Snippets

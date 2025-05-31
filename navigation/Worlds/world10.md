@@ -7,7 +7,7 @@ description: >
     Click Game Hub in the top left to go back to the home page.
   </div>
 permalink: /world10
-Author: Everyone
+Author: Zach, Ian, Aarush, Pradyun, Lars, Darsh
 ---
 
 <style>

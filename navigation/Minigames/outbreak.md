@@ -3,7 +3,7 @@ layout: bootstrap
 title: Outbreak
 description: Outbreak
 permalink: /outbreak
-Author: Lars
+Author: Lars & Zach
 ---
 
 <html lang="en">

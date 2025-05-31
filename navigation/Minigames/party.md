@@ -3,7 +3,7 @@ layout: bootstrap
 title: Party
 description: Party Game
 permalink: /party
-Author: Zach & Ian
+Author: Ian
 ---
 
 <div class="container my-5">

@@ -3,7 +3,7 @@ layout: bootstrap
 title: Simulation
 description: Simulation Game
 permalink: /simulation
-Author: Ian
+Author: Zach
 ---
 
 <meta charset="UTF-8">

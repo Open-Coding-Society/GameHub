@@ -3,7 +3,7 @@ layout: post
 title: Skins Help Page
 description: Main Skin Help Page
 permalink: /skinhelp
-Author: Everyone
+Author: Ian
 ---
 
 # Game Hub Skins System Overview

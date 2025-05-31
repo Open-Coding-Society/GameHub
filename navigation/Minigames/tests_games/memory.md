@@ -3,7 +3,7 @@ layout: bootstrap
 title: Visual Memory
 description: Visual Memory Game
 permalink: /memory
-Author: Ian
+Author: Zach
 ---
 
 <div class="container text-center p-5">

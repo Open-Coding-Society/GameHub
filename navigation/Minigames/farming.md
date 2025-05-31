@@ -3,7 +3,7 @@ layout: base
 title: Farming
 description: Farming Game
 permalink: /farming
-Author: Zach & Ian
+Author: Ian
 ---
 
 <meta charset="UTF-8">
