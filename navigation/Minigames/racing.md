@@ -1,3 +1,11 @@
+---
+layout: bootstrap
+title: Racing
+description: Racing Game
+permalink: /racing  
+Author: Ian
+---
+
 <style>
   body {
     margin: 0;
