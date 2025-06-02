@@ -21,10 +21,11 @@ Author: Ian
     background-color: #8b9d83;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    image-rendering: pixelated;
   }
   .inventory-slot {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border: 2px solid #6c757d;
     border-radius: 5px;
     display: inline-flex;
@@ -34,14 +35,28 @@ Author: Ian
     background-color: #e9ecef;
     cursor: pointer;
     transition: all 0.2s;
+    font-size: 2rem;
+    position: relative;
+    overflow: hidden;
   }
-  .inventory-slot:hover {
-    background-color: #dee2e6;
-    transform: scale(1.05);
-  }
-  .selected-slot {
-    border: 2px solid #0d6efd;
+  .inventory-slot.selected-slot {
+    border: 3px solid #0d6efd;
     background-color: #cfe2ff;
+    animation: slotPulse 0.5s;
+  }
+  @keyframes slotPulse {
+    0% { box-shadow: 0 0 0 0 #0d6efd44; }
+    100% { box-shadow: 0 0 10px 5px #0d6efd22; }
+  }
+  .inventory-slot .slot-label {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 0.8rem;
+    color: #495057;
+    background: #fff8;
+    border-radius: 3px;
+    padding: 0 2px;
   }
   .card {
     border-radius: 8px;
@@ -137,9 +152,7 @@ Author: Ian
         <div class="row" id="merchantItems">
           <!-- Merchant items will be populated by JS -->
         </div>
-        
         <hr>
-        
         <h6 class="mt-3 mb-2">Sell Items</h6>
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
@@ -163,36 +176,55 @@ Author: Ian
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // Game State
+  // --- Emoji assets ---
+  const EMOJIS = {
+    player: "👨‍🌾",
+    merchant: "🧑‍🦳",
+    wheat: "🌾",
+    carrot: "🥕",
+    pumpkin: "🎃",
+    copper: "🟤",
+    iron: "⚪",
+    gold: "🟡",
+    diamond: "💎",
+    tilled: "⬛",
+    grass: "🟩",
+    water: "🟦",
+    dirt: "🟫"
+  };
+
+  // --- Game State ---
+  const TILE_SIZE = 32; // Bigger tiles for readability
+  const PLAYER_SIZE = 32;
   const gameState = {
     player: {
       x: 400,
       y: 300,
-      speed: 3,
+      speed: 4,
       direction: 'down',
       inventory: [],
       coins: 100,
       selectedSlot: null,
       tools: {
-        sickle: { name: 'Sickle', type: 'tool', uses: Infinity, action: 'harvest' },
-        pickaxe: { name: 'Pickaxe', type: 'tool', uses: Infinity, action: 'mine' }
+        sickle: { name: 'Sickle', type: 'tool', uses: Infinity, action: 'harvest', emoji: "🔪" },
+        pickaxe: { name: 'Pickaxe', type: 'tool', uses: Infinity, action: 'mine', emoji: "⛏️" }
       }
     },
     map: {
       tiles: [],
-      width: 80,
-      height: 60,
-      tileSize: 10,
-      merchantPosition: { x: 10, y: 10 }
+      width: 25,
+      height: 18,
+      tileSize: TILE_SIZE,
+      merchantPosition: { x: 3, y: 3 }
     },
     crops: [],
     ores: [],
     merchant: {
       items: [
-        { name: 'Wheat Seed', type: 'seed', price: 10, rarity: 'common', growthTime: 3, produces: 'Wheat' },
-        { name: 'Carrot Seed', type: 'seed', price: 20, rarity: 'uncommon', growthTime: 5, produces: 'Carrot' },
-        { name: 'Pumpkin Seed', type: 'seed', price: 50, rarity: 'rare', growthTime: 8, produces: 'Pumpkin' },
-        { name: 'Fertilizer', type: 'item', price: 30, effect: 'growthSpeed', value: 0.8 }
+        { name: 'Wheat Seed', type: 'seed', price: 10, rarity: 'common', growthTime: 3, produces: 'Wheat', emoji: EMOJIS.wheat },
+        { name: 'Carrot Seed', type: 'seed', price: 20, rarity: 'uncommon', growthTime: 5, produces: 'Carrot', emoji: EMOJIS.carrot },
+        { name: 'Pumpkin Seed', type: 'seed', price: 50, rarity: 'rare', growthTime: 8, produces: 'Pumpkin', emoji: EMOJIS.pumpkin },
+        { name: 'Fertilizer', type: 'item', price: 30, effect: 'growthSpeed', value: 0.8, emoji: "💩" }
       ]
     },
     time: {
@@ -204,7 +236,7 @@ Author: Ian
     keys: { w: false, a: false, s: false, d: false, e: false }
   };
 
-  // DOM Elements
+  // --- DOM Elements ---
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
   const coinsDisplay = document.getElementById('coins');
@@ -224,137 +256,55 @@ Author: Ian
 
   // --- Helper: Get object at tile ---
   function getObjectAtTile(tileX, tileY) {
-    // Merchant
     if (tileX === gameState.map.merchantPosition.x && tileY === gameState.map.merchantPosition.y) {
       return { type: 'merchant' };
     }
-    // Crop
     const cropIndex = gameState.crops.findIndex(c =>
       Math.floor(c.x / gameState.map.tileSize) === tileX &&
       Math.floor(c.y / gameState.map.tileSize) === tileY
     );
     if (cropIndex !== -1) return { type: 'crop', index: cropIndex };
-    // Ore
     const oreIndex = gameState.ores.findIndex(o =>
       Math.floor(o.x / gameState.map.tileSize) === tileX &&
       Math.floor(o.y / gameState.map.tileSize) === tileY
     );
     if (oreIndex !== -1) return { type: 'ore', index: oreIndex };
-    // Tilled soil
     if (gameState.map.tiles[tileY] && gameState.map.tiles[tileY][tileX] === 'tilled_soil') {
       return { type: 'tilled_soil' };
     }
     return null;
   }
 
-  // Initialize the game
-  function initGame() {
-    generateMap();
-    generateOres();
-    setupInventory();
-    gameState.player.inventory.push(gameState.player.tools.sickle);
-    gameState.player.inventory.push(gameState.player.tools.pickaxe);
-    merchantModal = new bootstrap.Modal(document.getElementById('merchantModal'));
-    setInterval(() => {
-      if (!gameState.time.paused) {
-        updateTime();
-        updatePlayerPosition();
-      }
-      drawGame();
-    }, 1000/60);
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-    // --- Add mouse click interaction on canvas ---
-    canvas.addEventListener('click', handleCanvasClick);
-    // --- Add hover effect for pointer cursor on interactive objects ---
-    canvas.addEventListener('mousemove', handleCanvasHover);
-    // --- Allow keyboard focus for accessibility ---
-    canvas.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        interact();
-      }
-    });
-    drawGame();
-  }
-
-  // --- Mouse click handler for easier interaction ---
-  function handleCanvasClick(e) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
-    const obj = getObjectAtTile(tileX, tileY);
-
-    if (!obj) return;
-
-    if (obj.type === 'merchant') {
-      openMerchant();
-    } else if (obj.type === 'crop') {
-      // Try to harvest crop
-      harvestCrop(obj.index, true);
-    } else if (obj.type === 'ore') {
-      // Try to mine ore
-      mineOre(obj.index, true);
-    } else if (obj.type === 'tilled_soil') {
-      // Try to plant seed
-      plantCrop(tileX, tileY, getSelectedSeed());
-    }
-  }
-
-  // --- Change cursor to pointer if hovering interactive object ---
-  function handleCanvasHover(e) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
-    const obj = getObjectAtTile(tileX, tileY);
-    if (obj) {
-      canvas.style.cursor = 'pointer';
-    } else {
-      canvas.style.cursor = 'default';
-    }
-  }
-
-  // --- Helper: Get selected seed from inventory ---
-  function getSelectedSeed() {
-    if (gameState.player.selectedSlot !== null) {
-      const item = gameState.player.inventory[gameState.player.selectedSlot];
-      if (item && item.type === 'seed') return item;
-    }
-    // If no seed selected, try to find first seed in inventory
-    return gameState.player.inventory.find(item => item.type === 'seed');
-  }
-
-  // Map generation (unchanged)
+  // --- Map Generation ---
   function generateMap() {
     for (let y = 0; y < gameState.map.height; y++) {
       gameState.map.tiles[y] = [];
       for (let x = 0; x < gameState.map.width; x++) {
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.08) {
           gameState.map.tiles[y][x] = 'water';
-        } else if (Math.random() < 0.2) {
+        } else if (Math.random() < 0.18) {
           gameState.map.tiles[y][x] = 'grass';
         } else {
           gameState.map.tiles[y][x] = 'dirt';
         }
       }
     }
-    for (let y = 20; y < 30; y++) {
-      for (let x = 30; x < 50; x++) {
+    for (let y = 7; y < 12; y++) {
+      for (let x = 10; x < 18; x++) {
         gameState.map.tiles[y][x] = 'tilled_soil';
       }
     }
     gameState.map.tiles[gameState.map.merchantPosition.y][gameState.map.merchantPosition.x] = 'dirt';
   }
 
-  // Ore generation (unchanged)
+  // --- Ore Generation ---
   function generateOres() {
     gameState.ores = [];
     const oreTypes = [
-      { name: 'Copper Ore', rarity: 'common', value: 20, spawnChance: 0.1 },
-      { name: 'Iron Ore', rarity: 'uncommon', value: 50, spawnChance: 0.05 },
-      { name: 'Gold Ore', rarity: 'rare', value: 100, spawnChance: 0.02 },
-      { name: 'Diamond', rarity: 'legendary', value: 500, spawnChance: 0.005 }
+      { name: 'Copper Ore', rarity: 'common', value: 20, spawnChance: 0.08, emoji: EMOJIS.copper },
+      { name: 'Iron Ore', rarity: 'uncommon', value: 50, spawnChance: 0.04, emoji: EMOJIS.iron },
+      { name: 'Gold Ore', rarity: 'rare', value: 100, spawnChance: 0.015, emoji: EMOJIS.gold },
+      { name: 'Diamond', rarity: 'legendary', value: 500, spawnChance: 0.005, emoji: EMOJIS.diamond }
     ];
     for (let y = 0; y < gameState.map.height; y++) {
       for (let x = 0; x < gameState.map.width; x++) {
@@ -366,7 +316,8 @@ Author: Ian
                 y: y * gameState.map.tileSize,
                 type: ore.name,
                 rarity: ore.rarity,
-                value: ore.value
+                value: ore.value,
+                emoji: ore.emoji
               });
               break;
             }
@@ -376,29 +327,33 @@ Author: Ian
     }
   }
 
-  // Inventory management (unchanged)
+  // --- Inventory Management ---
   function setupInventory() {
     inventoryDiv.innerHTML = '';
     for (let i = 0; i < 10; i++) {
       const slot = document.createElement('div');
       slot.className = 'inventory-slot';
+      if (i === gameState.player.selectedSlot) slot.classList.add('selected-slot');
       slot.id = `slot-${i}`;
       slot.addEventListener('click', () => selectItem(i));
-      if (gameState.player.inventory[i]) {
-        slot.textContent = gameState.player.inventory[i].name.substring(0, 3);
-        slot.title = gameState.player.inventory[i].name;
-        if (i === gameState.player.selectedSlot) {
-          slot.classList.add('selected-slot');
-          if (gameState.player.inventory[i].type === 'tool') {
-            currentToolDisplay.textContent = gameState.player.inventory[i].name;
-          } else {
-            currentToolDisplay.textContent = 'None selected';
-          }
-        }
+      const item = gameState.player.inventory[i];
+      if (item) {
+        slot.innerHTML = (item.emoji || getItemEmoji(item)) +
+          `<span class="slot-label">${item.name.split(" ")[0]}</span>`;
+        slot.title = item.name;
       }
       inventoryDiv.appendChild(slot);
     }
     coinsDisplay.textContent = gameState.player.coins;
+    // Animate selected tool
+    const selected = document.querySelector('.inventory-slot.selected-slot');
+    if (selected) selected.classList.add('selected-slot');
+    const sel = gameState.player.selectedSlot;
+    if (sel !== null && gameState.player.inventory[sel] && gameState.player.inventory[sel].type === 'tool') {
+      currentToolDisplay.textContent = gameState.player.inventory[sel].name;
+    } else {
+      currentToolDisplay.textContent = 'None selected';
+    }
   }
 
   function selectItem(slotIndex) {
@@ -406,7 +361,7 @@ Author: Ian
     setupInventory();
   }
 
-  // Time system (unchanged)
+  // --- Time System ---
   function updateTime() {
     gameState.time.minute += 10;
     if (gameState.time.minute >= 60) {
@@ -416,9 +371,7 @@ Author: Ian
         gameState.time.hour = 6;
         gameState.time.day++;
         updateCrops();
-        if (Math.random() < 0.3) {
-          generateOres();
-        }
+        if (Math.random() < 0.3) generateOres();
       }
     }
     const hourStr = gameState.time.hour.toString().padStart(2, '0');
@@ -427,200 +380,167 @@ Author: Ian
     dayDisplay.textContent = gameState.time.day;
   }
 
-  // Crop growth (unchanged)
+  // --- Crop Growth ---
   function updateCrops() {
     for (const crop of gameState.crops) {
       if (crop.growth < crop.growthTime) {
         crop.growth++;
-        if (crop.growth === crop.growthTime) {
-          crop.ready = true;
-        }
+        if (crop.growth === crop.growthTime) crop.ready = true;
       }
     }
   }
 
-  // Drawing functions (unchanged)
+  // --- Drawing Functions (with emoji and animation) ---
+  let playerAnimFrame = 0;
   function drawGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw map
     for (let y = 0; y < gameState.map.height; y++) {
       for (let x = 0; x < gameState.map.width; x++) {
-        const tileX = x * gameState.map.tileSize;
-        const tileY = y * gameState.map.tileSize;
-        switch (gameState.map.tiles[y][x]) {
-          case 'water':
-            ctx.fillStyle = '#4a8df0';
-            break;
-          case 'grass':
-            ctx.fillStyle = '#5a9e4a';
-            break;
-          case 'tilled_soil':
-            ctx.fillStyle = '#8b5a2b';
-            break;
-          default:
-            ctx.fillStyle = '#a67c52';
-        }
-        ctx.fillRect(tileX, tileY, gameState.map.tileSize, gameState.map.tileSize);
+        const tile = gameState.map.tiles[y][x];
+        let emoji = EMOJIS.dirt;
+        if (tile === 'water') emoji = EMOJIS.water;
+        else if (tile === 'grass') emoji = EMOJIS.grass;
+        else if (tile === 'tilled_soil') emoji = EMOJIS.tilled;
+        drawEmoji(emoji, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE);
       }
     }
-    // Draw merchant
-    const merchantX = gameState.map.merchantPosition.x * gameState.map.tileSize;
-    const merchantY = gameState.map.merchantPosition.y * gameState.map.tileSize;
-    ctx.fillStyle = '#007bff';
-    ctx.fillRect(merchantX, merchantY, gameState.map.tileSize, gameState.map.tileSize);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '8px Arial';
-    ctx.fillText('$', merchantX + 3, merchantY + gameState.map.tileSize - 3);
-    // Draw ores
+    // Merchant
+    drawEmoji(EMOJIS.merchant, gameState.map.merchantPosition.x * TILE_SIZE, gameState.map.merchantPosition.y * TILE_SIZE, TILE_SIZE);
+    // Ores
     for (const ore of gameState.ores) {
-      ctx.fillStyle = getOreColor(ore.type);
-      ctx.beginPath();
-      ctx.arc(ore.x + gameState.map.tileSize/2, ore.y + gameState.map.tileSize/2, 
-          gameState.map.tileSize/2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '8px Arial';
-      ctx.fillText(ore.value, ore.x + 2, ore.y + gameState.map.tileSize - 2);
+      drawEmoji(ore.emoji, ore.x, ore.y, TILE_SIZE);
     }
-    // Draw crops
+    // Crops
     for (const crop of gameState.crops) {
-      if (crop.ready) {
-        ctx.fillStyle = getCropColor(crop.type);
-      } else {
-        ctx.fillStyle = '#5a9e4a';
-      }
-      ctx.fillRect(crop.x, crop.y, gameState.map.tileSize, gameState.map.tileSize);
+      let emoji = getCropEmoji(crop.type);
       if (!crop.ready) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(crop.x, crop.y + gameState.map.tileSize - 2, 
-              gameState.map.tileSize * (crop.growth / crop.growthTime), 2);
+        // Animate growing: pulse opacity
+        ctx.globalAlpha = 0.7 + 0.3 * Math.sin(Date.now()/400 + crop.x);
+      }
+      drawEmoji(emoji, crop.x, crop.y, TILE_SIZE);
+      ctx.globalAlpha = 1;
+      // Growth bar
+      if (!crop.ready) {
+        ctx.fillStyle = "#222";
+        ctx.fillRect(crop.x, crop.y + TILE_SIZE - 6, TILE_SIZE, 5);
+        ctx.fillStyle = "#6c3";
+        ctx.fillRect(crop.x, crop.y + TILE_SIZE - 6, TILE_SIZE * (crop.growth / crop.growthTime), 5);
       }
     }
-    // Draw player
-    ctx.fillStyle = '#dc3545';
-    ctx.fillRect(gameState.player.x, gameState.player.y, 15, 15);
-    ctx.fillStyle = '#ffffff';
-    switch (gameState.player.direction) {
-      case 'up':
-        ctx.fillRect(gameState.player.x + 5, gameState.player.y, 5, 3);
-        break;
-      case 'down':
-        ctx.fillRect(gameState.player.x + 5, gameState.player.y + 12, 5, 3);
-        break;
-      case 'left':
-        ctx.fillRect(gameState.player.x, gameState.player.y + 5, 3, 5);
-        break;
-      case 'right':
-        ctx.fillRect(gameState.player.x + 12, gameState.player.y + 5, 3, 5);
-        break;
-    }
+    // Player (emoji, animated bounce)
+    const px = gameState.player.x;
+    const py = gameState.player.y;
+    const bounce = Math.sin(Date.now()/200) * 3;
+    ctx.font = `${PLAYER_SIZE}px serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.save();
+    ctx.translate(px + PLAYER_SIZE/2, py + PLAYER_SIZE/2 + bounce);
+    ctx.rotate(0.05 * Math.sin(Date.now()/300));
+    ctx.fillText(EMOJIS.player, 0, 0);
+    ctx.restore();
   }
 
-  function getOreColor(oreType) {
-    switch (oreType) {
-      case 'Copper Ore': return '#b87333';
-      case 'Iron Ore': return '#a19d94';
-      case 'Gold Ore': return '#ffd700';
-      case 'Diamond': return '#b9f2ff';
-      default: return '#ffffff';
-    }
+  function drawEmoji(emoji, x, y, size) {
+    ctx.font = `${size}px serif`;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText(emoji, x, y);
   }
 
-  function getCropColor(cropType) {
-    switch (cropType) {
-      case 'Wheat': return '#f5deb3';
-      case 'Carrot': return '#ffa500';
-      case 'Pumpkin': return '#ff7518';
-      default: return '#5a9e4a';
+  function getCropEmoji(type) {
+    if (type === 'Wheat') return EMOJIS.wheat;
+    if (type === 'Carrot') return EMOJIS.carrot;
+    if (type === 'Pumpkin') return EMOJIS.pumpkin;
+    return EMOJIS.grass;
+  }
+  function getItemEmoji(item) {
+    if (item.type === 'tool') return item.emoji;
+    if (item.type === 'seed') return getCropEmoji(item.produces);
+    if (item.type === 'crop') return getCropEmoji(item.name);
+    if (item.type === 'ore') {
+      if (item.name === 'Copper Ore') return EMOJIS.copper;
+      if (item.name === 'Iron Ore') return EMOJIS.iron;
+      if (item.name === 'Gold Ore') return EMOJIS.gold;
+      if (item.name === 'Diamond') return EMOJIS.diamond;
     }
+    return "❓";
   }
 
-  // Input handling
+  // --- Input Handling ---
   function handleKeyDown(e) {
     const key = e.key.toLowerCase();
     if (key in gameState.keys) {
       gameState.keys[key] = true;
-      if (key === 'e') {
-        interact();
-      }
+      if (key === 'e') interact();
     }
   }
-
   function handleKeyUp(e) {
     const key = e.key.toLowerCase();
-    if (key in gameState.keys) {
-      gameState.keys[key] = false;
-    }
+    if (key in gameState.keys) gameState.keys[key] = false;
   }
-
   function updatePlayerPosition() {
-    if (gameState.keys.w) {
-      gameState.player.y -= gameState.player.speed;
-      gameState.player.direction = 'up';
-    }
-    if (gameState.keys.s) {
-      gameState.player.y += gameState.player.speed;
-      gameState.player.direction = 'down';
-    }
-    if (gameState.keys.a) {
-      gameState.player.x -= gameState.player.speed;
-      gameState.player.direction = 'left';
-    }
-    if (gameState.keys.d) {
-      gameState.player.x += gameState.player.speed;
-      gameState.player.direction = 'right';
-    }
-    gameState.player.x = Math.max(0, Math.min(canvas.width - 15, gameState.player.x));
-    gameState.player.y = Math.max(0, Math.min(canvas.height - 15, gameState.player.y));
+    if (gameState.keys.w) { gameState.player.y -= gameState.player.speed; gameState.player.direction = 'up'; }
+    if (gameState.keys.s) { gameState.player.y += gameState.player.speed; gameState.player.direction = 'down'; }
+    if (gameState.keys.a) { gameState.player.x -= gameState.player.speed; gameState.player.direction = 'left'; }
+    if (gameState.keys.d) { gameState.player.x += gameState.player.speed; gameState.player.direction = 'right'; }
+    gameState.player.x = Math.max(0, Math.min(canvas.width - PLAYER_SIZE, gameState.player.x));
+    gameState.player.y = Math.max(0, Math.min(canvas.height - PLAYER_SIZE, gameState.player.y));
   }
 
-  // --- Improved interact: also triggers on click, and highlights nearest object ---
+  // --- Mouse/Keyboard Interact ---
+  function handleCanvasClick(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
+    const obj = getObjectAtTile(tileX, tileY);
+    if (!obj) return;
+    if (obj.type === 'merchant') openMerchant();
+    else if (obj.type === 'crop') harvestCrop(obj.index, true);
+    else if (obj.type === 'ore') mineOre(obj.index, true);
+    else if (obj.type === 'tilled_soil') plantCrop(tileX, tileY, getSelectedSeed());
+  }
+  function handleCanvasHover(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
+    const obj = getObjectAtTile(tileX, tileY);
+    canvas.style.cursor = obj ? 'pointer' : 'default';
+  }
   function interact() {
-    // Get tile player is facing
     let tileX, tileY;
     switch (gameState.player.direction) {
-      case 'up':
-        tileX = Math.floor(gameState.player.x / gameState.map.tileSize);
-        tileY = Math.floor((gameState.player.y - 10) / gameState.map.tileSize);
-        break;
-      case 'down':
-        tileX = Math.floor(gameState.player.x / gameState.map.tileSize);
-        tileY = Math.floor((gameState.player.y + 20) / gameState.map.tileSize);
-        break;
-      case 'left':
-        tileX = Math.floor((gameState.player.x - 10) / gameState.map.tileSize);
-        tileY = Math.floor(gameState.player.y / gameState.map.tileSize);
-        break;
-      case 'right':
-        tileX = Math.floor((gameState.player.x + 20) / gameState.map.tileSize);
-        tileY = Math.floor(gameState.player.y / gameState.map.tileSize);
-        break;
+      case 'up': tileX = Math.floor(gameState.player.x / TILE_SIZE); tileY = Math.floor((gameState.player.y - TILE_SIZE) / TILE_SIZE); break;
+      case 'down': tileX = Math.floor(gameState.player.x / TILE_SIZE); tileY = Math.floor((gameState.player.y + PLAYER_SIZE) / TILE_SIZE); break;
+      case 'left': tileX = Math.floor((gameState.player.x - TILE_SIZE) / TILE_SIZE); tileY = Math.floor(gameState.player.y / TILE_SIZE); break;
+      case 'right': tileX = Math.floor((gameState.player.x + PLAYER_SIZE) / TILE_SIZE); tileY = Math.floor(gameState.player.y / TILE_SIZE); break;
     }
     const obj = getObjectAtTile(tileX, tileY);
     if (!obj) return;
-    if (obj.type === 'merchant') {
-      openMerchant();
-      return;
-    }
-    if (obj.type === 'crop') {
-      harvestCrop(obj.index, false);
-      return;
-    }
-    if (obj.type === 'ore') {
-      mineOre(obj.index, false);
-      return;
-    }
-    if (obj.type === 'tilled_soil') {
-      plantCrop(tileX, tileY, getSelectedSeed());
-    }
+    if (obj.type === 'merchant') openMerchant();
+    else if (obj.type === 'crop') harvestCrop(obj.index, false);
+    else if (obj.type === 'ore') mineOre(obj.index, false);
+    else if (obj.type === 'tilled_soil') plantCrop(tileX, tileY, getSelectedSeed());
   }
 
-  // --- Allow click/keyboard harvest/mine to skip tool selection if possible ---
+  // --- Inventory/Seed Helpers ---
+  function getSelectedSeed() {
+    if (gameState.player.selectedSlot !== null) {
+      const item = gameState.player.inventory[gameState.player.selectedSlot];
+      if (item && item.type === 'seed') return item;
+    }
+    return gameState.player.inventory.find(item => item.type === 'seed');
+  }
+
+  // --- Crop/Ore/Plant Actions ---
   function harvestCrop(index, viaClick = false) {
     const crop = gameState.crops[index];
     let selectedItem = gameState.player.selectedSlot !== null 
       ? gameState.player.inventory[gameState.player.selectedSlot] 
       : null;
-    // If not sickle, but via click, auto-equip sickle if available
     if ((!selectedItem || selectedItem.name !== 'Sickle') && viaClick) {
       const sickleIndex = gameState.player.inventory.findIndex(i => i.name === 'Sickle');
       if (sickleIndex !== -1) {
@@ -634,7 +554,8 @@ Author: Ian
       const harvestedItem = {
         name: crop.type,
         type: 'crop',
-        value: getCropValue(crop.type)
+        value: getCropValue(crop.type),
+        emoji: getCropEmoji(crop.type)
       };
       if (gameState.player.inventory.length < 10) {
         gameState.player.inventory.push(harvestedItem);
@@ -647,19 +568,15 @@ Author: Ian
       alert('You need to select the sickle to harvest!');
     }
   }
-
   function getCropValue(cropType) {
-    const seed = gameState.merchant.items.find(item => 
-      item.produces === cropType);
+    const seed = gameState.merchant.items.find(item => item.produces === cropType);
     return seed ? seed.price * 2 : 10;
   }
-
   function mineOre(index, viaClick = false) {
     const ore = gameState.ores[index];
     let selectedItem = gameState.player.selectedSlot !== null 
       ? gameState.player.inventory[gameState.player.selectedSlot] 
       : null;
-    // If not pickaxe, but via click, auto-equip pickaxe if available
     if ((!selectedItem || selectedItem.name !== 'Pickaxe') && viaClick) {
       const pickaxeIndex = gameState.player.inventory.findIndex(i => i.name === 'Pickaxe');
       if (pickaxeIndex !== -1) {
@@ -673,7 +590,8 @@ Author: Ian
       const oreItem = {
         name: ore.type,
         type: 'ore',
-        value: ore.value
+        value: ore.value,
+        emoji: ore.emoji
       };
       if (gameState.player.inventory.length < 10) {
         gameState.player.inventory.push(oreItem);
@@ -686,7 +604,6 @@ Author: Ian
       alert('You need to select the pickaxe to mine!');
     }
   }
-
   function plantCrop(tileX, tileY, seed) {
     if (!seed) {
       alert('Select a seed in your inventory to plant!');
@@ -696,8 +613,8 @@ Author: Ian
     if (seedIndex !== -1) {
       gameState.player.inventory.splice(seedIndex, 1);
       gameState.crops.push({
-        x: tileX * gameState.map.tileSize,
-        y: tileY * gameState.map.tileSize,
+        x: tileX * TILE_SIZE,
+        y: tileY * TILE_SIZE,
         type: seed.produces,
         growth: 0,
         growthTime: seed.growthTime,
@@ -707,6 +624,7 @@ Author: Ian
     }
   }
 
+  // --- Merchant Modal ---
   function openMerchant() {
     const merchantItemsDiv = document.getElementById('merchantItems');
     merchantItemsDiv.innerHTML = '';
@@ -716,7 +634,7 @@ Author: Ian
       itemDiv.innerHTML = `
         <div class="card h-100">
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${item.name}</h5>
+            <h5 class="card-title">${item.emoji || getItemEmoji(item)} ${item.name}</h5>
             <p class="card-text">${getItemDescription(item)}</p>
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="badge bg-primary">${item.price} coins</span>
@@ -748,7 +666,6 @@ Author: Ian
       });
     });
   }
-
   function getItemDescription(item) {
     if (item.type === 'seed') {
       return `Grows into ${item.produces} in ${item.growthTime} days.`;
@@ -757,7 +674,6 @@ Author: Ian
     }
     return '';
   }
-
   function updateSellPreview() {
     const sellPreview = document.getElementById('sellPreview');
     const crops = gameState.player.inventory.filter(item => item.type === 'crop');
@@ -777,7 +693,6 @@ Author: Ian
     }
     sellPreview.innerHTML = previewHTML;
   }
-
   function buyItem(index) {
     const item = gameState.merchant.items[index];
     if (gameState.player.coins >= item.price) {
@@ -793,7 +708,6 @@ Author: Ian
       alert('Not enough coins!');
     }
   }
-
   function sellItems(type) {
     let itemsToSell = [];
     let itemsToKeep = [];
@@ -824,19 +738,41 @@ Author: Ian
     }
   }
 
+  // --- Game Loop ---
+  function gameLoop() {
+    if (!gameState.time.paused) {
+      updateTime();
+      updatePlayerPosition();
+    }
+    drawGame();
+    requestAnimationFrame(gameLoop);
+  }
+
+  // --- Init ---
+  function initGame() {
+    generateMap();
+    generateOres();
+    setupInventory();
+    gameState.player.inventory.push(gameState.player.tools.sickle);
+    gameState.player.inventory.push(gameState.player.tools.pickaxe);
+    merchantModal = new bootstrap.Modal(document.getElementById('merchantModal'));
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    canvas.addEventListener('click', handleCanvasClick);
+    canvas.addEventListener('mousemove', handleCanvasHover);
+    canvas.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') interact();
+    });
+    gameLoop();
+  }
   window.onload = initGame;
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/27mariocircuit.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/27mariocircuit.mp3');
 music.loop = true;
 music.volume = 0.5;
-
-// Play music after first user interaction (required by browsers)
 function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);

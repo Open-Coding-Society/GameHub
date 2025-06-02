@@ -3,7 +3,7 @@ layout: bootstrap
 title: Simulation
 description: Simulation Game
 permalink: /simulation
-Author: Zach
+Author: Ian & Zach
 ---
 
 <meta charset="UTF-8">
@@ -44,6 +44,23 @@ Author: Zach
     color: #f0f3f5;
     border: 1px solid #444;
   }
+  .item-card {
+    background-color: #23272f;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: #f0f3f5;
+  }
+  .news-card {
+    background-color: #23272f;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #f0f3f5;
+    font-style: italic;
+  }
 </style>
 <nav class="navbar navbar-dark mb-4 px-4">
   <a class="navbar-brand text-light" href="#">Robinhood Market Game</a>
@@ -52,7 +69,10 @@ Author: Zach
 </nav>
 
 <div class="container">
+  <div id="news" class="news-card mb-4"></div>
   <div id="stocks" class="row"></div>
+  <h3 class="mt-5">Spend Your Money</h3>
+  <div id="items" class="row"></div>
 </div>
 
 <script>
@@ -63,8 +83,38 @@ Author: Zach
     "AIWorks": { price: 200, history: [200], shares: 0 }
   };
 
+  const items = [
+    { name: "Gaming PC", price: 2000 },
+    { name: "Vacation", price: 5000 },
+    { name: "Sports Car", price: 30000 },
+    { name: "Private Jet", price: 1000000 }
+  ];
+
+  // --- Fake News System ---
+  const newsTemplates = [
+    { up: "Analysts predict a strong quarter for {stock}.", down: "Rumors of layoffs at {stock} worry investors." },
+    { up: "{stock} announces breakthrough technology.", down: "{stock} faces regulatory scrutiny." },
+    { up: "Positive earnings report boosts {stock}.", down: "Disappointing sales numbers for {stock}." },
+    { up: "{stock} secures major partnership.", down: "{stock} CEO steps down unexpectedly." }
+  ];
+  let currentNews = {};
+
+  function generateFakeNews() {
+    currentNews = {};
+    let newsHtml = "";
+    for (let name in stocks) {
+      const trend = Math.random() > 0.5 ? "up" : "down";
+      const template = newsTemplates[Math.floor(Math.random() * newsTemplates.length)];
+      const newsText = template[trend].replace("{stock}", name);
+      currentNews[name] = trend;
+      newsHtml += `<div><b>${name}:</b> ${newsText} <span style="color:${trend === "up" ? "#00c805" : "#ff3b3b"};">(${trend === "up" ? "↑" : "↓"})</span></div>`;
+    }
+    document.getElementById("news").innerHTML = newsHtml;
+  }
+
   function createStockCards() {
     const container = document.getElementById("stocks");
+    container.innerHTML = "";
     for (let name in stocks) {
       const col = document.createElement("div");
       col.className = "col-md-4";
@@ -74,11 +124,16 @@ Author: Zach
       card.innerHTML = `
 <h4 class="mb-2">${name}</h4>
 <canvas id="chart-${name}"></canvas>
-<p class="mt-3">Price: $<span id="price-${name}">${stocks[name].price}</span></p>
-<div class="input-group mb-3">
-<input type="number" class="form-control" id="invest-${name}" placeholder="Amount to Invest">
-<button class="btn btn-custom" onclick="invest('${name}')">Invest</button>
-  </div>
+<p class="mt-3">Price: $<span id="price-${name}">${stocks[name].price.toFixed(2)}</span></p>
+<p>Shares Owned: <span id="shares-${name}">${stocks[name].shares.toFixed(2)}</span></p>
+<div class="input-group mb-2">
+  <input type="number" class="form-control" id="invest-${name}" placeholder="Amount to Invest">
+  <button class="btn btn-custom" onclick="invest('${name}')">Invest</button>
+</div>
+<div class="input-group mb-2">
+  <input type="number" class="form-control" id="withdraw-${name}" placeholder="Shares to Withdraw">
+  <button class="btn btn-secondary" onclick="withdraw('${name}')">Withdraw</button>
+</div>
 `;
 
       col.appendChild(card);
@@ -88,10 +143,14 @@ Author: Zach
   }
 
   function generateMarket() {
+    generateFakeNews();
     for (let name in stocks) {
       const stock = stocks[name];
-      const change = (Math.random() - 0.5) * 20;
-      stock.price = Math.max(1, stock.price + change);
+      // News influences the direction
+      let baseChange = (Math.random() - 0.5) * 20;
+      if (currentNews[name] === "up") baseChange = Math.abs(baseChange);
+      if (currentNews[name] === "down") baseChange = -Math.abs(baseChange);
+      stock.price = Math.max(1, stock.price + baseChange);
       stock.history.push(stock.price);
       document.getElementById(`price-${name}`).innerText = stock.price.toFixed(2);
       updateChart(name);
@@ -108,9 +167,32 @@ Author: Zach
       stock.shares += shares;
       balance -= amount;
       document.getElementById("balance").innerText = balance.toFixed(2);
+      document.getElementById(`shares-${name}`).innerText = stock.shares.toFixed(2);
       amountInput.value = "";
     } else {
       alert("Invalid investment amount");
+    }
+  }
+
+  // Withdraw by shares instead of amount
+  function withdraw(name) {
+    const sharesInput = document.getElementById(`withdraw-${name}`);
+    const sharesToSell = parseFloat(sharesInput.value);
+    const stock = stocks[name];
+
+    if (!isNaN(sharesToSell) && sharesToSell > 0) {
+      if (sharesToSell <= stock.shares) {
+        const amount = sharesToSell * stock.price;
+        stock.shares -= sharesToSell;
+        balance += amount;
+        document.getElementById("balance").innerText = balance.toFixed(2);
+        document.getElementById(`shares-${name}`).innerText = stock.shares.toFixed(2);
+        sharesInput.value = "";
+      } else {
+        alert("Not enough shares to withdraw this amount");
+      }
+    } else {
+      alert("Invalid number of shares");
     }
   }
 
@@ -158,7 +240,38 @@ Author: Zach
     chart.update();
   }
 
+  function createItemCards() {
+    const container = document.getElementById("items");
+    container.innerHTML = "";
+    items.forEach(item => {
+      const col = document.createElement("div");
+      col.className = "col-md-3";
+      const card = document.createElement("div");
+      card.className = "item-card";
+      card.innerHTML = `
+        <h5>${item.name}</h5>
+        <p>Price: $${item.price.toLocaleString()}</p>
+        <button class="btn btn-custom" onclick="buyItem('${item.name}', ${item.price})">Buy</button>
+      `;
+      col.appendChild(card);
+      container.appendChild(col);
+    });
+  }
+
+  function buyItem(name, price) {
+    if (balance >= price) {
+      balance -= price;
+      document.getElementById("balance").innerText = balance.toFixed(2);
+      alert(`You bought: ${name}!`);
+    } else {
+      alert("Not enough balance to buy this item.");
+    }
+  }
+
+  // Initial setup
+  generateFakeNews();
   createStockCards();
+  createItemCards();
 </script>
 
 <script>
