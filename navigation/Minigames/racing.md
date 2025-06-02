@@ -1,549 +1,627 @@
----
-layout: bootstrap
-title: Racing 
-description: Racing Game 
-permalink: /racing
-Author: Ian
----
-
 <style>
   body {
-    background: #0d1117;
+    margin: 0;
+    background-color: #0d1117;
     color: #c9d1d9;
-    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  }
-  .racing-container {
-    max-width: 900px;
-    margin: 40px auto;
-    background: #161b22;
-    border-radius: 18px;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.25);
-    padding: 32px 0 40px 0;
-    border: 1px solid #21262d;
-  }
-  h1, h2, h3 {
-    color: #58a6ff;
-    text-align: center;
-    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    user-select: none;
   }
   canvas {
-    border: 2px solid #30363d;
     display: block;
-    margin: 32px auto 0 auto;
-    background: #000;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(20,20,20,0.18);
-    max-width: 100%;
+    margin: auto;
+    background: radial-gradient(circle, #0d1117 0%, #000000 80%);
   }
-  .hud {
+  #hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    user-select: none;
+  }
+  #menu, #winScreen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #161b22dd;
+    padding: 20px 40px;
+    border-radius: 10px;
     text-align: center;
-    margin-top: 18px;
-    color: #c9d1d9;
-    font-size: 1.1rem;
-    letter-spacing: 0.01em;
-  }
-  .win-screen, .start-menu {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(13,17,23,0.96);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  .win-screen h2, .start-menu h2 {
     color: #58a6ff;
-    font-size: 2.5rem;
-    margin-bottom: 18px;
+    font-weight: 600;
+    font-size: 22px;
+    display: none;
   }
-  .win-screen button, .start-menu button {
+  #menu button, #winScreen button {
+    margin-top: 15px;
     background: #238636;
-    color: #fff;
     border: none;
-    border-radius: 8px;
-    padding: 12px 32px;
-    font-size: 1.2rem;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 18px;
     cursor: pointer;
-    margin-top: 18px;
-    transition: background 0.2s;
   }
-  .win-screen button:hover, .start-menu button:hover {
+  #menu button:hover, #winScreen button:hover {
     background: #2ea043;
-  }
-  .start-menu .card {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 16px;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
-    padding: 32px 40px;
-    text-align: center;
-    max-width: 400px;
-  }
-  .start-menu ul {
-    text-align: left;
-    margin: 18px 0 0 0;
-    color: #c9d1d9;
-    font-size: 1rem;
-  }
-  .timer {
-    color: #f1e05a;
-    font-size: 1.2rem;
-    margin-top: 8px;
-    text-align: center;
-    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.03em;
   }
 </style>
 
-<div class="racing-container" id="gameContainer" style="display:none;">
-  <h1>Racing Game</h1>
-  <div class="timer" id="timer"></div>
-  <canvas id="gameCanvas" width="800" height="600"></canvas>
-  <div class="hud" id="hud"></div>
+<div id="hud"></div>
+
+<div id="menu">
+  GitHub Racing!<br />
+  Press <b>Space</b> to Start
 </div>
 
-<div id="startMenu" class="start-menu">
-  <div class="card">
-    <h2>🏎️ Racing Game</h2>
-    <p>Race against 3 computer opponents!<br>
-      Complete 3 laps and use items to win.</p>
-    <ul>
-      <li><strong>W</strong> - Accelerate</li>
-      <li><strong>S</strong> - Brake/Reverse (use to avoid obstacles!)</li>
-      <li><strong>Space</strong> - Use Item</li>
-    </ul>
-    <button id="startBtn" class="btn btn-success mt-3">Start Race</button>
-  </div>
+<div id="winScreen">
+  You Win!<br />
+  <div id="finalTime"></div>
+  <button id="restartBtn">Restart</button>
 </div>
 
-<div id="winScreen" class="win-screen" style="display:none;">
-  <h2>🏁 You Win! 🏁</h2>
-  <p>Congratulations! You finished all 3 laps.</p>
-  <div class="timer" id="finalTime"></div>
-  <button onclick="returnToMenu()">Return to Menu</button>
-</div>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
 
 <script>
-// --- Track Definition ---
-const track = [
-  // Outer rectangle (barriers)
-  {x: 100, y: 100}, {x: 700, y: 100}, {x: 700, y: 500}, {x: 100, y: 500}, {x: 100, y: 100},
-  // Inner rectangle (track inside)
-  {x: 200, y: 200}, {x: 600, y: 200}, {x: 600, y: 400}, {x: 200, y: 400}, {x: 200, y: 200}
-];
+(() => {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const hud = document.getElementById('hud');
+  const menu = document.getElementById('menu');
+  const winScreen = document.getElementById('winScreen');
+  const restartBtn = document.getElementById('restartBtn');
+  const finalTimeEl = document.getElementById('finalTime');
 
-// Centerline path for cars to follow (simplified as a list of waypoints)
-const path = [
-  {x: 150, y: 300}, {x: 400, y: 120}, {x: 650, y: 300}, {x: 400, y: 480}, {x: 150, y: 300}
-];
+  const GAME_STATE = { MENU: 0, PLAYING: 1, WIN: 2 };
+  let currentState = GAME_STATE.MENU;
 
-// --- Timed Obstacles ---
-const obstacles = [
-  // Each obstacle is {pos: index on path, t: progress (0-1), active: true/false, timer: ms}
-  {pos: 0, t: 0.5, active: false, timer: 0, period: 3000, duration: 1200},
-  {pos: 2, t: 0.5, active: false, timer: 0, period: 4000, duration: 1500},
-  {pos: 3, t: 0.2, active: false, timer: 0, period: 5000, duration: 1800}
-];
+  // Path points loop
+  const path = [
+    {x: 100, y: 540},
+    {x: 150, y: 380},
+    {x: 240, y: 300},
+    {x: 350, y: 300},
+    {x: 440, y: 360},
+    {x: 520, y: 480},
+    {x: 640, y: 480},
+    {x: 730, y: 400},
+    {x: 730, y: 300},
+    {x: 600, y: 150},
+    {x: 470, y: 140},
+    {x: 360, y: 190},
+    {x: 300, y: 280},
+    {x: 200, y: 380}
+  ];
 
-// Helper to get obstacle XY
-function getObstacleXY(ob) {
-  const p1 = path[ob.pos];
-  const p2 = path[(ob.pos + 1) % path.length];
-  return {
-    x: p1.x + (p2.x - p1.x) * ob.t,
-    y: p1.y + (p2.y - p1.y) * ob.t
-  };
-}
+    // Define red start/finish line between these two points (index 13 -> 0)
+    // Replace this:
+  // const startLine = { from: path[path.length - 1], to: path[0] };
 
-// Update obstacle timers and toggle active state
-function updateObstacles(dt) {
-  for (const ob of obstacles) {
-    ob.timer += dt;
-    if (!ob.active && ob.timer >= ob.period) {
-      ob.active = true;
-      ob.timer = 0;
-    } else if (ob.active && ob.timer >= ob.duration) {
-      ob.active = false;
-      ob.timer = 0;
-    }
+  // With a vertical finish line segment:
+  const finishLineX = 400;  // X position of finish line, adjust as needed
+  const finishLineY1 = 290; // vertical line start Y
+  const finishLineY2 = 340; // vertical line end Y
+
+  const startLine = { from: {x: finishLineX, y: finishLineY1}, to: {x: finishLineX, y: finishLineY2} };
+
+
+  function createCar(color) {
+    return {
+      pos: 0,
+      t: 0,
+      lap: 1,
+      stunned: 0,
+      obstaclePenalty: 0,
+      boost: 0,
+      color: color,
+      item: null,
+      passedStartLine: false // track if car crossed start line this lap
+    };
   }
-}
 
-// Draw obstacles
-function drawObstacles() {
-  for (const ob of obstacles) {
-    const {x, y} = getObstacleXY(ob);
-    ctx.save();
-    ctx.globalAlpha = ob.active ? 1 : 0.3;
-    ctx.fillStyle = ob.active ? "#ffbe00" : "#555";
+  const player = createCar('#58a6ff');
+  const npcs = [
+    createCar('#ff7b72'),
+    createCar('#eac55e'),
+    createCar('#8bc34a')
+  ];
+
+  const cars = [player, ...npcs];
+
+  const keys = { w: false, s: false, a: false, d: false, space: false };
+
+  let obstacles = [];
+  const obstacleSpawnInterval = 8000;
+  let obstacleTimer = 0;
+  let obstacleActiveDuration = 4000;
+  let obstacleActive = false;
+
+  let powerUps = [];
+  const powerUpSpawnInterval = 15000;
+  let powerUpTimer = 0;
+
+  let lapMessage = '';
+  let gameEnded = false;
+  let startTime = 0;
+  let elapsedTime = 0;
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function getCarXY(car) {
+    const p1 = path[car.pos];
+    const p2 = path[(car.pos + 1) % path.length];
+    const x = lerp(p1.x, p2.x, car.t);
+    const y = lerp(p1.y, p2.y, car.t);
+    return { x, y };
+  }
+
+  // Line intersection helper for start line detection
+  function lineSegmentsIntersect(p1, p2, q1, q2) {
+    // Based on vector cross product
+    function ccw(a,b,c) {
+      return (c.y - a.y) * (b.x - a.x) > (b.y - a.y) * (c.x - a.x);
+    }
+    return (ccw(p1,q1,q2) !== ccw(p2,q1,q2)) && (ccw(p1,p2,q1) !== ccw(p1,p2,q2));
+  }
+
+  function drawTrack() {
+    // Track wide path
+    ctx.strokeStyle = '#30363d';
+    ctx.lineWidth = 30;
+    ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.arc(x, y, 22, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#fff";
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let i = 1; i < path.length; i++) {
+      ctx.lineTo(path[i].x, path[i].y);
+    }
+    ctx.closePath();
     ctx.stroke();
+
+    // Path points for reference
+    ctx.fillStyle = '#21262d';
+    path.forEach(point => {
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 12, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+  // Replace the old start/finish line drawing with this:
+  ctx.strokeStyle = '#ff4136'; // bright red
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(startLine.from.x, startLine.from.y);
+  ctx.lineTo(startLine.to.x, startLine.to.y);
+  ctx.stroke();
+
+  }
+
+  function drawCar(car) {
+    const { x, y } = getCarXY(car);
+    const nextPoint = path[(car.pos + 1) % path.length];
+    const angle = Math.atan2(nextPoint.y - y, nextPoint.x - x);
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.fillStyle = car.color;
+    ctx.shadowColor = car.color;
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(0, 0, 15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw item indicator on player car
+    if (car === player && car.item) {
+      ctx.fillStyle = car.item === 'shell' ? '#FF6347' : '#FFA500';
+      ctx.font = 'bold 16px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(car.item === 'shell' ? '🐢' : '🍄', 0, -25);
+    }
+
     ctx.restore();
   }
-}
 
-// Check if car collides with any active obstacle
-function checkObstacleCollision(car) {
-  for (const ob of obstacles) {
-    if (!ob.active) continue;
-    const carXY = getCarXY(car);
-    const obXY = getObstacleXY(ob);
-    const dx = carXY.x - obXY.x, dy = carXY.y - obXY.y;
-    if (dx*dx + dy*dy < 30*30) {
-      return true;
-    }
+  function spawnObstacle() {
+    // Pick a random position along the path but away from start line
+    const index = Math.floor(Math.random() * (path.length - 3)) + 2;
+    const base = path[index];
+    obstacles.push({
+      x: base.x + (Math.random() * 60 - 30),
+      y: base.y + (Math.random() * 60 - 30),
+      radius: 18,
+      alpha: 1
+    });
   }
-  return false;
-}
 
-let canvas, ctx;
-let player, npcs, keys, lapMessage, gameEnded, itemInterval;
-let timerStart = null;
-let timerInterval = null;
-let elapsedMs = 0;
-let lastFrameTime = null;
-
-function resetGameState() {
-  player = {
-    pos: 0, // index on path
-    t: 0,   // progress between path points (0-1)
-    lap: 1,
-    item: null,
-    stunned: 0,
-    boost: 0,
-    color: "#ff5e57",
-    obstaclePenalty: 0
-  };
-  npcs = [
-    { pos: 1, t: 0.2, lap: 1, stunned: 0, color: "#58a6ff", speed: 0.0085, obstaclePenalty: 0 },
-    { pos: 2, t: 0.5, lap: 1, stunned: 0, color: "#2ea043", speed: 0.0075, obstaclePenalty: 0 },
-    { pos: 3, t: 0.7, lap: 1, stunned: 0, color: "#f1e05a", speed: 0.009, obstaclePenalty: 0 }
-  ];
-  keys = {};
-  lapMessage = "";
-  gameEnded = false;
-  timerStart = null;
-  elapsedMs = 0;
-  lastFrameTime = null;
-  for (const ob of obstacles) {
-    ob.active = false;
-    ob.timer = Math.random() * ob.period; // randomize initial timers
+  function drawObstacles() {
+    if (!obstacleActive) return;
+    obstacles.forEach(o => {
+      ctx.fillStyle = `rgba(255, 130, 0, ${o.alpha})`;
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
-}
 
-function formatTime(ms) {
-  const totalSeconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  const tenths = Math.floor((ms % 1000) / 100);
-  return `${minutes}:${seconds.toString().padStart(2, '0')}.${tenths}`;
-}
-
-// Item logic
-const items = ["shell", "mushroom"];
-function useItem() {
-  if (!player.item) return;
-
-  if (player.item === "shell") {
-    const closest = npcs.reduce((prev, curr) =>
-      (npcDistance(player, curr) < npcDistance(player, prev) ? curr : prev)
-    );
-    closest.stunned = 120;
-  } else if (player.item === "mushroom") {
-    player.boost = 600;
-  }
-  player.item = null;
-}
-
-function npcDistance(a, b) {
-  // Compare path progress
-  return Math.abs((a.lap * path.length + a.pos + a.t) - (b.lap * path.length + b.pos + b.t));
-}
-
-// Controls
-document.addEventListener("keydown", (e) => {
-  if (gameEnded || document.getElementById("gameContainer").style.display === "none") return;
-  keys[e.key.toLowerCase()] = true;
-  if (e.key === " ") useItem();
-});
-document.addEventListener("keyup", (e) => {
-  if (gameEnded || document.getElementById("gameContainer").style.display === "none") return;
-  keys[e.key.toLowerCase()] = false;
-});
-
-// Move along path
-function moveCar(car, isPlayer = false) {
-  if (car.stunned > 0) {
-    car.stunned--;
-    return;
-  }
-  if (car.obstaclePenalty > 0) {
-    car.obstaclePenalty--;
-    return;
-  }
-  let speed = isPlayer ? 0.012 : (car.speed || 0.009);
-  if (car.boost > 0) {
-    speed *= 2;
-    car.boost--;
-  }
-  // Player controls: accelerate/decelerate
-  if (isPlayer) {
-    if (keys["w"]) car.t += speed;
-    if (keys["s"]) car.t -= speed / 2;
-    if (car.t < 0) {
-      if (car.pos > 0) {
-        car.pos--;
-        car.t = 1 + car.t;
-      } else {
-        car.t = 0;
+  function checkObstacleCollision(car) {
+    if (!obstacleActive) return false;
+    const { x, y } = getCarXY(car);
+    for (const o of obstacles) {
+      const dx = x - o.x;
+      const dy = y - o.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 15 + o.radius) {
+        return true;
       }
     }
-    if (car.t > 1) {
-      car.pos++;
-      car.t = car.t - 1;
-    }
-  } else {
-    // NPCs always move forward
-    car.t += speed;
-    if (car.t > 1) {
-      car.pos++;
-      car.t = car.t - 1;
-    }
-  }
-  // Lap logic for both player and NPCs
-  if (car.pos >= path.length - 1) {
-    car.pos = 0;
-    car.t = 0;
-    car.lap++;
-    if (isPlayer && car.lap <= 3) {
-      lapMessage = car.lap === 3 ? "Final Lap!" : `Lap ${car.lap}`;
-      setTimeout(() => lapMessage = "", 3000);
-    }
-  }
-}
-
-// Get car position on track
-function getCarXY(car) {
-  const p1 = path[car.pos];
-  const p2 = path[(car.pos + 1) % path.length];
-  return {
-    x: p1.x + (p2.x - p1.x) * car.t,
-    y: p1.y + (p2.y - p1.y) * car.t
-  };
-}
-
-// Draw track and barriers
-function drawTrack() {
-  // Outer barrier
-  ctx.save();
-  ctx.strokeStyle = "#30363d";
-  ctx.lineWidth = 24;
-  ctx.beginPath();
-  ctx.moveTo(track[0].x, track[0].y);
-  for (let i = 1; i < 5; i++) ctx.lineTo(track[i].x, track[i].y);
-  ctx.stroke();
-  ctx.restore();
-
-  // Inner barrier
-  ctx.save();
-  ctx.strokeStyle = "#30363d";
-  ctx.lineWidth = 24;
-  ctx.beginPath();
-  ctx.moveTo(track[5].x, track[5].y);
-  for (let i = 6; i < 10; i++) ctx.lineTo(track[i].x, track[i].y);
-  ctx.stroke();
-  ctx.restore();
-
-  // Track surface
-  ctx.save();
-  ctx.strokeStyle = "#21262d";
-  ctx.lineWidth = 80;
-  ctx.beginPath();
-  ctx.moveTo(path[0].x, path[0].y);
-  for (let i = 1; i < path.length; i++) ctx.lineTo(path[i].x, path[i].y);
-  ctx.stroke();
-  ctx.restore();
-}
-
-// Draw car
-function drawCar(car) {
-  const {x, y} = getCarXY(car);
-  ctx.save();
-  ctx.shadowColor = car.color;
-  ctx.shadowBlur = 8;
-  ctx.fillStyle = car.color;
-  ctx.beginPath();
-  ctx.arc(x, y, 15, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-// Draw HUD
-function drawHUD() {
-  const hud = document.getElementById("hud");
-  let html = `<strong>Lap:</strong> ${Math.min(player.lap,3)}/3`;
-  if (player.item && !gameEnded) html += ` &nbsp; <strong>Item:</strong> ${player.item}`;
-  if (lapMessage) html += `<br><span style="color:#58a6ff;font-weight:bold">${lapMessage}</span>`;
-  if (!gameEnded) html += `<br><span style="color:#ffbe00">Avoid obstacles! Brake (<b>S</b>) to stop in time.</span>`;
-  hud.innerHTML = html;
-}
-
-// Draw Timer
-function drawTimer() {
-  const timerDiv = document.getElementById("timer");
-  if (!timerDiv) return;
-  let ms = elapsedMs;
-  if (!gameEnded && timerStart !== null) {
-    ms = Date.now() - timerStart;
-    elapsedMs = ms;
-  }
-  timerDiv.textContent = `Time: ${formatTime(ms)}`;
-}
-
-// Main game loop
-let animationFrameId;
-function gameLoop(now) {
-  if (gameEnded) return;
-  if (!lastFrameTime) lastFrameTime = now;
-  const dt = now - lastFrameTime;
-  lastFrameTime = now;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  drawTrack();
-  updateObstacles(dt);
-  drawObstacles();
-
-  moveCar(player, true);
-  npcs.forEach(npc => moveCar(npc));
-
-  // Obstacle collision for player
-  if (checkObstacleCollision(player)) {
-    // If braking, avoid penalty
-    if (!keys["s"] && player.obstaclePenalty === 0) {
-      player.obstaclePenalty = 60; // 1 second penalty (60 frames)
-      lapMessage = "Hit obstacle! Brake to avoid!";
-      setTimeout(() => { if (lapMessage === "Hit obstacle! Brake to avoid!") lapMessage = ""; }, 2000);
-    }
+    return false;
   }
 
-  // Obstacle collision for NPCs (random chance to avoid)
-  for (const npc of npcs) {
-    if (checkObstacleCollision(npc) && npc.obstaclePenalty === 0) {
-      if (Math.random() < 0.7) { // 70% chance to get penalized
-        npc.obstaclePenalty = 60;
+  function spawnPowerUp() {
+    // Random location along path excluding near start line
+    const index = Math.floor(Math.random() * (path.length - 4)) + 3;
+    const base = path[index];
+    const types = ['shell', 'mushroom'];
+    powerUps.push({
+      x: base.x + (Math.random() * 60 - 30),
+      y: base.y + (Math.random() * 60 - 30),
+      radius: 14,
+      type: types[Math.floor(Math.random() * types.length)],
+      alpha: 1,
+      collected: false
+    });
+  }
+
+  function drawPowerUps() {
+    powerUps.forEach(pu => {
+      if (pu.collected) return;
+      ctx.fillStyle = pu.type === 'shell' ? '#FF6347' : '#FFA500';
+      ctx.beginPath();
+      ctx.arc(pu.x, pu.y, pu.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 18px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(pu.type === 'shell' ? '🐢' : '🍄', pu.x, pu.y + 6);
+    });
+  }
+
+  function checkPowerUpCollision(car) {
+    if (car.item) return; // Only 1 item at a time
+    const { x, y } = getCarXY(car);
+    for (const pu of powerUps) {
+      if (pu.collected) continue;
+      const dx = x - pu.x;
+      const dy = y - pu.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 15 + pu.radius) {
+        pu.collected = true;
+        car.item = pu.type;
       }
     }
   }
 
-  drawCar(player);
-  npcs.forEach(drawCar);
+  function usePowerUp(car) {
+    if (!car.item) return;
 
-  drawHUD();
-  drawTimer();
+    if (car.item === 'shell') {
+      // Fire shell to stun closest NPC ahead
+      let target = null;
+      let minDist = Infinity;
+      const playerPos = car.pos + car.t;
 
-  // End game after 3 laps
-  if (player.lap > 3) {
-    endGame();
-    return;
+      for (const npc of npcs) {
+        if (npc.stunned > 0) continue;
+        let npcPos = npc.pos + npc.t;
+        let dist = npcPos - playerPos;
+        if (dist < 0) dist += path.length; // loop adjustment
+        if (dist > 0 && dist < minDist) {
+          minDist = dist;
+          target = npc;
+        }
+      }
+      if (target) {
+        target.stunned = 3000; // 3 seconds stunned
+        lapMessage = 'Shell hit!';
+        setTimeout(() => lapMessage = '', 2000);
+      }
+    } else if (car.item === 'mushroom') {
+      car.boost = 5000; // 5 seconds speed boost
+      lapMessage = 'Speed Boost!';
+      setTimeout(() => lapMessage = '', 2000);
+    }
+
+    car.item = null;
   }
 
-  animationFrameId = requestAnimationFrame(gameLoop);
+  // Update drawHUD to show NPC laps and positions
+  function drawHUD() {
+    let html = `<strong>Your Lap:</strong> ${player.lap}/3`;
+    if (player.item) html += `&nbsp;<strong>Item:</strong> ${player.item === 'shell' ? '🐢 Shell' : '🍄 Mushroom'}`;
+    if (lapMessage) html += `<br><span style="color:#58a6ff;font-weight:bold">${lapMessage}</span>`;
+    if (!gameEnded && currentState === GAME_STATE.PLAYING) {
+      html += `<br><span style="color:#ffbe00">Avoid obstacles! Use <b>Space</b> to use item.</span>`;
+    }
+    if (obstacleActive) {
+      html += `<br><span style="color:#ff4136">Obstacles active!</span>`;
+    }
+    html += `<br><strong>Time:</strong> ${(elapsedTime / 1000).toFixed(2)}s`;
+
+    // Add NPC lap info
+    npcs.forEach((npc, i) => {
+      html += `<br><span style="color:${npc.color}">NPC ${i+1}: Lap ${npc.lap}/3</span>`;
+    });
+
+    hud.innerHTML = html;
+  }
+
+  // Inside moveCar, tweak NPC speed to be faster than player:
+  function moveCar(car, dt, isPlayer = false) {
+    if (currentState !== GAME_STATE.PLAYING) return;
+    if (car.stunned > 0) {
+      car.stunned -= dt;
+      if (car.stunned < 0) car.stunned = 0;
+      return;
+    }
+
+    let baseSpeed = 0.002 * dt;
+
+    if (car.obstaclePenalty > 0) {
+      baseSpeed *= 0.5;
+      car.obstaclePenalty -= dt;
+      if (car.obstaclePenalty < 0) car.obstaclePenalty = 0;
+    }
+
+    if (car.boost > 0) {
+      baseSpeed *= 1.8;
+      car.boost -= dt;
+      if (car.boost < 0) car.boost = 0;
+    }
+
+    if (isPlayer) {
+      if (keys.w) baseSpeed *= 2.0;
+      if (keys.s) baseSpeed *= 0.4;
+      if (keys.a) {
+        car.t -= 0.0008 * dt;
+        if (car.t < 0) {
+          car.t += 1;
+          car.pos = (car.pos - 1 + path.length) % path.length;
+        }
+      }
+      if (keys.d) {
+        car.t += 0.0008 * dt;
+        if (car.t > 1) {
+          car.t -= 1;
+          car.pos = (car.pos + 1) % path.length;
+        }
+      }
+    } else {
+      // NPC speed 20-30% faster base speed + simple obstacle slowdown
+      let speedMultiplier = 1.25; // adjust speed advantage here
+
+      const { x, y } = getCarXY(car);
+      let nearObstacle = false;
+      for (const o of obstacles) {
+        if (!obstacleActive) break;
+        const dx = x - o.x;
+        const dy = y - o.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 70) {
+          nearObstacle = true;
+          break;
+        }
+      }
+      baseSpeed *= speedMultiplier;
+      baseSpeed *= nearObstacle ? 0.6 : 1 + 0.1 * Math.sin(car.t * 10);
+    }
+
+    car.t += baseSpeed;
+    while (car.t > 1) {
+      car.t -= 1;
+      car.pos = (car.pos + 1) % path.length;
+    }
+    while (car.t < 0) {
+      car.t += 1;
+      car.pos = (car.pos - 1 + path.length) % path.length;
+    }
+
+    // Detect crossing start line for lap increment (unchanged)
+    const prevPos = car.pos === 0 ? path.length - 1 : car.pos - 1;
+    const prevPoint = lerpPoint(path[prevPos], path[car.pos], car.t - baseSpeed);
+    const currPoint = lerpPoint(path[car.pos], path[(car.pos + 1) % path.length], car.t);
+
+    if (lineSegmentsIntersect(prevPoint, currPoint, startLine.from, startLine.to)) {
+      if (!car.passedStartLine) {
+        car.lap++;
+        if (car.lap > 3) {
+          if (car === player) {
+            gameEnded = true;
+            currentState = GAME_STATE.WIN;
+            elapsedTime = performance.now() - startTime;
+            finalTimeEl.textContent = `Your time: ${(elapsedTime / 1000).toFixed(2)}s`;
+            winScreen.style.display = 'block';
+          } else {
+            // NPC wins
+            gameEnded = true;
+            currentState = GAME_STATE.WIN;
+            finalTimeEl.textContent = `NPC won the race!`;
+            winScreen.style.display = 'block';
+          }
+        }
+        car.passedStartLine = true;
+        if (car === player) {
+          lapMessage = `Lap ${car.lap}`;
+          setTimeout(() => lapMessage = '', 2500);
+        }
+      }
+    } else {
+      car.passedStartLine = false;
+    }
+  }
+
+
+  function checkLap(car) {
+  const prevPos = car.pos === 0 ? path.length - 1 : car.pos - 1;
+  const prevPoint = lerpPoint(path[prevPos], path[car.pos], car.t);
+  const currPoint = getCarXY(car);
+
+  // Check if car crosses the vertical finish line between last frame and this frame
+  // We consider crossing if the car moves from left side (x < finishLineX) to right side (x > finishLineX)
+  // or vice versa, but only count crossing going forward (left to right) to prevent double counting.
+
+  // Here we detect crossing from left to right only:
+  if (prevPoint.x < finishLineX && currPoint.x >= finishLineX) {
+    // Also check that y position is within the vertical line segment's range
+    const yCross = lerp(prevPoint.y, currPoint.y, (finishLineX - prevPoint.x) / (currPoint.x - prevPoint.x));
+    if (yCross >= finishLineY1 && yCross <= finishLineY2) {
+      if (!car.passedStartLine) {
+        car.lap++;
+        car.passedStartLine = true;
+        if (car === player) {
+          lapMessage = `Lap ${car.lap} completed!`;
+        }
+        if (car.lap > 3) {
+          if (car === player) {
+            currentState = GAME_STATE.WIN;
+            elapsedTime = Date.now() - startTime;
+            finalTimeEl.textContent = `Time: ${(elapsedTime / 1000).toFixed(2)}s`;
+            winScreen.style.display = 'block';
+          }
+        }
+      }
+    }
+  } else if (currPoint.x < finishLineX - 10) {
+    // Reset passed flag once car is sufficiently left of finish line so next crossing counts
+    car.passedStartLine = false;
+  }
 }
 
-// Item pickup every 5 seconds randomly
-function startItemInterval() {
-  itemInterval = setInterval(() => {
-    if (!player.item && !gameEnded) player.item = items[Math.floor(Math.random() * items.length)];
-  }, 5000);
-}
-function stopItemInterval() {
-  if (itemInterval) clearInterval(itemInterval);
-  itemInterval = null;
-}
 
-// Timer interval for updating timer display
-function startTimerInterval() {
-  timerInterval = setInterval(drawTimer, 100);
-}
-function stopTimerInterval() {
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = null;
-}
+  function lerpPoint(p1, p2, t) {
+    // Clamp t between 0 and 1 for safety
+    t = Math.min(Math.max(t, 0), 1);
+    return { x: lerp(p1.x, p2.x, t), y: lerp(p1.y, p2.y, t) };
+  }
 
-function endGame() {
-  gameEnded = true;
-  stopItemInterval();
-  stopTimerInterval();
-  // Show final time on win screen
-  document.getElementById("finalTime").textContent = `Final Time: ${formatTime(elapsedMs)}`;
-  document.getElementById("winScreen").style.display = "flex";
-}
+  function update(dt) {
+    if (currentState !== GAME_STATE.PLAYING) return;
 
-function startGame() {
-  resetGameState();
-  document.getElementById("startMenu").style.display = "none";
-  document.getElementById("winScreen").style.display = "none";
-  document.getElementById("gameContainer").style.display = "block";
-  stopItemInterval();
-  stopTimerInterval();
-  timerStart = Date.now();
-  elapsedMs = 0;
-  lastFrameTime = null;
-  startItemInterval();
-  startTimerInterval();
-  cancelAnimationFrame(animationFrameId);
-  animationFrameId = requestAnimationFrame(gameLoop);
-}
+    elapsedTime = performance.now() - startTime;
 
-function returnToMenu() {
-  stopItemInterval();
-  stopTimerInterval();
-  cancelAnimationFrame(animationFrameId);
-  document.getElementById("gameContainer").style.display = "none";
-  document.getElementById("winScreen").style.display = "none";
-  document.getElementById("startMenu").style.display = "flex";
-  resetGameState();
-  drawTimer();
-}
+    obstacleTimer += dt;
+    powerUpTimer += dt;
 
-document.getElementById("startBtn").onclick = startGame;
+    if (obstacleTimer > obstacleSpawnInterval) {
+      obstacles = [];
+      spawnObstacle();
+      obstacleActive = true;
+      obstacleTimer = 0;
+      setTimeout(() => { obstacleActive = false; obstacles = []; }, obstacleActiveDuration);
+    }
 
-// On page load, show start menu, hide game/win screens
-window.onload = function() {
-  canvas = document.getElementById("gameCanvas");
-  ctx = canvas.getContext("2d");
-  resetGameState();
+    if (powerUpTimer > powerUpSpawnInterval) {
+      spawnPowerUp();
+      powerUpTimer = 0;
+    }
 
-  document.getElementById("startMenu").style.display = "flex";
-  document.getElementById("gameContainer").style.display = "none";
-  document.getElementById("winScreen").style.display = "none";
-  stopItemInterval();
-  stopTimerInterval();
-  drawTimer();
+    // Move cars
+    cars.forEach(car => {
+      if (checkObstacleCollision(car)) {
+        car.obstaclePenalty = 1500; // slow down 1.5 sec
+      }
+      moveCar(car, dt, car === player);
+      checkPowerUpCollision(car);
+    });
+  }
 
-  document.getElementById("startBtn").onclick = startGame;
-};
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTrack();
+    drawObstacles();
+    drawPowerUps();
+    cars.forEach(drawCar);
+    drawHUD();
+  }
+
+  let lastTime = performance.now();
+
+  function gameLoop(ts) {
+    const dt = ts - lastTime;
+    lastTime = ts;
+    if (currentState === GAME_STATE.PLAYING) update(dt);
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
+
+  function startGame() {
+    player.pos = 0;
+    player.t = 0;
+    player.lap = 1;
+    player.stunned = 0;
+    player.boost = 0;
+    player.item = null;
+    player.passedStartLine = false;
+
+    npcs.forEach(npc => {
+      npc.pos = Math.floor(Math.random() * path.length);
+      npc.t = Math.random();
+      npc.lap = 1;
+      npc.stunned = 0;
+      npc.boost = 0;
+      npc.item = null;
+      npc.passedStartLine = false;
+    });
+
+    obstacles = [];
+    powerUps = [];
+    obstacleTimer = 0;
+    powerUpTimer = 0;
+    obstacleActive = false;
+    lapMessage = '';
+    gameEnded = false;
+    elapsedTime = 0;
+    startTime = performance.now();
+    currentState = GAME_STATE.PLAYING;
+    menu.style.display = 'none';
+    winScreen.style.display = 'none';
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      if (currentState === GAME_STATE.MENU) {
+        startGame();
+      } else if (currentState === GAME_STATE.PLAYING) {
+        usePowerUp(player);
+      }
+      e.preventDefault();
+    }
+    if (currentState === GAME_STATE.PLAYING) {
+      if (e.key.toLowerCase() === 'w') keys.w = true;
+      if (e.key.toLowerCase() === 's') keys.s = true;
+      if (e.key.toLowerCase() === 'a') keys.a = true;
+      if (e.key.toLowerCase() === 'd') keys.d = true;
+    }
+  });
+
+  window.addEventListener('keyup', (e) => {
+    if (currentState === GAME_STATE.PLAYING) {
+      if (e.key.toLowerCase() === 'w') keys.w = false;
+      if (e.key.toLowerCase() === 's') keys.s = false;
+      if (e.key.toLowerCase() === 'a') keys.a = false;
+      if (e.key.toLowerCase() === 'd') keys.d = false;
+    }
+  });
+
+  restartBtn.addEventListener('click', () => {
+    currentState = GAME_STATE.MENU;
+    winScreen.style.display = 'none';
+    menu.style.display = 'block';
+  });
+
+  menu.style.display = 'block';
+  requestAnimationFrame(gameLoop);
+})();
 </script>
-
-<script>
-// --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/29rainbowroad.mp3');
-music.loop = true;
-music.volume = 0.5;
-
-// Play music after first user interaction (required by browsers)
-function startMusicOnce() {
-  music.play().catch(() => {});
-  window.removeEventListener('click', startMusicOnce);
-  window.removeEventListener('keydown', startMusicOnce);
-}
-window.addEventListener('click', startMusicOnce);
-window.addEventListener('keydown', startMusicOnce);
-</script>
-
