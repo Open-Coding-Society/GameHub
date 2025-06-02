@@ -8,14 +8,12 @@ Author: Aarush & Ian
 
 <script>
 // filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
 
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/18moonviewhighway.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/18moonviewhighway.mp3');
 music.loop = true;
 music.volume = 0.5;
 
-// Play music after first user interaction (required by browsers)
 function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
@@ -27,7 +25,7 @@ window.addEventListener('keydown', startMusicOnce);
 
 <style>
   body {
-    margin: 0; 
+    margin: 0;
     background: #7ec850;
     font-family: Arial, sans-serif;
     user-select: none;
@@ -55,17 +53,6 @@ window.addEventListener('keydown', startMusicOnce);
   .hidden {
     display: none;
   }
-  #pauseMsg {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: yellow;
-    padding: 8px 12px;
-    font-weight: bold;
-    display: none;
-    border-radius: 5px;
-    z-index: 15;
-  }
 </style>
 
 <div id="startMenu" class="menu">
@@ -73,19 +60,15 @@ window.addEventListener('keydown', startMusicOnce);
   <button id="startBtn">Start Game</button>
   <div style="font-size: 1rem; margin-top: 1rem;">
     Use WASD to move. Avoid cars & trains!<br>
-    The screen follows your frog as you climb infinitely.<br>
-    Press P to pause/resume.
+    The screen follows your frog as you climb infinitely.
   </div>
 </div>
 
 <div id="gameOverMenu" class="menu hidden">
   <div>💥 Game Over!</div>
   <div id="finalScore"></div>
-  <div id="highScore"></div>
   <button id="gameOverBackBtn">Back to Menu</button>
 </div>
-
-<div id="pauseMsg">⏸️ Paused - Press P to Resume</div>
 
 <canvas id="gameCanvas" width="800" height="600"></canvas>
 
@@ -106,55 +89,46 @@ window.addEventListener('keydown', startMusicOnce);
   let lanes = new Map();
 
   let gameActive = false;
-  let paused = false;
   let score = 0;
 
   const startMenu = document.getElementById("startMenu");
   const gameOverMenu = document.getElementById("gameOverMenu");
-  const pauseMsg = document.getElementById("pauseMsg");
-
   const startBtn = document.getElementById("startBtn");
   const gameOverBackBtn = document.getElementById("gameOverBackBtn");
-
   const finalScore = document.getElementById("finalScore");
-  const highScoreDisplay = document.getElementById("highScore");
 
-  // --- Generate obstacles randomly when lane is created ---
-  // Returns array of obstacles for lane: each obstacle = { x, type, length, speed, direction, offset }
-  function generateLaneObstaclesRandom(laneY) {
-    const obstacles = [];
-    // Random lane type: grass, car lane, train lane
-    // Randomly assign lane types with higher chance for grass
-    let rand = Math.random();
-    let type;
-    if (laneY % 7 === 0) {
-      // Every 7 lanes is a train lane for some structure
-      type = "train";
-    } else if (rand < 0.35) {
-      type = "car";
-    } else {
-      type = "grass";
-    }
+function generateLaneObstaclesRandom(laneY) {
+  const obstacles = [];
 
-    if (type === "grass") return obstacles;
+  // Prevent any obstacles from spawning in the player's spawn lane
+  if (laneY === 1) return obstacles;
 
-    // Random direction & speed
-    const direction = Math.random() < 0.5 ? 1 : -1;
-    const speed = type === "train" ? 0.5 + Math.random() * 0.3 : 0.7 + Math.random() * 1.0;
-    const length = type === "train" ? 3 : 1;
-
-    // Number of obstacles depends on lane width and type
-    const numObs = type === "train" ? 1 : Math.floor(Math.random() * 3) + 1;
-
-    for (let i = 0; i < numObs; i++) {
-      const x = Math.floor(Math.random() * cols);
-      obstacles.push({ x, type, length, speed, direction, offset: 0 });
-    }
-    return obstacles;
+  let rand = Math.random();
+  let type;
+  if (laneY % 7 === 0) {
+    type = "train";
+  } else if (rand < 0.35) {
+    type = "car";
+  } else {
+    type = "grass";
   }
 
+  if (type === "grass") return obstacles;
+
+  const direction = Math.random() < 0.5 ? 1 : -1;
+  const speed = type === "train" ? 0.5 + Math.random() * 0.3 : 0.7 + Math.random() * 1.0;
+  const length = type === "train" ? 3 : 1;
+  const numObs = type === "train" ? 1 : Math.floor(Math.random() * 3) + 1;
+
+  for (let i = 0; i < numObs; i++) {
+    const x = Math.floor(Math.random() * cols);
+    obstacles.push({ x, type, length, speed, direction, offset: 0 });
+  }
+  return obstacles;
+}
+
+
   function updateLanes() {
-    // Generate lanes within range of player y +/- 10 lanes
     const minLane = Math.floor(player.y) - 10;
     const maxLane = Math.floor(player.y) + 10;
     for (let lane = minLane; lane <= maxLane; lane++) {
@@ -169,9 +143,9 @@ window.addEventListener('keydown', startMusicOnce);
     for (let y = 0; y <= rowsVisible; y++) {
       const laneNum = startLane + y;
       let color;
-      if (laneNum % 7 === 0) color = "#5a2e0a"; // train lane brown
-      else if (laneNum % 2 === 1) color = "#656d78"; // car lane gray
-      else color = "#a0d468"; // grass
+      if (laneNum % 7 === 0) color = "#5a2e0a";
+      else if (laneNum % 2 === 1) color = "#656d78";
+      else color = "#a0d468";
 
       ctx.fillStyle = color;
       ctx.fillRect(0, y * tileSize, canvas.width, tileSize);
@@ -244,7 +218,7 @@ window.addEventListener('keydown', startMusicOnce);
   function drawScore() {
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
-    ctx.fillText(`Score: ${Math.floor(score)}`, 80, 20); // Remove the "-" sign from the score display
+    ctx.fillText(`Score: ${Math.floor(score)}`, 80, 20);
   }
 
   function updateObstacles() {
@@ -284,13 +258,12 @@ window.addEventListener('keydown', startMusicOnce);
   }
 
   function gameLoop() {
-    if (!gameActive || paused) {
+    if (!gameActive) {
       requestAnimationFrame(gameLoop);
       return;
     }
 
     updateObstacles();
-
     cameraY = player.y;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -305,57 +278,40 @@ window.addEventListener('keydown', startMusicOnce);
     }
 
     updateLanes();
-
     requestAnimationFrame(gameLoop);
   }
 
   function endGame() {
     gameActive = false;
-    finalScore.textContent = `Score: ${Math.floor(-score)}`;
-    let highScore = localStorage.getItem("highScore") || 0;
-    if (-score > highScore) {
-      localStorage.setItem("highScore", -score);
-      highScore = -score;
-    }
-    highScoreDisplay.textContent = `High Score: ${Math.floor(highScore)}`;
+    finalScore.textContent = `Score: ${Math.floor(score)}`;
     gameOverMenu.classList.remove("hidden");
   }
 
   function startGame() {
+    lanes.clear();
+    updateLanes();
+
     let safeSpawn = false;
     while (!safeSpawn) {
-      player = { x: Math.floor(cols / 2), y: 1 }; // Spawn the player in a safe zone without obstacles
+      player = { x: Math.floor(cols / 2), y: 1 };
       const playerLaneObs = lanes.get(player.y) || [];
-      safeSpawn = playerLaneObs.every(obs => obs.type === "grass");
+      safeSpawn = playerLaneObs.length === 0;
     }
 
     cameraY = 0;
-    lanes.clear();
     score = 0;
     gameActive = true;
-    paused = false;
-    pauseMsg.style.display = "none";
     startMenu.classList.add("hidden");
     gameOverMenu.classList.add("hidden");
-    updateLanes();
     gameLoop();
   }
-
 
   window.addEventListener("keydown", (e) => {
     if (!gameActive) return;
 
-    if (e.key === "p" || e.key === "P") {
-      paused = !paused;
-      pauseMsg.style.display = paused ? "block" : "none";
-      if (!paused) gameLoop();
-      return;
-    }
-    if (paused) return;
-
     if (e.key === "w" || e.key === "ArrowUp") {
       player.y -= 1;
-      score = -player.y;
+      score = Math.max(score, -player.y);
     } else if (e.key === "s" || e.key === "ArrowDown") {
       if (player.y < 0) player.y += 1;
     } else if (e.key === "a" || e.key === "ArrowLeft") {
@@ -371,6 +327,3 @@ window.addEventListener('keydown', startMusicOnce);
     startMenu.classList.remove("hidden");
   });
 </script>
-
-
-
