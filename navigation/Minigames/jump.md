@@ -42,11 +42,9 @@ Author: Aarush
 <div class="gdash-center">
   <label for="gdashDifficulty" style="font-size:1.1em;">Difficulty: </label>
   <select id="gdashDifficulty" style="font-size:1.1em;">
-    <option value="1">Very Easy</option>
     <option value="2">Easy</option>
     <option value="3" selected>Normal</option>
     <option value="4">Hard</option>
-    <option value="5">Insane</option>
   </select>
   <button id="gdashRestart" class="gdash-btn" style="display:none;">Restart</button>
 </div>
