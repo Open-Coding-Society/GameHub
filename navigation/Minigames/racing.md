@@ -81,8 +81,11 @@ Author: Ian
   const restartBtn = document.getElementById('restartBtn');
   const finalTimeEl = document.getElementById('finalTime');
 
-  const GAME_STATE = { MENU: 0, PLAYING: 1, WIN: 2 };
+  const GAME_STATE = { MENU: 0, COUNTDOWN: 1, PLAYING: 2, WIN: 3 };
   let currentState = GAME_STATE.MENU;
+
+  let countdown = 3; // Countdown timer
+  let countdownInterval;
 
   // Path points loop
   const path = [
@@ -597,10 +600,40 @@ Author: Ian
     winScreen.style.display = 'none';
   }
 
+  function startCountdown() {
+    countdown = 3;
+    currentState = GAME_STATE.COUNTDOWN;
+    menu.style.display = 'none';
+    winScreen.style.display = 'none';
+
+    const countdownEl = document.createElement('div');
+    countdownEl.id = 'countdown';
+    countdownEl.style.position = 'absolute';
+    countdownEl.style.top = '50%';
+    countdownEl.style.left = '50%';
+    countdownEl.style.transform = 'translate(-50%, -50%)';
+    countdownEl.style.fontSize = '48px';
+    countdownEl.style.color = '#ff4136';
+    countdownEl.style.fontWeight = 'bold';
+    document.body.appendChild(countdownEl);
+
+    countdownInterval = setInterval(() => {
+      if (countdown > 0) {
+        countdownEl.textContent = countdown;
+        countdown--;
+      } else {
+        clearInterval(countdownInterval);
+        document.body.removeChild(countdownEl);
+        currentState = GAME_STATE.PLAYING;
+        startGame();
+      }
+    }, 1000);
+  }
+
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
       if (currentState === GAME_STATE.MENU) {
-        startGame();
+        startCountdown();
       } else if (currentState === GAME_STATE.PLAYING) {
         usePowerUp(player);
       }
