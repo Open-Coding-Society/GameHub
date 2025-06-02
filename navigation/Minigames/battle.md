@@ -18,30 +18,32 @@ Author: Ian
     overflow: hidden;
     height: 100vh;
   }
- #gameCanvas {
+  #gameCanvas {
     background: #333;
     display: block;
     margin: auto;
     border: 3px solid #fff;
-    width: 100%;
-    height: 100%;
+    width: 75%;
+    height: 75%; /* Make it a square */
+    max-width: 75vh; /* Ensure it remains square */
+    max-height: 75vw; /* Ensure it remains square */
   }
-.info {
+  .info {
     position: absolute;
     top: 10px;
     left: 10px;
     color: white;
     font-family: Arial, sans-serif;
   }
-.info p {
+  .info p {
     margin: 5px 0;
     font-size: 18px;
   }
-h2 {
+  h2 {
     font-size: 2rem;
     color: white;
   }
-.start-menu {
+  .start-menu {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -50,11 +52,11 @@ h2 {
     font-family: Arial, sans-serif;
     font-size: 24px;
   }
-.start-menu button {
+  .start-menu button {
     padding: 15px 30px;
     font-size: 18px;
   }
-#victory {
+  #victory {
     display: none;
     color: lime;
     font-size: 2rem;
@@ -65,7 +67,7 @@ h2 {
     text-align: center;
     font-family: Arial, sans-serif;
   }
-#loseMenu {
+  #loseMenu {
     display: none;
     color: white;
     font-size: 1.5rem;
@@ -75,9 +77,15 @@ h2 {
     transform: translate(-50%, -50%);
     text-align: center;
   }
-#loseMenu button {
+  #loseMenu button {
     padding: 10px 20px;
     font-size: 18px;
+  }
+  .game-desc {
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
   }
 /* Confetti styles */
   .confetti {
@@ -104,20 +112,22 @@ h2 {
 
 <!-- Start Menu -->
 <div id="startMenu" class="start-menu">
-<h2>Battle Games</h2>
-<button id="startButton" class="btn btn-primary btn-lg">Start Game</button>
+  <h2>Battle Game</h2>
+  <button id="startButton" class="btn btn-primary btn-lg">Start Game</button>
 </div>
 
 <!-- Game Area -->
 <div id="gameArea" style="display:none;">
-<div class="info">
-  <p id="score">Score: 0</p>
-  <p id="timer">Time: 0s</p>
-</div>
-<p id="victory">You Win!</p>
-
-
-<canvas id="gameCanvas"></canvas>
+  <div class="info">
+    <p id="score">Score: 0</p>
+    <p id="timer">Time: 0s</p>
+  </div>
+  <p id="victory">You Win!</p>
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-desc">
+    <h3>Battle Game</h3>
+    <p>Use WASD keys to move and Space/Q to shoot. Be the last one standing!</p>
+  </div>
 </div>
 
 <!-- Loose Menu -->
@@ -152,7 +162,7 @@ class Entity {
     this.x = x;
     this.y = y;
     this.color = color;
-    this.radius = 20;
+    this.radius = 30; // 1.5x the original size
     this.maxHp = BASE_HP + (isNPC ? 2000 : 0);
     this.hp = this.maxHp;
     this.cooldown = 0;
@@ -174,10 +184,10 @@ ctx.globalAlpha = this.alpha;
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
 ctx.fillStyle = 'red';
-    ctx.fillRect(this.x - 25, this.y - 35, 50, 6);
+    ctx.fillRect(this.x - 37.5, this.y - 52.5, 75, 9); // Adjust health bar size
     ctx.fillStyle = 'lime';
     const hpPercent = Math.max(0, this.hp / this.maxHp);
-    ctx.fillRect(this.x - 25, this.y - 35, 50 * hpPercent, 6);
+    ctx.fillRect(this.x - 37.5, this.y - 52.5, 75 * hpPercent, 9); // Adjust health bar size
     ctx.globalAlpha = 1.0;
   }
 move() {
@@ -198,8 +208,8 @@ class Bullet {
     this.dy = dy;
     this.angle = angle;
     this.owner = owner;
-    this.length = 30;
-    this.width = 8;
+    this.length = 45; // 1.5x the original size
+    this.width = 12; // 1.5x the original size
   }
 update() {
     this.x += this.dx;
@@ -218,14 +228,14 @@ collidesWith(entity) {
     return dist < entity.radius + this.length / 2;
   }
 }
-const player = new Entity(400, 300, 'deepskyblue', PLAYER_DAMAGE);
+const player = new Entity(canvas.width / 2, canvas.height / 2, 'deepskyblue', PLAYER_DAMAGE);
 let npcs = spawnNPCs();
 const bullets = [];
 function spawnNPCs() {
   return [
-    new Entity(100, 100, 'red', NPC_DAMAGE, true),
-    new Entity(700, 100, 'orange', NPC_DAMAGE, true),
-    new Entity(400, 500, 'purple', NPC_DAMAGE, true),
+    new Entity(50, 50, 'red', NPC_DAMAGE, true), // Top-left corner
+    new Entity(canvas.width - 50, 50, 'orange', NPC_DAMAGE, true), // Top-right corner
+    new Entity(canvas.width / 2, canvas.height - 50, 'purple', NPC_DAMAGE, true), // Bottom-middle
   ];
 }
 function autoAimShot(shooter, targets) {
@@ -259,7 +269,7 @@ if (nearest) {
 const keys = {};
 document.addEventListener('keydown', e => {
   keys[e.key.toLowerCase()] = true;
-  if (e.key.toLowerCase() === 'q') {
+  if (e.key.toLowerCase() === 'q' || e.code === 'Space') { // Allow Q and Space to shoot
     autoAimShot(player, npcs);
   }
 });
@@ -399,9 +409,6 @@ restartButton.addEventListener('click', () => {
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/12littlegoth.mp3'); // Change path as needed
 music.loop = true;
