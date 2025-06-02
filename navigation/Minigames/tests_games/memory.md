@@ -136,14 +136,15 @@ Author: Zach
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
+  // Disable copy/paste functionality
+  document.addEventListener('copy', (e) => e.preventDefault());
+  document.addEventListener('paste', (e) => e.preventDefault());
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/22dksummit.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/22dksummit.mp3');
 music.loop = true;
 music.volume = 0.5;
 

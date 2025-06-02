@@ -33,11 +33,15 @@ Author: Ian
     border-radius: 50%;
     position: absolute;
     cursor: pointer;
+    z-index: 2;
   }
   .miss-zone {
     width: 100%;
     height: 100%;
     position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
   }
 </style>
 
@@ -49,9 +53,13 @@ Author: Ian
   let misses = 0;
   let gameRunning = false;
   let gameDuration = 20000; // 20 seconds
-  let gameInterval, endTimeout;
+  let endTimeout = null;
+  let currentTarget = null;
 
   function spawnTarget() {
+    // Remove any existing target
+    if (currentTarget) currentTarget.remove();
+
     const target = document.createElement('div');
     target.classList.add('target');
 
@@ -61,14 +69,15 @@ Author: Ian
     target.style.top = `${y}px`;
 
     target.addEventListener('click', (e) => {
+      if (!gameRunning) return;
       e.stopPropagation();
       score++;
       updateStats();
-      target.remove();
       spawnTarget();
     });
 
     gameBox.appendChild(target);
+    currentTarget = target;
   }
 
   function updateStats() {
@@ -82,28 +91,40 @@ Author: Ian
     gameRunning = true;
     startBtn.style.display = 'none';
 
+    // Remove any existing targets
+    if (currentTarget) currentTarget.remove();
+
     spawnTarget();
 
-    gameBox.addEventListener('click', registerMiss);
+    // Ensure only one miss-zone exists
+    let missZone = gameBox.querySelector('.miss-zone');
+    if (!missZone) {
+      missZone = document.createElement('div');
+      missZone.className = 'miss-zone';
+      gameBox.appendChild(missZone);
+    }
+    missZone.onclick = function(e) {
+      // Only count as miss if not clicking the target
+      if (!e.target.classList.contains('target') && gameRunning) {
+        misses++;
+        updateStats();
+      }
+    };
 
     endTimeout = setTimeout(() => {
       endGame();
     }, gameDuration);
   }
 
-  function registerMiss(e) {
-    if (e.target.classList.contains('miss-zone')) {
-      misses++;
-      updateStats();
-    }
-  }
-
   function endGame() {
     gameRunning = false;
-    clearInterval(gameInterval);
     clearTimeout(endTimeout);
-    gameBox.innerHTML = `<button id="startBtn" class="btn btn-success position-absolute top-50 start-50 translate-middle">Start Game</button>`;
-    updateStats();
+    if (currentTarget) currentTarget.remove();
+    stats.innerHTML += `<br><b>Game Over!</b>`;
+    // Reset start button
+    gameBox.innerHTML = `
+      <button id="startBtn" class="btn btn-success position-absolute top-50 start-50 translate-middle">Start Game</button>
+    `;
     document.getElementById('startBtn').addEventListener('click', startGame);
   }
 
@@ -111,15 +132,10 @@ Author: Ian
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/21daisycircuit.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/21daisycircuit.mp3');
 music.loop = true;
 music.volume = 0.5;
-
-// Play music after first user interaction (required by browsers)
 function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
