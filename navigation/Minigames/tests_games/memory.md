@@ -69,7 +69,7 @@ Author: Zach
   }
 
   function flashCells() {
-    const totalFlashes = gridSize === 3 ? getRandomInt(3, 5) : getRandomInt(7, 10);
+    const totalFlashes = Math.floor((gridSize * gridSize) / 2); // Half of the squares appear
     activeCells = [];
     while (activeCells.length < totalFlashes) {
       const randomIndex = Math.floor(Math.random() * (gridSize * gridSize));
@@ -80,22 +80,28 @@ Author: Zach
     activeCells.forEach(index => {
       const cell = grid.children[index];
       cell.classList.add('active');
-      setTimeout(() => cell.classList.remove('active'), gridSize === 5 ? 4000 : 1000); // 3 extra seconds for 5x5 grid
+      setTimeout(() => cell.classList.remove('active'), gridSize * 1000); // Increase time based on grid size
     });
     setTimeout(() => {
       Array.from(grid.children).forEach(cell => (cell.disabled = false));
-    }, gridSize === 5 ? 4200 : 1200); // Adjust delay for 5x5 grid
+    }, gridSize * 1000 + 200); // Adjust delay for user interaction
   }
 
   function handleUserInput(index) {
+    if (userSelections.includes(index)) {
+      stats.innerHTML = `❌ You clicked the same square twice! You lost at level <strong>${level}</strong>.`;
+      resetGame();
+      return;
+    }
+
     if (activeCells.includes(index)) {
       userSelections.push(index);
       if (userSelections.length === activeCells.length) {
         winStreak++;
-        if (winStreak === 3 && gridSize === 3) {
-          gridSize = 5;
+        if (winStreak === 3) {
+          gridSize++;
           winStreak = 0;
-          stats.textContent = `🎉 Advanced to 5x5 grid!`;
+          stats.textContent = `🎉 Advanced to ${gridSize}x${gridSize} grid!`;
         }
         setTimeout(nextRound, 800);
       }

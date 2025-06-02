@@ -104,6 +104,13 @@ Author: Ian
 // filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
 // ...existing code...
 
+
+ // Disable copy/paste functionality
+  userInput.addEventListener('copy', (e) => e.preventDefault());
+  userInput.addEventListener('paste', (e) => e.preventDefault());
+</script>
+
+<script>
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/26coconutmall.mp3'); // Change path as needed
 music.loop = true;

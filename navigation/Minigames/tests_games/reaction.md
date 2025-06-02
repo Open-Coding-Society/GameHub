@@ -41,15 +41,15 @@ Author: Ian
   }
   .start-screen {
     background-color: #21262d;
-    cursor: pointer;
+    cursor: pointer; /* Remove blue circle effect */
   }
   .wait-screen {
     background-color: #30363d;
-    cursor: wait;
+    cursor: default; /* Keep default mouse icon */
   }
   .click-screen {
     background-color: #238636;
-    cursor: pointer;
+    cursor: pointer; /* Remove blue circle effect */
   }
   .score {
     font-size: 1.5rem;
