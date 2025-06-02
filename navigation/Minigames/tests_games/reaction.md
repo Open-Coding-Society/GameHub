@@ -24,6 +24,7 @@ Author: Ian
     background-color: #0d1117;
     color: #c9d1d9;
     font-family: 'Segoe UI', sans-serif;
+    cursor: default; /* Always show default mouse icon */
   }
   .game-card {
     background-color: #161b22;
@@ -71,7 +72,8 @@ Author: Ian
       }, Math.random() * 3000 + 2000);
     } else if (screen.classList.contains('click-screen')) {
       const endTime = new Date().getTime();
-      const reactionTime = endTime - startTime;
+      let reactionTime = endTime - startTime;
+      reactionTime = Math.min(reactionTime, 10000); // Cap display at 10,000ms
       result.innerText = `⏱️ Your reaction time: ${reactionTime} ms`;
       screen.className = 'start-screen';
       screen.innerHTML = '<h2>Click to try again</h2>';
@@ -85,11 +87,8 @@ Author: Ian
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/24mushroomgorge.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/24mushroomgorge.mp3');
 music.loop = true;
 music.volume = 0.5;
 

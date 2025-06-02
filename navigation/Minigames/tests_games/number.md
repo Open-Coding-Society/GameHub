@@ -26,6 +26,19 @@ Author: Ian
     border-radius: 1rem;
     box-shadow: 0 0 20px rgba(0,255,0,0.1);
   }
+  #userInput:disabled {
+    background-color: #222 !important;
+    color: #888 !important;
+    cursor: not-allowed;
+  }
+  #numberDisplay {
+    letter-spacing: 0.2em;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    user-select: none;
+  }
+  #memoryStats {
+    font-size: 1.2rem;
+  }
 </style>
 
 <script>
@@ -86,14 +99,15 @@ Author: Ian
       checkAnswer();
     }
   });
+
+  // Disable copy/paste functionality
+  userInput.addEventListener('copy', (e) => e.preventDefault());
+  userInput.addEventListener('paste', (e) => e.preventDefault());
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
-// ...existing code...
-
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/23toadsfactory.mp3'); // Change path as needed
+const music = new Audio('{{site.baseurl}}/assets/audio/23toadsfactory.mp3');
 music.loop = true;
 music.volume = 0.5;
 
