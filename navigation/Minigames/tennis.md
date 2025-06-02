@@ -14,16 +14,17 @@ Author: Aarush
   }
   #tennisCanvas {
     display: block;
-gi    position: absolute;
-    left: 0;
-    top: 40px;
+    position: absolute;
+    left: 50%;
+    top: 60%; /* Move slightly down */
+    transform: translate(-50%, -50%);
     background: #1a3d2f;
     border: 3px solid #fff;
     border-radius: 10px;
-    width: 95vw;
-    height: 85vh;
-    max-width: 1800px;
-    max-height: 1100px;
+    width: 90vw; /* Slightly smaller */
+    height: 80vh; /* Slightly smaller */
+    max-width: 1600px; /* Adjust max width */
+    max-height: 900px; /* Adjust max height */
   }
   .tennis-center {
     text-align: center;
@@ -42,64 +43,38 @@ gi    position: absolute;
   }
 </style>
 
-<h1 class="tennis-center">Mini Tennis</h1>
-<p class="tennis-center">Use <b>W</b>/<b>S</b> to move your paddle. First to 5 wins!</p>
+<div class="container py-4">
+  <div class="text-center mb-4">
+    <h1 class="display-4">Pong Game</h1>
+    <p class="lead">Use <b>W</b>/<b>S</b> or <b>↑</b>/<b>↓</b> to move your puck and return serves. First to 5 points wins!</p>
+  </div>
+
 <div class="tennis-center">
   <button id="tennisRestart" class="tennis-btn" style="display:none;">Restart</button>
 </div>
-<canvas id="tennisCanvas" width="1800" height="1100"></canvas>
+<canvas id="tennisCanvas"></canvas>
 <div class="tennis-center" id="tennisScore"></div>
 
 <script>
+(() => {
   const canvas = document.getElementById('tennisCanvas');
   const ctx = canvas.getContext('2d');
-  const width = canvas.width;
-  const height = canvas.height;
+  const width = 1200; // Canvas width
+  const height = 600; // Canvas height
+  canvas.width = width;
+  canvas.height = height;
+
+  // Center the canvas in the middle of the page
+  canvas.style.position = 'absolute';
+  canvas.style.top = '50%';
+  canvas.style.left = '50%';
+  canvas.style.transform = 'translate(-50%, -50%)';
 
   // Paddle settings
-  const paddleWidth = 12, paddleHeight = 80, paddleSpeed = 14; // Faster paddle
+  const paddleWidth = 12, paddleHeight = 80, paddleSpeed = 14;
   let playerY = height / 2 - paddleHeight / 2;
   let aiY = height / 2 - paddleHeight / 2;
-  let playerTargetY = playerY;
   let playerMoveDir = 0;
-
-  // Pointer lock helpers
-  function requestPointerLock() {
-    canvas.requestPointerLock =
-      canvas.requestPointerLock ||
-      canvas.mozRequestPointerLock ||
-      canvas.webkitRequestPointerLock;
-    if (canvas.requestPointerLock) canvas.requestPointerLock();
-  }
-
-  function pointerLockChange() {
-    // No-op, but could add UI feedback if desired
-  }
-
-  canvas.addEventListener('click', () => {
-    requestPointerLock();
-  });
-
-  document.addEventListener('pointerlockchange', pointerLockChange, false);
-  document.addEventListener('mozpointerlockchange', pointerLockChange, false);
-  document.addEventListener('webkitpointerlockchange', pointerLockChange, false);
-
-  canvas.addEventListener('mousemove', (e) => {
-    // If pointer is locked, use movementY for relative movement
-    if (
-      document.pointerLockElement === canvas ||
-      document.mozPointerLockElement === canvas ||
-      document.webkitPointerLockElement === canvas
-    ) {
-      playerTargetY += e.movementY * 1.5; // Scale for faster movement
-      playerTargetY = Math.max(0, Math.min(height - paddleHeight, playerTargetY));
-    } else {
-      // Fallback: absolute mouse position
-      const rect = canvas.getBoundingClientRect();
-      const mouseY = e.clientY - rect.top;
-      playerTargetY = Math.max(0, Math.min(height - paddleHeight, mouseY - paddleHeight / 2));
-    }
-  });
 
   // Ball settings
   let ballX = width / 2, ballY = height / 2;
@@ -110,6 +85,10 @@ gi    position: absolute;
   // Score
   let playerScore = 0, aiScore = 0;
   let gameOver = false;
+
+  // AI miss logic
+  let aiMissCounter = Math.floor(Math.random() * 10) + 1; // Random miss between 1-10 hits
+  let aiMissOffset = 0; // Offset for AI paddle when missing
 
   function drawCourt() {
     ctx.fillStyle = "#1a3d2f";
@@ -150,10 +129,10 @@ gi    position: absolute;
     ctx.restore();
   }
 
-  function resetBall() {
+  function resetBall(servingPlayer) {
     ballX = width / 2;
     ballY = height / 2;
-    ballSpeedX = 6 * (Math.random() > 0.5 ? 1 : -1);
+    ballSpeedX = servingPlayer === "player" ? 6 : -6; // Serve direction based on who lost the point
     ballSpeedY = 4 * (Math.random() > 0.5 ? 1 : -1);
   }
 
@@ -162,7 +141,7 @@ gi    position: absolute;
     aiScore = 0;
     playerY = height / 2 - paddleHeight / 2;
     aiY = height / 2 - paddleHeight / 2;
-    resetBall();
+    resetBall("player");
     gameOver = false;
     document.getElementById('tennisScore').textContent = '';
     document.getElementById('tennisRestart').style.display = 'none';
@@ -171,12 +150,8 @@ gi    position: absolute;
   function update() {
     if (gameOver) return;
 
-    // Smoothly move player paddle toward target
-    if (playerY < playerTargetY) {
-      playerY += Math.min(paddleSpeed, playerTargetY - playerY);
-    } else if (playerY > playerTargetY) {
-      playerY -= Math.min(paddleSpeed, playerY - playerTargetY);
-    }
+    // Player paddle movement
+    playerY += playerMoveDir * paddleSpeed;
     playerY = Math.max(0, Math.min(height - paddleHeight, playerY));
 
     // Ball movement
@@ -199,15 +174,25 @@ gi    position: absolute;
       ballSpeedY += ((ballY - (playerY + paddleHeight / 2)) / paddleHeight) * 6;
     }
 
-    // AI paddle collision
-    if (
-      ballX + ballRadius > width - 32 &&
-      ballY > aiY &&
-      ballY < aiY + paddleHeight
-    ) {
-      ballSpeedX *= -1.1;
-      ballX = width - 32 - ballRadius;
-      ballSpeedY += ((ballY - (aiY + paddleHeight / 2)) / paddleHeight) * 6;
+    // AI paddle collision or miss
+    if (ballX + ballRadius > width - 32) {
+      if (--aiMissCounter <= 0) {
+        aiMissOffset = Math.random() > 0.5 ? 50 : -50; // Randomly offset AI paddle too high or too low
+        aiY += aiMissOffset; // Apply the offset
+        aiMissCounter = Math.floor(Math.random() * 10) + 1; // Reset miss counter
+        playerScore++;
+        resetBall("player");
+      } else if (
+        ballY > aiY &&
+        ballY < aiY + paddleHeight
+      ) {
+        ballSpeedX *= -1.1;
+        ballX = width - 32 - ballRadius;
+        ballSpeedY += ((ballY - (aiY + paddleHeight / 2)) / paddleHeight) * 6;
+      } else {
+        aiScore++;
+        resetBall("ai");
+      }
     }
 
     // Score
@@ -218,16 +203,12 @@ gi    position: absolute;
         document.getElementById('tennisScore').innerHTML = "<b>Game Over!</b> You Lose!";
         document.getElementById('tennisRestart').style.display = '';
       }
-      resetBall();
+      resetBall("ai");
     }
-    if (ballX > width) {
-      playerScore++;
-      if (playerScore >= 5) {
-        gameOver = true;
-        document.getElementById('tennisScore').innerHTML = "<b>Game Over!</b> You Win!";
-        document.getElementById('tennisRestart').style.display = '';
-      }
-      resetBall();
+    if (playerScore >= 5) {
+      gameOver = true;
+      document.getElementById('tennisScore').innerHTML = "<b>Game Over!</b> You Win!";
+      document.getElementById('tennisRestart').style.display = '';
     }
 
     // AI movement (simple follow)
@@ -253,18 +234,22 @@ gi    position: absolute;
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'w' || e.key === 'W') {
-      playerTargetY -= paddleSpeed * 6;
-      playerTargetY = Math.max(0, playerTargetY);
+    if (e.key === 'w' || e.key === 'ArrowUp') {
+      playerMoveDir = -1; // Move up
     }
-    if (e.key === 's' || e.key === 'S') {
-      playerTargetY += paddleSpeed * 6;
-      playerTargetY = Math.min(height - paddleHeight, playerTargetY);
+    if (e.key === 's' || e.key === 'ArrowDown') {
+      playerMoveDir = 1; // Move down
     }
     if (e.key.toLowerCase() === 'r') {
       resetGame();
       draw();
       loop();
+    }
+  });
+
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'w' || e.key === 'ArrowUp' || e.key === 's' || e.key === 'ArrowDown') {
+      playerMoveDir = 0; // Stop movement
     }
   });
 
@@ -278,6 +263,7 @@ gi    position: absolute;
   resetGame();
   draw();
   loop();
+})();
 </script>
 
 <script>
