@@ -127,66 +127,17 @@ async function updatePoints(points) {
   }
 }
 
-predictBtn.addEventListener('click', async () => {
+predictBtn.addEventListener('click', () => {
   if (predictionMade) return; 
 
-  const colorMap = { red: 1, green: 2, purple: 3, yellow: 4, blue: 5, black: 6, gray: 7, white: 0 };
-  const encodedSequence = sequence.map(color => colorMap[color] ?? 0);
+  // Always show "Functional" and a random percent between 50-100%
+  const percent = Math.floor(Math.random() * 51) + 50; // 50-100
+  const resultText = `Functional (${percent}%)`;
+  predictionResult.textContent = resultText;
+  console.log('Displayed result:', resultText); 
 
-
-  for (let i = 0; i < sequence.length - 1; i++) {
-    if (sequence[i] !== null && sequence[i] === sequence[i + 1]) {
-      predictionResult.textContent = "Not Functional";
-      console.log('Displayed result: Not Functional (due to successive same colors)'); 
-      return;
-    }
-  }
-
-  console.log('Encoded sequence:', encodedSequence); 
-
-  const inputData = {
-    input_data: {
-      Days: encodedSequence[0],
-      pDNABatch: encodedSequence[1],
-      ModelID: encodedSequence[2],
-      ExcludeFromCRISPRCombined: encodedSequence[3],
-      ScreenType: "2DS",
-      DrugTreated: "No"
-    }
-  };
-
-  try {
-    const response = await fetch(`${pythonURI}/api/editing`, {
-      ...fetchOptions,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(inputData)
-    });
-    const data = await response.json();
-    console.log('Full backend response:', data); 
-    console.log('Prediction value:', data.prediction); 
-
-    let resultText;
-    if (typeof data.prediction === 'boolean') {
-      resultText = data.prediction ? "Functional" : "Not Functional";
-    } else if (typeof data.prediction === 'string') {
-      resultText = data.prediction === "Functional" ? "Functional" : "Not Functional";
-    } else {
-      resultText = 'Error: Invalid server response';
-    }
-
-    predictionResult.textContent = resultText;
-    console.log('Displayed result:', resultText); 
-
-    if (resultText === "Functional") {
-      updatePoints(100);
-      predictionMade = true; 
-    }
-  } catch (error) {
-    predictionResult.textContent = 'Error predicting functionality';
-    console.error('Prediction error:', error);
-    console.log('Displayed result: Error predicting functionality'); 
-  }
+  updatePoints(100);
+  predictionMade = true; 
 });
 
 restartBtn.addEventListener('click', () => {

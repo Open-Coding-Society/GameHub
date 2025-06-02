@@ -41,14 +41,39 @@ Author: Ian
     z-index: 10;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
-    #moneyDisplay {
+    #statusBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 10px;
     }
+    #moneyDisplay, #healthDisplay, #waveDisplay {
+    margin: 0 10px;
+    }
+    #towerTitle {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0px;
+    }
+    #towerDesc {
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: #333;
+    }
 </style>
 
-<div id="moneyDisplay">Money: $500</div>
+<div id="towerTitle">Tower Defense Game</div>
+<div id="towerDesc">Spend money to place monkeys down and protect the balloons from making it to the end!</div>
+<div id="statusBar">
+  <span id="moneyDisplay">Money: $1000</span>
+  <span id="healthDisplay">Health: 20</span>
+  <span id="waveDisplay">Wave: 0</span>
+</div>
 
 <div id="gameContainer">
   <canvas id="gameCanvas" width="900" height="500"></canvas>
@@ -72,17 +97,21 @@ Author: Ian
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
   const moneyDisplay = document.getElementById("moneyDisplay");
+  const healthDisplay = document.getElementById("healthDisplay");
+  const waveDisplay = document.getElementById("waveDisplay");
   const upgradePanel = document.getElementById("upgradePanel");
   const upgradeRangeBtn = document.getElementById("upgradeRange");
   const upgradeDamageBtn = document.getElementById("upgradeDamage");
   const sellMonkeyBtn = document.getElementById("sellMonkey");
   const startWaveBtn = document.getElementById("startWaveBtn");
 
-  let money = 500;
+  let money = 1000;
+  let health = 20;
   let currentWave = 0;
   let waveInProgress = false;
   let balloonsToSpawn = 0;
   let balloonSpawnInterval = null;
+  let gameOver = false;
 
   let placingType = null; // "dart", "sniper", "boomerang"
   let selectedMonkey = null;
@@ -160,8 +189,8 @@ Author: Ian
       super(x, y, 200);
       this.type = "dart";
       this.damage = 1;
-      this.range = 100;
-      this.fireRate = 40;
+      this.range = 90;
+      this.fireRate = 25; // fast fire
     }
   }
 
@@ -169,9 +198,9 @@ Author: Ian
     constructor(x, y) {
       super(x, y, 300);
       this.type = "sniper";
-      this.damage = 5;
+      this.damage = 6;
       this.range = 250;
-      this.fireRate = 100;
+      this.fireRate = 80; // slow fire
     }
     draw() {
       ctx.save();
@@ -201,8 +230,8 @@ Author: Ian
       super(x, y, 250);
       this.type = "boomerang";
       this.damage = 2;
-      this.range = 120;
-      this.fireRate = 60;
+      this.range = 140;
+      this.fireRate = 45; // medium fire
     }
     draw() {
       ctx.save();
@@ -229,7 +258,25 @@ Author: Ian
         ctx.stroke();
       }
     }
+    shoot(target) {
+      // Hit up to 3 balloons in a row within range
+      const pierce = 3;
+      const inRange = balloons.filter(b => dist(this.x, this.y, b.x, b.y) <= this.range && !b.isPopped);
+      if (inRange.length > 0) {
+        for (let i = 0; i < Math.min(pierce, inRange.length); i++) {
+          shootProjectile(this, inRange[i]);
+        }
+      }
+    }
   }
+
+  // Store base HP for each balloon type
+  const BASE_BALLOON_HP = {
+    red: 3,
+    blue: 6,
+    green: 10,
+    gray: 5
+  };
 
   // Balloon class with different types and HP
   class Balloon {
@@ -238,24 +285,33 @@ Author: Ian
       this.x = path[0].x;
       this.y = path[0].y;
       this.pathIndex = 0;
-      this.speed = 1 + currentWave * 0.1;
 
+      // Double HP every wave (wave 1 = x2, wave 2 = x4, etc.)
+      const hpMultiplier = Math.pow(2, Math.max(0, currentWave - 1));
       if (type === "red") {
-        this.hp = 3 + currentWave;
+        this.hp = BASE_BALLOON_HP.red * hpMultiplier;
+        this.maxHp = this.hp;
         this.color = "red";
-        this.reward = 10;
+        this.reward = 100;
+        this.speed = (1 + currentWave * 0.1) * 3;
       } else if (type === "blue") {
-        this.hp = 6 + currentWave * 2;
+        this.hp = BASE_BALLOON_HP.blue * hpMultiplier;
+        this.maxHp = this.hp;
         this.color = "blue";
-        this.reward = 15;
+        this.reward = 150;
+        this.speed = (1 + currentWave * 0.1) * 2;
       } else if (type === "green") {
-        this.hp = 10 + currentWave * 3;
+        this.hp = BASE_BALLOON_HP.green * hpMultiplier;
+        this.maxHp = this.hp;
         this.color = "green";
-        this.reward = 25;
+        this.reward = 200;
+        this.speed = 1 + currentWave * 0.1;
       } else {
-        this.hp = 5;
+        this.hp = BASE_BALLOON_HP.gray * hpMultiplier;
+        this.maxHp = this.hp;
         this.color = "gray";
-        this.reward = 10;
+        this.reward = 100;
+        this.speed = 1 + currentWave * 0.1;
       }
       this.radius = 12;
       this.isPopped = false;
@@ -291,7 +347,12 @@ Author: Ian
       ctx.fillStyle = "black";
       ctx.fillRect(this.x - this.radius, this.y - this.radius - 10, this.radius * 2, 5);
       ctx.fillStyle = "lime";
-      ctx.fillRect(this.x - this.radius, this.y - this.radius - 10, this.radius * 2 * (this.hp / (10 + currentWave * 3)), 5);
+      ctx.fillRect(
+        this.x - this.radius,
+        this.y - this.radius - 10,
+        this.radius * 2 * (this.hp / this.maxHp),
+        5
+      );
     }
   }
 
@@ -418,20 +479,32 @@ Author: Ian
   function updateMoneyDisplay() {
     moneyDisplay.textContent = `Money: $${money}`;
   }
+  // Update health display text
+  function updateHealthDisplay() {
+    healthDisplay.textContent = `Health: ${health}`;
+  }
+  // Update wave display text
+  function updateWaveDisplay() {
+    waveDisplay.textContent = `Wave: ${currentWave}`;
+  }
 
   // Start wave spawning balloons
   function startWave() {
-    if (waveInProgress) return;
+    if (waveInProgress || gameOver) return;
+    waveInProgress = true;
+    startWaveBtn.disabled = true;
 
     currentWave++;
-    balloonsToSpawn = 10 + currentWave * 5;
-    waveInProgress = true;
+    updateWaveDisplay();
+    // Increase difficulty: 10 + (currentWave-1)*10
+    balloonsToSpawn = 10 + (currentWave - 1) * 10;
 
     balloonSpawnInterval = setInterval(() => {
       if (balloonsToSpawn <= 0) {
         clearInterval(balloonSpawnInterval);
         balloonSpawnInterval = null;
         waveInProgress = false;
+        startWaveBtn.disabled = false;
         return;
       }
       balloonsToSpawn--;
@@ -496,6 +569,7 @@ Author: Ian
 
   // Main update function
   function update() {
+    if (gameOver) return;
     // Update monkeys
     monkeys.forEach(m => m.update());
 
@@ -504,9 +578,17 @@ Author: Ian
     balloons = balloons.filter(b => {
       const alive = b.update();
       if (!alive) {
-        // Balloon reached end - remove and penalize player?
-        money -= 50;
-        updateMoneyDisplay();
+        // Balloon reached end - lose 1 health
+        health -= 1;
+        updateHealthDisplay();
+        if (health <= 0 && !gameOver) {
+          health = 0;
+          updateHealthDisplay();
+          gameOver = true;
+          setTimeout(() => {
+            alert("Game Over! You lost all your health.");
+          }, 100);
+        }
       }
       return alive;
     });
@@ -550,18 +632,22 @@ Author: Ian
 
   // Button handlers
   document.getElementById("placeDart").onclick = () => {
+    if (gameOver) return;
     placingType = "dart";
     hideUpgradePanel();
   };
   document.getElementById("placeSniper").onclick = () => {
+    if (gameOver) return;
     placingType = "sniper";
     hideUpgradePanel();
   };
   document.getElementById("placeBoomerang").onclick = () => {
+    if (gameOver) return;
     placingType = "boomerang";
     hideUpgradePanel();
   };
   startWaveBtn.onclick = () => {
+    if (gameOver) return;
     startWave();
     hideUpgradePanel();
   };
@@ -578,6 +664,7 @@ Author: Ian
 
   // Canvas click handler for placing or selecting monkeys
   canvas.addEventListener("click", (e) => {
+    if (gameOver) return;
     const rect = canvas.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
@@ -612,6 +699,8 @@ Author: Ian
 
   // Initial draw and start game loop
   updateMoneyDisplay();
+  updateHealthDisplay();
+  updateWaveDisplay();
   requestAnimationFrame(gameLoop);
 
 })();
