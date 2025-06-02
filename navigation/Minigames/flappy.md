@@ -107,8 +107,9 @@ Author: Aarush
 
   // Pipes
   let pipes = [];
-  const pipeWidth = 60;
-  const pipeGap = 150;
+  const pipeWidth = 90; // Increased from 60 to 90 for bigger pipes
+  const pipeGap = 200;  // Increased from 150 to 200 for easier passage
+  const pipeDistance = 180; // NEW: Distance between pipes (frames), increased for farther spacing
   let pipeSpeed = Number(speedRange.value);
   let frame = 0;
   let score = 0;
@@ -242,7 +243,7 @@ Author: Aarush
     bird.y += bird.velocity;
 
     // Add pipes
-    if (frame % 90 === 0) {
+    if (frame % pipeDistance === 0) { // Use pipeDistance instead of 90
       const top = Math.random() * (height - pipeGap - 120) + 40;
       pipes.push({
         x: width,

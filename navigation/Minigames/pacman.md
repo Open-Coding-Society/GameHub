@@ -49,7 +49,7 @@ Author: Aarush
 </style>
 
 <h1 style="text-align: center;">Pacman Game</h1>
-<p style="text-align: center;">Use W, A, S, D keys to move Pacman! Hold Shift + Direction to shoot!</p>
+<p style="text-align: center;">Use W, A, S, D keys to move Pacman! Click Space to shoot in the direction you are looking!</p>
 
 <p class="restart-hint">Press <b>R</b> to restart</p>
 
@@ -124,11 +124,20 @@ Author: Aarush
     ghostSpeedValue.textContent = ghostSpeedSlider.value;
   }
 
+  // Set base speed of Pacman to 20
+  pacmanSpeed = 20 / 4; // Convert to px/frame (scaled for smoothness)
+
+  // Update speed slider to reflect base speed
+  pacmanSpeedSlider.value = 20;
+  pacmanSpeedValue.textContent = pacmanSpeedSlider.value;
+
+  // Ensure speed updates correctly when slider changes
   pacmanSpeedSlider.addEventListener('input', updateSpeedFromSliders);
   ghostSpeedSlider.addEventListener('input', updateSpeedFromSliders);
   updateSpeedFromSliders();
 
   // Generate maze randomly based on difficulty
+  // Ensure maze generation allows access to all orbs
   function generateMaze(difficulty) {
     const maze = [];
     let wallChance;
@@ -140,16 +149,24 @@ Author: Aarush
       const row = [];
       for (let c = 0; c < cols; c++) {
         if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) {
-          row.push(0);
+          row.push(0); // Border walls
           continue;
         }
         const safeZone =
           (Math.abs(r - 1) <= 1 && Math.abs(c - 1) <= 1) ||
           (Math.abs(r - Math.floor(rows / 2)) <= 2 && Math.abs(c - Math.floor(cols / 2)) <= 2);
         if (!safeZone && Math.random() < wallChance) {
-          row.push(0);
+          // Prevent fully surrounding an orb
+          const neighbors = [
+            [r - 1, c],
+            [r + 1, c],
+            [r, c - 1],
+            [r, c + 1]
+          ];
+          const surrounded = neighbors.every(([nr, nc]) => maze[nr]?.[nc] === 0 || nr === 0 || nr === rows - 1 || nc === 0 || nc === cols - 1);
+          row.push(surrounded ? 1 : 0); // Place orb if surrounded
         } else {
-          row.push(1);
+          row.push(Math.random() < 0.5 ? 1 : 2); // 1 = orb, 2 = empty
         }
       }
       maze.push(row);
@@ -255,9 +272,9 @@ Author: Aarush
     ctx.fill();
   }
 
-  // Draw bullets smoothly
+  // Change bullets to red color for differentiation
   function drawBullets() {
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'red'; // Change bullet color to red
     for (const bullet of bullets) {
       ctx.beginPath();
       ctx.arc(bullet.pixelX + tileSize / 2, bullet.pixelY + tileSize / 2, tileSize / 6, 0, Math.PI * 2);
@@ -361,10 +378,10 @@ Author: Aarush
         // Check collisions
         if (!canMoveTo(bullet.x, bullet.y)) return false; // hits wall - remove
 
-        // Check ghosts
         for (let i = 0; i < ghosts.length; i++) {
           if (ghosts[i].x === bullet.x && ghosts[i].y === bullet.y) {
-            ghosts.splice(i, 1);
+            const killedGhost = ghosts.splice(i, 1)[0]; // Remove ghost and store it
+            respawnGhost(killedGhost); // Respawn ghost after 10 seconds
             return false; // bullet disappears
           }
         }
@@ -387,20 +404,72 @@ Author: Aarush
     }
   }
 
-  // Check if any ghost collides with Pacman
+  // Check if all orbs are collected
+  function checkWinCondition() {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (maze[r][c] === 1) return false; // Orb still exists
+      }
+    }
+    return true; // All orbs collected
+  }
+
+  // Update checkCollisions to show "You Win!" if all orbs are collected
   function checkCollisions() {
     for (const ghost of ghosts) {
       const px = Math.round(pacman.pixelX / tileSize);
       const py = Math.round(pacman.pixelY / tileSize);
       if (ghost.x === px && ghost.y === py) {
         gameOver = true;
+        ctx.fillStyle = 'red';
+        ctx.font = '48px Segoe UI';
+        ctx.textAlign = 'center';
+        ctx.fillText('Press R to Restart', canvas.width / 2, canvas.height / 2); // Only show restart text
       }
     }
+
+    if (checkWinCondition()) {
+      gameOver = true;
+      ctx.fillStyle = 'green';
+      ctx.font = '48px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('You Win!', canvas.width / 2, canvas.height / 2); // Show win text
+    }
+  }
+
+  // Respawn ghosts near the middle after 10 seconds
+  function respawnGhost(ghost) {
+    setTimeout(() => {
+      const centerX = Math.floor(cols / 2);
+      const centerY = Math.floor(rows / 2);
+      let newX, newY;
+
+      // Ensure the ghost spawns at least 10 tiles away from Pacman and not on walls
+      do {
+        newX = centerX + Math.floor(Math.random() * 5) - 2;
+        newY = centerY + Math.floor(Math.random() * 5) - 2;
+      } while (
+        Math.abs(newX - pacman.x) < 10 &&
+        Math.abs(newY - pacman.y) < 10 &&
+        !canMoveTo(newX, newY)
+      );
+
+      ghosts.push({
+        x: newX,
+        y: newY,
+        pixelX: newX * tileSize,
+        pixelY: newY * tileSize,
+        dx: 1,
+        dy: 0,
+        color: ghost.color, // Same color as the ghost killed
+      });
+    }, 10000); // 10 seconds delay
   }
 
   // Handle keyboard input
   let inputDir = null;
 
+  // Prevent space key from scrolling the page and allow shooting
   document.addEventListener('keydown', (e) => {
     if (gameOver) return;
 
@@ -420,21 +489,30 @@ Author: Aarush
 
     if (key in directionMap) {
       inputDir = directionMap[key];
+    }
 
-      // Shoot bullet if shift held
-      if (e.shiftKey) {
-        // Add bullet at pacman's current tile with direction
+    if (e.code === 'Space') {
+      e.preventDefault(); // Prevent page from scrolling down
+      // Shoot bullet in Pacman's current direction
+      if (pacman.dx !== 0 || pacman.dy !== 0) {
         bullets.push({
           x: pacman.x,
           y: pacman.y,
-          dx: inputDir.dx,
-          dy: inputDir.dy,
+          dx: pacman.dx,
+          dy: pacman.dy,
           pixelX: pacman.pixelX,
           pixelY: pacman.pixelY,
           targetX: undefined,
           targetY: undefined,
         });
       }
+    }
+  });
+
+  // Ensure pressing 'R' restarts the level after collision
+  document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'r' && gameOver) {
+      resetGame();
     }
   });
 
@@ -455,10 +533,13 @@ Author: Aarush
     inputDir = null;
     bullets = [];
     initGhosts();
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
   }
 
   difficultySelect.addEventListener('change', resetGame);
-  document.getElementById('restartBtn').addEventListener('click', resetGame);
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    resetGame();
+  });
 
   // Main game loop using requestAnimationFrame
   function gameLoop() {
@@ -508,7 +589,7 @@ Author: Aarush
       ctx.fillStyle = 'red';
       ctx.font = '48px Segoe UI';
       ctx.textAlign = 'center';
-      ctx.fillText('Game Over! Press R to Restart', canvas.width / 2, canvas.height / 2);
+      ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2); // Only show "Game Over!" text
     }
 
     requestAnimationFrame(gameLoop);
