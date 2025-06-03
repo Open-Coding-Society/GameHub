@@ -140,8 +140,14 @@ Author: Ian & Zach
     margin: 0; /* Remove default margins */
   }
   .crafting-menu {
-    display: none; /* Hide crafting menu */
+    margin-left: -450px; 
   }
+  .shop-menu {
+    margin-left: 0px; 
+}
+.information-menu {
+  margin-left: 0px; 
+}
 </style>
 
 <div class="container py-4">
@@ -199,7 +205,7 @@ Author: Ian & Zach
 
   <!-- New row for Crafting, Shop, and Information boxes -->
   <div class="row mt-4">
-    <div class="col-lg-4">
+    <div class="col-lg-4 crafting-menu">
       <div class="card mb-3">
         <div class="card-header">Crafting</div>
         <div class="card-body">
@@ -207,7 +213,7 @@ Author: Ian & Zach
         </div>
       </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 shop-menu">
       <div class="card mb-3">
         <div class="card-header">Shop</div>
         <div class="card-body">
@@ -215,7 +221,7 @@ Author: Ian & Zach
         </div>
       </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 information-menu">
       <div class="card mb-3">
         <div class="card-header">Information</div>
         <div class="card-body">
