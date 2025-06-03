@@ -259,3 +259,47 @@ In the front matter, you can also define things like a title and description for
 - The type value will tell us which column this is going to appear under the time box supported pages.  The "ccc" stands for Code, Code, Code.
 
 - The courses will tell us which menu item it will be under, in this case, the `csa` menu, and the `week` tells it what row (week) it will appear under that menu.
+
+---
+
+## Technical Design Overview
+
+### Architecture Diagram
+
+The technical design of Genome Gamers follows a modular architecture that integrates the front-end, backend, and deployment pipelines. Below is a high-level overview of the architecture:
+
+- **Frontend**: Built using HTML, CSS, and JavaScript, leveraging Jekyll for static site generation. The front-end is styled using SASS and integrates with GitHub APIs for dynamic content. The interactive game hub is implemented using HTML5 Canvas and JavaScript.
+
+A detailed architecture diagram is available on [Draw.io](https://app.diagrams.net/). You can find the diagram file in the repository under `docs/architecture.drawio`.
+
+---
+
+## Technical Description
+
+### Frontend Design
+
+The front-end is based on the structure of the website, which includes:
+
+1. **Game Hub**: The index page (`index.md`) serves as the central hub for navigating different worlds and minigames. It features:
+   - Interactive elements like NPC dialogues and skin customization.
+   - Dynamic rendering using HTML5 Canvas.
+   - Background music and visual styling for an immersive experience.
+2. **Navigation Bar**: Configured in `_config.yml` to provide easy access to different sections of the website.
+3. **Styling**: Custom themes are applied using SASS, with options to switch themes in `_sass/minima/custom-styles.scss`.
+
+### Interactive Features
+
+The game hub includes several interactive features:
+
+- **NPC Dialogues**: NPCs provide hints and guidance for navigating different worlds. Dialogues are dynamically rendered using JavaScript.
+- **Skin Customization**: Players can customize their character's appearance using a modal interface.
+- **Game Worlds**: Each world is represented by an interactive object on the canvas, allowing players to enter different experiences.
+
+---
+
+## References
+
+- [Draw.io Diagram](https://app.diagrams.net/)
+- [Jekyll Documentation](https://jekyllrb.com/)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [HTML5 Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
