@@ -6,746 +6,308 @@ permalink: /farming
 Author: Zach & Ian
 ---
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harvest Haven</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-  body {
-    background-color: #f8f9fa;
-    font-family: 'Arial', sans-serif;
-    overflow-x: scroll; /* Enable horizontal scrolling */
-    overflow-y: scroll; /* Keep vertical scrolling */
-    width: 200vw; /* Extend width to allow scrolling beyond normal boundaries */
-  }
-  #gameCanvas {
-    width: 960px; /* Increased width by 1.25x */
-    height: 700px; /* Increased height by 1.25x */
-    border: 3px solid #495057;
-    border-radius: 5px;
-    background-color: #8b9d83;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    image-rendering: pixelated;
-    margin-left: -445px; /* Moved left by 5px */
-  }
-  .inventory-slot {
-    width: 60px;
-    height: 60px;
-    border: 2px solid #6c757d;
-    border-radius: 5px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 3px;
-    background-color: #e9ecef;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .inventory-slot.selected-slot {
-    border: 3px solid #0d6efd;
-    background-color: #cfe2ff;
-    animation: slotPulse 0.5s;
-  }
-  @keyframes slotPulse {
-    0% { box-shadow: 0 0 0 0 #0d6efd44; }
-    100% { box-shadow: 0 0 10px 5px #0d6efd22; }
-  }
-  .inventory-slot .slot-label {
-    font-size: 0.8rem; /* Slightly smaller font size */
-    text-align: center; /* Center the text */
-    max-width: 15ch; /* Limit text to 15 characters */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: absolute;
-    bottom: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, 50%); /* Adjust for perfect centering */
-    color: #495057;
-    background: #fff8;
-    border-radius: 3px;
-    padding: 0 2px;
-  }
-  .card {
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  .card-header {
-    font-weight: bold;
-    background-color: #e9ecef;
-  }
-  .controls {
-    background-color: #e9ecef;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  .btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-  }
-  .modal-content {
-    border-radius: 10px;
-  }
-  .merchant-item {
-    transition: all 0.2s;
-  }
-  .merchant-item:hover {
-    transform: translateY(-3px);
-  }
-  .btn-coins {
-    background: #28a745 !important; /* Green button */
-    color: #ffffff !important;
-    border: none !important;
-    margin-left: 5px; /* Adjusted spacing */
-    padding: 8px 12px; /* Slightly smaller size */
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  .btn-coins:hover {
-    background: #218838 !important; /* Darker green on hover */
-  }
-  .popup-modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #ffffff;
-    border: 2px solid #28a745;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  .popup-modal .close-btn {
-    background: #dc3545;
-    color: #ffffff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    float: right;
-  }
-  .popup-modal .close-btn:hover {
-    background: #c82333;
-  }
-  .title-section {
-    margin-left: -800px; /* Move title 1500px to the left */
-  }
-  hr {
-    width: 100%; /* Make the horizontal rule span the full width of the screen */
-    margin: 0; /* Remove default margins */
-  }
-  .crafting-menu {
-    margin-left: -450px; 
-  }
-  .shop-menu {
-    margin-left: 0px; 
-}
-.information-menu {
-  margin-left: 0px; 
-}
-</style>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Farming Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 2rem;
+    }
 
-<div class="container py-4">
-  <div class="text-center mb-4 title-section"> <!-- Updated margin for left alignment -->
-    <h1 class="display-4">Harvest Haven</h1>
-    <p class="lead d-inline">A Farming Adventure Game -</p>
-    <button class="btn-coins d-inline" id="coinsBtn">Controls</button> <!-- Added Controls button -->
+    .farm-container {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .plot {
+      width: 80px;
+      height: 80px;
+      background-color: #a0d468;
+      border: 2px solid #6c757d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+
+    .tilled { background-color: #c3e6cb; }
+    .watered { background-color: #ffeeba; }
+    .planted { background-color: #f5c6cb; }
+    .grown { background-color: #d4edda; }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      display: none;
+    }
+
+    .popup ul {
+      text-align: left;
+    }
+
+    .popup .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container text-center">
+    <h1 class="mb-4">🌻 Simple Farming Game 🧑‍🌾</h1>
+
+    <div class="mb-3">
+      <span id="gold">Gold: 50</span>
+    </div>
+
+    <div class="mb-3 d-flex justify-content-center">
+      <button class="btn btn-secondary me-2" onclick="selectTool('hoe')">Hoe</button>
+      <button class="btn btn-primary me-2" onclick="selectTool('water')">Water</button>
+      <button class="btn btn-success me-2" onclick="buySeed('parsnip', 1)">Buy Parsnip Seed (Cost: 1 gold)</button>
+      <button class="btn btn-success me-2" onclick="buySeed('tomato', 2)">Buy Tomato Seed (Cost: 2 gold)</button>
+      <button class="btn btn-success" onclick="buySeed('carrot', 3)">Buy Carrot Seed (Cost: 3 gold)</button>
+    </div>
+
+    <div class="farm-container" id="farm"></div>
+
+    <div class="mt-3 d-flex justify-content-center">
+      <button class="btn btn-info me-2" onclick="showInstructions()">How to Play</button>
+      <button class="btn btn-warning me-2" onclick="sellCrops()">Sell Crops</button>
+      <button class="btn btn-danger" onclick="buyPortal()">Buy Portal (1000 Gold)</button>
+    </div>
+
+    <div class="mt-3" id="message"></div>
   </div>
 
-  <!-- Controls Popup -->
-  <div id="controlsPopup" class="popup-modal">
-    <button class="close-btn" onclick="closePopup('controlsPopup')">&times;</button>
-    <h4>Controls</h4>
-    <ul style="margin-bottom:0;">
-      <li><span style="color:gray;">Movement</span>: Use WASD to move</li>
-      <li><span style="color:green;">Interact</span>: Click E or an object when next to it to interact</li>
-      <li><span style="color:#003366;">Select</span>: Click on items from inventory to select</li>
-      <li><span style="color:purple;">Shipping Bin</span>: Select item from inventory and sell item to get gold</li>
-      <li><span style="color:orange;">Crafting</span>: Click on upgrade and spend reosurces for faster materials</li>
-      <li><span style="color:red;">Shop</span>: Click to buy seeds and materials to make gold, and portal to end game</li>
-      <li><span style="color:#00bfff;">Merchant</span>: Click to interact with merchant to find better deals on items</li>
+  <div class="popup" id="instructionsPopup">
+    <span class="close-btn" onclick="closeInstructions()">✖</span>
+    <h3>How to Play</h3>
+    <ul>
+      <li>Use the Hoe to till soil.</li>
+      <li>Buy seeds and plant them in tilled soil.</li>
+      <li>Water planted seeds to start growth.</li>
+      <li>Wait for crops to grow.</li>
+      <li>Sell grown crops for gold.</li>
+      <li>Buy the Portal for 1000 gold to win the game!</li>
     </ul>
   </div>
 
-  <div class="row">
-    <div class="col-lg-7">
-      <canvas id="gameCanvas" width="955" height="955" tabindex="0"></canvas> <!-- Updated dimensions -->
-    </div>
-    <div class="col-lg-5 d-flex flex-column">
-      <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <span>Player Inventory</span>
-          <span class="badge bg-primary">7 empty slots</span>
-        </div>
-        <div class="card-body" id="inventory">
-          <!-- Inventory slots will be generated by JS -->
-        </div>
-      </div>
-      <div class="card mb-3">
-        <div class="card-header">Stats</div>
-        <div class="card-body">
-          <p><strong>Gold:</strong> <span id="coins" class="badge bg-success">100</span></p>
-          <p><strong>Day:</strong> <span id="day" class="badge bg-info">1</span></p>
-          <p><strong>Time:</strong> <span id="time" class="badge bg-secondary">12:00 AM</span></p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">Shipping Bin</div>
-        <div class="card-body">
-          <p id="currentTool">None selected</p>
-        </div>
-      </div>
-    </div>
+  <div class="popup" id="portalPopup" style="display: none;">
+    <h3>Congratulations! You bought the Portal!</h3>
+    <button class="btn btn-success me-2" onclick="continuePlaying()">Continue Playing</button>
+    <button class="btn btn-danger" onclick="restartGame()">Restart Game</button>
   </div>
 
-  <!-- New row for Crafting, Shop, and Information boxes -->
-  <div class="row mt-4">
-    <div class="col-lg-4 crafting-menu">
-      <div class="card mb-3">
-        <div class="card-header">Crafting</div>
-        <div class="card-body">
-           <li><span style="color:#FFD580;">Stone Axe</span>: 3 stone, 2 wood</li>
-      <li><span style="color:#FFD580;">Stone Pickaxe</span>: 3 stone, 2 wood</li>
-      <li><span style="color:#FFD580;">Stone Shovel</span>: 1 stone, 2 wood</li>
-      <li><span style="color:#FFD580;">Stone Hoe</span>: 2 stone, 2 wood</li>
-      <li><span style="color:#FFD580;">Stone Watering Can</span>: 5 stone</li>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 shop-menu">
-      <div class="card mb-3">
-        <div class="card-header">Shop</div>
-        <div class="card-body">
-           <li><span style="color:#964B00;">Parsnip Seeds</span>: 50 gold</li>
-      <li><span style="color:#964B00;">Tomato Seeds</span>: 50 gold</li>
-      <li><span style="color:#964B00;">Carrot Seeds</span>: 50 gold</li>
-      <li><span style="color:#964B00;">Gold</span>: 100 gold</li>
-      <li><span style="color:#964B00;">Diamond</span>: 200 gold</li>
-      <li><span style="color:#964B00;">Portal - Ends Game</span>: 5000 gold</li>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-9 information-menu"> <!-- Changed from col-lg-4 to col-lg-9 -->
-      <div class="card mb-3">
-        <div class="card-header">Information</div>
-        <div class="card-body">
-      <ul>
-        <li><span style="color:#6c757d;">Crops</span>: Hoe soil, water it, and plant seeds. Crops grow in 2 days and can be harvested for profit.</li>
-        <li><span style="color:#6c757d;">Inventory</span>: Holds up to 36 slots. Each slot can stack up to 10 items of the same type.</li>
-        <li><span style="color:#6c757d;">Shipping Bin</span>: Sell items like crops, seeds, ores, and materials for gold. Hover to select quantity.</li>
-        <li><span style="color:#6c757d;">Crafting</span>: Upgrade tools using wood, stone, gold, or diamond. Higher tiers improve efficiency.</li>
-        <li><span style="color:#6c757d;">Shop</span>: Buy seeds, gold, diamond, and a portal to end the game. Seeds cost 50 gold each.</li>
-        <li><span style="color:#6c757d;">Tools</span>: Start with basic tools. Upgraded tools double material output or speed up crop growth.</li>
-        <li><span style="color:#6c757d;">Gold/Diamond</span>: Gold sells for 50 coins, diamond sells for 100 coins. Use them for crafting upgrades.</li>
-        <li><span style="color:#6c757d;">Portal</span>: Costs 5000 gold. Ends the game and lets you continue or restart.</li>
-        <li><span style="color:#6c757d;">Time</span>: Each in-game hour lasts 80 seconds. Days progress at midnight, resetting the map.</li>
-        <li><span style="color:#6c757d;">Merchant</span>: Interact to buy items or sell crops and ores for better deals.</li>
-      </ul>
-    </div>
-      </div>
-    </div>
+  <div class="popup" id="goldPopup" style="display: none;">
+    <h3>Out of Gold!</h3>
+    <p>You have been given 20 gold to buy more crops.</p>
+    <button class="btn btn-primary" onclick="closeGoldPopup()">OK</button>
   </div>
-</div>
 
-<!-- Merchant Modal -->
-<div class="modal fade" id="merchantModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Merchant's Shop</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-info">
-          "Hello farmer! What can I do for you today?"
-        </div>
-        <h6 class="mt-3 mb-2">Buy Items</h6>
-        <div class="row" id="merchantItems">
-          <!-- Merchant items will be populated by JS -->
-        </div>
-        <hr>
-        <h6 class="mt-3 mb-2">Sell Items</h6>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <button class="btn btn-success sell-btn">Sell All Crops</button>
-            <button class="btn btn-success sell-btn ms-2">Sell All Ores</button>
-          </div>
-          <div>
-            <button class="btn btn-danger sell-btn">Sell Everything</button>
-          </div>
-        </div>
-        <div id="sellPreview" class="bg-light p-2 rounded">
-          <!-- Items to sell will appear here -->
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+  <script>
+    const farm = document.getElementById('farm');
+    const goldDisplay = document.getElementById('gold');
+    const messageDisplay = document.getElementById('message');
+    const instructionsPopup = document.getElementById('instructionsPopup');
+    const portalPopup = document.getElementById('portalPopup');
+    const goldPopup = document.getElementById('goldPopup');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Ensure the Controls button functionality works
-  document.getElementById('coinsBtn').onclick = function() {
-    const coinsPopup = document.getElementById('controlsPopup');
-    if (coinsPopup) {
-      coinsPopup.style.display = 'block';
-    } else {
-      console.error('Controls popup element not found.');
-    }
-  };
-function closePopup(popupId) {
-    const popup = document.getElementById(popupId);
-    if (popup) {
-      popup.style.display = 'none';
-    } else {
-      console.error(`Popup with ID "${popupId}" not found.`);
-    }
-  }
- // --- Emoji assets ---
-  const EMOJIS = {
-    player: "👨‍🌾",
-    merchant: "🧑‍🦳",
-    wheat: "🌾",
-    carrot: "🥕",
-    pumpkin: "🎃",
-    copper: "🟤",
-    iron: "⚪",
-    gold: "🟡",
-    diamond: "💎",
-    tilled: "⬛",
-    grass: "🟩",
-    water: "🟦",
-    dirt: "🟫",
-    house: "🏠",
-    mailbox: "📬",
-    bed: "🛏️",
-    chest: "📦"
-  };
-  const TILE_SIZE = 48; // Increased tile size for 20x20 grid
-  const PLAYER_SIZE = 64; // Doubled the player size
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
-  const coinsDisplay = document.getElementById('coins');
-  const dayDisplay = document.getElementById('day');
-  const timeDisplay = document.getElementById('time');
-  const inventoryDiv = document.getElementById('inventory');
-  const currentToolDisplay = document.getElementById('currentTool');
-  let merchantModal = null;
-  // --- Game State ---
-  const gameState = {
-    player: {
-      x: canvas.width / 2,
-      y: canvas.height / 2,
-      speed: 5, // Increased speed by 1.25x (original was 4)
-      direction: 'down',
-      inventory: Array(36).fill(null), // 36 slots
-      coins: 100,
-      selectedSlot: null,
-      inventoryPage: 0, // Tracks the current inventory page (0, 1, 2)
-      tools: {
-        woodenPickaxe: { name: 'Wooden Pickaxe', type: 'tool', uses: Infinity, action: 'mine', emoji: "⛏️" },
-        woodenAxe: { name: 'Wooden Axe', type: 'tool', uses: Infinity, action: 'chop', emoji: "🪓" },
-        woodenShovel: { name: 'Wooden Shovel', type: 'tool', uses: Infinity, action: 'dig', emoji: "<img src='{{ site.baseurl }}/images/shovel.png' alt='Shovel' style='width: 48px; height: 48px; position: relative; top: 10px;'>" },
-        woodenHoe: { name: 'Wooden Hoe', type: 'tool', uses: Infinity, action: 'till', emoji: "<img src='{{ site.baseurl }}/images/hoe.png' alt='Hoe' style='width: 48px; height: 48px; position: relative; top: 10px;'>" },
-        woodenWateringCan: { name: 'Wooden Watering Can', type: 'tool', uses: Infinity, action: 'water', emoji: "<img src='{{ site.baseurl }}/images/can.png' alt='Watering Can' style='width: 48px; height: 48px; position: relative; top: 10px;'>"},
-      }
-    },
-    map: {
-      tiles: [],
-      width: 20, // Fixed width for 20x20 grid
-      height: 20, // Fixed height for 20x20 grid
-      tileSize: TILE_SIZE,
-      homeBase: { x: 10, y: 9 }, // Adjusted positions for new grid
-      mailboxPosition: { x: 11, y: 9 },
-      bedPosition: { x: 10, y: 10 },
-      chestPosition: { x: 9, y: 9 },
-      merchantPosition: { x: 3, y: 3 }
-    },
-    crops: [],
-    ores: [],
-    merchant: {
-      items: [
-        { name: 'Wheat Seed', type: 'seed', price: 10, rarity: 'common', growthTime: 3, produces: 'Wheat', emoji: EMOJIS.wheat },
-        { name: 'Carrot Seed', type: 'seed', price: 20, rarity: 'uncommon', growthTime: 5, produces: 'Carrot', emoji: EMOJIS.carrot },
-        { name: 'Pumpkin Seed', type: 'seed', price: 50, rarity: 'rare', growthTime: 8, produces: 'Pumpkin', emoji: EMOJIS.pumpkin },
-        { name: 'Fertilizer', type: 'item', price: 30, effect: 'growthSpeed', value: 0.8, emoji: "💩" }
-      ]
-    },
-    time: {
-      day: 1, // Start at day 1
-      hour: 12, // Start at 12:00 AM
-      minute: 0,
-      isPM: false, // Start at AM
-      paused: true // Start paused for 5 seconds
-    },
-    keys: { w: false, a: false, s: false, d: false, e: false }
-  };
-// Prepopulate first page slots
-gameState.player.inventory[0] = gameState.player.tools.woodenAxe;
-gameState.player.inventory[1] = gameState.player.tools.woodenPickaxe;
-gameState.player.inventory[2] = gameState.player.tools.woodenShovel;
-gameState.player.inventory[3] = gameState.player.tools.woodenHoe;
-gameState.player.inventory[4] = gameState.player.tools.woodenWateringCan;
-// --- Map Generation ---
-  function generateMap() {
-    for (let y = 0; y < gameState.map.height; y++) {
-      gameState.map.tiles[y] = [];
-      for (let x = 0; x < gameState.map.width; x++) {
-        if (x >= 15 && x <= 20 && y >= 0 && y <= 20) {
-          // Guarantee tiles with hex color #FFEE8C for farmland in the specified range
-          gameState.map.tiles[y][x] = '#FFEE8C';
-        } else {
-          const randomValue = Math.random();
-          if (randomValue < 0.1) {
-            gameState.map.tiles[y][x] = 'water'; // 10% chance for water
-          } else if (randomValue < 0.25) {
-            gameState.map.tiles[y][x] = 'grass'; // 15% chance for grass
-          } else if (randomValue < 0.45) {
-            gameState.map.tiles[y][x] = 'gray'; // 20% chance for gray tiles
-          } else {
-            gameState.map.tiles[y][x] = 'blue'; // 55% chance for blue tiles
-          }
-        }
-      }
-    }
-    gameState.map.tiles[gameState.map.homeBase.y][gameState.map.homeBase.x] = 'house';
-    gameState.map.tiles[gameState.map.mailboxPosition.y][gameState.map.mailboxPosition.x] = 'mailbox';
-    gameState.map.tiles[gameState.map.bedPosition.y][gameState.map.bedPosition.x] = 'bed';
-    gameState.map.tiles[gameState.map.chestPosition.y][gameState.map.chestPosition.x] = 'chest';
-  }
-// --- Ore Generation ---
-  function generateOres() {
-    gameState.ores = [];
-    const oreTypes = [
-      { name: 'Copper Ore', rarity: 'common', value: 20, spawnChance: 0.08, emoji: EMOJIS.copper },
-      { name: 'Iron Ore', rarity: 'uncommon', value: 50, spawnChance: 0.04, emoji: EMOJIS.iron },
-      { name: 'Gold Ore', rarity: 'rare', value: 100, spawnChance: 0.015, emoji: EMOJIS.gold },
-      { name: 'Diamond', rarity: 'legendary', value: 500, spawnChance: 0.005, emoji: EMOJIS.diamond }
-    ];
-    for (let y = 0; y < gameState.map.height; y++) {
-      for (let x = 0; x < gameState.map.width; x++) {
-        if (gameState.map.tiles[y][x] === 'dirt' || gameState.map.tiles[y][x] === 'grass') {
-          for (const ore of oreTypes) {
-            if (Math.random() < ore.spawnChance) {
-              gameState.ores.push({
-                x: x * gameState.map.tileSize,
-                y: y * gameState.map.tileSize,
-                type: ore.name,
-                rarity: ore.rarity,
-                value: ore.value,
-                emoji: ore.emoji
-              });
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-// --- Inventory Management ---
-  function setupInventory() {
-    inventoryDiv.innerHTML = '';
-    const startIndex = gameState.player.inventoryPage * 12;
-    const endIndex = startIndex + 12;
-let emptySlots = 0; // Count empty slots for the current page
-for (let i = startIndex; i < endIndex; i++) {
-        const slot = document.createElement('div');
-        slot.className = 'inventory-slot';
-        if (i === gameState.player.selectedSlot) slot.classList.add('selected-slot');
-        slot.id = `slot-${i}`;
-        slot.addEventListener('click', () => selectItem(i));
-        const item = gameState.player.inventory[i];
-        if (item) {
-            const displayName = getToolDisplayName(item.name);
-            slot.innerHTML = `${item.emoji || getItemEmoji(item)}<span class="slot-label">${displayName}</span>`;
-            slot.title = item.name; // Full name as tooltip
-        } else {
-            emptySlots++; // Increment empty slot count
-        }
-        inventoryDiv.appendChild(slot);
-    }
-// Update inventory header to show empty slots
-    const inventoryHeader = document.querySelector('.card-header span.badge.bg-primary');
-    if (inventoryHeader) {
-        inventoryHeader.textContent = `${emptySlots} empty slots`; // Display empty slots
-    }
-// Add navigation buttons for inventory pages
-    const navDiv = document.createElement('div');
-    navDiv.className = 'inventory-nav d-flex justify-content-between mt-2';
-    const prevButton = document.createElement('button');
-    prevButton.className = 'btn btn-sm btn-secondary';
-    prevButton.textContent = 'Previous';
-    prevButton.disabled = gameState.player.inventoryPage === 0;
-    prevButton.addEventListener('click', () => changeInventoryPage(-1));
-    const nextButton = document.createElement('button');
-    nextButton.className = 'btn btn-sm btn-secondary';
-    nextButton.textContent = 'Next';
-    nextButton.disabled = gameState.player.inventoryPage === 2;
-    nextButton.addEventListener('click', () => changeInventoryPage(1));
-    navDiv.appendChild(prevButton);
-    navDiv.appendChild(nextButton);
-    inventoryDiv.appendChild(navDiv);
-coinsDisplay.textContent = gameState.player.coins;
-    const sel = gameState.player.selectedSlot;
-    if (sel !== null && gameState.player.inventory[sel]) {
-        const selectedItem = gameState.player.inventory[sel];
-        currentToolDisplay.innerHTML = `${selectedItem.name}`; // Display only the name
-    } else {
-        currentToolDisplay.innerHTML = 'None selected';
-    }
-}
-function changeInventoryPage(direction) {
-    gameState.player.inventoryPage += direction;
-    setupInventory();
-  }
-function selectItem(slotIndex) {
-    gameState.player.selectedSlot = slotIndex;
-    setupInventory();
-  }
-  function getToolDisplayName(name) {
-    const toolNames = {
-      "Wooden Axe": "Axe",
-      "Wooden Pickaxe": "Pickaxe",
-      "Wooden Shovel": "Shovel",
-      "Wooden Hoe": "Hoe",
-      "Wooden Watering Can": "Watering Can"
+    let gold = 50; // Start with 50 gold
+    let selectedTool = 'hoe';
+    let seedAvailable = null; // Track the type of seed available to plant
+    let portalPurchased = false; // Track if the Portal has been purchased
+
+    const cropData = {
+      parsnip: { emoji: '🥬', value: 5, growTime: 5000 },
+      tomato: { emoji: '🍅', value: 12, growTime: 10000 },
+      carrot: { emoji: '🥕', value: 24, growTime: 20000 }
     };
-    return toolNames[name] || abbreviateName(name); // Use full name for tools, abbreviate others
-  }
-  function abbreviateName(name) {
-    const parts = name.split(' ');
-    if (parts.length > 1) {
-      return `${parts[0][0]}. ${parts.slice(1).join(' ')}`.slice(0, 15); // Abbreviate and limit to 15 characters
+
+    const plots = [];
+
+    function selectTool(tool) {
+      selectedTool = tool;
+      messageDisplay.textContent = `Selected tool: ${tool}`;
     }
-    return name.slice(0, 15); // Limit single-word names to 15 characters
-  }
-  // --- Time System ---
-  function updateTime() {
-    const timeIncrement = 80 * 1000; // Slowed down by 2x (original was 40 seconds per hour)
-    const minutesPerHour = 60;
-gameState.time.minute += minutesPerHour / (timeIncrement / 1000);
-    if (gameState.time.minute >= minutesPerHour) {
-      gameState.time.minute = 0;
-      gameState.time.hour++;
-      if (gameState.time.hour > 12) {
-        gameState.time.hour = 1; // Reset to 1 after 12
+
+    function updateGold(amount) {
+      gold += amount;
+      goldDisplay.textContent = `Gold: ${gold}`;
+      if (gold <= 0) {
+        gold = 20; // Give user 20 gold
+        updateGold(0); // Update display
+        goldPopup.style.display = 'block';
       }
-      if (gameState.time.hour === 12) {
-        gameState.time.isPM = !gameState.time.isPM; // Toggle AM/PM at 12
-        if (!gameState.time.isPM) {
-          gameState.time.day++; // Increment day at 12:00 AM
-          regenerateMap(); // Reset and regenerate map
-          updateCrops();
-          if (Math.random() < 0.3) generateOres();
+    }
+
+    function buySeed(seedType, cost) {
+      if (gold >= cost) {
+        selectedTool = seedType;
+        seedAvailable = seedType; // Allow planting the seed
+        gold -= cost;
+        updateGold(0); // Update display
+        messageDisplay.textContent = `Bought ${seedType} seed for ${cost} gold.`;
+      } else {
+        messageDisplay.textContent = `Not enough gold to buy ${seedType} seed.`;
+      }
+    }
+
+    function createFarm() {
+      farm.innerHTML = ''; // Clear existing plots
+      plots.length = 0; // Reset plots array
+      for (let i = 0; i < 15; i++) {
+        const plot = document.createElement('div');
+        plot.className = 'plot';
+        plot.dataset.state = 'empty';
+        plot.dataset.crop = '';
+        plot.innerText = '';
+        plot.addEventListener('click', () => interact(plot));
+        farm.appendChild(plot);
+        plots.push(plot);
+      }
+    }
+
+    function interact(plot) {
+      const state = plot.dataset.state;
+      const crop = plot.dataset.crop;
+
+      if (selectedTool === 'hoe' && state === 'empty') {
+        plot.dataset.state = 'tilled';
+        plot.className = 'plot tilled';
+        plot.innerText = '';
+      } else if (cropData[selectedTool] && state === 'tilled' && seedAvailable === selectedTool) {
+        plot.dataset.state = 'planted';
+        plot.dataset.crop = selectedTool;
+        plot.className = 'plot planted';
+        plot.innerText = cropData[selectedTool].emoji;
+        seedAvailable = null; // Reset seed availability after planting
+      } else if (selectedTool === 'water' && state === 'planted') {
+        growCrop(plot, plot.dataset.crop);
+        plot.dataset.state = 'watered';
+        plot.className = 'plot watered';
+        plot.innerText = cropData[plot.dataset.crop].emoji;
+      } else if (state === 'grown') {
+        const cropType = plot.dataset.crop;
+        const value = cropData[cropType].value;
+        updateGold(value);
+        plot.dataset.state = 'empty';
+        plot.dataset.crop = '';
+        plot.className = 'plot';
+        plot.innerText = '';
+        messageDisplay.textContent = `Sold ${cropType} for ${value} gold.`;
+      } else {
+        messageDisplay.textContent = 'Invalid action.';
+      }
+    }
+
+    function growCrop(plot, cropType) {
+      setTimeout(() => {
+        if (plot.dataset.state === 'watered' && plot.dataset.crop === cropType) {
+          plot.dataset.state = 'grown';
+          plot.className = 'plot grown';
+          plot.innerText = cropData[cropType].emoji;
         }
-      }
+      }, cropData[cropType].growTime);
     }
-const hourStr = gameState.time.hour.toString().padStart(2, '0');
-    const minuteStr = Math.floor(gameState.time.minute).toString().padStart(2, '0'); // Ensure minutes are rounded and readable
-    const period = gameState.time.isPM ? 'PM' : 'AM';
-    timeDisplay.textContent = `${hourStr}:${minuteStr} ${period}`; // Display only hours and minutes
-    dayDisplay.textContent = `${gameState.time.day}`; // Display only the day number
-  }
-function regenerateMap() {
-    gameState.map.tiles = [];
-    for (let y = 0; y < gameState.map.height; y++) {
-      gameState.map.tiles[y] = [];
-      for (let x = 0; x < gameState.map.width; x++) {
-        const randomValue = Math.random();
-        if (randomValue < 0.1) {
-          gameState.map.tiles[y][x] = 'water'; // 10% chance for water
-        } else if (randomValue < 0.25) {
-          gameState.map.tiles[y][x] = 'grass'; // 15% chance for grass
-        } else if (randomValue < 0.45) {
-          gameState.map.tiles[y][x] = 'brown'; // 20% chance for brown tiles
-        } else {
-          gameState.map.tiles[y][x] = 'blue'; // 55% chance for blue tiles
+
+    function sellCrops() {
+      let total = 0;
+      plots.forEach(plot => {
+        if (plot.dataset.state === 'grown') {
+          const cropType = plot.dataset.crop;
+          const value = cropData[cropType].value;
+          total += value;
+          plot.dataset.state = 'empty';
+          plot.dataset.crop = '';
+          plot.className = 'plot';
+          plot.innerText = '';
         }
+      });
+      if (total > 0) {
+        updateGold(total);
+        messageDisplay.textContent = `Sold crops for ${total} gold.`;
+      } else {
+        messageDisplay.textContent = 'No crops to sell.';
       }
     }
-    gameState.map.tiles[gameState.map.homeBase.y][gameState.map.homeBase.x] = 'house';
-    gameState.map.tiles[gameState.map.mailboxPosition.y][gameState.map.mailboxPosition.x] = 'mailbox';
-    gameState.map.tiles[gameState.map.bedPosition.y][gameState.map.bedPosition.x] = 'bed';
-    gameState.map.tiles[gameState.map.chestPosition.y][gameState.map.chestPosition.x] = 'chest';
-    generateOres(); // Regenerate ores for the new map
-  }
-  // --- Crop Growth ---
-  function updateCrops() {
-    for (const crop of gameState.crops) {
-      if (crop.growth < crop.growthTime) {
-        crop.growth++;
-        if (crop.growth === crop.growthTime) crop.ready = true;
+
+    function buyPortal() {
+      if (portalPurchased) {
+        portalPopup.style.display = 'block';
+        return;
+      }
+      if (gold >= 1000) {
+        gold -= 1000;
+        updateGold(0); // Update display
+        portalPopup.style.display = 'block';
+        portalPurchased = true; // Mark Portal as purchased
+      } else {
+        messageDisplay.textContent = 'Not enough gold to buy the Portal.';
       }
     }
-  }
-  // --- Drawing Functions (with emoji and animation) ---
-  let playerAnimFrame = 0;
-  function drawGame() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw map
-    for (let y = 0; y < gameState.map.height; y++) {
-      for (let x = 0; x < gameState.map.width; x++) {
-        const tile = gameState.map.tiles[y][x];
-        let emoji = EMOJIS.dirt;
-        if (tile === 'water') emoji = EMOJIS.water;
-        else if (tile === 'grass') emoji = EMOJIS.grass;
-        else if (tile === 'tilled_soil') emoji = EMOJIS.tilled;
-        else if (tile === 'house') emoji = "🏠";
-        else if (tile === 'mailbox') emoji = "📬";
-        else if (tile === 'bed') emoji = "🛏️";
-        else if (tile === 'chest') emoji = "📦";
-        drawEmoji(emoji, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE);
-      }
+
+    function continuePlaying() {
+      portalPopup.style.display = 'none';
+      messageDisplay.textContent = 'You chose to continue playing!';
     }
-    // Merchant
-    drawEmoji(EMOJIS.merchant, gameState.map.merchantPosition.x * TILE_SIZE, gameState.map.merchantPosition.y * TILE_SIZE, TILE_SIZE);
-    // Ores
-    for (const ore of gameState.ores) {
-      drawEmoji(ore.emoji, ore.x, ore.y, TILE_SIZE);
+
+    function restartGame() {
+      gold = 50; // Reset gold
+      selectedTool = 'hoe'; // Reset tool
+      seedAvailable = null; // Reset seed availability
+      portalPurchased = false; // Reset portal purchase status
+      updateGold(0); // Update gold display
+      messageDisplay.textContent = ''; // Clear message
+      createFarm(); // Reset farm plots
     }
-    // Crops
-    for (const crop of gameState.crops) {
-      let emoji = getCropEmoji(crop.type);
-      if (!crop.ready) {
-        // Animate growing: pulse opacity
-        ctx.globalAlpha = 0.7 + 0.3 * Math.sin(Date.now()/400 + crop.x);
-      }
-      drawEmoji(emoji, crop.x, crop.y, TILE_SIZE);
-      ctx.globalAlpha = 1;
-      // Growth bar
-      if (!crop.ready) {
-        ctx.fillStyle = "#222";
-        ctx.fillRect(crop.x, crop.y + TILE_SIZE - 6, TILE_SIZE, 5);
-        ctx.fillStyle = "#6c3";
-        ctx.fillRect(crop.x, crop.y + TILE_SIZE - 6, TILE_SIZE * (crop.growth / crop.growthTime), 5);
-      }
+
+    function showInstructions() {
+      instructionsPopup.style.display = 'block';
     }
-    // Player (emoji, animated bounce)
-    const px = gameState.player.x;
-    const py = gameState.player.y;
-    const bounce = Math.sin(Date.now() / 200) * 3;
-    ctx.font = `${PLAYER_SIZE}px serif`; // Adjusted font size for player
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.save();
-    ctx.translate(px + PLAYER_SIZE / 2, py + PLAYER_SIZE / 2 + bounce);
-    ctx.rotate(0.05 * Math.sin(Date.now() / 300));
-    ctx.fillText(EMOJIS.player, 0, 0);
-    ctx.restore();
-  }
-  function drawEmoji(emoji, x, y, size) {
-    ctx.font = `${size}px serif`;
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
-    ctx.fillText(emoji, x - 10, y); // Adjusted x position to move left by 5px
-  }
-  function getCropEmoji(type) {
-    if (type === 'Wheat') return EMOJIS.wheat;
-    if (type === 'Carrot') return EMOJIS.carrot;
-    if (type === 'Pumpkin') return EMOJIS.pumpkin;
-    return EMOJIS.grass;
-  }
-  function getItemEmoji(item) {
-    if (item.type === 'tool') return item.emoji;
-    if (item.type === 'seed') return getCropEmoji(item.produces);
-    if (item.type === 'crop') return getCropEmoji(item.name);
-    if (item.type === 'ore') {
-      if (item.name === 'Copper Ore') return EMOJIS.copper;
-      if (item.name === 'Iron Ore') return EMOJIS.iron;
-      if (item.name === 'Gold Ore') return EMOJIS.gold;
-      if (item.name === 'Diamond') return EMOJIS.diamond;
+
+    function closeInstructions() {
+      instructionsPopup.style.display = 'none';
     }
-    return "❓";
-  }
-  // --- Input Handling ---
-  gameState.time.paused = true; // Keep the timer paused initially
-let hasStartedMoving = false; // Track if the player has started moving
-function handleKeyDown(e) {
-  const key = e.key.toLowerCase();
-  if (key in gameState.keys) {
-    gameState.keys[key] = true;
-    if (!hasStartedMoving && (key === 'w' || key === 'a' || key === 's' || key === 'd')) {
-      hasStartedMoving = true;
-      gameState.time.paused = false; // Start the timer when movement begins
+
+    function closeGoldPopup() {
+      goldPopup.style.display = 'none';
     }
-    if (key === 'e') interact();
-  }
-}
-function handleKeyUp(e) {
-    const key = e.key.toLowerCase();
-    if (key in gameState.keys) gameState.keys[key] = false;
-  }
-  function updatePlayerPosition() {
-    if (gameState.keys.w) { gameState.player.y -= gameState.player.speed; gameState.player.direction = 'up'; }
-    if (gameState.keys.s) { gameState.player.y += gameState.player.speed; gameState.player.direction = 'down'; }
-    if (gameState.keys.a) { gameState.player.x -= gameState.player.speed; gameState.player.direction = 'left'; }
-    if (gameState.keys.d) { gameState.player.x += gameState.player.speed; gameState.player.direction = 'right'; }
-    gameState.player.x = Math.max(0, Math.min(canvas.width - PLAYER_SIZE, gameState.player.x));
-    gameState.player.y = Math.max(0, Math.min(canvas.height - PLAYER_SIZE, gameState.player.y));
-  }
-  // --- Mouse/Keyboard Interact ---
-  function handleCanvasClick(e) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
-    const obj = getObjectAtTile(tileX, tileY);
-    if (!obj) return;
-    if (obj.type === 'merchant') openMerchant();
-    else if (obj.type === 'crop') harvestCrop(obj.index, true);
-    else if (obj.type === 'ore') mineOre(obj.index, true);
-    else if (obj.type === 'tilled_soil') plantCrop(tileX, tileY, getSelectedSeed());
-  }
-  function handleCanvasHover(e) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const { tileX, tileY } = getTileAtPixel(mouseX, mouseY);
-    const obj = getObjectAtTile(tileX, tileY);
-    canvas.style.cursor = obj ? 'pointer' : 'default';
-  }
-  // --- Game Loop ---
-  function gameLoop() {
-    if (!gameState.time.paused) {
-      updateTime();
-      updatePlayerPosition();
-    }
-    drawGame();
-    setTimeout(gameLoop, 1000 / 60); // Reduced delay for smoother gameplay
-  }
-  // --- Init ---
-  function initGame() {
-    generateMap();
-    generateOres();
-    setupInventory();
-    gameState.player.inventory.push(gameState.player.tools.sickle);
-    gameState.player.inventory.push(gameState.player.tools.pickaxe);
-    merchantModal = new bootstrap.Modal(document.getElementById('merchantModal'));
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-    canvas.addEventListener('click', handleCanvasClick);
-    canvas.addEventListener('mousemove', handleCanvasHover);
-gameLoop();
-  }
-window.onload = initGame;
-</script>
+
+    createFarm();
+  </script>
+</body>
+</html>
 
 <script>
+// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// ...existing code...
+
 // --- Background Music ---
-const music = new Audio('{{site.baseurl}}/assets/audio/27mariocircuit.mp3');
+const music = new Audio('{{site.baseurl}}/assets/audio/27mariocircuit.mp3'); // Change path as needed
 music.loop = true;
 music.volume = 0.5;
+
+// Play music after first user interaction (required by browsers)
 function startMusicOnce() {
   music.play().catch(() => {});
   window.removeEventListener('click', startMusicOnce);
@@ -753,168 +315,4 @@ function startMusicOnce() {
 }
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
-</script>
-
-<script>
-// --- Initialize Game State ---
-gameState.player.coins = 500; // Start with 500 gold
-
-// --- Crop Mechanics ---
-function hoeTile(tileX, tileY) {
-  const tile = gameState.map.tiles[tileY][tileX];
-  if (tile === 'grass') {
-    gameState.map.tiles[tileY][tileX] = 'tilled_soil';
-  }
-}
-
-function waterTile(tileX, tileY) {
-  const tile = gameState.map.tiles[tileY][tileX];
-  if (tile === 'tilled_soil') {
-    gameState.map.tiles[tileY][tileX] = 'watered_soil';
-  }
-}
-
-function plantCrop(tileX, tileY, seed) {
-  const tile = gameState.map.tiles[tileY][tileX];
-  if (tile === 'watered_soil' && seed) {
-    gameState.crops.push({
-      x: tileX * TILE_SIZE,
-      y: tileY * TILE_SIZE,
-      type: seed.produces,
-      growth: 0,
-      growthTime: seed.growthTime,
-      ready: false
-    });
-    removeItemFromInventory(seed);
-  }
-}
-
-function harvestCrop(index) {
-  const crop = gameState.crops[index];
-  if (crop.ready) {
-    addItemToInventory({ name: crop.type, type: 'crop', value: 100 });
-    gameState.crops.splice(index, 1);
-  }
-}
-
-// --- Inventory Updates ---
-function addItemToInventory(item) {
-  for (let i = 0; i < gameState.player.inventory.length; i++) {
-    const slot = gameState.player.inventory[i];
-    if (slot && slot.name === item.name && slot.count < 10) {
-      slot.count++;
-      return;
-    }
-  }
-  for (let i = 0; i < gameState.player.inventory.length; i++) {
-    if (!gameState.player.inventory[i]) {
-      gameState.player.inventory[i] = { ...item, count: 1 };
-      return;
-    }
-  }
-}
-
-function removeItemFromInventory(item) {
-  for (let i = 0; i < gameState.player.inventory.length; i++) {
-    const slot = gameState.player.inventory[i];
-    if (slot && slot.name === item.name) {
-      slot.count--;
-      if (slot.count === 0) gameState.player.inventory[i] = null;
-      return;
-    }
-  }
-}
-
-// --- Shipping Bin ---
-function sellItem(slotIndex, quantity) {
-  const item = gameState.player.inventory[slotIndex];
-  if (item && item.type !== 'tool') {
-    const totalValue = item.value * quantity;
-    gameState.player.coins += totalValue;
-    item.count -= quantity;
-    if (item.count === 0) gameState.player.inventory[slotIndex] = null;
-  }
-}
-
-// --- Crafting System ---
-function craftTool(material, toolType) {
-  const requiredMaterials = { wood: 2, stone: 2, gold: 2, diamond: 2 };
-  if (hasMaterials(requiredMaterials[material])) {
-    removeMaterials(requiredMaterials[material]);
-    upgradeTool(toolType, material);
-  }
-}
-
-function upgradeTool(toolType, material) {
-  const tool = gameState.player.tools[toolType];
-  if (material === 'stone') tool.effectMultiplier = 2;
-  if (material === 'gold') tool.effectMultiplier = 4;
-  if (material === 'diamond') tool.effectMultiplier = 8;
-}
-
-// --- Shop ---
-function buyItem(item, quantity) {
-  const totalCost = item.price * quantity;
-  if (gameState.player.coins >= totalCost) {
-    gameState.player.coins -= totalCost;
-    for (let i = 0; i < quantity; i++) {
-      addItemToInventory(item);
-    }
-  }
-}
-
-function buyPortal() {
-  if (gameState.player.coins >= 5000) {
-    gameState.player.coins -= 5000;
-    showWinScreen();
-  }
-}
-
-function showWinScreen() {
-  const winScreen = document.createElement('div');
-  winScreen.innerHTML = `
-    <h1>You Win!</h1>
-    <button onclick="continuePlaying()">Continue Playing</button>
-    <button onclick="restartGame()">Play Again</button>
-  `;
-  document.body.appendChild(winScreen);
-}
-
-function continuePlaying() {
-  document.body.removeChild(document.querySelector('div'));
-}
-
-function restartGame() {
-  location.reload();
-}
-
-// --- Information Tab ---
-function showGameTips() {
-  const tips = `
-    <ul>
-      <li>Stone and wood are used for crafting tools.</li>
-      <li>Seeds can be planted and grown into crops.</li>
-      <li>Sell items in the shipping bin for gold.</li>
-      <li>Upgrade tools for better efficiency.</li>
-    </ul>
-  `;
-  document.getElementById('informationMenu').innerHTML = tips;
-}
-
-// --- Game Initialization ---
-function initGame() {
-  generateMap();
-  generateOres();
-  setupInventory();
-  gameState.player.inventory.push(gameState.player.tools.sickle);
-  gameState.player.inventory.push(gameState.player.tools.pickaxe);
-  merchantModal = new bootstrap.Modal(document.getElementById('merchantModal'));
-  document.addEventListener('keydown', handleKeyDown);
-  document.addEventListener('keyup', handleKeyUp);
-  canvas.addEventListener('click', handleCanvasClick);
-  canvas.addEventListener('mousemove', handleCanvasHover);
-  gameLoop();
-}
-
-window.onload = initGame;
 </script>
