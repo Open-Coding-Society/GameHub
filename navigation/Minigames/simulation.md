@@ -3,7 +3,7 @@ layout: bootstrap
 title: Simulation
 description: Simulation Game
 permalink: /simulation
-Author: Ian & Zach
+Author: Ian
 ---
 
 <meta charset="UTF-8">
@@ -61,10 +61,70 @@ Author: Ian & Zach
     color: #f0f3f5;
     font-style: italic;
   }
+  /* Popup styles */
+  .popup-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 260px;
+    background: #fff;
+    color: #222;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    z-index: 9999;
+    padding: 24px 20px 16px 20px;
+    text-align: left;
+    font-size: 1.1em;
+    display: none;
+  }
+  .popup-modal .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #888;
+    cursor: pointer;
+  }
+  .popup-modal h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.15em;
+    font-weight: bold;
+  }
+  /* Enhanced animation styles for purchased items */
+  .fly-animation {
+    position: fixed;
+    font-size: 2em;
+    animation: flyDynamic 5s linear;
+    z-index: 9999;
+  }
+
+  @keyframes flyDynamic {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 1;
+    }
+    25% {
+      transform: translate(50px, -50px) rotate(45deg);
+    }
+    50% {
+      transform: translate(-50px, 50px) rotate(-45deg);
+    }
+    75% {
+      transform: translate(50px, 50px) rotate(90deg);
+    }
+    100% {
+      transform: translate(-50px, -50px) rotate(-90deg);
+      opacity: 0;
+    }
+  }
 </style>
 <nav class="navbar navbar-dark mb-4 px-4">
-  <a class="navbar-brand text-light" href="#">Robinhood Market Game</a>
-  <span class="navbar-text">Balance: $<span id="balance">10000</span></span>
+  <a class="navbar-brand text-light" href="#">Simulation Market Game</a>
+  <span class="navbar-text">Balance: $<span id="balance">100000</span></span>
   <button class="btn btn-custom" onclick="generateMarket()">Generate Market</button>
 </nav>
 
@@ -75,18 +135,24 @@ Author: Ian & Zach
   <div id="items" class="row"></div>
 </div>
 
+<div id="balancePopup" class="popup-modal">
+  <button class="close-btn" onclick="closePopup('balancePopup')">&times;</button>
+  <h4>Balance Replenished</h4>
+  <p>Your balance has been replenished with $5000 to keep playing!</p>
+</div>
+
 <script>
-  let balance = 10000;
+  let balance = 100000; // Updated starting balance
   const stocks = {
-    "TechCorp": { price: 100, history: [100], shares: 0 },
-    "MemeInc": { price: 50, history: [50], shares: 0 },
-    "AIWorks": { price: 200, history: [200], shares: 0 }
+    "TechCorp": { price: 50, history: [50], shares: 0 }, // Updated price
+    "MemeInc": { price: 100, history: [100], shares: 0 }, // Updated price
+    "AIWorks": { price: 500, history: [500], shares: 0 } // Updated price
   };
 
   const items = [
-    { name: "Gaming PC", price: 2000 },
-    { name: "Vacation", price: 5000 },
-    { name: "Sports Car", price: 30000 },
+    { name: "Gaming PC", price: 5000 },
+    { name: "Vacation", price: 10000 },
+    { name: "Sports Car", price: 150000 },
     { name: "Private Jet", price: 1000000 }
   ];
 
@@ -157,6 +223,18 @@ Author: Ian & Zach
     }
   }
 
+  function checkBalance() {
+    if (balance < 1) {
+      balance += 5000;
+      document.getElementById("balance").innerText = balance.toFixed(2);
+      document.getElementById("balancePopup").style.display = "block";
+    }
+  }
+
+  function closePopup(id) {
+    document.getElementById(id).style.display = "none";
+  }
+
   function invest(name) {
     const amountInput = document.getElementById(`invest-${name}`);
     const amount = parseFloat(amountInput.value);
@@ -172,6 +250,7 @@ Author: Ian & Zach
     } else {
       alert("Invalid investment amount");
     }
+    checkBalance();
   }
 
   // Withdraw by shares instead of amount
@@ -240,6 +319,22 @@ Author: Ian & Zach
     chart.update();
   }
 
+  const itemCounts = {
+    "Gaming PC": 0,
+    "Vacation": 0,
+    "Sports Car": 0,
+    "Private Jet": 0
+  };
+
+  function updateItemCounts() {
+    items.forEach(item => {
+      const countElement = document.getElementById(`count-${item.name}`);
+      if (countElement) {
+        countElement.textContent = itemCounts[item.name];
+      }
+    });
+  }
+
   function createItemCards() {
     const container = document.getElementById("items");
     container.innerHTML = "";
@@ -247,15 +342,30 @@ Author: Ian & Zach
       const col = document.createElement("div");
       col.className = "col-md-3";
       const card = document.createElement("div");
-      card.className = "item-card";
+      card.className = "item-card position-relative";
       card.innerHTML = `
         <h5>${item.name}</h5>
         <p>Price: $${item.price.toLocaleString()}</p>
         <button class="btn btn-custom" onclick="buyItem('${item.name}', ${item.price})">Buy</button>
+        <span id="count-${item.name}" class="position-absolute bottom-0 end-0 me-2 mb-2" style="font-size: 1.2em;">${itemCounts[item.name]}</span>
       `;
       col.appendChild(card);
       container.appendChild(col);
     });
+  }
+
+  function createFlyingEmojis(emojis, duration, count) {
+    for (let i = 0; i < count; i++) {
+      const emoji = document.createElement("div");
+      emoji.className = "fly-animation";
+      emoji.style.left = `${Math.random() * 100}vw`;
+      emoji.style.top = `${Math.random() * 100}vh`;
+      emoji.style.animationDuration = `${Math.random() * 2 + duration}s`;
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      document.body.appendChild(emoji);
+
+      setTimeout(() => emoji.remove(), duration * 1000); // Remove after animation ends
+    }
   }
 
   function buyItem(name, price) {
@@ -263,9 +373,30 @@ Author: Ian & Zach
       balance -= price;
       document.getElementById("balance").innerText = balance.toFixed(2);
       alert(`You bought: ${name}!`);
+
+      // Increment item count and update display
+      itemCounts[name]++;
+      updateItemCounts();
+
+      // Trigger enhanced animations based on item purchased
+      switch (name) {
+        case "Gaming PC":
+          createFlyingEmojis(["💻", "🖥️", "🕹️", "🎮", "📱"], 5, 30);
+          break;
+        case "Vacation":
+          createFlyingEmojis(["🏖️", "🏨", "🌴", "✈️", "🌊", "🍹"], 10, 50);
+          break;
+        case "Sports Car":
+          createFlyingEmojis(["🏎️", "🚗", "🛣️", "🚦", "🏁"], 15, 70);
+          break;
+        case "Private Jet":
+          createFlyingEmojis(["✈️", "🛫", "🛬", "🎉", "🎊", "🌟"], 20, 100);
+          break;
+      }
     } else {
       alert("Not enough balance to buy this item.");
     }
+    checkBalance();
   }
 
   // Initial setup
