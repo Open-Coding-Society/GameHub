@@ -496,23 +496,6 @@ function typeDialogue(text, callback) {
 }
 
 function showNPCModal(worldKey) {
-  const now = Date.now();
-
-  // If cooldown active or interacting too soon, exit
-  if (npcCooldown || now - lastNPCInteractionTime < 3000) {
-    console.log("Please wait before talking to another NPC...");
-    alert("Give the NPCs a moment before chatting again!");
-    return;
-  }
-
-  
-
-  npcCooldown = true;
-  lastNPCInteractionTime = now;
-  setTimeout(() => {
-    npcCooldown = false;
-  }, 3000);
-
   pendingWorld = worldKey;
   npcMessage.textContent = worldNPCs[worldKey].message;
   npcDialogue.textContent = "";
@@ -565,12 +548,7 @@ npcCancelBtn.addEventListener('click', () => {
   npcDialogueIndex = 0;
   clearTimeout(typewriterTimeout);
   isTyping = false;
-
-  // Move player back to spawn point
-  player.x = SPAWN_POINT.x;
-  player.y = SPAWN_POINT.y;
 });
-
 
 // Prevent player from overlapping with world object
 function resolveTouch(player, obj) {
