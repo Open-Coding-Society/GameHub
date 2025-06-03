@@ -261,7 +261,7 @@ updateStatus();
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/9starjump.mp3'); // Change path as needed
 music.loop = true;
-music.volume = 0.5;
+music.volume = 0.7;
 
 // Play music after first user interaction (required by browsers)
 function startMusicOnce() {
@@ -272,4 +272,3 @@ function startMusicOnce() {
 window.addEventListener('click', startMusicOnce);
 window.addEventListener('keydown', startMusicOnce);
 </script>
-

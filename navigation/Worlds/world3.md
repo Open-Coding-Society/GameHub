@@ -231,7 +231,7 @@ Author: Zach, Ian, Aarush
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/haggstrom.mp3'); // Change path as needed
 music.loop = true;
-music.volume = 0.75;
+music.volume = 0.9;
 
 // Play music after first user interaction (required by browsers)
 function startMusicOnce() {

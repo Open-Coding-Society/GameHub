@@ -3,7 +3,7 @@ layout: bootstrap
 title: Road
 description: Road Game
 permalink: /road
-Author: Aarush & Ian
+Author: Ian
 ---
 
 <script>

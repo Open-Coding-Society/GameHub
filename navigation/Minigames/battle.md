@@ -3,7 +3,7 @@ layout: base
 title: Battle
 description: Battle Game (like Brawl Stars)
 permalink: /battle
-Author: Ian
+Author: Ian & Zach
 ---
 
 <meta charset="UTF-8">
@@ -412,7 +412,7 @@ restartButton.addEventListener('click', () => {
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/12littlegoth.mp3'); // Change path as needed
 music.loop = true;
-music.volume = 0.5;
+music.volume = 0.7;
 
 // Play music after first user interaction (required by browsers)
 function startMusicOnce() {

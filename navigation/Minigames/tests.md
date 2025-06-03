@@ -3,7 +3,7 @@ layout: bootstrap
 title: Tests
 description: Tests
 permalink: /tests
-Author: Ian
+Author: Ian & Zach
 ---
 
 <div class="container text-center p-5">
