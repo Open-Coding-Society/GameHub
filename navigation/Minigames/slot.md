@@ -247,17 +247,20 @@ Author: Ian
 let spinning = false;
 
   function spin() {
-    if (spinning) return;  // Prevent spin if already spinning
+    if (spinning) return; // Prevent spin if already spinning
 
     const cost = upgrades.genetherapy ? SPIN_COST + 5 : SPIN_COST;
 
     if (bloodCells < cost) {
-      alert("❌ Not enough blood cells.");
+      alert('Not enough blood cells! You received 50 more blood cells to keep playing.');
+      bloodCells += 50; // Add 50 blood cells
+      updateBalanceDisplay(); // Update the balance display
+      spinBtn.disabled = bloodCells < cost; // Ensure button state is updated
       return;
     }
 
     spinning = true;
-    spinBtn.disabled = true;  // Disable button immediately
+    spinBtn.disabled = true; // Disable button immediately
 
     bloodCells -= cost;
     updateBalanceDisplay();
@@ -327,6 +330,10 @@ let spinning = false;
       triggerConfetti();
     } else {
       resultText.innerText = `No win. Try again!`;
+      if (bloodCells === 0) {
+        alert('Not enough blood cells! You received 50 more blood cells to keep playing.');
+        bloodCells += 50; // Add 50 blood cells
+      }
     }
 
     updateBalanceDisplay();

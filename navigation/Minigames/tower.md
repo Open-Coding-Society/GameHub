@@ -68,7 +68,7 @@ Author: Zach & Ian
 </style>
 
 <div id="towerTitle">Tower Defense Game</div>
-<div id="towerDesc">Spend money to place monkeys down and protect the balloons from making it to the end!</div>
+<div id="towerDesc">Spend money to place monkeys down and protect the balloons from making it to the end! Click on troops to upgrade them and make them stronger!</div>
 <div id="statusBar">
   <span id="moneyDisplay">Money: $1000</span>
   <span id="healthDisplay">Health: 20</span>
@@ -79,8 +79,9 @@ Author: Zach & Ian
   <canvas id="gameCanvas" width="900" height="500"></canvas>
 
   <div id="upgradePanel">
-    <div><button id="upgradeRange">Upgrade Range (+$100)</button></div>
-    <div><button id="upgradeDamage">Upgrade Damage (+$100)</button></div>
+    <div><button id="upgradeRange">Upgrade Range (-$100)</button></div>
+    <div><button id="upgradeDamage">Upgrade Damage (-$100)</button></div>
+    <div><button id="upgradeFireRate">Upgrade Fire Rate (-$100)</button></div>
     <div><button id="sellMonkey">Sell Monkey</button></div>
   </div>
 </div>
@@ -102,6 +103,7 @@ Author: Zach & Ian
   const upgradePanel = document.getElementById("upgradePanel");
   const upgradeRangeBtn = document.getElementById("upgradeRange");
   const upgradeDamageBtn = document.getElementById("upgradeDamage");
+  const upgradeFireRateBtn = document.getElementById("upgradeFireRate");
   const sellMonkeyBtn = document.getElementById("sellMonkey");
   const startWaveBtn = document.getElementById("startWaveBtn");
 
@@ -145,11 +147,12 @@ Author: Zach & Ian
       this.y = y;
       this.range = 100;
       this.damage = 1;
-      this.price = price;
       this.fireRate = 60; // frames between shots
       this.fireCooldown = 0;
+      this.price = price;
       this.selected = false;
       this.type = "base";
+      this.levels = { range: 0, damage: 0, fireRate: 0 }; // Levels for upgrades
     }
     draw() {
       ctx.save();
@@ -522,50 +525,77 @@ Author: Zach & Ian
     balloons.push(new Balloon(type));
   }
 
-  // Upgrade selected monkey range or damage
+  // Update the upgrade panel to show sell price and levels
+  function showUpgradePanel(monkey) {
+    selectedMonkey = monkey;
+    const sellPrice = Math.floor(monkey.price / 2);
+    sellMonkeyBtn.textContent = `Sell Monkey (+$${sellPrice})`;
+
+    // Update levels next to each upgrade button
+    upgradeRangeBtn.innerHTML = `Upgrade Range (-$100) <span style="${monkey.levels.range === 10 ? 'font-weight:bold;' : ''}">[Lvl ${monkey.levels.range}]</span>`;
+    upgradeDamageBtn.innerHTML = `Upgrade Damage (-$100) <span style="${monkey.levels.damage === 10 ? 'font-weight:bold;' : ''}">[Lvl ${monkey.levels.damage}]</span>`;
+    upgradeFireRateBtn.innerHTML = `Upgrade Fire Rate (-$100) <span style="${monkey.levels.fireRate === 10 ? 'font-weight:bold;' : ''}">[Lvl ${monkey.levels.fireRate}]</span>`;
+
+    // Position upgrade panel near monkey
+    const rect = canvas.getBoundingClientRect();
+    const containerRect = document.getElementById("gameContainer").getBoundingClientRect();
+    upgradePanel.style.left = (monkey.x + rect.left - containerRect.left + 20) + "px";
+    upgradePanel.style.top = (monkey.y + rect.top - containerRect.top - 40) + "px";
+    upgradePanel.style.display = "block";
+  }
+
+  // Upgrade selected monkey's range, damage, or fire rate
   function upgradeSelectedMonkey(type) {
     if (!selectedMonkey) return;
 
-    if (money < 100) {
-      alert("Not enough money to upgrade!");
-      return;
-    }
-    if (type === "range") {
-      selectedMonkey.range += 20;
+    if (type === "range" && selectedMonkey.levels.range < 10 && money >= 100) {
+      selectedMonkey.range *= 1.10; // Increase range by 10%
+      selectedMonkey.levels.range++;
       money -= 100;
-    } else if (type === "damage") {
-      selectedMonkey.damage += 1;
+    } else if (type === "damage" && selectedMonkey.levels.damage < 10 && money >= 100) {
+      selectedMonkey.damage *= 1.10; // Increase damage by 10%
+      selectedMonkey.levels.damage++;
+      money -= 100;
+    } else if (type === "fireRate" && selectedMonkey.levels.fireRate < 10 && money >= 100) {
+      selectedMonkey.fireRate = Math.floor(selectedMonkey.fireRate * 0.9); // Increase fire rate by 10%
+      selectedMonkey.levels.fireRate++;
       money -= 100;
     }
+
+    // Update levels in the upgrade panel
+    showUpgradePanel(selectedMonkey);
     updateMoneyDisplay();
   }
 
   // Sell selected monkey
   function sellSelectedMonkey() {
     if (!selectedMonkey) return;
-    money += Math.floor(selectedMonkey.price / 2);
+    const sellPrice = Math.floor(selectedMonkey.price / 2);
+    money += sellPrice;
     monkeys = monkeys.filter(m => m !== selectedMonkey);
     selectedMonkey = null;
     hideUpgradePanel();
     updateMoneyDisplay();
   }
 
-  // Show upgrade panel near monkey
-  function showUpgradePanel(monkey) {
-    selectedMonkey = monkey;
-    // Position upgrade panel near monkey but keep it inside canvas container
-    const rect = canvas.getBoundingClientRect();
-    const containerRect = document.getElementById("gameContainer").getBoundingClientRect();
-
-    upgradePanel.style.left = (monkey.x + rect.left - containerRect.left + 20) + "px";
-    upgradePanel.style.top = (monkey.y + rect.top - containerRect.top - 40) + "px";
-    upgradePanel.style.display = "block";
-  }
-
   function hideUpgradePanel() {
     upgradePanel.style.display = "none";
     selectedMonkey = null;
   }
+
+  // Button handlers for upgrades
+  upgradeRangeBtn.onclick = () => {
+    upgradeSelectedMonkey("range");
+  };
+  upgradeDamageBtn.onclick = () => {
+    upgradeSelectedMonkey("damage");
+  };
+  upgradeFireRateBtn.onclick = () => {
+    upgradeSelectedMonkey("fireRate");
+  };
+  sellMonkeyBtn.onclick = () => {
+    sellSelectedMonkey();
+  };
 
   // Main update function
   function update() {
@@ -650,16 +680,6 @@ Author: Zach & Ian
     if (gameOver) return;
     startWave();
     hideUpgradePanel();
-  };
-
-  upgradeRangeBtn.onclick = () => {
-    upgradeSelectedMonkey("range");
-  };
-  upgradeDamageBtn.onclick = () => {
-    upgradeSelectedMonkey("damage");
-  };
-  sellMonkeyBtn.onclick = () => {
-    sellSelectedMonkey();
   };
 
   // Canvas click handler for placing or selecting monkeys
