@@ -90,9 +90,59 @@ The game hub includes several interactive features:
 
 ---
 
-## References
+## Getting Started
 
-- [Draw.io Diagram](https://app.diagrams.net/)
-- [Jekyll Documentation](https://jekyllrb.com/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [HTML5 Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+To set up the Genome Gamers Frontend project, follow the steps below:
+
+### Prerequisites
+
+Ensure you have the following installed on your system:
+1. **Node.js**: Download and install from [Node.js Official Website](https://nodejs.org/).
+2. **npm**: Comes bundled with Node.js.
+3. **Git**: Download and install from [Git Official Website](https://git-scm.com/).
+
+### Setup Instructions
+
+1. **Clone the Repository**:
+   Open a terminal and run the following command to clone the repository:
+   ```bash
+   git clone https://github.com/your-username/GenomeGamersFrontend.git
+   ```
+   Replace `your-username` with the actual GitHub username.
+
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd GenomeGamersFrontend
+   ```
+
+3. **Install Dependencies**:
+   Run the following command to install the required dependencies:
+   ```bash
+   npm install
+   ```
+
+4. **Start the Development Server**:
+   Launch the development server using:
+   ```bash
+   npm start
+   ```
+   This will start the server and open the project in your default web browser.
+
+5. **Build the Project**:
+   To generate the production-ready files, use:
+   ```bash
+   npm run build
+   ```
+
+6. **Deploy**:
+   Follow the deployment instructions in the repository to host the project on GitHub Pages or another platform.
+
+---
+
+### Additional Notes
+
+- **Configuration**: Customize `_config.yml` for site-specific settings.
+- **Game Assets**: Ensure all game assets (images, audio files, etc.) are stored in the appropriate directories under `assets/`.
+- **Troubleshooting**: Refer to the `docs/README.md` for troubleshooting common issues.
+
+Now you're ready to explore and contribute to the Genome Gamers Frontend project!
