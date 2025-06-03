@@ -3,7 +3,7 @@ layout: base
 title: Farming
 description: Farming Game
 permalink: /farming
-Author: Ian
+Author: Ian & Zach
 ---
 
 <meta charset="UTF-8">
@@ -16,12 +16,15 @@ Author: Ian
     font-family: 'Arial', sans-serif;
   }
   #gameCanvas {
+    width: 960px; /* Increased width by 1.25x */
+    height: 700px; /* Increased height by 1.25x */
     border: 3px solid #495057;
     border-radius: 5px;
     background-color: #8b9d83;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     image-rendering: pixelated;
+    margin-left: -450px; /* Keep the left margin unchanged */
   }
   .inventory-slot {
     width: 60px;
@@ -49,10 +52,16 @@ Author: Ian
     100% { box-shadow: 0 0 10px 5px #0d6efd22; }
   }
   .inventory-slot .slot-label {
+    font-size: 0.8rem; /* Slightly smaller font size */
+    text-align: center; /* Center the text */
+    max-width: 15ch; /* Limit text to 15 characters */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     position: absolute;
-    bottom: 2px;
-    right: 4px;
-    font-size: 0.8rem;
+    bottom: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, 50%); /* Adjust for perfect centering */
     color: #495057;
     background: #fff8;
     border-radius: 3px;
@@ -85,34 +94,87 @@ Author: Ian
   .merchant-item:hover {
     transform: translateY(-3px);
   }
+  .btn-coins {
+    background: #28a745 !important; /* Green button */
+    color: #ffffff !important;
+    border: none !important;
+    margin-left: 5px; /* Adjusted spacing */
+    padding: 8px 12px; /* Slightly smaller size */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .btn-coins:hover {
+    background: #218838 !important; /* Darker green on hover */
+  }
+  .popup-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  .popup-modal .close-btn {
+    background: #dc3545;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+  }
+  .popup-modal .close-btn:hover {
+    background: #c82333;
+  }
+  .title-section {
+    margin-left: -800px; /* Move title 1500px to the left */
+  }
+  hr {
+    width: 100%; /* Make the horizontal rule span the full width of the screen */
+    margin: 0; /* Remove default margins */
+  }
+  .crafting-menu {
+    display: none; /* Hide crafting menu */
+  }
 </style>
 
 <div class="container py-4">
-  <div class="text-center mb-4">
+  <div class="text-center mb-4 title-section"> <!-- Updated margin for left alignment -->
     <h1 class="display-4">Harvest Haven</h1>
-    <p class="lead">A Stardew Valley inspired farming adventure</p>
+    <p class="lead d-inline">A Farming Adventure Game -</p>
+    <button class="btn-coins d-inline" id="coinsBtn">Controls</button> <!-- Added Controls button -->
+  </div>
+
+  <!-- Controls Popup -->
+  <div id="controlsPopup" class="popup-modal">
+    <button class="close-btn" onclick="closePopup('controlsPopup')">&times;</button>
+    <h4>Controls</h4>
+    <ul style="margin-bottom:0;">
+      <li><span style="color:gray;">Movement</span>: Use WASD to move</li>
+      <li><span style="color:green;">Interact</span>: Click E or an object when next to it to interact</li>
+      <li><span style="color:#003366;">Inventory</span>: Click I to open inventory</li>
+      <li><span style="color:purple;">Select</span>: Click on items from inventory to select</li>
+      <li><span style="color:orange;">Merchant</span>: Click E or on the merchant to buy items</li>
+      <li><span style="color:red;">Gold</span>: Collect Gold to progress through the game</li>
+      <li><span style="color:#00bfff;">Resources</span>: Gain resources through farming, breaking, and storing items</li>
+    </ul>
   </div>
 
   <div class="row">
-    <div class="col-lg-8">
-      <div class="controls mb-3">
-        <h5>Controls</h5>
-        <p>
-          <strong>WASD</strong> to move |
-          <strong>E</strong> or <strong>Click</strong> to interact |
-          <strong>Click</strong> inventory items to select
-        </p>
-        <p>
-          Interact with objects and the merchant by facing them and pressing <strong>E</strong> or <strong>clicking</strong> on them in the game area.
-        </p>
-      </div>
-      <canvas id="gameCanvas" width="800" height="600" tabindex="0"></canvas>
+    <div class="col-lg-7">
+      <canvas id="gameCanvas" width="1000" height="750" tabindex="0"></canvas> <!-- Updated dimensions -->
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-5 d-flex flex-column">
       <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
           <span>Player Inventory</span>
-          <span class="badge bg-primary">10 slots</span>
+          <span class="badge bg-primary">12 slots</span>
         </div>
         <div class="card-body" id="inventory">
           <!-- Inventory slots will be generated by JS -->
@@ -121,13 +183,13 @@ Author: Ian
       <div class="card mb-3">
         <div class="card-header">Stats</div>
         <div class="card-body">
-          <p><strong>Coins:</strong> <span id="coins" class="badge bg-success">100</span></p>
+          <p><strong>Gold:</strong> <span id="coins" class="badge bg-success">100</span></p>
           <p><strong>Day:</strong> <span id="day" class="badge bg-info">1</span></p>
-          <p><strong>Time:</strong> <span id="time" class="badge bg-secondary">08:00</span></p>
+          <p><strong>Time:</strong> <span id="time" class="badge bg-secondary">12:00 AM</span></p>
         </div>
       </div>
       <div class="card">
-        <div class="card-header">Current Tool</div>
+        <div class="card-header">Shipping Bin</div>
         <div class="card-body">
           <p id="currentTool">None selected</p>
         </div>
@@ -176,6 +238,25 @@ Author: Ian
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  // Ensure the Controls button functionality works
+  document.getElementById('coinsBtn').onclick = function() {
+    const coinsPopup = document.getElementById('controlsPopup');
+    if (coinsPopup) {
+      coinsPopup.style.display = 'block';
+    } else {
+      console.error('Controls popup element not found.');
+    }
+  };
+
+  function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+      popup.style.display = 'none';
+    } else {
+      console.error(`Popup with ID "${popupId}" not found.`);
+    }
+  }
+
   // --- Emoji assets ---
   const EMOJIS = {
     player: "👨‍🌾",
@@ -190,31 +271,50 @@ Author: Ian
     tilled: "⬛",
     grass: "🟩",
     water: "🟦",
-    dirt: "🟫"
+    dirt: "🟫",
+    house: "🏠",
+    mailbox: "📬",
+    bed: "🛏️",
+    chest: "📦"
   };
-
-  // --- Game State ---
-  const TILE_SIZE = 32; // Bigger tiles for readability
+const TILE_SIZE = 32;
   const PLAYER_SIZE = 32;
+const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const coinsDisplay = document.getElementById('coins');
+  const dayDisplay = document.getElementById('day');
+  const timeDisplay = document.getElementById('time');
+  const inventoryDiv = document.getElementById('inventory');
+  const currentToolDisplay = document.getElementById('currentTool');
+  let merchantModal = null;
+  // --- Game State ---
   const gameState = {
     player: {
-      x: 400,
-      y: 300,
+      x: canvas.width / 2,
+      y: canvas.height / 2,
       speed: 4,
       direction: 'down',
-      inventory: [],
+      inventory: Array(36).fill(null), // 36 slots
       coins: 100,
       selectedSlot: null,
+      inventoryPage: 0, // Tracks the current inventory page (0, 1, 2)
       tools: {
-        sickle: { name: 'Sickle', type: 'tool', uses: Infinity, action: 'harvest', emoji: "🔪" },
-        pickaxe: { name: 'Pickaxe', type: 'tool', uses: Infinity, action: 'mine', emoji: "⛏️" }
+        woodenPickaxe: { name: 'Wooden Pickaxe', type: 'tool', uses: Infinity, action: 'mine', emoji: "⛏️" },
+        woodenAxe: { name: 'Wooden Axe', type: 'tool', uses: Infinity, action: 'chop', emoji: "🪓" },
+        woodenShovel: { name: 'Wooden Shovel', type: 'tool', uses: Infinity, action: 'dig', emoji: "<img src='{{ site.baseurl }}/images/shovel.png' alt='Shovel' style='width: 48px; height: 48px; position: relative; top: 10px;'>" },
+        woodenHoe: { name: 'Wooden Hoe', type: 'tool', uses: Infinity, action: 'till', emoji: "<img src='{{ site.baseurl }}/images/hoe.png' alt='Hoe' style='width: 48px; height: 48px; position: relative; top: 10px;'>" },
+        woodenWateringCan: { name: 'Wooden Watering Can', type: 'tool', uses: Infinity, action: 'water', emoji: "<img src='{{ site.baseurl }}/images/can.png' alt='Watering Can' style='width: 48px; height: 48px; position: relative; top: 10px;'>"},
       }
     },
     map: {
       tiles: [],
-      width: 25,
-      height: 18,
+      width: Math.floor(canvas.width / TILE_SIZE),
+      height: Math.floor(canvas.height / TILE_SIZE),
       tileSize: TILE_SIZE,
+      homeBase: { x: 12, y: 9 },
+      mailboxPosition: { x: 13, y: 9 },
+      bedPosition: { x: 12, y: 10 },
+      chestPosition: { x: 11, y: 9 },
       merchantPosition: { x: 3, y: 3 }
     },
     crops: [],
@@ -228,54 +328,21 @@ Author: Ian
       ]
     },
     time: {
-      day: 1,
-      hour: 8,
+      day: 1, // Start at day 1
+      hour: 12, // Start at 12:00 AM
       minute: 0,
-      paused: false
+      isPM: false, // Start at AM
+      paused: true // Start paused for 5 seconds
     },
     keys: { w: false, a: false, s: false, d: false, e: false }
   };
-
-  // --- DOM Elements ---
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
-  const coinsDisplay = document.getElementById('coins');
-  const dayDisplay = document.getElementById('day');
-  const timeDisplay = document.getElementById('time');
-  const inventoryDiv = document.getElementById('inventory');
-  const currentToolDisplay = document.getElementById('currentTool');
-  let merchantModal = null;
-
-  // --- Helper: Get tile under pixel coordinates ---
-  function getTileAtPixel(x, y) {
-    return {
-      tileX: Math.floor(x / gameState.map.tileSize),
-      tileY: Math.floor(y / gameState.map.tileSize)
-    };
-  }
-
-  // --- Helper: Get object at tile ---
-  function getObjectAtTile(tileX, tileY) {
-    if (tileX === gameState.map.merchantPosition.x && tileY === gameState.map.merchantPosition.y) {
-      return { type: 'merchant' };
-    }
-    const cropIndex = gameState.crops.findIndex(c =>
-      Math.floor(c.x / gameState.map.tileSize) === tileX &&
-      Math.floor(c.y / gameState.map.tileSize) === tileY
-    );
-    if (cropIndex !== -1) return { type: 'crop', index: cropIndex };
-    const oreIndex = gameState.ores.findIndex(o =>
-      Math.floor(o.x / gameState.map.tileSize) === tileX &&
-      Math.floor(o.y / gameState.map.tileSize) === tileY
-    );
-    if (oreIndex !== -1) return { type: 'ore', index: oreIndex };
-    if (gameState.map.tiles[tileY] && gameState.map.tiles[tileY][tileX] === 'tilled_soil') {
-      return { type: 'tilled_soil' };
-    }
-    return null;
-  }
-
-  // --- Map Generation ---
+// Prepopulate first page slots
+gameState.player.inventory[0] = gameState.player.tools.woodenAxe;
+gameState.player.inventory[1] = gameState.player.tools.woodenPickaxe;
+gameState.player.inventory[2] = gameState.player.tools.woodenShovel;
+gameState.player.inventory[3] = gameState.player.tools.woodenHoe;
+gameState.player.inventory[4] = gameState.player.tools.woodenWateringCan;
+// --- Map Generation ---
   function generateMap() {
     for (let y = 0; y < gameState.map.height; y++) {
       gameState.map.tiles[y] = [];
@@ -289,6 +356,10 @@ Author: Ian
         }
       }
     }
+    gameState.map.tiles[gameState.map.homeBase.y][gameState.map.homeBase.x] = 'house';
+    gameState.map.tiles[gameState.map.mailboxPosition.y][gameState.map.mailboxPosition.x] = 'mailbox';
+    gameState.map.tiles[gameState.map.bedPosition.y][gameState.map.bedPosition.x] = 'bed';
+    gameState.map.tiles[gameState.map.chestPosition.y][gameState.map.chestPosition.x] = 'chest';
     for (let y = 7; y < 12; y++) {
       for (let x = 10; x < 18; x++) {
         gameState.map.tiles[y][x] = 'tilled_soil';
@@ -296,8 +367,7 @@ Author: Ian
     }
     gameState.map.tiles[gameState.map.merchantPosition.y][gameState.map.merchantPosition.x] = 'dirt';
   }
-
-  // --- Ore Generation ---
+// --- Ore Generation ---
   function generateOres() {
     gameState.ores = [];
     const oreTypes = [
@@ -326,11 +396,13 @@ Author: Ian
       }
     }
   }
-
-  // --- Inventory Management ---
+// --- Inventory Management ---
   function setupInventory() {
     inventoryDiv.innerHTML = '';
-    for (let i = 0; i < 10; i++) {
+    const startIndex = gameState.player.inventoryPage * 12;
+    const endIndex = startIndex + 12;
+
+    for (let i = startIndex; i < endIndex; i++) {
       const slot = document.createElement('div');
       slot.className = 'inventory-slot';
       if (i === gameState.player.selectedSlot) slot.classList.add('selected-slot');
@@ -338,48 +410,119 @@ Author: Ian
       slot.addEventListener('click', () => selectItem(i));
       const item = gameState.player.inventory[i];
       if (item) {
-        slot.innerHTML = (item.emoji || getItemEmoji(item)) +
-          `<span class="slot-label">${item.name.split(" ")[0]}</span>`;
-        slot.title = item.name;
+        const displayName = getToolDisplayName(item.name);
+        slot.innerHTML = `${item.emoji || getItemEmoji(item)}<span class="slot-label">${displayName}</span>`;
+        slot.title = item.name; // Full name as tooltip
       }
       inventoryDiv.appendChild(slot);
     }
-    coinsDisplay.textContent = gameState.player.coins;
-    // Animate selected tool
-    const selected = document.querySelector('.inventory-slot.selected-slot');
-    if (selected) selected.classList.add('selected-slot');
-    const sel = gameState.player.selectedSlot;
-    if (sel !== null && gameState.player.inventory[sel] && gameState.player.inventory[sel].type === 'tool') {
-      currentToolDisplay.textContent = gameState.player.inventory[sel].name;
-    } else {
-      currentToolDisplay.textContent = 'None selected';
-    }
-  }
 
-  function selectItem(slotIndex) {
+    // Add navigation buttons for inventory pages
+    const navDiv = document.createElement('div');
+    navDiv.className = 'inventory-nav d-flex justify-content-between mt-2';
+    const prevButton = document.createElement('button');
+    prevButton.className = 'btn btn-sm btn-secondary';
+    prevButton.textContent = 'Previous';
+    prevButton.disabled = gameState.player.inventoryPage === 0;
+    prevButton.addEventListener('click', () => changeInventoryPage(-1));
+    const nextButton = document.createElement('button');
+    nextButton.className = 'btn btn-sm btn-secondary';
+    nextButton.textContent = 'Next';
+    nextButton.disabled = gameState.player.inventoryPage === 2;
+    nextButton.addEventListener('click', () => changeInventoryPage(1));
+    navDiv.appendChild(prevButton);
+    navDiv.appendChild(nextButton);
+    inventoryDiv.appendChild(navDiv);
+coinsDisplay.textContent = gameState.player.coins;
+const sel = gameState.player.selectedSlot;
+if (sel !== null && gameState.player.inventory[sel]) {
+  const selectedItem = gameState.player.inventory[sel];
+  currentToolDisplay.innerHTML = `${selectedItem.name}`; // Display only the name
+} else {
+  currentToolDisplay.innerHTML = 'None selected';
+}
+  }
+function changeInventoryPage(direction) {
+    gameState.player.inventoryPage += direction;
+    setupInventory();
+  }
+function selectItem(slotIndex) {
     gameState.player.selectedSlot = slotIndex;
     setupInventory();
   }
-
+  function getToolDisplayName(name) {
+    const toolNames = {
+      "Wooden Axe": "Axe",
+      "Wooden Pickaxe": "Pickaxe",
+      "Wooden Shovel": "Shovel",
+      "Wooden Hoe": "Hoe",
+      "Wooden Watering Can": "Watering Can"
+    };
+    return toolNames[name] || abbreviateName(name); // Use full name for tools, abbreviate others
+  }
+  function abbreviateName(name) {
+    const parts = name.split(' ');
+    if (parts.length > 1) {
+      return `${parts[0][0]}. ${parts.slice(1).join(' ')}`.slice(0, 15); // Abbreviate and limit to 15 characters
+    }
+    return name.slice(0, 15); // Limit single-word names to 15 characters
+  }
   // --- Time System ---
   function updateTime() {
-    gameState.time.minute += 10;
-    if (gameState.time.minute >= 60) {
+    const timeIncrement = 20 * 1000; // 20 seconds per hour
+    const minutesPerHour = 60;
+
+    gameState.time.minute += minutesPerHour / (timeIncrement / 1000);
+    if (gameState.time.minute >= minutesPerHour) {
       gameState.time.minute = 0;
       gameState.time.hour++;
-      if (gameState.time.hour >= 24) {
-        gameState.time.hour = 6;
-        gameState.time.day++;
-        updateCrops();
-        if (Math.random() < 0.3) generateOres();
+      if (gameState.time.hour > 12) {
+        gameState.time.hour = 1; // Reset to 1 after 12
+      }
+      if (gameState.time.hour === 12) {
+        gameState.time.isPM = !gameState.time.isPM; // Toggle AM/PM at 12
+        if (!gameState.time.isPM) {
+          gameState.time.day++; // Increment day at 12:00 AM
+          regenerateMap(); // Reset and regenerate map
+          updateCrops();
+          if (Math.random() < 0.3) generateOres();
+        }
       }
     }
+
     const hourStr = gameState.time.hour.toString().padStart(2, '0');
     const minuteStr = gameState.time.minute.toString().padStart(2, '0');
-    timeDisplay.textContent = `${hourStr}:${minuteStr}`;
-    dayDisplay.textContent = gameState.time.day;
+    const period = gameState.time.isPM ? 'PM' : 'AM';
+    timeDisplay.textContent = `${hourStr}:${minuteStr} ${period}`;
+    dayDisplay.textContent = `${gameState.time.day}`; // Display only the day number
   }
 
+  function regenerateMap() {
+    gameState.map.tiles = [];
+    for (let y = 0; y < gameState.map.height; y++) {
+      gameState.map.tiles[y] = [];
+      for (let x = 0; x < gameState.map.width; x++) {
+        if (Math.random() < 0.08) {
+          gameState.map.tiles[y][x] = 'water';
+        } else if (Math.random() < 0.18) {
+          gameState.map.tiles[y][x] = 'grass';
+        } else {
+          gameState.map.tiles[y][x] = 'dirt';
+        }
+      }
+    }
+    gameState.map.tiles[gameState.map.homeBase.y][gameState.map.homeBase.x] = 'house';
+    gameState.map.tiles[gameState.map.mailboxPosition.y][gameState.map.mailboxPosition.x] = 'mailbox';
+    gameState.map.tiles[gameState.map.bedPosition.y][gameState.map.bedPosition.x] = 'bed';
+    gameState.map.tiles[gameState.map.chestPosition.y][gameState.map.chestPosition.x] = 'chest';
+    for (let y = 7; y < 12; y++) {
+      for (let x = 10; x < 18; x++) {
+        gameState.map.tiles[y][x] = 'tilled_soil';
+      }
+    }
+    gameState.map.tiles[gameState.map.merchantPosition.y][gameState.map.merchantPosition.x] = 'dirt';
+    generateOres(); // Regenerate ores for the new map
+  }
   // --- Crop Growth ---
   function updateCrops() {
     for (const crop of gameState.crops) {
@@ -389,7 +532,6 @@ Author: Ian
       }
     }
   }
-
   // --- Drawing Functions (with emoji and animation) ---
   let playerAnimFrame = 0;
   function drawGame() {
@@ -402,6 +544,10 @@ Author: Ian
         if (tile === 'water') emoji = EMOJIS.water;
         else if (tile === 'grass') emoji = EMOJIS.grass;
         else if (tile === 'tilled_soil') emoji = EMOJIS.tilled;
+        else if (tile === 'house') emoji = "🏠";
+        else if (tile === 'mailbox') emoji = "📬";
+        else if (tile === 'bed') emoji = "🛏️";
+        else if (tile === 'chest') emoji = "📦";
         drawEmoji(emoji, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE);
       }
     }
@@ -441,14 +587,12 @@ Author: Ian
     ctx.fillText(EMOJIS.player, 0, 0);
     ctx.restore();
   }
-
   function drawEmoji(emoji, x, y, size) {
     ctx.font = `${size}px serif`;
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText(emoji, x, y);
   }
-
   function getCropEmoji(type) {
     if (type === 'Wheat') return EMOJIS.wheat;
     if (type === 'Carrot') return EMOJIS.carrot;
@@ -467,16 +611,22 @@ Author: Ian
     }
     return "❓";
   }
-
   // --- Input Handling ---
-  function handleKeyDown(e) {
-    const key = e.key.toLowerCase();
-    if (key in gameState.keys) {
-      gameState.keys[key] = true;
-      if (key === 'e') interact();
+  gameState.time.paused = true; // Keep the timer paused initially
+let hasStartedMoving = false; // Track if the player has started moving
+
+function handleKeyDown(e) {
+  const key = e.key.toLowerCase();
+  if (key in gameState.keys) {
+    gameState.keys[key] = true;
+    if (!hasStartedMoving && (key === 'w' || key === 'a' || key === 's' || key === 'd')) {
+      hasStartedMoving = true;
+      gameState.time.paused = false; // Start the timer when movement begins
     }
+    if (key === 'e') interact();
   }
-  function handleKeyUp(e) {
+}
+function handleKeyUp(e) {
     const key = e.key.toLowerCase();
     if (key in gameState.keys) gameState.keys[key] = false;
   }
@@ -488,7 +638,6 @@ Author: Ian
     gameState.player.x = Math.max(0, Math.min(canvas.width - PLAYER_SIZE, gameState.player.x));
     gameState.player.y = Math.max(0, Math.min(canvas.height - PLAYER_SIZE, gameState.player.y));
   }
-
   // --- Mouse/Keyboard Interact ---
   function handleCanvasClick(e) {
     const rect = canvas.getBoundingClientRect();
@@ -510,234 +659,6 @@ Author: Ian
     const obj = getObjectAtTile(tileX, tileY);
     canvas.style.cursor = obj ? 'pointer' : 'default';
   }
-  function interact() {
-    let tileX, tileY;
-    switch (gameState.player.direction) {
-      case 'up': tileX = Math.floor(gameState.player.x / TILE_SIZE); tileY = Math.floor((gameState.player.y - TILE_SIZE) / TILE_SIZE); break;
-      case 'down': tileX = Math.floor(gameState.player.x / TILE_SIZE); tileY = Math.floor((gameState.player.y + PLAYER_SIZE) / TILE_SIZE); break;
-      case 'left': tileX = Math.floor((gameState.player.x - TILE_SIZE) / TILE_SIZE); tileY = Math.floor(gameState.player.y / TILE_SIZE); break;
-      case 'right': tileX = Math.floor((gameState.player.x + PLAYER_SIZE) / TILE_SIZE); tileY = Math.floor(gameState.player.y / TILE_SIZE); break;
-    }
-    const obj = getObjectAtTile(tileX, tileY);
-    if (!obj) return;
-    if (obj.type === 'merchant') openMerchant();
-    else if (obj.type === 'crop') harvestCrop(obj.index, false);
-    else if (obj.type === 'ore') mineOre(obj.index, false);
-    else if (obj.type === 'tilled_soil') plantCrop(tileX, tileY, getSelectedSeed());
-  }
-
-  // --- Inventory/Seed Helpers ---
-  function getSelectedSeed() {
-    if (gameState.player.selectedSlot !== null) {
-      const item = gameState.player.inventory[gameState.player.selectedSlot];
-      if (item && item.type === 'seed') return item;
-    }
-    return gameState.player.inventory.find(item => item.type === 'seed');
-  }
-
-  // --- Crop/Ore/Plant Actions ---
-  function harvestCrop(index, viaClick = false) {
-    const crop = gameState.crops[index];
-    let selectedItem = gameState.player.selectedSlot !== null 
-      ? gameState.player.inventory[gameState.player.selectedSlot] 
-      : null;
-    if ((!selectedItem || selectedItem.name !== 'Sickle') && viaClick) {
-      const sickleIndex = gameState.player.inventory.findIndex(i => i.name === 'Sickle');
-      if (sickleIndex !== -1) {
-        gameState.player.selectedSlot = sickleIndex;
-        setupInventory();
-        selectedItem = gameState.player.inventory[sickleIndex];
-      }
-    }
-    const sickleEquipped = selectedItem && selectedItem.name === 'Sickle';
-    if (sickleEquipped) {
-      const harvestedItem = {
-        name: crop.type,
-        type: 'crop',
-        value: getCropValue(crop.type),
-        emoji: getCropEmoji(crop.type)
-      };
-      if (gameState.player.inventory.length < 10) {
-        gameState.player.inventory.push(harvestedItem);
-        gameState.crops.splice(index, 1);
-        setupInventory();
-      } else {
-        alert('Inventory full!');
-      }
-    } else {
-      alert('You need to select the sickle to harvest!');
-    }
-  }
-  function getCropValue(cropType) {
-    const seed = gameState.merchant.items.find(item => item.produces === cropType);
-    return seed ? seed.price * 2 : 10;
-  }
-  function mineOre(index, viaClick = false) {
-    const ore = gameState.ores[index];
-    let selectedItem = gameState.player.selectedSlot !== null 
-      ? gameState.player.inventory[gameState.player.selectedSlot] 
-      : null;
-    if ((!selectedItem || selectedItem.name !== 'Pickaxe') && viaClick) {
-      const pickaxeIndex = gameState.player.inventory.findIndex(i => i.name === 'Pickaxe');
-      if (pickaxeIndex !== -1) {
-        gameState.player.selectedSlot = pickaxeIndex;
-        setupInventory();
-        selectedItem = gameState.player.inventory[pickaxeIndex];
-      }
-    }
-    const pickaxeEquipped = selectedItem && selectedItem.name === 'Pickaxe';
-    if (pickaxeEquipped) {
-      const oreItem = {
-        name: ore.type,
-        type: 'ore',
-        value: ore.value,
-        emoji: ore.emoji
-      };
-      if (gameState.player.inventory.length < 10) {
-        gameState.player.inventory.push(oreItem);
-        gameState.ores.splice(index, 1);
-        setupInventory();
-      } else {
-        alert('Inventory full!');
-      }
-    } else {
-      alert('You need to select the pickaxe to mine!');
-    }
-  }
-  function plantCrop(tileX, tileY, seed) {
-    if (!seed) {
-      alert('Select a seed in your inventory to plant!');
-      return;
-    }
-    const seedIndex = gameState.player.inventory.indexOf(seed);
-    if (seedIndex !== -1) {
-      gameState.player.inventory.splice(seedIndex, 1);
-      gameState.crops.push({
-        x: tileX * TILE_SIZE,
-        y: tileY * TILE_SIZE,
-        type: seed.produces,
-        growth: 0,
-        growthTime: seed.growthTime,
-        ready: false
-      });
-      setupInventory();
-    }
-  }
-
-  // --- Merchant Modal ---
-  function openMerchant() {
-    const merchantItemsDiv = document.getElementById('merchantItems');
-    merchantItemsDiv.innerHTML = '';
-    gameState.merchant.items.forEach((item, index) => {
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'col-md-6 mb-3 merchant-item';
-      itemDiv.innerHTML = `
-        <div class="card h-100">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${item.emoji || getItemEmoji(item)} ${item.name}</h5>
-            <p class="card-text">${getItemDescription(item)}</p>
-            <div class="mt-auto d-flex justify-content-between align-items-center">
-              <span class="badge bg-primary">${item.price} coins</span>
-              <button class="btn btn-primary btn-sm buy-btn" data-index="${index}">Buy</button>
-            </div>
-          </div>
-        </div>
-      `;
-      merchantItemsDiv.appendChild(itemDiv);
-    });
-    updateSellPreview();
-    merchantModal.show();
-    document.querySelectorAll('.buy-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const index = parseInt(e.target.getAttribute('data-index'));
-        buyItem(index);
-      });
-    });
-    document.querySelectorAll('.sell-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const action = e.target.textContent;
-        if (action.includes('Crops')) {
-          sellItems('crop');
-        } else if (action.includes('Ores')) {
-          sellItems('ore');
-        } else {
-          sellItems('all');
-        }
-      });
-    });
-  }
-  function getItemDescription(item) {
-    if (item.type === 'seed') {
-      return `Grows into ${item.produces} in ${item.growthTime} days.`;
-    } else if (item.type === 'item' && item.effect === 'growthSpeed') {
-      return `Speeds up crop growth by ${(1 - item.value) * 100}%.`;
-    }
-    return '';
-  }
-  function updateSellPreview() {
-    const sellPreview = document.getElementById('sellPreview');
-    const crops = gameState.player.inventory.filter(item => item.type === 'crop');
-    const ores = gameState.player.inventory.filter(item => item.type === 'ore');
-    let previewHTML = '';
-    if (crops.length > 0) {
-      const cropValue = crops.reduce((sum, crop) => sum + crop.value, 0);
-      previewHTML += `<p><strong>Crops:</strong> ${crops.length} items worth ${cropValue} coins</p>`;
-    } else {
-      previewHTML += `<p class="text-muted">No crops to sell</p>`;
-    }
-    if (ores.length > 0) {
-      const oreValue = ores.reduce((sum, ore) => sum + ore.value, 0);
-      previewHTML += `<p><strong>Ores:</strong> ${ores.length} items worth ${oreValue} coins</p>`;
-    } else {
-      previewHTML += `<p class="text-muted">No ores to sell</p>`;
-    }
-    sellPreview.innerHTML = previewHTML;
-  }
-  function buyItem(index) {
-    const item = gameState.merchant.items[index];
-    if (gameState.player.coins >= item.price) {
-      if (gameState.player.inventory.length < 10) {
-        gameState.player.coins -= item.price;
-        gameState.player.inventory.push({...item});
-        setupInventory();
-        updateSellPreview();
-      } else {
-        alert('Inventory full!');
-      }
-    } else {
-      alert('Not enough coins!');
-    }
-  }
-  function sellItems(type) {
-    let itemsToSell = [];
-    let itemsToKeep = [];
-    if (type === 'all') {
-      itemsToSell = gameState.player.inventory.filter(item => item.type === 'crop' || item.type === 'ore');
-      itemsToKeep = gameState.player.inventory.filter(item => item.type !== 'crop' && item.type !== 'ore');
-    } else {
-      itemsToSell = gameState.player.inventory.filter(item => item.type === type);
-      itemsToKeep = gameState.player.inventory.filter(item => item.type !== type);
-    }
-    const total = itemsToSell.reduce((sum, item) => sum + item.value, 0);
-    if (itemsToSell.length > 0) {
-      gameState.player.inventory = itemsToKeep;
-      gameState.player.coins += total;
-      setupInventory();
-      updateSellPreview();
-      const feedback = document.createElement('div');
-      feedback.className = 'alert alert-success mt-3';
-      feedback.textContent = `Sold ${itemsToSell.length} items for ${total} coins!`;
-      document.querySelector('.modal-body').prepend(feedback);
-      setTimeout(() => feedback.remove(), 2000);
-    } else {
-      const feedback = document.createElement('div');
-      feedback.className = 'alert alert-warning mt-3';
-      feedback.textContent = `No items to sell!`;
-      document.querySelector('.modal-body').prepend(feedback);
-      setTimeout(() => feedback.remove(), 2000);
-    }
-  }
-
   // --- Game Loop ---
   function gameLoop() {
     if (!gameState.time.paused) {
@@ -745,9 +666,8 @@ Author: Ian
       updatePlayerPosition();
     }
     drawGame();
-    requestAnimationFrame(gameLoop);
+    setTimeout(gameLoop, 5 * 1000 / 60); // Adjust game loop for 5 seconds per hour
   }
-
   // --- Init ---
   function initGame() {
     generateMap();
@@ -760,11 +680,10 @@ Author: Ian
     document.addEventListener('keyup', handleKeyUp);
     canvas.addEventListener('click', handleCanvasClick);
     canvas.addEventListener('mousemove', handleCanvasHover);
-    canvas.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') interact();
-    });
+
     gameLoop();
   }
+
   window.onload = initGame;
 </script>
 
