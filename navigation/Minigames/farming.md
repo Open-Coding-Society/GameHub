@@ -196,6 +196,34 @@ Author: Ian & Zach
       </div>
     </div>
   </div>
+
+  <!-- New row for Crafting, Shop, and Information boxes -->
+  <div class="row mt-4">
+    <div class="col-lg-4">
+      <div class="card mb-3">
+        <div class="card-header">Crafting</div>
+        <div class="card-body">
+          <p>Craft items here</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card mb-3">
+        <div class="card-header">Shop</div>
+        <div class="card-body">
+          <p>Buy items here</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card mb-3">
+        <div class="card-header">Information</div>
+        <div class="card-body">
+          <p>Game tips and details</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Merchant Modal -->
