@@ -14,6 +14,7 @@ Author: Zach & Ian
   body {
     background-color: #f8f9fa;
     font-family: 'Arial', sans-serif;
+    overflow-x: auto; /* Enable horizontal scrolling */
   }
   #gameCanvas {
     width: 960px; /* Increased width by 1.25x */
