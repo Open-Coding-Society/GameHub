@@ -2,54 +2,94 @@
 
 Genome Gamers Frontend is a project designed to support students in their Computer Science and Software Engineering education. It combines educational resources like tech talks, code examples, and blogs with an interactive **Game Hub** that gamifies learning through engaging minigames.
 
-The **Game Hub** serves as the central platform where players can explore different worlds, interact with NPCs, and access a variety of games. Players navigate the hub using WASD controls, customize their character's appearance, and earn points by completing challenges. Each world offers unique experiences, ranging from DNA editing and tower defense to arcade classics and strategy games, all designed to enhance STEM learning in a fun and interactive way.
+The **Game Hub** serves as the central platform where players can explore different worlds, interact with NPCs, and access a variety of games. Players navigate the hub using WASD controls, customize their character's appearance, and earn points by completing challenges. Each world offers unique experiences, with three games per world designed to enhance STEM learning in a fun and interactive way.
 
 GitHub Pages can be customized by the blogger to support computer science learnings as the student works through the pathway of using JavaScript, Python/Flask, Java/Spring.
 
 ## Key Features
 
+### Game Hub (World Selector)
+The **Game Hub** acts as the central map where players can select different worlds to explore. Each world is represented by an icon, and players can interact with NPCs to learn more about the world and its games. The hub also includes options for customizing character skins and accessing help or additional resources.
+
+### Worlds and Their Games
+Each world contains three unique games that align with its theme:
+
+1. **Bioverse Central**:
+   - Explore options like skins, help, outlines, and more.
+   - Games: Skins customization, Help section, and Outlines.
+
+2. **Genomic Architects**:
+   - Focus on building DNA, editing genes, and playing blackjack.
+   - Games: DNA Building, Gene Editing, Blackjack.
+
+3. **Pathogen Patrol**:
+   - Predict outbreaks, explore organelles, and engage in scientific adventures.
+   - Games: Outbreak Prediction, Exploration, Adventure.
+
+4. **Arcade Rush**:
+   - Master fast-paced classics like Pac-Man, Flappy Bird, and Geometry Dash.
+   - Games: Pac-Man, Flappy Bird, Jump Challenges.
+
+5. **Party Time**:
+   - Spin slot machines, open digital packs, and enjoy party games.
+   - Games: Slot Machine, Pack Opening, Party Games.
+
+6. **Combat Zone**:
+   - Enter skirmishes, plan tactics, and survive swarms.
+   - Games: Skirmish, Strategy, Survival.
+
+7. **Strategy Core**:
+   - Engage in tower defense, simulations, and bird slinging.
+   - Games: Tower Defense, Simulation, Racing.
+
+8. **Skill & React**:
+   - Test reflexes with table tennis, crossy road, and other challenges.
+   - Games: Table Tennis, Reflex Challenges, Crossy Road.
+
+9. **Click & Collect**:
+   - Farm, race, and click through fast-paced experiences.
+   - Games: Farming, Racing, Clicker.
+
 ### Common Features Across the Site
 
 1. **Interactive Minigames**:
    - A variety of games such as platformers, tower defense, blackjack, farming simulators, and more.
-   - Games are built using JavaScript and HTML5 Canvas for dynamic rendering.
-   - Background music integration for immersive gameplay.
-   - Drag-and-drop mechanics for games like DNA editing and farming.
    - Real-time scoring and leaderboard systems.
 
-2. **Gamification of Learning**:
-   - Points system integrated with backend APIs to reward users for completing tasks or achieving milestones in games.
-   - Educational themes such as biology (DNA editing, cell exploration), data science, and machine learning.
+2. **NPC Interactions**:
+   - NPCs provide hints, dialogue, and guidance for each world and its games.
 
-3. **Responsive Design**:
+3. **Customization**:
+   - Players can customize their character's appearance using skins.
+
+4. **Educational Content**:
+   - Games are designed to enhance STEM learning through interactive and engaging experiences.
+
+5. **Responsive Design**:
    - All pages and games are optimized for desktop and mobile devices.
    - CSS animations and transitions for smooth user interactions.
 
-4. **Audio Integration**:
+6. **Audio Integration**:
    - Background music and sound effects are included in most games.
    - Audio files are preloaded for seamless playback.
 
-5. **Reusable Components**:
+7. **Reusable Components**:
    - Modular JavaScript files for shared functionality across games (e.g., game loops, collision detection, scoring systems).
    - Shared CSS styles for consistent design.
 
-6. **API Integration**:
+8. **API Integration**:
    - Backend API endpoints for updating user points and fetching leaderboard data.
    - Fetch-based asynchronous calls for real-time updates.
 
-7. **Educational Content**:
-   - Fun facts and educational tidbits displayed during gameplay.
-   - Themes tied to STEM topics such as biology, chemistry, and computer science.
-
-8. **Customizable Settings**:
+9. **Customizable Settings**:
    - Difficulty levels for games (e.g., Easy, Medium, Hard).
    - Adjustable parameters like speed, jump height, and spawn rates.
 
-9. **Leaderboard System**:
-   - Persistent leaderboard for tracking top scores across games.
-   - Integration with backend APIs for storing and retrieving leaderboard data.
+10. **Leaderboard System**:
+    - Persistent leaderboard for tracking top scores across games.
+    - Integration with backend APIs for storing and retrieving leaderboard data.
 
-10. **Modular Design**:
+11. **Modular Design**:
     - Each game is encapsulated in its own file structure for easy maintenance and updates.
     - Shared assets like images, audio files, and scripts are stored in centralized directories.
 
