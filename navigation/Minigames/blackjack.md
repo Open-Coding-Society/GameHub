@@ -41,6 +41,38 @@ Author: Zach
   }
 </style>
 
+<!--Teleports Back to given World-->
+<style>
+  #canvas-container {
+    position: relative;
+    display: inline-block;
+  }
+  .right-center-icon {
+    position: absolute;
+    top: 50%;
+    right: 32px;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.12);
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  }
+  .right-center-icon:hover {
+    background: rgba(0,0,0,0.22);
+  }
+</style>
+  
+<div id="canvas-container" style="position: relative;">
+  <canvas id="gameCanvas" width="100" height="50"></canvas>
+  <a href="{{site.baseurl}}/world1">
+    <img src="{{site.baseurl}}/images/icon30.png" alt="Home Icon" class="right-center-icon">
+  </a>
+</div>
+
 <div class="container mt-5">
   <h1 class="text-center">Antibody Blackjack</h1>
   <p class="text-center description">Get as close as you can to 21 without going over!</p>
