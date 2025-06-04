@@ -178,11 +178,3 @@ Ensure you have the following installed on your system:
    Follow the deployment instructions in the repository to host the project on GitHub Pages or another platform.
 
 ---
-
-### Additional Notes
-
-- **Configuration**: Customize `_config.yml` for site-specific settings.
-- **Game Assets**: Ensure all game assets (images, audio files, etc.) are stored in the appropriate directories under `assets/`.
-- **Troubleshooting**: Refer to the `docs/README.md` for troubleshooting common issues.
-
-Now you're ready to explore and contribute to the Genome Gamers Frontend project!
