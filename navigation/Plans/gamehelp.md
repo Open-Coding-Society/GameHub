@@ -403,7 +403,7 @@ Controls player movement on the map and triggers discovery events for organelles
 For each game, you can add a skin system, point rewards, or leaderboards to increase replay value and user engagement!
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// filepath: /home/kasm-user/nighthawk/GameHub/navigation/Worlds/world0.md
 // ...existing code...
 
 // --- Background Music ---

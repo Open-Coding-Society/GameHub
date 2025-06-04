@@ -10,22 +10,22 @@ categories: [Planning]
 This is an adventure game with numerous interactions to simulate and address real-life concerns in the field of Biotechnology. Moreover, this game highlights the numerous achievements that the Scripps Research Institute has accomplished. 
 
 ### Game Hub Frontend & Backend Repositories
-- [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
+- [Frontend Repository](https://github.com/Prad-coder/GameHub)
 - [Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
 
 ### Game Hub Links
-- [Worlds 0-8](https://prad-coder.github.io/GenomeGamersFrontend/)
-- [Original Design Minigames - World 9](https://prad-coder.github.io/GenomeGamersFrontend/world9)
-- [Pilot City Minigames: World 10](https://prad-coder.github.io/GenomeGamersFrontend/world10)
+- [Worlds 0-8](https://prad-coder.github.io/GameHub/)
+- [Original Design Minigames - World 9](https://prad-coder.github.io/GameHub/world9)
+- [Pilot City Minigames: World 10](https://prad-coder.github.io/GameHub/world10)
 
 ### KanBan Board
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
 ### Next Plan
-[Next Plan](https://prad-coder.github.io/GenomeGamersFrontend/planning/2025/05/06/Next_Plan.html)
+[Next Plan](https://prad-coder.github.io/GameHub/planning/2025/05/06/Next_Plan.html)
 
 ### Final Plan
-[Final Plan](https://prad-coder.github.io/GenomeGamersFrontend/planning/2025/05/06/Final_Plan.html)
+[Final Plan](https://prad-coder.github.io/GameHub/planning/2025/05/06/Final_Plan.html)
 
 ### Ideate
 The Scripps Research: Biotech Engagement Game Development project uses interactive games to introduce students to biotechnology. Each game is built around real scientific data and machine learning models, allowing players to tackle challenges like predicting disease outbreaks or designing new treatments. Through gameplay, students experience how data and AI are used in real-world research to solve major health problems.  
@@ -66,7 +66,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - **ML Model:** Time-series forecasting & classification using Random Forest, XGBoost, K-Means, and Logistic Regression.  
 - **Gameplay:** Players analyze trends, predict outbreaks, and implement countermeasures to minimize infections & economic impact.  
 
-[Predict Outbreak Scenarios Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/11)
+[Predict Outbreak Scenarios Burndown](https://github.com/Prad-coder/GameHub/issues/11)
 
 <img width="381" alt="Image" src="https://github.com/user-attachments/assets/6c64c916-44f2-4495-9007-823b3963948b" />
 
@@ -77,7 +77,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - **ML Model:** Random Forest, XGBoost – predict mutation impact.  
 - **Gameplay:** Players build DNA sequences; ML predicts mutation effects. 
 
-[DNA Building Blocks Game Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/16)
+[DNA Building Blocks Game Burndown](https://github.com/Prad-coder/GameHub/issues/16)
 
 <img width="349" alt="Image" src="https://github.com/user-attachments/assets/d486b7b2-121a-4917-bc87-37c9e955b818" />
  
@@ -88,7 +88,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - **ML Model:** SVM, Random Forest – predict gene edit impacts.  
 - **Gameplay:** Players modify genes; ML forecasts mutation effects.  
 
-[Gene Editing Challenge Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/14)
+[Gene Editing Challenge Burndown](https://github.com/Prad-coder/GameHub/issues/14)
 
 <img width="215" alt="Image" src="https://github.com/user-attachments/assets/c64c360d-340c-44f7-9f77-9eaf3aef2415" />
 
@@ -99,7 +99,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - **ML Model:** K-Nearest Neighbors, Neural Networks – predict binding efficacy and stability.  
 - **Gameplay:** Players draw antibody fragments like blackjack; ML predicts if the binding score is optimal or unstable.  
 
-[Antibody Blackjack Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/13)
+[Antibody Blackjack Burndown](https://github.com/Prad-coder/GameHub/issues/13)
 
 <img width="337" alt="Image" src="https://github.com/user-attachments/assets/03a330cc-9f7a-451c-8390-5c1766e3f148" />
 
@@ -108,7 +108,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 ### **5. Cell Exploration Journey**  
 - **Gameplay:** Players navigate pathways through a joystick and reach different cell organelles where they learn about those organelles.
 
-[Cell Exploration Journey Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/12)
+[Cell Exploration Journey Burndown](https://github.com/Prad-coder/GameHub/issues/12)
 
 <img width="223" alt="Image" src="https://github.com/user-attachments/assets/4c0ce11c-912b-472d-85f3-29a10358490c" />
 
@@ -121,7 +121,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - Choose the right treatment or containment method (quarantine, vaccine, etc.)
 - Unlock the next zone if they neutralize the threat
 
-[Pathogen Platformer Burndown](https://github.com/Prad-coder/GenomeGamersFrontend/issues/28)
+[Pathogen Platformer Burndown](https://github.com/Prad-coder/GameHub/issues/28)
 
 <img width="466" alt="Image" src="https://github.com/user-attachments/assets/85b2b7a1-eee3-4f8e-8eca-030ea641d35d" />
 
@@ -132,7 +132,7 @@ Dataset 4: Antibody Blackjack dataset from Protein Data Bank
 - About us: About the creators - team roles of our minigames and website
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// filepath: /home/kasm-user/nighthawk/GameHub/navigation/Worlds/world0.md
 // ...existing code...
 
 // --- Background Music ---

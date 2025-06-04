@@ -409,7 +409,7 @@ update();
 </script>
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// filepath: /home/kasm-user/nighthawk/GameHub/navigation/Worlds/world0.md
 // ...existing code...
 
 // --- Background Music ---

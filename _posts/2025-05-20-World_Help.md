@@ -140,7 +140,7 @@ objectImages.format = '{{site.baseurl}}/images/newIcon.png';
 - Make worlds scrollable or paginated if too many icons.
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// filepath: /home/kasm-user/nighthawk/GameHub/navigation/Worlds/world0.md
 // ...existing code...
 
 // --- Background Music ---

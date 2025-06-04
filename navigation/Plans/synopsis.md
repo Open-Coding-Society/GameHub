@@ -10,23 +10,23 @@ Author: Zach
 We will add 8 worlds with 3 levels each to make 24 total games in different places, rather than all on one page.
 
 ### Game Hub Frontend & Backend Repositories
-- [Frontend Repository](https://github.com/Prad-coder/GenomeGamersFrontend)
+- [Frontend Repository](https://github.com/Prad-coder/GameHub)
 - [Backend Repository](https://github.com/Prad-coder/GenomeGamersBackend)
 
 ### Game Hub Links
-- [Worlds 0-8](https://prad-coder.github.io/GenomeGamersFrontend/)
-- [Original Design Minigames - World 9](https://prad-coder.github.io/GenomeGamersFrontend/world9)
-- [Pilot City Minigames: World 10](https://prad-coder.github.io/GenomeGamersFrontend/world10)
+- [Worlds 0-8](https://prad-coder.github.io/GameHub/)
+- [Original Design Minigames - World 9](https://prad-coder.github.io/GameHub/world9)
+- [Pilot City Minigames: World 10](https://prad-coder.github.io/GameHub/world10)
 
 
 ### KanBan Board
 [KanBan Board](https://github.com/users/Prad-coder/projects/1)
 
 ### Initial Plan
-[Initial Plan](https://prad-coder.github.io/GenomeGamersFrontend/planning/2025/05/06/Initial_Plan.html)
+[Initial Plan](https://prad-coder.github.io/GameHub/planning/2025/05/06/Initial_Plan.html)
 
 ### Next Plan
-[Next Plan](https://prad-coder.github.io/GenomeGamersFrontend/planning/2025/05/06/Next_Plan.html)
+[Next Plan](https://prad-coder.github.io/GameHub/planning/2025/05/06/Next_Plan.html)
 
 ### Ideate
 These new worlds and levels will sort and separate our games into categories making it more engaging and UI friendly.
@@ -233,7 +233,7 @@ Serves as the central hub for all experiences that don’t fit into the main the
 <img width="1280" alt="Image" src="https://github.com/user-attachments/assets/28c5d020-745f-4b8c-a54f-76fc64062db8" />
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// filepath: /home/kasm-user/nighthawk/GameHub/navigation/Worlds/world0.md
 // ...existing code...
 
 // --- Background Music ---

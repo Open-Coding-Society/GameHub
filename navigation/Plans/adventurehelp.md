@@ -107,7 +107,7 @@ document.getElementById('skin-button').onclick = () => {
 This code sets up a modular, audio-rich platformer game. To add skin support, you’d need to add UI for skin selection and update the player rendering logic to use the chosen skin, similar to your Game Hub implementation.
 
 <script>
-// filepath: /home/kasm-user/nighthawk/GenomeGamersFrontend/navigation/Worlds/world0.md
+// filepath: /home/kasm-user/nighthawk/GameHub/navigation/Worlds/world0.md
 // ...existing code...
 
 // --- Background Music ---
