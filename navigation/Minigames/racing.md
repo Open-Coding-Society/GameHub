@@ -350,7 +350,8 @@ Author: Ian
 
   // Update drawHUD to show NPC laps and positions
   function drawHUD() {
-    let html = `<strong>Your Lap:</strong> ${player.lap}/3`;
+    let html = `<div style="color:#ffbe00;margin-bottom:4px;"><b>Hold the W key to speed up and the S key to slow down!</b></div>`;
+    html += `<strong>Your Lap:</strong> ${player.lap}/3`;
     if (player.item) html += `&nbsp;<strong>Item:</strong> ${player.item === 'shell' ? '🐢 Shell' : '🍄 Mushroom'}`;
     if (lapMessage) html += `<br><span style="color:#58a6ff;font-weight:bold">${lapMessage}</span>`;
     if (!gameEnded && currentState === GAME_STATE.PLAYING) {

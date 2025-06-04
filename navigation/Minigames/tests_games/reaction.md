@@ -16,7 +16,7 @@ Author: Ian
     <p id="result" class="mt-3 score"></p>
   </div>
 
-  <p class="mt-4 text-muted">Try to click as quickly as you can when the screen turns green.</p>
+  <p class="mt-4 text-muted">Try to click the mouse button or the space bar as quickly as you can when the screen turns green.</p>
 </div>
 
 <style>
@@ -61,7 +61,7 @@ Author: Ian
   const result = document.getElementById('result');
   let startTime, timeout;
 
-  screen.addEventListener('click', () => {
+  function handleGameAction() {
     if (screen.classList.contains('start-screen')) {
       screen.className = 'wait-screen';
       screen.innerHTML = '<h2>Wait for green...</h2>';
@@ -82,6 +82,19 @@ Author: Ian
       result.innerText = '⚠️ Too soon! Wait for green!';
       screen.className = 'start-screen';
       screen.innerHTML = '<h2>Click to try again</h2>';
+    }
+  }
+
+  screen.addEventListener('click', handleGameAction);
+
+  // Add space bar support
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+      // Only trigger if the game is visible and not focused on an input
+      if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        handleGameAction();
+        e.preventDefault();
+      }
     }
   });
 </script>
