@@ -290,6 +290,7 @@ Author: Zach, Ian, Aarush, Lars
       <li><span style="color:orange;">Worlds</span>: Click <strong> Cancel </strong>to move away from the world, talk to see different messages, and enter to go into the world</li>
       <li><span style="color:red;">Home Button</span>: Click the <strong> Home </strong>icon in the top right of the worlds pages to go back to this page</li>
       <li><span style="color:#00bfff;">Music</span>: Find the <strong> Music </strong>note in the top/bottom right of your screen to mute, fast forward, or pause the music</li>
+      <li><span style="color:#FFC0CB;">Form</span>: Scan the <strong> QR </strong>code below or click the link here to respond to our google form: <a href="https://docs.google.com/forms/d/e/1FAIpQLSdRLBVL1xN1hCwacCcyTCNTNFdA7TTKn8pG9Wqpx25znM590A/viewform?usp=sharing&ouid=104967620423493227675" target="_blank" rel="noopener noreferrer">Google Form</a></li>
   </ul>
   <div style="text-align:center; margin-top:12px; position:relative;">
     <img width="220" alt="Google Form" src="https://github.com/user-attachments/assets/1097107f-c5ac-4a91-8384-6a9b6043c2de" style="position:relative; left:300px;" />
