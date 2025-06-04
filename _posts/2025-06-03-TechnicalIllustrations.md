@@ -14,6 +14,11 @@ This page provides technical illustrations and diagrams to explain the architect
 
 ---
 
+## One-line Description:
+Game Hub: An interactive web platform of student-created minigames and worlds blending biotech education with fun, casual gameplay.
+
+---
+
 ## 1. **Overall System Architecture**
 
 **Architecture and Functionality:**  

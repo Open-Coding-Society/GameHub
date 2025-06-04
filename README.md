@@ -5,6 +5,11 @@ This document outlines the journey of designing and building our game hub, focus
 
 <img width="1280" alt="Image" src="https://github.com/user-attachments/assets/eaaf7ae4-3a85-4045-861a-311e8c6700de" />
 
+--- 
+
+## One-line Description:
+Game Hub: An interactive web platform of student-created minigames and worlds blending biotech education with fun, casual gameplay.
+
 ---
 
 ## 1. Initial Plan: The Outline
