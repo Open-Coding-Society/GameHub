@@ -2,8 +2,8 @@ title: Game Hub
 description: "Game Hub: A platform for gamers to share their experiences and connect with others."
 owner_name: Pradyun Gowda
 github_username: Prad-coder
-github_repo: "GenomeGamersFrontend" 
-baseurl: "/GenomeGamersFrontend"
+github_repo: "GameHub" 
+baseurl: "/GameHub"
 future: true
 remote_theme: jekyll/minima
 minima:
