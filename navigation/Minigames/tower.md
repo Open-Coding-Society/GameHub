@@ -68,7 +68,7 @@ Author: Zach & Ian
 </style>
 
 <div id="towerTitle">Tower Defense Game</div>
-<div id="towerDesc">Spend money to place monkeys down and protect the balloons from making it to the end! Click on troops to upgrade them and make them stronger!</div>
+<div id="towerDesc">Spend money to place monkeys down and protect the balloons from making it to the end! Click on troops to upgrade them and make them stronger! (Level 10 is max level)</div>
 <div id="statusBar">
   <span id="moneyDisplay">Money: $1000</span>
   <span id="healthDisplay">Health: 20</span>

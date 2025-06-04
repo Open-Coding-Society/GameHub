@@ -186,6 +186,44 @@ Author: Zach, Ian, Aarush, Lars
   .npc-modal-btn:not(:last-child) {
     margin-right: 0;
   }
+
+  /* Add styles for the navigation popup */
+.popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 260px;
+  background: #fff;
+  color: #222;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  z-index: 9999;
+  padding: 24px 20px 16px 20px;
+  text-align: left;
+  font-size: 1.1em;
+  display: none;
+}
+.popup-modal .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #888;
+  cursor: pointer;
+}
+.popup-modal h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.15em;
+  font-weight: bold;
+}
+.popup-modal ul {
+  padding-left: 18px;
+  margin-bottom: 0;
+}
 </style>
 
 <div id="loading">Loading game assets...</div>
@@ -240,7 +278,30 @@ Author: Zach, Ian, Aarush, Lars
   </div>
 </div>
 
+<!-- Navigation Popup -->
+<div id="navPopup" class="popup-modal">
+  <button class="close-btn" onclick="closePopup('navPopup')">&times;</button>
+  <h4>Navigation Help</h4>
+  <ul style="margin-bottom:0;">
+     <li><span style="color:gray;">Movement</span>: Use the <strong> WASD </strong>keys to move</li>
+      <li><span style="color:green;">Menu</span>: Click the <strong> Game Hub </strong>button in the top left to go to this page</li>
+      <li><span style="color:#003366;">Search</span>: Click the <strong> Search </strong>button in the top right to find help and planning pages</li>
+      <li><span style="color:purple;">Cosmetics</span>: Go to the <strong> Clotheshanger </strong>above this button and click confirm to change your outfit</li>
+      <li><span style="color:orange;">Worlds</span>: Click <strong> Cancel </strong>to move away from the world, talk to see different messages, and enter to go into the world</li>
+      <li><span style="color:red;">Home Button</span>: Click the <strong> Home </strong>icon in the top right of the worlds pages to go back to this page</li>
+      <li><span style="color:#00bfff;">Music</span>: Find the <strong> Music </strong>note in the top/bottom right of your screen to mute, fast forward, or pause the music</li>
+  </ul>
+</div>
+
 <script>
+function closePopup(id) {
+  const popup = document.getElementById(id);
+  if (popup) {
+    popup.style.display = 'none';
+    // Do not set isModalOpen here!
+  }
+}
+
 // --- Background Music ---
 const music = new Audio('{{site.baseurl}}/assets/audio/rooftoprun.mp3'); // Change path as needed
 music.loop = true;
@@ -288,7 +349,8 @@ const objectImages = {
    world6: '{{site.baseurl}}/images/symbol6.png', // top 1
    world7: '{{site.baseurl}}/images/symbol7.png', // top 2
    world8: '{{site.baseurl}}/images/symbol8.png', // top 3 
-   skin: '{{site.baseurl}}/images/icon22.png' // skin
+   skin: '{{site.baseurl}}/images/icon22.png', // skin
+   nav: '{{site.baseurl}}/images/icon34.png', // navigation
 };
 
 const loadedObjectImages = {};
@@ -321,7 +383,8 @@ const objects = [
   { x: 660, y: 250, width: 40, height: 40, game: 'world6' }, // top 1
   { x: 510, y: 100, width: 40, height: 40, game: 'world7' }, // top 2
   { x: 330, y: 100, width: 40, height: 40, game: 'world8' }, // top 3
-  { x: 730, y: 500, width: 40, height: 40, game: 'skin' } // skin icon
+  { x: 730, y: 410, width: 40, height: 40, game: 'skin' }, // skin icon
+  { x: 740, y: 590, width: 40, height: 40, game: 'nav' } // navigation
 ];
 
 const walls = [
@@ -350,7 +413,7 @@ walls.push(
 { x: canvas.width - borderThickness, y: 0, width: borderThickness, height: canvas.height } // right
 );
 
-const topRightBox = { x: 675, y: 500, width: 40, height: 40 }; 
+const topRightBox = { x: 730, y: 410, width: 40, height: 40 }; 
 const skinModal = document.getElementById('skin-modal');
 const closeModal = document.getElementById('close-modal');
 const confirmButton = document.getElementById('confirm-button');
@@ -574,7 +637,8 @@ function update() {
   let nextX = player.x;
   let nextY = player.y;
 
-  if (!isModalOpen && !npcModalOpen) { 
+  // Only lock movement for skin modal or NPC modal, not for nav modal
+  if (!isModalOpen && !npcModalOpen) {
     if (keys['w']) nextY -= player.speed;
     if (keys['s']) nextY += player.speed;
     if (keys['a']) nextX -= player.speed;
@@ -614,9 +678,16 @@ function update() {
     hasLeftSkinBox = true;
   }
 
+  // Handle leaving navigation box
+  // No longer lock movement for nav modal
+
   if (collidedWorld && !npcModalOpen) {
     resolveTouch(player, objects.find(o => o.game === collidedWorld));
     showNPCModal(collidedWorld);
+  }
+
+  if (!npcModalOpen && !isModalOpen) {
+    handleNavInteraction();
   }
 }
 
@@ -684,6 +755,9 @@ function draw() {
       } else if (obj.game === 'world8') { 
         scaledWidth *= 0.9;
         scaledHeight *= 0.9;
+      } else if (obj.game === 'nav') { 
+        scaledWidth *= 0.7;
+        scaledHeight *= 0.7;
       } else if (obj.game === 'stealth') { 
         scaledWidth *= 0.6;
         scaledHeight *= 0.6;  
@@ -803,6 +877,86 @@ skinOptions.forEach((option, index) => {
     option.classList.add('selected');
   }
 });
+
+// Navigation popup logic
+const navPopup = document.getElementById('navPopup');
+const navObject = objects.find(o => o.game === 'nav'); // Find the navigation object
+
+// Add interaction logic for the navigation icon
+function handleNavInteraction() {
+  if (isColliding(player, navObject) && navPopup.style.display !== 'block') {
+    navPopup.style.display = 'block';
+    // Do NOT set isModalOpen here, so movement is never locked for nav popup
+  }
+};
+
+// Clicking X only closes the popup, never affects movement
+function closePopup(id) {
+  const popup = document.getElementById(id);
+  if (popup) {
+    popup.style.display = 'none';
+    // Do not set isModalOpen here!
+  }
+}
+
+// Modify the update function to ensure proper interaction logic
+function update() {
+  let nextX = player.x;
+  let nextY = player.y;
+
+  // Only lock movement for skin modal or NPC modal, not for nav modal
+  if (!isModalOpen && !npcModalOpen) {
+    if (keys['w']) nextY -= player.speed;
+    if (keys['s']) nextY += player.speed;
+    if (keys['a']) nextX -= player.speed;
+    if (keys['d']) nextX += player.speed;
+  }
+
+  const futureBox = {
+    x: nextX,
+    y: nextY,
+    width: player.width,
+    height: player.height
+  };
+
+  const hittingWall = walls.some(wall => isColliding(futureBox, wall));
+  if (!hittingWall) {
+    player.x = nextX;
+    player.y = nextY;
+  }
+
+  // World/NPC collision
+  let collidedWorld = null;
+  objects.forEach(obj => {
+    if (obj.game === 'skin' && isColliding(player, obj)) {
+      if (hasLeftSkinBox && !isModalOpen) {
+        skinModal.style.display = 'block';
+        isModalOpen = true;
+        hasLeftSkinBox = false;
+      }
+    } else if (obj.game !== 'skin' && worldNPCs[obj.game] && isColliding(player, obj)) {
+      collidedWorld = obj.game;
+    }
+  });
+
+  // Handle leaving skin box
+  const skinObj = objects.find(o => o.game === 'skin');
+  if (!isColliding(player, skinObj)) {
+    hasLeftSkinBox = true;
+  }
+
+  // Handle leaving navigation box
+  // No longer lock movement for nav modal
+
+  if (collidedWorld && !npcModalOpen) {
+    resolveTouch(player, objects.find(o => o.game === collidedWorld));
+    showNPCModal(collidedWorld);
+  }
+
+  if (!npcModalOpen && !isModalOpen) {
+    handleNavInteraction();
+  }
+}
 </script>
 <script type="module">
 import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
