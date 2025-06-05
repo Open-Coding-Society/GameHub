@@ -204,16 +204,6 @@ Author: Zach, Ian, Aarush, Lars
   font-size: 1.1em;
   display: none;
 }
-.popup-modal .close-btn {
-  position: absolute;
-  top: 8px;
-  right: 14px;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  color: #888;
-  cursor: pointer;
-}
 .popup-modal h4 {
   margin-top: 0;
   margin-bottom: 10px;
@@ -280,7 +270,6 @@ Author: Zach, Ian, Aarush, Lars
 
 <!-- Navigation Popup -->
 <div id="navPopup" class="popup-modal">
-  <button class="close-btn" onclick="closePopup('navPopup')">&times;</button>
   <h4>Navigation Help</h4>
   <ul style="margin-bottom:0;">
      <li><span style="color:gray;">Movement</span>: Use the <strong> WASD </strong>keys to move</li>
@@ -892,100 +881,8 @@ function handleNavInteraction() {
     navPopup.style.display = 'block';
     // Do NOT set isModalOpen here, so movement is never locked for nav popup
   }
+  // Auto-close nav popup if player leaves the nav icon area
+  if (!isColliding(player, navObject) && navPopup.style.display === 'block') {
+    navPopup.style.display = 'none';
+  }
 };
-
-// Clicking X only closes the popup, never affects movement
-function closePopup(id) {
-  const popup = document.getElementById(id);
-  if (popup) {
-    popup.style.display = 'none';
-    // Do not set isModalOpen here!
-  }
-}
-
-// Modify the update function to ensure proper interaction logic
-function update() {
-  let nextX = player.x;
-  let nextY = player.y;
-
-  // Only lock movement for skin modal or NPC modal, not for nav modal
-  if (!isModalOpen && !npcModalOpen) {
-    if (keys['w']) nextY -= player.speed;
-    if (keys['s']) nextY += player.speed;
-    if (keys['a']) nextX -= player.speed;
-    if (keys['d']) nextX += player.speed;
-  }
-
-  const futureBox = {
-    x: nextX,
-    y: nextY,
-    width: player.width,
-    height: player.height
-  };
-
-  const hittingWall = walls.some(wall => isColliding(futureBox, wall));
-  if (!hittingWall) {
-    player.x = nextX;
-    player.y = nextY;
-  }
-
-  // World/NPC collision
-  let collidedWorld = null;
-  objects.forEach(obj => {
-    if (obj.game === 'skin' && isColliding(player, obj)) {
-      if (hasLeftSkinBox && !isModalOpen) {
-        skinModal.style.display = 'block';
-        isModalOpen = true;
-        hasLeftSkinBox = false;
-      }
-    } else if (obj.game !== 'skin' && worldNPCs[obj.game] && isColliding(player, obj)) {
-      collidedWorld = obj.game;
-    }
-  });
-
-  // Handle leaving skin box
-  const skinObj = objects.find(o => o.game === 'skin');
-  if (!isColliding(player, skinObj)) {
-    hasLeftSkinBox = true;
-  }
-
-  // Handle leaving navigation box
-  // No longer lock movement for nav modal
-
-  if (collidedWorld && !npcModalOpen) {
-    resolveTouch(player, objects.find(o => o.game === collidedWorld));
-    showNPCModal(collidedWorld);
-  }
-
-  if (!npcModalOpen && !isModalOpen) {
-    handleNavInteraction();
-  }
-}
-</script>
-<script type="module">
-import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-async function fetchPoints() {
-  try {
-    const response = await fetch(`${pythonURI}/api/points`, {
-      ...fetchOptions,
-      method: 'GET',
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      if (data.total_points !== undefined) {
-        document.getElementById('points-display').textContent = `Points: ${data.total_points}`;
-      } else {
-        document.getElementById('points-display').textContent = 'Points: 0'; 
-      }
-    } else {
-      const error = await response.json();
-      document.getElementById('points-display').textContent = `Points: ${error.message || 'Error fetching points'}`;
-    }
-  } catch (err) {
-    document.getElementById('points-display').textContent = 'Points: Failed to fetch points';
-  }
-}
-
-fetchPoints();
-</script>
